@@ -1,0 +1,196 @@
+.deal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block: 2rem;
+    background-color: var(--light-gray);
+}
+.deal .deal_Intro{
+    position: relative;
+    background-image: url("../../assets/greenBackground.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 90%;
+    height: 20rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.deal .deal_Intro h2{
+    font-size: 1.9rem;
+    line-height: 2.2rem;
+    color: var(--light-text);
+    text-transform: capitalize;
+    text-align: left;
+    width: 30%;
+}
+.deal .deal_Intro img{
+    position: absolute;
+    top:0rem;
+    left: 50%;
+    width: 31rem;
+    transform: translateX(-50%);
+}
+.deal_Intro .btn{
+     width: 13rem;
+}
+.deal_Intro .btn::after{
+    top: 3rem;
+    left:9.5rem;
+    height: 15rem;
+    width: 16rem;
+}
+.btn:hover::after{
+    top: -1.8rem;
+    left: 2.9rem;
+}
+
+
+.main_deal{
+   padding-top: 4rem;
+}
+.main_deal_holder{
+    column-gap:2rem
+}
+.main_deal_holder .deal_card{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--gray);
+    height: 30rem;
+    width: 23rem;
+}
+
+.monthly_price {
+    position: absolute;
+    top: -2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--tetiary-color);
+    width: 45%;
+    height: 8rem;
+    flex-direction: column;
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:  var(--light-text);
+    background: var(--primary-color);
+}
+.monthly_price::after{
+    content: '';
+    position: absolute;
+    top: 0rem;
+    left: -2.6rem;
+    background: var(--secondary-color);
+    clip-path: polygon(3% 78%, 100% 78%, 100% 0);
+    height: 3rem;
+    width: 2.6rem;
+}
+.monthly_price_upper{
+    display:flex;
+    align-items: center;
+    gap:.4rem;
+    z-index: 111;
+}
+.monthly_price_upper small{
+    font-size: 1.7rem;
+}
+.monthly_price_upper h2{
+    font-size: 2.7rem;
+    margin-top: -1rem;
+    z-index: 111;
+}
+.monthly_price p{
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    margin-top: -.4rem;
+    z-index: 111;
+}
+
+.deal_card .plan{
+    margin-top: 5rem;
+    background: var(--light-gray);
+    border-left: 3px solid var(--primary-color);
+    margin-left: -2rem;
+    padding: .6rem .4rem;
+    border-radius: 0rem 1rem 1rem 0rem;
+    width: 90%;
+    font-weight: 500;
+    font-size: 1.3rem;
+    z-index: 111;
+}
+.deal_card .featues{
+    display: flex;
+    flex-direction: column;
+    line-height: 1.9rem;
+    z-index: 111;
+}
+.deal_card .featues li{
+    list-style: none;
+    color: var(--text-color);
+    font-weight: 400;
+    font-size: .9rem;
+    z-index: 111;
+}
+.deal_card .featues li i{
+    color: var(--primary-color);
+    margin-right: .5rem;
+    font-size: 1.2rem;
+}
+.deal_card .btn{
+    background: var(--primary-color);
+    z-index: 111;
+}
+
+.deal_card .btn p{
+    color: var(--text-color);
+}
+.deal_hover{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    background: var(--primary-color);
+    height: 100%;
+    border-radius: 1rem;
+    z-index: 0;
+    width: 0%;
+    transition: .2s linear;
+}
+.deal_card:hover .featues li{
+   color:var(--light-text)
+}
+.deal_card:hover .featues li i{
+    color:var(--tetiary-color)
+ }
+.deal_card:hover .deal_hover{
+    width: 100%;
+} 
+.deal_card:hover .btn::after,
+.deal_card:hover .btn::before{
+    background: var(--tetiary-color);
+}
+.deal_card:hover .btn{
+    background: var(--tetiary-color);
+}
+.monthly_hover{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    background: var(--tetiary-color);
+    height: 100%;
+    width: 0%;
+    transition: .2s linear;
+}
+.deal_card:hover .monthly_hover{
+    width: 100%;
+}
+.deal_card:hover .monthly_price{
+    color: var(--text-color);
+}

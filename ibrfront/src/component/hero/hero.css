@@ -1,0 +1,278 @@
+
+.hero {
+  background-image: url("../../assets/cleaningbackground.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: multiply;
+  background-attachment: fixed;
+  height: 97vh;
+  background-color: var(--secondary-color);
+  z-index: 0;
+  position: relative;
+}
+.bubble{
+  position: absolute;
+  width: 5rem;
+  height:5rem;
+  box-shadow: inset var(--bubbles-shadow);
+  border-radius: 50%; 
+  display: flex;
+  align-items: center; 
+  z-index: -11;
+  justify-content: center;
+}
+.b1{
+  top:7%;
+  left: 35%;
+  animation: bubblemovement 4.2s 1s infinite;
+}
+.b2{
+   top:50%;
+   left: 5%;
+   animation: bubblemovement 5.2s 3s infinite;
+}
+.b3{
+  top:60%;
+  right: 2%;
+  width: 3.7rem;
+  height:3.7rem;
+  animation: bubblemovement 5.2s 3s infinite;
+}
+.b4
+{
+  top:6%;
+  left: 10%;
+  width: 3rem;
+  height:3rem;
+  animation: bubblemovement 4.2s 1s infinite;
+}
+.b5{
+  top: 46%;
+  left: 8%;
+  width: 3rem;
+  height:3rem;
+  animation: bubblemovement 4.2s 2.4s infinite;
+}
+.b6{
+ top:90%;
+ left: 96%;
+ width: 1.8rem;
+ height:1.8rem;
+ animation: bubblemovement 5.2s 2s infinite;
+}
+.b7
+{
+ top:85%;
+ left: 58%;
+ width: 3rem;
+ height:3rem;
+ animation: bubblemovement 5.5s 2s infinite;
+}
+.b8
+{
+ top:30%;
+ left: 50%;
+ width: 2.5rem;
+ height:2.5rem;
+ animation: bubblemovement 4.9s 1.4s infinite;
+}
+.b9{
+  top:7%;
+  left: 95%;
+  width: 2.9rem;
+  height:2.9rem;
+  animation: bubblemovement 5.2s 3s infinite;
+ }
+ .b10
+ {
+  top:0%;
+  left: 93%;
+   width: 3.5rem;
+ height:3.5rem;
+ animation: bubblemovement 6.2s 2s infinite;
+ }
+ .b11
+ {
+  top:75%;
+  left: 60%;
+  animation: bubblemovement 5.2s 1.8s infinite;
+ }
+.bubble small{
+     content: '';
+     width: 30%;
+     margin-left: -58.6%;
+     height:30%;
+     background: var(--shadow-white);
+     box-shadow: inset var(--bubbles-shadow);
+     border-radius: 50%; 
+}
+.hero .text {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.hero .text .question {
+  color: var(--tetiary-color);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+.hero .text h1 {
+  font-size: 4rem;
+  line-height: 3.8rem;
+  margin-block: 1rem;
+  color: var(--light-text);
+  text-transform: capitalize;
+}
+.hero .text h1 span {
+  color: var(--tetiary-color);
+}
+.hero .ps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+.hero .text p {
+  font-size: 0.95rem;
+  color: var(--light-text);
+  line-height: 1.4rem;
+}
+.hero .image {
+  position: relative;
+}
+.hero .btn p {
+  top: 30%;
+  color: var(--text-color);
+  left: 17%;
+}
+.hero .btn:hover p {
+  color: var(--light-text);
+}
+.image .person {
+  width: 42rem;
+  margin-top: 5rem;
+  margin-right: -8rem;
+}
+.image .stars {
+  width: 3.5rem;
+  position: absolute;
+  right: -0.5rem;
+  top: 5rem;
+  animation: scale 2s infinite;
+}
+.image .spark {
+  width: 4rem;
+  position: absolute;
+  bottom: 3rem;
+  left: -2rem;
+  animation: rotate 4s 1s infinite;
+}
+.speech {
+  position: absolute;
+  top: 5rem;
+  left: 0rem;
+  display: flex;
+}
+.speech .circle {
+  border: 1px solid var(--light-text);
+  padding: 1.3rem;
+  border-radius: 50%;
+  text-align: center;
+  align-items: center;
+  color: var(--light-text);
+}
+.speech .circle p {
+  font-size: 1.1rem;
+  animation: changeWidth 3s infinite;
+  transition: none;
+  display: inline-flex;
+  white-space: nowrap;
+  border-right: 2px solid var(--tetiary-color);
+  position: relative;
+  overflow: hidden;
+  transition: ease-in-out;
+
+}
+.speech .circle h3 i {
+  font-size: 1.1rem;
+  margin-right: 0.7rem;
+  font-size: 1.8rem;
+}
+.speech .cone {
+  position: absolute;
+  top: 5rem;
+  right: -1rem;
+  transform: rotate(305deg);
+}
+.speech .cone div {
+  border: 3px solid var(--light-text);
+  border-radius: 50%;
+  height: 1.3rem;
+  width: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.moveright,
+.moveleft{
+  position: absolute;
+  border: 2px solid var(--primary-color);
+  z-index: 111;
+  line-height: 2.6rem;
+}
+.moveright{
+  top:50%;
+  right:1rem;
+}
+.moveleft{
+  top:50%;
+  left:1rem;
+}
+.hero .iconactive{
+   background: var(--tetiary-color);
+}
+.hero .iconactive:hover{
+  background: var(--secondary-color);
+  animation: darkiconhover 4s infinite;
+}
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.4);
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes changeWidth {
+  0% {
+    width: .5rem;
+  }
+  100% {
+    width: 5.5rem;
+  }
+}
+@keyframes bubblemovement {
+  0% {
+    transform: translateX(0px) translateY(0px) scale(1) ;
+  }
+  25% {
+    transform: translateX(29px) translateY(0px) scale(1.1) ;
+  }
+  50% {
+    transform: translateX(29px) translateY(-22px) scale(.8) ;
+  }
+   70% {
+    transform: translateX(20px) translateY(-22px) scale(1.1) ;
+  }
+  100% {
+    transform: translateX(0px) translateY(0px) scale(1) ;
+
+  }
+}

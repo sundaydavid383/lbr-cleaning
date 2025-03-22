@@ -1,0 +1,109 @@
+.portfolio_heading{
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 3rem;
+    align-items: center;
+}
+.portfolio{
+    margin-top: 8rem;
+    background: var(--light-gray);
+    padding: 3rem .2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.portfolio_heading .title{
+    text-align: left;
+    width: 36%;
+}
+.portfolio_heading .btn{
+    width: 11rem;
+}
+.portfolio_holder{
+    width: 80%;
+    position: relative;
+    overflow: hidden;
+
+    align-self: center;
+}
+.portfolio_container{
+    width: 390%;
+    margin-left: -3rem;
+    transition: .3s linear;
+    gap:4rem
+}
+.portfolio_card{
+    width: 34rem; 
+    position: relative; 
+    overflow: hidden;
+}
+.portfolio_card .person{
+    position: absolute;
+    top:.4rem;
+    left:.8rem;
+    background: var(--tetiary-color);
+    padding: .6rem;
+    border-radius: 1.4rem;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: .2s linear;
+    cursor: pointer;
+    width: 0%;
+    height: 0%;
+    overflow: hidden;
+}
+.portfolio_card .person:hover{
+    background: var(--secondary-color);
+    color:var(--tetiary-color)
+} 
+.portfolio_card .place{
+   position: absolute;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+   bottom: .3rem;
+   background: var(--secondary-color);
+   height: 8rem;
+   border-radius: .7rem .7rem 0rem 0rem;
+   border-bottom: 5px solid var(--tetiary-color);
+   padding: 1rem;
+   text-align: left;
+   color: var(--light-text);
+   text-transform: capitalize;
+   width: 25rem;
+  left: -27rem;
+   transition:.2s linear
+}
+.portfolio_card .place span{
+  font-size: .92rem;
+  font-weight: 300;
+
+}
+.portfolio_card .place span i{
+    margin-right: .4rem;
+    font-size: 1.2rem;
+}
+.portfolio_card .place p{
+     font-size: 1.13rem;
+     font-weight: 400;
+}
+.portfolio_card .fa-circle-arrow-right{
+    position: absolute;
+    top: 1rem;
+    right:2rem;
+    font-size: 2rem;
+    transform: rotate(310deg);
+    color: var(--tetiary-color);
+}
+.portfolio_card img{
+    width: 100%;
+    border-radius: .3rem;
+}
+.portfolio_card:hover .place
+{
+  left: 0rem;
+}
+.portfolio_card:hover .person{
+    width:fit-content;
+height: fit-content;
+}

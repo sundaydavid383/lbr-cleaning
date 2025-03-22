@@ -1,0 +1,119 @@
+.about{
+    margin-top: 14rem;
+    gap:8rem
+}
+.about .about_image{
+    width:80%;
+    position: relative;
+}
+.about img{
+    width: 5rem;
+}
+.about .image1{
+    width: 90%;
+}
+.about .image2{
+    width: 90%;
+    position: absolute;
+    bottom: -2rem;
+    border: 10px solid var(--background-color);
+    left: 8rem;
+}
+.videoicon{
+    position: absolute;
+    top:50%;
+    left:70%;
+    font-size: 6rem;
+    z-index: 111;
+    color: var(--tetiary-color);
+    width: 6rem;
+    transition: .2s;
+    height: 6rem;
+    animation: iconhoverLarge 4s infinite;
+}
+.videoicon:hover{
+  background: var(--tetiary-color);
+}
+.videoicon:hover i{
+    color: var(--secondary-color);
+}
+.about_text{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+   
+}
+.about_text img{
+ position: absolute;
+ right: 0rem;
+ top:-3rem;
+ animation: rotate 4s infinite;
+}
+.about_text h4{
+   color: var(--primary-color);
+   font-weight: 500;
+   font-size: 1.2rem;
+   margin-bottom: 1rem;
+}
+.about_text h1{
+    color: var(--secondary-color);
+   font-weight: 600;
+   font-size: 2.5rem;
+   line-height: 3rem;
+}
+.about_text .p1{
+    color: var(--text-color);
+    font-weight: 300;
+    font-size: .94rem;
+    margin-top: 1rem;
+    line-height: 1.5rem;
+ }
+ .about_text .award{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 0rem;
+    right: 0rem;
+    border-radius: 1rem;
+    background: var(--tetiary-color);
+    height: 11rem;
+    width: 12rem;
+    justify-content: center;
+    padding: .5rem;
+    gap:.5rem;
+ }
+ .about_text .award i{
+     color: var(--primary-color);
+     font-size: 3rem;
+ }
+ .about_text .award h1{
+    font-size: 3rem;
+ }
+ .about_text .award p{
+    font-size: 1rem;
+    color: var(--text-color);
+    font-weight: 300;
+    font-size: 1.2rem;
+ }
+ .about_text ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    margin-block: 1.5rem;
+ }
+ .about_text ul li{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+ }
+ .about_text ul li i{
+    color: var(--primary-color);
+ }
+ .about_text ul li p{
+    color: var(--text-color);
+    font-weight : 400;
+    font-size: .94rem;
+ }

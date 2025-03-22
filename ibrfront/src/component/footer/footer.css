@@ -1,0 +1,292 @@
+.footer {
+    background: var(--secondary-color);
+  }
+  .subscribe {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    padding-inline: 0.4rem;
+    align-items: flex-end;
+    align-items: center;
+    border-bottom: 1px dashed var(--gray);
+  }
+  .subscribe h2 {
+    font-size: 2.21rem;
+    color: var(--light-text);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 2.1rem;
+    text-transform: capitalize;
+  }
+
+  .subscribe form {
+    display: flex;
+    border: 1px solid var(--background-color);
+    padding: 0.8rem;
+    position: relative;
+    border-radius: 1rem;
+    width: 40%;
+    margin-bottom: 2rem;
+    justify-content: space-between;
+  }
+  .subscribe form .btn p {
+    font-size: 1rem;
+    font-weight: 300;
+  }
+  .subscribe form input {
+    background: transparent;
+    width: 80%;
+    font-weight: 300;
+    font-size: 1.1rem;
+    color: var(--background-color);
+  }
+  #emailLb{
+    position: absolute;
+    top:5.4rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: red;
+    left: 48%;
+    text-wrap: nowrap;
+    transform: translateX(-50%);
+    z-index: -11;
+  }
+
+  #emailLb.alert{
+    opacity: 1;
+    z-index: 1;
+  }
+  .updateReciever{
+      background: var(--gray);
+      position: fixed;
+      top:1rem;
+      border-radius: 2rem;
+      box-shadow:   0px 0px 10px 2px var(--lightBlack);;
+      right: 3rem;
+      width: 19rem;
+      height: 12rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+     padding: 1rem;
+     text-align: center;
+     color: var(--black);
+     line-height: 1.6rem;
+     font-size: 1.19rem;    
+     font-weight: 500;
+     font-family:sans-serif;
+    z-index: -111; 
+    transition: .2s linear;
+    animation: scale 2s infinite;
+  }
+  .updateReciever.active{
+    z-index: 21;
+    opacity: 1;
+  }
+  @keyframes scale {
+    0%{
+      transform: scale(1.01);
+    }
+    0%{
+      transform: scale(1.02);
+    }
+    
+  
+  }
+  .subscribe .socials {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .subscribe .socials a{
+    background: var(--primary-color);
+  }
+  .subscribe .socials a:hover{
+    background: var(--tetiary-color);
+    animation: iconhover 4s infinite;
+    color: var(--secondary-color);
+  }
+  .main_footer {
+    padding: 1.7rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer .main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.82rem;
+    width: 24rem;
+    color: var(--light-text);
+    justify-content: space-between;
+  }
+  .footer .main p {
+    font-weight: 300;
+    font-size: 0.93rem;
+  }
+  .footer .explore {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .footer .explore h2 {
+    color: var(--light-text);
+    margin-bottom: 0.6rem;
+  }
+  .footer .explore li {
+    position: relative;
+  }
+  .footer .explore li i {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-right: 0.8rem;
+  }
+  .footer .explore li i,
+  .footer .footer_details small i {
+    border: 1px solid var(--gray);
+    padding: .9rem;
+    border-radius: 50%;
+    backdrop-filter: blur(-15px);
+    background: var(--shadow-white);
+  }
+  .footer .explore li:hover i {
+    color: var(--tetiary-color);
+  }
+  .footer .explore li a {
+    color: var(--light-text);
+    transition: 0.2s linear;
+  }
+  .footer .explore li a:hover {
+    color: var(--tetiary-color);
+  }
+  .footer .explore li span {
+    width: 0%;
+    height: 0.25rem;
+    position: absolute;
+    top: 3rem;
+    transition: 0.2s linear;
+    border-radius: 0.5rem;
+    left: 0rem;
+    background: var(--tetiary-color);
+  }
+  .footer .explore li:hover span {
+    width: 84%;
+  }
+  .footer_details {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    line-height: 2rem;
+    gap: .6rem;
+    align-self: flex-end;
+  }
+  .footer_details small {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+
+  }
+  .footer_details small i {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+  }
+  .footer_details p {
+    color: var(--white);
+    font-size: 1rem;
+    transition: 0.2s;
+  }
+  .footer_details a{
+    color: var(--light-text);
+  }
+  .footer_details a:hover p {
+    color: var(--tetiary-color);
+  }
+  .footer_details a:hover i {
+    color: var(--tetiary-color);
+  }
+  .footer_details p:hover {
+    color: var(--tetiary-color);
+  }
+  .copyright {
+    color: var(--light-text);
+    text-align: center;
+    padding: 1.5rem;
+    padding-bottom: 0.8rem;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+  .copyright span {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .futup.active {
+    animation: bottomfadeIn 2.2s forwards;
+  }
+  .subscribe .btn p{
+    font-weight: 500;
+    margin-top: -1.7rem;
+  }
+  .footer .logo p{
+    color: var(--light-text);
+    font-weight: 1100;
+    font-size:1.6rem;
+ }
+  @media (max-width: 980px) {
+    .subscribe {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .subscribe form {
+      width: 70%;
+    }
+    .footer .main {
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.4rem;
+    }
+    .main_footer {
+      flex-direction: column;
+      padding: 1rem 0rem;
+      align-items: center;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .footer .explore {
+      align-items: center;
+      justify-content: center;
+    }
+    .footer .explore li:hover span {
+      width: 100%;
+    }
+    .footer_details {
+      width: 100%;
+      line-height: 2rem;
+      align-items:center;
+      justify-items: center;
+    }
+   
+  
+  }
+  @media (max-width: 580px) {
+      .subscribe {
+         width: 100%;
+        }
+      .subscribe .socials a {
+          width: 3rem;
+          height: 3rem;
+      }
+      .subscribe .socials{
+          gap: .4rem;
+      }
+          .footer .main {
+              width: 100%;
+            }
+            .footer_details{
+              width: 100%;
+            }
+  }

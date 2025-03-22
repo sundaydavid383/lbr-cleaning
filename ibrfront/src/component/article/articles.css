@@ -1,0 +1,121 @@
+.articles .title{
+    color:var(--black);
+    border-bottom-color: var(--primary-color);
+    text-align: center;
+    padding-block: 4rem;
+}
+.articles{
+    display: flex;
+    flex-direction: column;
+}
+.article_card{
+    display: flex;
+    flex-direction: column;
+    width: 24rem;
+    padding-bottom: .8rem;
+    border-radius: .6rem;
+    border-bottom: 2px solid var(--primary-color);
+    position: relative;
+}
+.article_card .articles_image img{
+    width: 100%;
+    transition: .3s linear;
+    border-radius: .1rem;
+}
+.article_card .articles_image{
+    position: relative;
+    overflow: hidden;
+
+}
+.articles_container{
+    flex-wrap: wrap;
+    justify-content: baseline;
+    align-items: flex-end;  
+    gap: 1rem;
+}
+.author{
+    font-size: .95rem;
+    color: var(--text-color);
+    font-weight: 500;
+    top:0rem;
+    left:.3rem;
+    background: var(--tetiary-color);
+    border-radius: 1rem;
+    padding: .5rem;
+    position: absolute;
+    opacity: 0;
+    transition: .2s linear;
+
+}
+.date{
+    font-size: 1rem;
+    color: var(--secondary-color);
+    font-weight: 300;
+    width: 5rem;
+    margin-top: .4rem;
+    bottom: 57%;
+    left:.3rem;
+    background: var(--tetiary-color);
+    border-radius: 1rem;
+    padding: .5rem;
+    position: absolute;
+    text-align: center;
+    line-height: 1.5rem;
+    opacity: 0;
+    transition: .2s linear;
+}
+.date .day{
+    font-weight: 500;
+}
+.date .month{
+    font-weight: 800;
+    font-size: 1.9rem;
+}
+.article_card h2{
+    font-size: 1.31rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding: .4rem;
+     padding-bottom: 1rem;  
+       line-height: 1.9rem;
+    text-transform: capitalize;
+    background: var(--lighter-gray);
+}
+.article_card .articelp{
+    color: var(--text-color);
+    font-size: .9rem;
+    padding: .4rem;
+    font-weight: 300;
+    margin-bottom: .8rem;
+    line-height: 1.8rem;
+    background: var(--lighter-gray);
+}
+.article_text{
+    padding: .9rem;
+    background: var(--lighter-gray);
+}
+
+.article_card .btn p{
+    line-height: 3.4rem;
+}
+.article_card:hover .date,
+.article_card:hover .author{
+   opacity: 1;
+}
+.article_card:hover img{
+    transform: scale(1.2);
+}
+.article_card:hover h2,
+.article_card:hover .articelp{
+    background: none;
+}
+@media (max-width: 780px) {
+    .articles_container{
+        gap: 2rem
+    }
+}
+@media (max-width: 580px) {
+    .article_card{
+        width: 90%;
+    }
+}

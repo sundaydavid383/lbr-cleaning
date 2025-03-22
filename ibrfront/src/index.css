@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+}
+.container {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem 5rem;
+    align-items: center;
+  }
+:root{
+    --primary-color:rgb(36, 170, 36);
+    --secondary-color:rgb(8, 92, 8);
+    --background-color: rgb(245, 245, 228);
+    --light-backgound: rgb(187, 238, 187);
+    --tetiary-color:rgb(212, 190, 62);
+    --light-gray: rgb(228, 222, 222);
+    --lighter-gray:rgb(240, 233, 233);
+    --gray: rgb(189, 185, 185);
+    --text-color : rgb(8, 59, 8);
+    --light-text: rgb(243, 240, 240);
+    --box-shadow:0px 0px 15px 4px rgba(34, 34, 34,.4);
+    --light-shadow: 0px 0px 5px 4px rgba(232, 248, 227, 0.4);
+    --bubbles-shadow: 0px 0px 7px 0px rgba(114, 121, 114, 0.7);
+    --shadow-white: rgba(77, 75, 75, 0.1);
+    --primary-shadow: 0px 0px 5px 4px rgba(36, 170, 36,.4);
+    --video-background: rgba(0,0,0,.9);
+    --large-shadow: 0px 0px 90px 30px rgba(113, 223, 49, 0.6);
+}
+ .logo{
+    display: flex;
+    align-items: flex-end;
+}
+ .logo img{
+    width: 3.3rem;
+    box-shadow: var();
+}
+ .logo p{
+   color: var(--text-color);
+   font-weight: 600;
+   font-size:1.6rem;
+}
+.iconactive,
+.icon{
+    color:var(--light-text);
+    background: var(--secondary-color);
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 2.9rem;
+    text-align: center;
+    transition: .2s linear;
+}
+body{
+    background-color: var(--background-color);
+    overflow-x: hidden;
+}
+
+.iconactive:hover{
+    background: var(--tetiary-color);
+    animation: iconhover 4s infinite;
+    color: var(--secondary-color);
+}
+@keyframes iconhover {
+    0%{
+        box-shadow: 0px 0px 1px 0px rgba(30, 95, 4, 0.1);
+    }
+    30%{
+        box-shadow: 0px 0px 1px 10px rgba(30, 95, 4, 0.5);
+    }
+    70%{
+        box-shadow: 0px 0px 1px 8px rgba(30, 95, 4, 0);
+    }
+    100%{
+        box-shadow: 0px 0px 1px 8px rgba(30, 95, 4, 0);
+    }
+}
+@keyframes iconhoverLarge {
+    0%{
+        box-shadow: 0px 0px 1px 0px rgba(30, 95, 4, 0.1);
+    }
+    30%{
+        box-shadow: 0px 0px 1px 30px rgba(30, 95, 4, 0.5);
+    }
+    70%{
+        box-shadow: 0px 0px 1px 14px rgba(30, 95, 4, 0);
+    }
+    100%{
+        box-shadow: 0px 0px 1px 30px rgba(30, 95, 4, 0);
+    }
+}
+@keyframes darkiconhover {
+    0%{
+        box-shadow: 0px 0px 1px 0px rgba(197, 194, 19, 0.1);
+    }
+    30%{
+        box-shadow: 0px 0px 1px 10px rgba(197, 194, 19, 0.5);
+    }
+    70%{
+        box-shadow: 0px 0px 1px 8px rgba(197, 194, 19, 0);
+    }
+    100%{
+        box-shadow: 0px 0px 1px 8px rgba(197, 194, 19, 0);
+    }
+}
+.btn{
+    background: var(--tetiary-color);
+    width: 10rem;
+    border-radius: 3rem;
+    height:3.6rem;
+    text-align: center;
+    line-height: 3.5rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before,
+.btn:after{
+    position: absolute;
+    top: -8rem;
+    left:-8rem;
+    transition: .5s ease-in-out;
+    content: '';
+    background: var(--primary-color);
+    height: 9rem;
+    width: 10rem;
+    border-radius: 50%;
+    z-index: 0;
+}
+.btn:after{
+    top: 3rem;
+    left:7.5rem;
+}
+.btn:hover::after{
+    top: -.6rem;
+    left: 2.9rem;
+}
+.btn:hover::before{
+    top: -.4rem;
+    left:-1.6rem;
+}
+.btn i{
+    padding-left: .3rem;
+}
+.btn p{
+    position: absolute;
+    z-index: 11111;
+    color: var(--text-color);
+    left: 10%;
+}
+.btn:hover p{
+    color: var(--light-text);
+}
+.title {
+    text-align: center;
+  }
+  .title span {
+    color: var(--tetiary-color);
+    font-size: 1.37rem;
+    text-transform: uppercase;
+  }
+  .title h2 {
+    font-size: 2.6rem;
+    line-height: 2.948rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-block: .6rem;
+    color: var(--light-text);
+    margin-bottom: 1.5rem;
+    text-transform: capitalize;
+  }
+  .title .bright{
+    color: var(--secondary-color);
+}
+.title .priamry{
+    color: var(--primary-color);
+}
