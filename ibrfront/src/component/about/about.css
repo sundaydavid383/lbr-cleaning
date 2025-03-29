@@ -117,3 +117,74 @@
     font-weight : 400;
     font-size: .94rem;
  }
+ 
+@media (max-width: 1168px) {
+    .about{
+        margin-top: 29rem;
+        gap:8rem;
+        padding-inline: 1rem;
+    }
+    .about_text .award{
+        bottom: -2rem;
+        right: 0rem;
+        height: 7.7rem;
+        line-height: .9rem;
+        width: 7.2rem;
+        padding: .2rem;
+        gap:0rem;
+     }
+     .about_text .award i{
+        color: var(--primary-color);
+        font-size: 2rem;
+    }
+    .about_text .award h1{
+       font-size: 2rem;
+    }
+    .about_text .award p{
+       font-size: 1rem;
+       font-size: 1rem;
+       text-align: center;
+    }
+  }
+  @media (max-width: 868px) {
+    .about{
+        margin-top: 29rem;
+        gap:8rem;
+        padding-inline: 1rem;
+    }
+    .about.container{
+        flex-wrap: wrap;
+        padding-inline: 2.4rem;
+    }
+    .about .image1{
+        width: 70%;
+    }
+    .about .image2{
+        width: 70%;
+        bottom: -1rem;
+        left: 50%;
+    }
+    .about_text .award{
+        bottom: 0rem;
+        right: 0rem;
+        height: 11.7rem;
+        line-height: 1.4rem;
+        width: 10.2rem;
+        padding: .2rem;
+        gap:.5rem;
+     }
+     .about_text .award i{
+        color: var(--primary-color);
+        font-size: 3rem;
+    }
+    .about_text .award h1{
+       font-size: 3rem;
+    }
+    .about_text .award p{
+       font-size: 1.3rem;
+       color: var(--text-color);
+       font-weight: 300;
+       text-align: center;
+    }
+  }
+  

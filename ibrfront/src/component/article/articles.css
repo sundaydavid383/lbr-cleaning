@@ -25,10 +25,11 @@
 .article_card .articles_image{
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 
 }
 .articles_container{
-    flex-wrap: wrap;
     justify-content: baseline;
     align-items: flex-end;  
     gap: 1rem;
@@ -109,13 +110,52 @@
 .article_card:hover .articelp{
     background: none;
 }
-@media (max-width: 780px) {
+@media (max-width: 1168px) {
     .articles_container{
-        gap: 2rem
+      flex-wrap: wrap;
+      padding-inline: 0rem;
     }
-}
-@media (max-width: 580px) {
     .article_card{
-        width: 90%;
+        width: 22rem;
     }
-}
+  }
+  @media (max-width: 868px) {
+    .article_card{
+        width: 70%;
+    } 
+    .articles_container{
+       gap: 3rem;
+      }
+   }
+  @media (max-width: 658px) {
+    .nav-upper .social-platforms {
+      display: flex;
+      gap: 0.5rem;
+      background-color: rgb(229, 255, 0);
+    }
+    .nav .fa-bars-staggered{
+      display: flex;
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      top: 9rem;
+      left: 50%;
+      align-items: center;
+      padding-block: 0rem;
+      transform: translateX(-50%);
+      width: 0%;
+      overflow: hidden;
+      position: fixed;
+      box-shadow: var(--box-shadow);
+      background: var(--background-color);
+      height: 0%;
+    }
+    .links.active{
+      padding-block: 1rem;
+      height: auto;
+      width: 100%;
+    }
+  }
+  

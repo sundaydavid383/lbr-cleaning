@@ -156,7 +156,7 @@ body{
 }
 .btn p{
     position: absolute;
-    z-index: 11111;
+    z-index: 11;
     color: var(--text-color);
     left: 10%;
 }
@@ -187,3 +187,31 @@ body{
 .title .priamry{
     color: var(--primary-color);
 }
+
+@media (max-width: 1168px) {
+    .container {
+        padding: 2.4rem 2.8rem;
+      }
+}
+  @media (max-width: 768px) {
+    html{
+        font-size: 86%;
+    }
+    .iconactive,
+.icon{
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.2rem;
+    line-height: 2.4rem;
+}
+.btn{
+    width: 8rem;
+    height:3.4rem;
+    font-weight: 500;
+    font-size: .965rem;
+}
+  }
+  @media (max-width: 498px) {
+
+  }
+    

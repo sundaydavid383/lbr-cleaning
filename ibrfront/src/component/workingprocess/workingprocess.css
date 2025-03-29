@@ -28,7 +28,6 @@
     backdrop-filter: blur(15px);
     padding: 2rem;
     border-radius: 12rem;
-
 }
 .workingprocess_card .icon{
     width: 7rem;
@@ -128,3 +127,41 @@
         transform: translateY(10px);
       }
  }
+ @media (max-width: 1168px) {
+    .workingprocess_card {
+        width: 16rem;
+        backdrop-filter: blur(15px);
+        padding: 1.8rem;
+        border-radius: 1rem;
+    }
+  }
+  @media (max-width: 868px) {
+     .workingProcess_container{
+         margin-top: 2rem;
+         flex-wrap: wrap
+     }
+     .workingprocess_card {
+         width: 50%;
+         border-radius: 1rem !important;
+     }
+  }
+  @media (max-width: 658px) {
+     .workingProcess_container{
+        gap: 2rem;
+     }
+    .workingprocess_card {
+        width: 60%;
+        border-radius: 1rem !important;
+    }
+    .workingprocess .right{
+        right: -23rem;
+        top:40rem;
+        width: 50rem;
+        animation: goUpandDown 5s infinite;
+     }
+     .workingprocess .left{
+        left: 0rem;
+        top:18rem;
+        animation: goUpandDown 7s infinite;
+     }
+  }

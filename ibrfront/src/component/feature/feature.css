@@ -2,10 +2,11 @@
     background: transparent;
     position: absolute;
     bottom:-8rem;
-    gap:1rem
+    gap:1rem;
+    flex-wrap: wrap;
 }
 .features .feature{
-    width: 25rem;
+    width: 23rem;
     height: 10rem;
     background: var(--gray);
     padding: 1rem;
@@ -15,6 +16,7 @@
     gap:.7rem;
     position: relative;
     transition:  .2s linear;
+    z-index: 112;
 }
 .feature:hover{
   border-radius: 0rem;
@@ -52,3 +54,30 @@
     font-weight: 400;
     font-size: .94rem;
 }
+
+@media (max-width: 1368px){
+    .features{
+        background: transparent;
+        position: absolute;
+        bottom:-14rem;
+    }
+    .features .feature{
+        width: 30%;
+        height: auto;
+        z-index: 112;
+        white-space: wrap;
+    }
+}
+
+  @media (max-width: 868px) {
+    .features{
+        bottom:-33rem;
+    }
+    .features .feature{
+        width: 100%;
+    }
+    .feature .icon{
+        width: 7rem;
+    }
+  }
+  

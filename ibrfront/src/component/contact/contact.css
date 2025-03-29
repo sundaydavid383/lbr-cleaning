@@ -1,3 +1,6 @@
+select{
+  height: 3.4rem;
+}
 .contact {
   display: flex;
   flex-direction: column;
@@ -21,24 +24,92 @@
   line-height: 2.8rem;
   margin-block: 1rem;
   color: var(--light-text);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   text-transform: capitalize;
   text-align: center;
 }
 .contact .main_contact form {
   display: flex;
+  align-self: center;
+  flex-direction: column;
+  width: 60%;
+  gap: .2rem;
+
+}
+.contact .main_contact form label{
+  display: flex;
   width: 100%;
-  gap: 2rem;
+  position: absolute;top: -30%;
+  left:0%;
+  text-transform: capitalize;
+  font-weight: 500;
+  color: var(--tetiary-color);
 }
 .contact .main_contact form input {
-  width: 25%;
+  width: 100%;
+  margin-bottom: 2rem;
   border: 0;
   outline: 0;
-  border-radius: 0.2rem;
+  border-radius: 0.9rem;
   font-size: 1rem;
   padding: 0.8rem;
   height: 3.4rem;
   text-transform: capitalize;
+}
+.contact .btn p{
+  line-height: 0rem;
+  margin-top: -.5rem;
+}
+.contact .btn{
+  margin-top: 2rem;
+}
+.contact .main_contact form .inputlabel{
+  position: relative;
+}
+.contact .main_contact form .inputlabel input,
+.contact .main_contact form .inputlabel select{
+  width: 100%;
+}
+#cleaning_service.alert, 
+.input_phone.alert,
+.input_name.alert,
+.input_email.alert{
+  animation: alert 1s forwards;
+}
+@keyframes alert {
+  0%{
+     transform: translateX(0px);
+     border: 2px solid red;
+  }
+  15%{
+    transform: translateX(-10px);
+    border: 2px solid red;
+  }
+  30%{
+    transform: translateX(10px);
+    border: 2px solid red;
+  }
+  45%{
+    transform: translateX(-10px);
+    border: 2px solid red;
+  }
+  60%{
+    transform: translateX(10px);
+    border: 2px solid red;
+  }
+  75%{
+    transform: translateX(-10px);
+    border: 2px solid red;
+  }
+  90%{
+    transform: translateX(10px);
+    border: 2px solid red;
+  }
+
+  100%{
+    transform: translateX(0px);  border: 2px solid red;
+  }
+
 }
 #cleaning_service {
   border-radius: 0.42rem;
@@ -57,11 +128,21 @@
 .contact .main_contact .btn {
   border-radius: 1.3rem;
 }
+.contact  .btn p{
+ margin-top:1.4rem;
+}
+.contact  .btn:hover::before{
+  top: -.6Frem;
+  left:-1.6rem;
+}
+.contact .main_contact .btn p{
+  margin-top:-.6rem;
+ }
 .contact_service {
   display: flex;
   flex-direction: column;
   margin-top: 7rem;
-  width: 75%;
+  width:30rem;
   position: relative;
   overflow: hidden;
   align-self: center;
@@ -69,13 +150,13 @@
 
 .service_holder {
   display: flex;
-  width: 250%;
-  gap: 2rem;
+  width: 140rem;
+  gap: 0rem;
   transition: .2s linear;
- /* animation: scrollingover 108s infinite;*/
+ /*animation: scrollingover 8s infinite;*/
 }
 .service_holder .service {
-  width: 24rem;
+  width: 23rem;
   display: flex;
   align-items: flex-start;
   transition: .2s linear;
@@ -165,7 +246,7 @@
   0% {
     transform: translateX(0px);
   }
-  10% {
+  /* 10% {
     transform: translateX(-260px);
   }
   20% {
@@ -191,8 +272,20 @@
   }
   90% {
     transform: translateX(-260px);
-  }
+  } */
   100% {
-    transform: translateX(0px);
+    transform: translateX(-1500px);
   }
+}
+
+@media (max-width: 1168px) {
+
+}
+@media (max-width: 868px) {
+  .contact .main_contact form {
+    width: 100%;
+  }
+  
+}
+@media (max-width: 658px) {
 }

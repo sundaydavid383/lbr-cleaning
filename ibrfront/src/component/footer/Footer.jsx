@@ -147,7 +147,7 @@ const Footer = () => {
             </small>{" "}
             09014886877
           </p>
-          <a target="_blank" href="https://wa.me/09014886853">
+          <a target="_blank" href="https://wa.me/2349014886853">
             <p>
               <small>
                 <i className="fa-brands fa-whatsapp"></i>

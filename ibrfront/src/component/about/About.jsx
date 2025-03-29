@@ -11,7 +11,7 @@ const About = () => {
     <div className="about container">
       <div className="about_image">
         <div onClick={()=>{setSeeVideo(true)}} className="videoicon iconactive">
-        <i class="fa-solid fa-circle-play"></i>
+        <i className="fa-solid fa-circle-play"></i>
         </div>
         <img className="image1" src={image1} alt="" />
         <img className="image2" src={image2} alt="" />
@@ -33,15 +33,15 @@ const About = () => {
       </div>
       <ul>
         <li>
-          <i class="fa-solid fa-circle-check"></i>
+          <i className="fa-solid fa-circle-check"></i>
           <p>Cleeny Your Home or Office</p>
         </li>
         <li>
-        <i class="fa-solid fa-circle-check"></i>
+        <i className="fa-solid fa-circle-check"></i>
           <p>24/7 Emmergency Quality Services</p>
         </li>
         <li>
-          <i class="fa-solid fa-circle-check"></i>
+          <i className="fa-solid fa-circle-check"></i>
           <p>Online Booking System available
           </p>
         </li>

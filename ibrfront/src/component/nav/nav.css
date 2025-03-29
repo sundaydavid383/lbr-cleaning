@@ -1,67 +1,158 @@
-.nav{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-shadow: var(--box-shadow);
-    height: 9rem;
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: var(--box-shadow);
+  height: 9rem;
+  z-index: 223333;
+  position: sticky;
+}
+
+.nav.active {
+    position: fixed;
+    top: 0rem;
+    left: 0rem;
+    z-index: 223333;
+    animation: navtransform 1s forwards;
 }
 .nav-lower,
-.nav-upper{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background-color: var(--primary-color);
-    color: var(--light-text);
-    padding : .4rem 1.4rem;
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  padding: 0.6rem 1.4rem;
 }
-.nav-upper .social-platforms{
-    display: flex;
-    gap: 1.5rem;
-}
-
-.media{
-   display: flex;
-   gap:1rem;
-}
-.media .phone{
-    border-right: 1px solid var(--light-text);
-    padding-right: .7rem;
-}
-.media p{
-    font-size: .98rem;
-}
-.media p i{
-   color: var(--tetiary-color);
-   margin-right: .4rem;
-   font-size: 1.55rem;
-}
-.nav-lower{
-     padding-block: 1rem;
-    background: transparent;
-    padding-inline: 5rem;
+.nav-upper .social-platforms {
+  display: flex;
+  gap: 1rem;
 }
 
-.links{
-    display: flex;
-    gap: 3rem;
-    font-size: 1.1rem;
-    font-weight: 500;
+.media {
+  display: flex;
+  gap: 1rem;
 }
-.links a{
-    color: var(--secondary-color);
-    position: relative;
+.media .phone {
+  border-right: 1px solid var(--light-text);
+  padding-right: 0.7rem;
 }
-.links a div{
-    height: .3rem;
-    width: 0%;
-    background-color: var(--primary-color);
-    border-radius: 1rem;
-    transition:.3s linear
+.media p,
+.media a {
+  font-size: 0.98rem;
+  transition: 0.3s;
+  color: var(--light-text);
 }
-.links a:hover div{
-    width: 100%;
+.media a:hover {
+  color: var(--tetiary-color);
 }
-.links a:hover{
+.media p i,
+.media a i {
+  color: var(--tetiary-color);
+  margin-right: 0.4rem;
+  font-size: 1.55rem;
+}
+.nav-lower {
+  padding-block: 1rem;
+  background: var(--background-color);
+  padding-inline: 5rem;
+}
+.nav .fa-bars-staggered{
     color: var(--primary-color);
+    font-size: 2.5rem;
+    cursor: pointer;
+    display: none;
+    transition: .3s linear;
+}
+.nav .fa-bars-staggered:hover{
+    transform: rotate(270deg);
+}
+.links {
+  display: flex;
+  gap: 3rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.links a {
+  color: var(--secondary-color);
+  position: relative;
+}
+.links a div {
+  height: 0.3rem;
+  width: 0%;
+  background-color: var(--primary-color);
+  border-radius: 1rem;
+  transition: 0.3s linear;
+}
+.links a:hover div {
+  width: 100%;
+}
+.links a:hover {
+  color: var(--primary-color);
+}
+@keyframes navtransform {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+@media (max-width: 1168px) {
+  .nav-lower {
+    padding-inline: 2.4rem;
+  }
+  .nav-upper .social-platforms {
+    background-color: blue;
+  }
+}
+@media (max-width: 868px) {
+  .nav-upper .social-platforms {
+    display: flex;
+    gap: 0.5rem;
+    background-color: red;
+  }
+  .nav-lower {
+    padding-inline: 0.6rem;
+  }
+  .links {
+    display: flex;
+    gap: 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+@media (max-width: 658px) {
+  .nav-upper .social-platforms {
+    display: flex;
+    gap: 0.5rem;
+    background-color: rgb(229, 255, 0);
+  }
+  .nav .fa-bars-staggered{
+    display: flex;
+  }
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    top: 9rem;
+    left: 50%;
+    align-items: center;
+    padding-block: 0rem;
+    transform: translateX(-50%);
+    width: 0%;
+    overflow: hidden;
+    position: fixed;
+    box-shadow: var(--box-shadow);
+    background: var(--background-color);
+   height: 0%;
+  }
+  .links.active{
+    padding-block: 1rem;
+    height: auto;
+    width: 100%;
+  }
 }

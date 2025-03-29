@@ -1,19 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./nav.css"
 import houseimage from "../../assets/house-cleaning.png";
 import { Link } from "react-router";
 
 const Nav = () => {
+  const [linkActive, setLinkActive] = useState(false)
+  const [active, setActive] = useState(false);
+
+useEffect(() => {
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
+   
   return (
-    <div className="nav">
+    <div className={`nav ${active ? "active" : ""}`}>
       <div className="nav-upper">
       <div className="media">
             <p className="phone">
               <i className="fa-solid fa-phone-volume"></i>+16102458976
             </p>
-            <p className="email">
+            <a href="mailto:sundayudoh383@gmail.com" className="email">
               <i className="fa-solid fa-envelope"></i>klanohelp@gmail.com
-            </p>
+            </a>
           </div>
         <div className="social-platforms">
         <Link className="iconactive" to="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
@@ -39,11 +58,12 @@ const Nav = () => {
           <img src={houseimage} alt="" />
           <p>LBR Cleaning</p>
         </div>
-        <div className="links">
-        <Link to="/"><p>HOME</p><div></div></Link>
-<Link to="/service"><p>SERVICE</p><div></div></Link>
-<Link to="/pages"><p>PAGES</p><div></div></Link>
-<Link to="/blog"><p>BLOG</p><div></div></Link>
+        <i onClick={()=>setLinkActive(prev=>!prev)} class="fa-solid fa-bars-staggered"></i>
+        <div className={`links ${linkActive?"active":""}`}>
+        <Link onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>
+        <Link onClick={()=>setLinkActive(false)} to="/service"><p>SERVICE</p><div></div></Link>
+        <Link onClick={()=>setLinkActive(false)} to="/pages"><p>PAGES</p><div></div></Link>
+        <Link onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
         </div>
         <div className="btn">
           <p>

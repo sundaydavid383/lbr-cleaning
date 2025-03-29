@@ -38,7 +38,7 @@ const Hero = () => {
       sectionimage: image2,
       sectionimageStar: star,
       sectionimageSpark: spark,
-      talks: ["Book a cleaning", "Contact us for pricing"],
+      talks: ["Book a cleaning", "clean today"],
       talksReport: "090876543"
     },
     {
@@ -52,7 +52,7 @@ const Hero = () => {
       sectionimage: image3,
       sectionimageStar: star,
       sectionimageSpark: spark,
-      talks: ["Learn more", "Get a free estimate"],
+      talks: ["Learn more", "free estimate"],
       talksReport: "090112233"
     },
     {
