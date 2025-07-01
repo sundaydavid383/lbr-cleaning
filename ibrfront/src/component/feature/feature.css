@@ -1,9 +1,10 @@
 .features{
     background: transparent;
-    position: absolute;
+    position: relative;
     bottom:-8rem;
     gap:1rem;
     flex-wrap: wrap;
+    margin-block: 4rem;
 }
 .features .feature{
     width: 23rem;
@@ -39,9 +40,11 @@
     color: var(--primary-color);
 }
 .feature .icon{
-    width: 14rem;
+    width: 30%;
+    object-fit: contain;
     height: 5rem;
     line-height: 5.3rem;
+    background: transparent;
 }
 .feature h2{
     color: var(--primary-color);

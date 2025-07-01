@@ -1,61 +1,22 @@
 import React from 'react'
 import "./deal.css"
 import { Link } from 'react-router'
-import image1 from "../../assets/cleaner4.png"
 
-const Deal = () => {
-  const plans = [
-    {
-      price: "$/19monthly",
-      description: "Affordable cleaning ",
-      name: "Basic Cleaning",
-      details: "Ideal for apartments and small offices. Get essential cleaning services at an affordable price.",
-      features: [
-        "Dusting and surface cleaning",
-        "Vacuuming and mopping floors",
-        "Bathroom and kitchen sanitization",
-        "Trash removal",
-        "Weekly scheduled cleaning"
-      ],
-      btnText: "Choose Plan"
-    },
-    {
-      price: "$/29monthly",
-      description: "Best value ",
-      name: "Standard Cleaning",
-      details: "Perfect for medium-sized homes and offices. Includes deep cleaning services to maintain hygiene and freshness.",
-      features: [
-        "Everything in Basic Cleaning",
-        "Carpet and upholstery cleaning",
-        "Window cleaning (interior)",
-        "Appliance exterior cleaning",
-        "Bi-weekly deep cleaning"
-      ],
-      btnText: "Choose Plan"
-    },
-    {
-      price: "$/49monthly",
-      description: "Premium service ",
-      name: "Premium Cleaning",
-      details: "Comprehensive cleaning for large homes, offices, and commercial spaces. Includes additional premium services.",
-      features: [
-        "Everything in Standard Cleaning",
-        "Exterior window and glass cleaning",
-        "Wall and ceiling dusting",
-        "Disinfection and sanitization",
-        "Customized cleaning schedule"
-      ],
-      btnText: "Choose Plan"
-    }
-  ];
+
+const Deal = ({deal_Intro, plans}) => {
+  
+
   return (
     <div className='deal'>
         <div className="deal_Intro">
-          <h2>Please Call Us to Take the
-          Extraordinary Service!</h2>
-          <img src={image1} alt="" />
-          <Link className='btn' to={"/contact"}><p>Call:+123 934 43845</p></Link>
-        </div>
+          <h2>{deal_Intro.h2}</h2>
+          <img src={deal_Intro.image} alt="" />
+        <a
+  className="btn"
+  href={deal_Intro.email ? `mailto:${deal_Intro.email}` : `tel:${deal_Intro.phone}`}
+>
+  <p>{deal_Intro.email ? `Email: ${deal_Intro.email}` : `Call: ${deal_Intro.phone}`}</p>
+</a></div>
         <div className="main_deal">
         <div className="title ">
           <span className="priamry">Pricing Plan</span>

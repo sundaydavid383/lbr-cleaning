@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./nav.css"
 import houseimage from "../../assets/house-cleaning.png";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   const [linkActive, setLinkActive] = useState(false)
@@ -62,14 +62,14 @@ useEffect(() => {
         <div className={`links ${linkActive?"active":""}`}>
         <Link onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>
         <Link onClick={()=>setLinkActive(false)} to="/service"><p>SERVICE</p><div></div></Link>
-        <Link onClick={()=>setLinkActive(false)} to="/pages"><p>PAGES</p><div></div></Link>
+        <Link onClick={()=>setLinkActive(false)} to="/about"><p>ABOUT</p><div></div></Link>
         <Link onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
         </div>
-        <div className="btn">
+        <Link  to={"/contact"} className="btn">
           <p>
             contact us <i className="fa-solid fa-arrow-right-long"></i>
           </p>
-        </div>
+        </Link>
       </div>
     </div>
   );

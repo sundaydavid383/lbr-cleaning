@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import About from './component/about/About';
+import About from './pages/about/About';
 import Service from './pages/service/Service';
+import ServiceDetails from './component/serviceDetails/serviceDetails';
 import Nav from './component/nav/Nav'
 import {BrowserRouter, Routes, Route} from 'react-router';
 import Footer from './component/footer/Footer'
@@ -18,7 +19,7 @@ const App = () => {
        <Route path="" element={<Home/>}/>
        <Route path="/service" element={<Service/>}/>
        <Route path="/about" element={<About/>}/>
-       <Route path="/pages" element={<Blog/>}/>
+       <Route path="/services/:serviceId" element={<ServiceDetails />}/>
        <Route path="/contact" element={<Contact/>}/>
     </Routes>
     <Footer/>

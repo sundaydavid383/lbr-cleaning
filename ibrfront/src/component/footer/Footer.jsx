@@ -27,36 +27,46 @@ const Footer = () => {
       }
     };
   }, []);
-  const onSubmit = (e)=>{
-    const updateReciever = document.querySelector(".updateReciever")
-    const emailLb = document.getElementById("emailLb");
-    const regEmail = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
-    e.preventDefault();
+ const onSubmit = async (e) => {
+  e.preventDefault();
+  const updateReciever = document.querySelector(".updateReciever");
+  const emailLb = document.getElementById("emailLb");
+  const regEmail = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
 
-    if (email === "") {
-      emailLb.classList.add("alert");
-      setTimeout(() => {
-        emailLb.classList.remove("alert");
-      }, 200);
-      emailLb.textContent = "enter your email"
-      return;
-    }
-    else if(!regEmail.test(email)){
-      emailLb.classList.add("alert");
-      setTimeout(() => {
-        emailLb.classList.remove("alert");
-      }, 2000);
-      emailLb.textContent = "enter a valid email address"
-      return;
-    }
-    
-    updateReciever.classList.add("active")
-    setTimeout(() => {
-      updateReciever.classList.remove("active")
-    }, 7000);
-          emailLb.textContent = ""
-          setEmail("")
+  if (email === "") {
+    emailLb.classList.add("alert");
+    emailLb.textContent = "enter your email";
+    setTimeout(() => emailLb.classList.remove("alert"), 200);
+    return;
+  } else if (!regEmail.test(email)) {
+    emailLb.classList.add("alert");
+    emailLb.textContent = "enter a valid email address";
+    setTimeout(() => emailLb.classList.remove("alert"), 2000);
+    return;
   }
+
+  try {
+    const res = await fetch("http://localhost:5100/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      updateReciever.classList.add("active");
+      setTimeout(() => updateReciever.classList.remove("active"), 7000);
+      emailLb.textContent = "";
+      setEmail("");
+    } else {
+      emailLb.classList.add("alert");
+      emailLb.textContent = data.message || "Something went wrong!";
+    }
+  } catch (err) {
+    emailLb.classList.add("alert");
+    emailLb.textContent = "Server error. Try again later.";
+  }
+};
 
   return (
     <div className="footer ">

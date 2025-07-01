@@ -1,0 +1,334 @@
+.contact-hero {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  padding: 100px 20px;
+  text-align: center;
+  color: var(--light-text);
+}
+
+.hero-overlay {
+  background: var(--video-background); /* dark overlay */
+  padding: 40px;
+  box-shadow: var(--primary-shadow);
+}
+
+.contact-hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.contact-hero p {
+  font-size: 1.1rem;
+}
+
+/* Contact Info */
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+  margin-top: 9rem;
+}
+
+.info-card {
+  background: var(--lighter-gray);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--primary-shadow);
+}
+
+.info-card i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.info-card h3 {
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+.info-card p a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.info-card p a:hover {
+  text-decoration: underline;
+}
+
+/* Form Section */
+.contact-form-section {
+  background: var(--light-gray);
+  padding: 60px 20px;
+  display: flex;
+  flex-flow: column;
+  gap:.7rem;
+}
+
+.form-wrapper {
+  max-width: 600px;
+  margin: auto;
+  background: var(--light-backgound);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+}
+
+.form-wrapper h2 {
+  color: var(--secondary-color);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contact-form .form-group {
+  margin-bottom: 15px;
+}
+
+.contact-form label {
+  display: block;
+  color: var(--secondary-color);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: var(--light-shadow);
+}
+
+.contact-form button {
+  background: var(--primary-color);
+  color: white;
+  padding: 14px;
+  width: 100%;
+  border: none;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.contact-form button:hover {
+  background: var(--secondary-color);
+  transform: scale(1.02);
+}
+.contact-map {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.contact-map iframe {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.contact-map small {
+  display: block;
+  margin-top: 8px;
+  color: var(--secondary-color);
+}
+
+.contact-map small a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+.contact-map small a:hover {
+  text-decoration: underline;
+}
+.status-message {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.status-message.success {
+  color: var(--primary-color);
+}
+
+.status-message.error {
+  color: red;
+}
+
+/* ========================
+   Business Hours Section
+=========================== */
+.business-hours {
+  padding: 60px 20px;
+  background: var(--lighter-gray);
+  color: var(--text-color);
+  text-align: center;
+}
+
+.hours-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-left: 5px solid var(--primary-color);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+}
+
+.business-hours h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.business-hours ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.business-hours li {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* ========================
+   FAQ Section
+=========================== */
+.faq-section {
+  padding: 60px 20px;
+  background: var(--background-color);
+  color: var(--text-color);
+  text-align: left;
+}
+
+.faq-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 40px;
+}
+
+.faq-item {
+  max-width: 900px;
+  margin: 0 auto 30px auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: var(--light-shadow);
+  transition: transform 0.3s;
+  border-left: 4px solid var(--secondary-color);
+}
+
+.faq-item h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--secondary-color);
+}
+
+.faq-item p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.faq-item:hover {
+  transform: translateY(-5px);
+}
+
+/* ========================
+   Encouragement Section
+=========================== */
+.encouragement-banner {
+  padding: 50px 20px;
+  background: var(--light-backgound);
+  text-align: center;
+  color: var(--text-color);
+}
+
+.encouragement-banner h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: var(--secondary-color);
+}
+
+.encouragement-banner p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.explore-btn {
+  background: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 24px;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: var(--primary-shadow);
+  transition: background 0.3s;
+}
+
+.explore-btn:hover {
+  background: var(--secondary-color);
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-hero h1 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-info {
+    grid-template-columns: 1fr;
+    margin-top:20rem
+
+
+  }
+}
+
+/* =========================
+   📱 Mobile (below 768px)
+============================ */
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+  }
+
+  .hours-wrapper,
+  .faq-item {
+    padding: 25px 20px;
+    text-align: left;
+  }
+}
+
+
+
+

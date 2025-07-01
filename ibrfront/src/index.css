@@ -18,6 +18,7 @@
 :root{
     --primary-color:rgb(36, 170, 36);
     --secondary-color:rgb(8, 92, 8);
+    --light-secondary-color:rgb(8, 92, 8, .8);
     --background-color: rgb(245, 245, 228);
     --light-backgound: rgb(187, 238, 187);
     --tetiary-color:rgb(212, 190, 62);
@@ -33,7 +34,8 @@
     --primary-shadow: 0px 0px 5px 4px rgba(36, 170, 36,.4);
     --video-background: rgba(0,0,0,.9);
     --large-shadow: 0px 0px 90px 30px rgba(113, 223, 49, 0.6);
-}
+    --hero-background1: "../../assets/cleaningbackground.jpg";
+ }
  .logo{
     display: flex;
     align-items: flex-end;
@@ -214,4 +216,56 @@ body{
   @media (max-width: 498px) {
 
   }
-    
+    @media (max-width: 498px) {
+  html {
+    font-size: 80%; /* Reduce global font size for very small screens */
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 1.4rem 1rem;
+    gap: 1rem;
+  }
+
+  .logo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo img {
+    width: 2.8rem;
+  }
+
+  .logo p {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .btn {
+    width: 7.2rem;
+    height: 3rem;
+    font-size: 0.9rem;
+  }
+
+  .btn p {
+    left: 5%;
+  }
+
+  .title h2 {
+    font-size: 2rem;
+    line-height: 2.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .title span {
+    font-size: 1.1rem;
+  }
+
+  .iconactive,
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+}

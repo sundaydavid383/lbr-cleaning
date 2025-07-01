@@ -3,8 +3,9 @@
   flex-direction: column;
   width: 100%;
   box-shadow: var(--box-shadow);
-  height: 9rem;
+  height: 7rem;
   z-index: 223333;
+  transition: all 0.3s ease-in-out;
   position: sticky;
 }
 
@@ -12,7 +13,7 @@
     position: fixed;
     top: 0rem;
     left: 0rem;
-    z-index: 223333;
+    z-index: 233;
     animation: navtransform 1s forwards;
 }
 .nav-lower,
@@ -23,7 +24,7 @@
   width: 100%;
   background-color: var(--primary-color);
   color: var(--light-text);
-  padding: 0.6rem 1.4rem;
+  padding: 0.2rem .4rem;
 }
 .nav-upper .social-platforms {
   display: flex;
@@ -54,9 +55,9 @@
   font-size: 1.55rem;
 }
 .nav-lower {
-  padding-block: 1rem;
+  padding-block: .2rem;
   background: var(--background-color);
-  padding-inline: 5rem;
+  padding-inline: 1.5rem;
 }
 .nav .fa-bars-staggered{
     color: var(--primary-color);
@@ -129,7 +130,6 @@
   .nav-upper .social-platforms {
     display: flex;
     gap: 0.5rem;
-    background-color: rgb(229, 255, 0);
   }
   .nav .fa-bars-staggered{
     display: flex;
@@ -154,5 +154,59 @@
     padding-block: 1rem;
     height: auto;
     width: 100%;
+  }
+}
+@media (max-width: 658px) {
+  /* Stack or hide the nav-upper content for clarity */
+  .nav-upper {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.6rem 1rem;
+    gap: 0.4rem;
+  }
+
+  .media {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .nav-lower {
+    padding-inline: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .nav .fa-bars-staggered {
+    display: block;
+  }
+
+  .links {
+    position: fixed;
+    top: 5rem;
+    left: 0;
+    width: 100%;
+    height: 0;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--background-color);
+    box-shadow: var(--box-shadow);
+    transition: height 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .links.active {
+    height: auto;
+    padding-block: 1rem;
+    top: 13rem;
+  }
+
+  .links a {
+    padding: 0.8rem 0;
+  }
+
+  .btn {
+    margin-top: 0.5rem;
   }
 }

@@ -1,0 +1,301 @@
+.service-detail-page {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.detail-banner {
+  position: relative;
+  height: 350px;
+  background: var(--hero-background1) no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+}
+
+.detail-banner img {
+  display: none;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+}
+
+.overlay h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.overlay p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: auto;
+}
+
+.detail-content,
+.why-section,
+.cta-section {
+  padding: 50px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.detail-content h2,
+.why-section h2,
+.cta-section h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+.inclusion-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.inclusion-list {
+  flex: 1 1 55%;
+  list-style: none;
+  padding-left: 0;
+}
+
+.inclusion-list li {
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.inclusion-list li::before {
+  content: "\f058";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: var(--primary-color);
+  position: absolute;
+  left: 0;
+  top: 2px;
+}
+
+.inclusion-image {
+  flex: 1 1 40%;
+  text-align: center;
+}
+
+.inclusion-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: var(--light-shadow);
+}
+
+
+.benefits-list {
+  background-color: var(--light-backgound);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--light-shadow);
+  margin-top: 20px;
+}
+
+.benefits-list li {
+  margin: 8px 0;
+}
+
+.cta-section {
+  background-color: var(--tetiary-color);
+  color: var(--light-text);
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.cta-section h2 {
+  color: var(--light-text);
+}
+
+.cta-button {
+  margin-top: 20px;
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: var(--primary-shadow);
+  transition: all 0.3s ease-in-out;
+}
+
+.cta-button:hover {
+  background: var(--light-secondary-color);
+}
+.cta-button i {
+  margin-right: 8px;
+  color: white; /* or use var(--light-text) if needed */
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+.not-found {
+  padding: 50px;
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.logo {
+  display: flex;
+  align-items: flex-end;
+}
+.prep-section,
+.testimonial-section,
+.faq-section {
+  background-color: var(--light-backgound);
+  padding: 50px 20px;
+  max-width: 1100px;
+  margin: 50px auto;
+  border-radius: 10px;
+  box-shadow: var(--light-shadow);
+  animation: fadeInUp 0.8s ease both;
+}
+
+.prep-section h2,
+.testimonial-section h2,
+.faq-section h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.prep-list {
+  list-style: none;
+  padding: 0;
+}
+
+.prep-list li {
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.prep-list li::before {
+  content: "🧽";
+  position: absolute;
+  left: 0;
+}
+
+.testimonials blockquote {
+  background: #fff;
+  padding: 20px 25px;
+  border-left: 5px solid var(--primary-color);
+  font-style: italic;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.testimonials span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.faq-item h4 {
+  margin-bottom: 5px;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.faq-item p {
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  width: 100vw; /* Full viewport width */
+  max-width: 1100px;
+  margin: auto;
+  gap: 20px;
+}
+
+.faq-item {
+  background: var(--light-backgound);
+  border-radius: 8px;
+  box-shadow: var(--light-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.faq-question {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  background: white;
+  color: var(--secondary-color);
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+}
+
+.faq-question i {
+  margin-left: 10px;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.faq-answer {
+  padding: 0 20px 15px 20px;
+  animation: slideDown 0.3s ease;
+}
+
+.faq-answer p {
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s ease-out;
+}
+
+/* Active visible state when scrolled into view */
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* === ENTRANCE ANIMATION === */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

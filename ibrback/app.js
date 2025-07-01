@@ -3,11 +3,24 @@ const cors = require("cors")
 const app = express()
 const nodemailer = require("nodemailer")
 const appPassword = "yvil cmib rtwc mfzl"
+require("dotenv").config();
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const contactRoutes = require("./routes/contact");
 
 
 //usecase
 app.use(express.json())
 app.use(cors())
+app.use(helmet());
+
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+});
+app.use(limiter);
 
 
 //create transporter
@@ -51,6 +64,28 @@ app.post("/appointments/book", async (req,res) => {
       console.error("an error occured:", error.message)
       return res.status(500).json({success:false, data:"an unexpected error occured try connecting to the internet and try again"})
    }
+})
+
+
+
+app.use("/api/contact", contactRoutes);
+
+
+
+// Route to handle newsletter signup
+app.post('/api/subscribe', (req, res) => {
+  const { email } = req.body;
+
+  const emailRegex = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
+
+  if (!email || !emailRegex.test(email)) {
+    return res.status(400).json({ success: false, message: "Invalid email format" });
+  }
+
+  // TODO: Save email to database or file
+  console.log("New subscription:", email);
+
+  return res.status(200).json({ success: true, message: "Subscription successful!" });
 })
 
 //i am listening
