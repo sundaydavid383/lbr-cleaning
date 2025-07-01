@@ -233,13 +233,12 @@ select {
 }
 
 .single_service_display:hover .text {
-  background: linear-gradient(135deg, var(--primary-color), var(--tetiary-color));
-  transform: scale(1.05);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
   color: #fff;
 }
 
 .single_service_display:hover ul li i {
-  color: #fff;
+  color: var(--secondary-color);
 }
 
 .single_service_display:hover .btn p {
