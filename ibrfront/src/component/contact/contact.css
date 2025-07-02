@@ -63,15 +63,6 @@ select {
   text-transform: capitalize;
 }
 
-.contact .btn {
-  margin-top: 2rem;
-  border-radius: 1.3rem;
-}
-
-.contact .btn p {
-  margin-top: -0.6rem;
-  line-height: 0rem;
-}
 
 .contact .main_contact form .inputlabel {
   position: relative;
@@ -212,19 +203,7 @@ select {
   transition: color 0.3s ease;
 }
 
-/* BUTTON INSIDE */
-.single_service_display .btn p {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.6rem;
-  background: var(--primary-color);
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-  color: #fff;
-  transition: all 0.3s ease-in-out;
-}
+
 
 /* === SHOCKING HOVER EFFECT === */
 .single_service_display:hover {
@@ -241,13 +220,10 @@ select {
   color: var(--secondary-color);
 }
 
-.single_service_display:hover .btn p {
-  background: #fff;
-  color: var(--primary-color);
-}
+
 
 /* Carousel Nav Buttons */
-.carousel-btn {
+ .carousel-btn {
   background: var(--primary-color);
   color: white;
   border: none;
@@ -260,7 +236,7 @@ select {
 
 .carousel-btn:hover {
   background: var(--tetiary-color);
-}
+} 
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
@@ -272,8 +248,8 @@ select {
     flex-direction: column;
   }
 
-  .carousel-btn {
+   .carousel-btn {
     width: 100%;
     margin-top: 1rem;
-  }
+  } 
 }

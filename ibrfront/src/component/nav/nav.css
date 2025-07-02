@@ -106,15 +106,12 @@
   .nav-lower {
     padding-inline: 2.4rem;
   }
-  .nav-upper .social-platforms {
-    background-color: blue;
-  }
+
 }
 @media (max-width: 868px) {
   .nav-upper .social-platforms {
     display: flex;
     gap: 0.5rem;
-    background-color: red;
   }
   .nav-lower {
     padding-inline: 0.6rem;

@@ -1,138 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import "./portfolio.css"
-import img1 from "../../assets/cleaner11.jpg"
-import img2 from "../../assets/cleaner12.jpg"
-import img4 from "../../assets/cleaner13.jpg"
-import img3 from "../../assets/cleaner14.jpg"
-import img5 from "../../assets/cleaner15.jpg"
-import img6 from "../../assets/cleaner16.jpg"
-import img7 from "../../assets/cleaner17.jpg"
-import img8 from "../../assets/cleaner18.jpg"
+import React, { useState } from 'react';
+import './portfolio.css';
+import img1 from "../../assets/cleaner11.jpg";
+import img2 from "../../assets/cleaner12.jpg";
+import img3 from "../../assets/cleaner14.jpg";
+import img4 from "../../assets/cleaner13.jpg";
+import img5 from "../../assets/cleaner15.jpg";
+import img6 from "../../assets/cleaner16.jpg";
+import img7 from "../../assets/cleaner17.jpg";
+import img8 from "../../assets/cleaner18.jpg";
+
+const cardsData = [
+  { name: "John Doe", img: img1, location: "New York, USA", desc: "Residential Cleaning Specialist" },
+  { name: "Jane Smith", img: img2, location: "London, UK", desc: "Office Cleaning Expert" },
+  { name: "Michael Johnson", img: img3, location: "Toronto, Canada", desc: "Deep Cleaning Specialist" },
+  { name: "Alice Brown", img: img4, location: "Sydney, Australia", desc: "Post-Construction Cleaning" },
+  { name: "David Wilson", img: img5, location: "Berlin, Germany", desc: "Move-in/Move-out Cleaning" },
+  { name: "Emma Davis", img: img6, location: "Paris, France", desc: "Carpet and Upholstery Cleaning" },
+  { name: "Chris Lee", img: img7, location: "Tokyo, Japan", desc: "Window and Glass Cleaning" },
+  { name: "Mr Love", img: img8, location: "Newcastle, UK", desc: "Window and Glass Cleaning" },
+];
 
 const Portfolio = () => {
-    const [translate, setTranslate] = useState(0)
-    const [moveVlaue, setMoveValue] = useState(585)
-  useEffect(() => {
-        document.querySelector(".portfolio_container").style.transform = `translateX(${translate}px)`
-  }, [translate])
-//   useEffect(() => {
-//     const handleResize = () => {
-//         const width = window.innerWidth;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const total = cardsData.length;
 
-//         if (width < 658) {
-//             setMoveValue(1162); // 755%
-//         } else if (width < 868) {
-//             setMoveValue(1008); // 655%
-//         } else if (width < 668) {
-//             setMoveValue(854); // 555%
-//         } else {
-//             setMoveValue(600); // Default for 390%
-//         }
-//     };
+  const moveLeft = () => {
+    if (activeIndex > 0) setActiveIndex(activeIndex - 1);
+  };
 
-//     // Call initially
-//     handleResize();
+  const moveRight = () => {
+    if (activeIndex < total - 1) setActiveIndex(activeIndex + 1);
+  };
 
-//     // Listen for window resize
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-// }, []);
-  
   return (
-    <div className='portfolio'>
-            {translate < 0?<div onClick={()=>{setTranslate(prev=>prev+moveVlaue)}} className="moveleft iconactive"><i className="fa-solid fa-arrow-left-long"></i></div>:null}
-            {translate > -4015?<div onClick={()=>{setTranslate(prev=>prev-moveVlaue)}} className="moveright iconactive"><i className="fa-solid fa-arrow-right-long"></i></div>:null}
-       <div className="portfolio_heading">
-       <div className="title">
-          <span className='priamry'>our services</span>
-          <h2 className='bright'>Professional Cleaning Services</h2>
-        </div> 
-        <div className="btn">
-          <p>
-          View all works<i className="fa-solid fa-arrow-right-long"></i>
+    <div className="portfolio">
+      <div className="portfolio_heading">
+        <div className="title">
+          <span className="priamry">our services</span>
+          <h2 className="bright">Professional Cleaning Services</h2>
+          <p className="tracker">
+            Viewing service {activeIndex + 1} of {total}
           </p>
         </div>
-       </div>
-       <div className="portfolio_holder">
-       <div className="portfolio_container container">
-  <div className="portfolio_card">
-    <div className="person">John Doe</div>
-    <img src={img1} alt="John Doe" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>New York, USA</span>
-      <p>John Doe - Residential Cleaning Specialist</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Jane Smith</div>
-    <img src={img2} alt="Jane Smith" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>London, UK</span>
-      <p>Jane Smith - Office Cleaning Expert</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Michael Johnson</div>
-    <img src={img3} alt="Michael Johnson" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Toronto, Canada</span>
-      <p>Michael Johnson - Deep Cleaning Specialist</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Alice Brown</div>
-    <img src={img4} alt="Alice Brown" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Sydney, Australia</span>
-      <p>Alice Brown - Post-Construction Cleaning</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">David Wilson</div>
-    <img src={img5} alt="David Wilson" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Berlin, Germany</span>
-      <p>David Wilson - Move-in/Move-out Cleaning</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Emma Davis</div>
-    <img src={img6} alt="Emma Davis" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Paris, France</span>
-      <p>Emma Davis - Carpet and Upholstery Cleaning</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Chris Lee</div>
-    <img src={img7} alt="Chris Lee" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Tokyo, Japan</span>
-      <p>Chris Lee - Window and Glass Cleaning</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-  <div className="portfolio_card">
-    <div className="person">Mr Love</div>
-    <img src={img8} alt="Chris Lee" />
-    <div className="place">
-      <span><i className='fas fa-location-dot'></i>Newcastle British</span>
-      <p>Chris Lee - Window and Glass Cleaning</p>
-      <i className="fa-solid fa-circle-arrow-right"></i>
-    </div>
-  </div>
-</div>
+        <div className="btn">
+          <p>View all works <i className="fa-solid fa-arrow-right-long"></i></p>
+        </div>
+      </div>
 
-</div>
-       </div>
-   
-  )
-}
+      <div className="portfolio_holder">
+        {activeIndex > 0 && (
+          <div className="moveleft iconactive" onClick={moveLeft}>
+            <i className="fa-solid fa-arrow-left-long"></i>
+          </div>
+        )}
 
-export default Portfolio
+        <div className="portfolio_card">
+          <div className="person">{cardsData[activeIndex].name}</div>
+          <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} />
+          <div className="place">
+            <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
+            <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
+            <i className="fa-solid fa-circle-arrow-right"></i>
+          </div>
+        </div>
+
+        {activeIndex < total - 1 && (
+          <div className="moveright iconactive" onClick={moveRight}>
+            <i className="fa-solid fa-arrow-right-long"></i>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Portfolio;
