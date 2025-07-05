@@ -199,6 +199,9 @@ body{
     html{
         font-size: 86%;
     }
+    body{
+       overflow-x: hidden;
+    }
     .iconactive,
 .icon{
     width: 2.4rem;
@@ -218,6 +221,7 @@ body{
   }
     @media (max-width: 498px) {
   html {
+     overflow-x: hidden;
     font-size: 80%; /* Reduce global font size for very small screens */
   }
 

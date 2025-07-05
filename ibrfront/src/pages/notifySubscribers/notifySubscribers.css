@@ -1,0 +1,39 @@
+.notify-subscribers {
+  padding: 2rem;
+  background: var(--lighter-gray);
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  max-width: 600px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notify-subscribers h2 {
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.notify-subscribers textarea {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--gray);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.notify-subscribers button {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.notify-subscribers button:hover {
+  background: var(--secondary-color);
+}

@@ -1,6 +1,6 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
-const twilio = require("twilio");
+// const twilio = require("twilio"); // 🔒 Commented out for now
 
 const mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -10,10 +10,10 @@ const mailTransporter = nodemailer.createTransport({
   },
 });
 
-const twilioClient = twilio(
-  process.env.TWILIO_SID,
-  process.env.TWILIO_TOKEN
-);
+// const twilioClient = twilio(
+//   process.env.TWILIO_SID,
+//   process.env.TWILIO_TOKEN
+// );
 
 exports.submitContactForm = async (req, res) => {
   try {
@@ -37,14 +37,15 @@ exports.submitContactForm = async (req, res) => {
       from: process.env.SMTP_USER,
       to: email,
       subject: `Thanks for contacting SparkleClean!`,
-      text: `Hi ${name},\n\nThank you for reaching out to SparkleClean. We’ve received your message and will get back to you shortly.\n\nHere’s what you sent:\nSubject: ${subject}\nMessage: ${message}\n\nYou can also reach us on WhatsApp at ${process.env.WHATSAPP_TO}\n\nBest regards,\nThe SparkleClean Team`,
+      text: `Hi ${name},\n\nThank you for reaching out to SparkleClean. We’ve received your message and will get back to you shortly.\n\nHere’s what you sent:\nSubject: ${subject}\nMessage: ${message}\n\nBest regards,\nThe SparkleClean Team`,
     };
 
     // ✉️ Send Emails
     await mailTransporter.sendMail(adminMailOptions);
     await mailTransporter.sendMail(userMailOptions);
 
-    // 📲 WhatsApp message to YOU (admin)
+    // 📲 WhatsApp message to admin (commented out)
+    /*
     const whatsappTextToAdmin = `📥 New Contact Form Submission:\n\n👤 Name: ${name}\n📧 Email: ${email}\n📱 WhatsApp: ${whatsapp}\n📝 Subject: ${subject}\n💬 Message: ${message}`;
     await twilioClient.messages.create({
       body: whatsappTextToAdmin,
@@ -59,11 +60,11 @@ exports.submitContactForm = async (req, res) => {
       from: process.env.TWILIO_WHATSAPP_FROM,
       to: `whatsapp:${whatsapp}`,
     });
+    */
 
-    res.status(200).json({ msg: "Form submitted successfully!" });
+    res.status(200).json({ msg: "Form submitted successfully via email!" });
   } catch (error) {
     console.error("Contact Form Error:", error);
     res.status(500).json({ msg: "Server error. Please try again later." });
   }
 };
-

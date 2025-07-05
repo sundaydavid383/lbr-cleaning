@@ -60,7 +60,7 @@
   margin-bottom: 10px;
 }
 
-.info-card p a {
+.info-card p {
   color: var(--text-color);
   text-decoration: none;
 }
@@ -112,6 +112,7 @@
   border: 1px solid var(--gray);
   border-radius: 8px;
   font-size: 1rem;
+  margin-top: .4rem;
 }
 
 .contact-form input:focus,
@@ -119,6 +120,7 @@
   outline: none;
   border-color: var(--primary-color);
   box-shadow: var(--light-shadow);
+  
 }
 
 .contact-form button {
@@ -308,7 +310,7 @@
 @media (max-width: 480px) {
   .contact-info {
     grid-template-columns: 1fr;
-    margin-top:20rem
+    margin-top:30rem
 
 
   }

@@ -220,6 +220,12 @@ select {
   color: var(--secondary-color);
 }
 
+.contact .main_contact .btn{
+  margin-top: 0rem;
+}
+.contact .main_contact .btn p {
+  margin-top: -2rem;
+}
 
 
 /* Carousel Nav Buttons */
@@ -249,7 +255,7 @@ select {
   }
 
    .carousel-btn {
-    width: 100%;
+    width: 40%;
     margin-top: 1rem;
   } 
 }

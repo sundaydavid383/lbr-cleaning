@@ -33,11 +33,7 @@ const Deal = ({deal_Intro, plans}) => {
                 <li key={idx}><i className="fa-solid fa-check"></i> {feature}</li>
                ))}
               </ul>
-              <div className="btn">
-          <p>
-            {plan.btnText} <i className="fa-solid fa-arrow-right-long"></i>
-          </p>
-        </div>
+              
               </div>
               
             ))}
