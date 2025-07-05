@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const app = express()
 const nodemailer = require("nodemailer")
-const EmailModel = require("./models/Subscriber");
+const EmailModel = require("./models/subscriber");
 require("dotenv").config();
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
