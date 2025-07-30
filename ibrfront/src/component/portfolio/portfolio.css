@@ -28,6 +28,7 @@
 }
 .portfolio_container{
     width: 938%;
+    min-height: 100%;
     margin-left: -1.7rem;
     transition: .3s linear;
     background-color: red;
@@ -35,11 +36,25 @@
     gap:2rem;
     /* animation: scrollingover 2s infinite; */
 }
-.portfolio_card{
-    width: 100%; 
+.portfolio_card_wrapper {
+  min-height: 320px; /* adjust based on your card height */
+  position: relative;
+}
+.portfolio_holder .iconactive{
+   width: 2rem;
+   height: 2rem;
+   font-size: 1rem;
+   line-height: 2rem;
+}
+.portfolio_card{ 
     height: 100%;
-    position: relative; 
     overflow: hidden;
+    position: absolute; /* 👈 ensures cards overlap */
+    width: 100%;
+    min-height: 220px;  /* 👈 avoids flicker and collapse */
+    background: var(--lighter-gray);
+    border-radius: 0.5rem;
+    box-shadow: var(--box-shadow);
 }
 .portfolio_card .person{
     position: absolute;
@@ -109,7 +124,7 @@
 }
 .portfolio_card:hover .person{
     width:fit-content;
-height: fit-content;
+    height: fit-content;
 }
 @keyframes scrollingover {
     0% {

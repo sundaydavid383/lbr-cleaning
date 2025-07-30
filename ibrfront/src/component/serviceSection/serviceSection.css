@@ -99,6 +99,7 @@
   margin-bottom: 0.4rem;
   padding: 0.5rem;
   border-radius: 8px;
+  text-wrap: no-wrap;
   color: var(--light-text);
   font-weight: 400;
   font-size: .9rem;

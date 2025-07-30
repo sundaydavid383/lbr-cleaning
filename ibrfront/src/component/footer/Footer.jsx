@@ -2,9 +2,16 @@ import { useRef, useEffect, useState } from "react";
 import "./footer.css";
 import houseimage from "../../assets/house-cleaning.png";
 import { Link } from "react-router";
+import CustomAlert from "../../component/customAlert/CustomAlert";
+import Loading from "../../component/loading/Loading";
+
 const Footer = () => {
   const [email, setEmail] = useState("");
+  const [alert, setAlert] = useState({ message: "", type: "success" });
+  const [loading, setLoading] = useState(false);
+
   const observer = useRef(null);
+
   useEffect(() => {
     observer.current = new IntersectionObserver(
       (entries) => {
@@ -19,178 +26,128 @@ const Footer = () => {
       },
       { threshold: 0.3 }
     );
+
     const elements = document.querySelectorAll(".futup");
     elements.forEach((em) => observer.current.observe(em));
+
     return () => {
       if (observer.current) {
         elements.forEach((em) => observer.current.unobserve(em));
       }
     };
   }, []);
- const onSubmit = async (e) => {
-  e.preventDefault();
-  const updateReciever = document.querySelector(".updateReciever");
-  const emailLb = document.getElementById("emailLb");
-  const regEmail = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
 
-  if (email === "") {
-    emailLb.classList.add("alert");
-    emailLb.textContent = "enter your email";
-    setTimeout(() => emailLb.classList.remove("alert"), 200);
-    return;
-  } else if (!regEmail.test(email)) {
-    emailLb.classList.add("alert");
-    emailLb.textContent = "enter a valid email address";
-    setTimeout(() => emailLb.classList.remove("alert"), 2000);
-    return;
-  }
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const regEmail = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
 
-  try {
-    const res = await fetch("http://localhost:5100/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      updateReciever.classList.add("active");
-      setTimeout(() => updateReciever.classList.remove("active"), 7000);
-      emailLb.textContent = "";
-      setEmail("");
-    } else {
-      emailLb.classList.add("alert");
-      emailLb.textContent = data.message || "Something went wrong!";
+    if (email.trim() === "") {
+      setAlert({ message: "Please enter your email", type: "danger" });
+      return;
+    } else if (!regEmail.test(email)) {
+      setAlert({ message: "Enter a valid email address", type: "danger" });
+      return;
     }
-  } catch (err) {
-    emailLb.classList.add("alert");
-    emailLb.textContent = "Server error. Try again later.";
-  }
-};
+
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:5100/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setAlert({ message: data.message, type: "success" });
+        setEmail("");
+      } else {
+        setAlert({ message: data.message || "Something went wrong", type: "danger" });
+      }
+    } catch (err) {
+      setAlert({ message: "Server error. Try again later.", type: "danger" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="footer ">
+    <div className="footer">
+      {loading && <Loading message="Subscribing..." />}
+      <CustomAlert
+        message={alert.message}
+        type={alert.type}
+        onClose={() => setAlert({ message: "", type: "success" })}
+      />
+
       <div className="subscribe container">
         <h2>Stay in Touch</h2>
-        <form onSubmit={onSubmit} action="">
+        <form onSubmit={onSubmit}>
           <input
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              console.log(email)
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             type="text"
             name="email"
             placeholder="Enter Your Email"
           />
-          <label id="emailLb" htmlFor="">
-          </label>
           <button type="submit" className="btn">
-          <p>
-          Thank You <i className="fa-solid fa-arrow-right-long"></i>
-          </p>
-        </button>
+            <p>
+              Subscribe <i className="fa-solid fa-arrow-right-long"></i>
+            </p>
+          </button>
         </form>
-    {/* {    <div className="updateReciever">
-          <span>You will now be receiving updates from us</span>
-          <div onClick={()=>{document.querySelector(".updateReciever").classList.remove("active")}} className="btn">
-          <p>
-          Thank You <i className="fa-solid fa-arrow-right-long"></i>
-          </p>
-        </div>
-        </div>} */}
+
         <div className="socials">
-          <Link className="iconactive" target="_blank" to="https://www.facebook.com/RCCGNewSprings">
+          <Link className="iconactive" target="_blank" to="https://www.facebook.com/lbrcleaning">
             <i className="fa-brands fa-facebook-f"></i>
           </Link>
-          <Link className="iconactive" target="_blank" to="https://www.instagram.com/rccgnewspringsyouth/">
+          <Link className="iconactive" target="_blank" to="https://www.instagram.com/lbrcleaning">
             <i className="fa-brands fa-instagram"></i>
           </Link>
-          <Link className="iconactive" target="_blank" to="https://www.youtube.com/@RCCGNewSprings">
+          <Link className="iconactive" target="_blank" to="https://www.youtube.com/@lbrcleaning">
             <i className="fa-brands fa-youtube"></i>
           </Link>
         </div>
       </div>
+
       <div className="main_footer container">
         <div className="main futup">
-           <div className="logo">
-                    <img src={houseimage} alt="" />
-                    <p>LBR Cleaning</p>
-                  </div>
+          <div className="logo">
+            <img src={houseimage} alt="" />
+            <p>LBR Cleaning</p>
+          </div>
           <p>
-            At Newspring Tim412, we are dedicated to guiding youth towards a
-            deeper relationship with Jesus Christ. Our mission is to inspire and
-            equip the next generation to live out their faith boldly, fostering
-            a community rooted in love, service, and spiritual growth.
+            At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.
           </p>
         </div>
+
         <ul className="explore futup">
-          <h2>Explore Link</h2>
-          <li>
-            <Link to="">
-              <span></span>
-              <i className="fa-solid fa-blog"></i>Blog
-            </Link>
-          </li>
-          <li>
-            <Link to="/about">
-              <span></span>
-              <i className="fa-solid fa-address-card"></i>About Us
-            </Link>
-          </li>
-          <li>
-            <Link to="/services">
-              <span></span>
-              <i className="fa-brands fa-servicestack"></i>Services
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact">
-              <span></span>
-            </Link>
-          </li>
+          <h2>Explore Links</h2>
+          <li><Link to="/blog"><i className="fa-solid fa-blog"></i> Blog</Link></li>
+          <li><Link to="/about"><i className="fa-solid fa-address-card"></i> About Us</Link></li>
+          <li><Link to="/services"><i className="fa-brands fa-servicestack"></i> Services</Link></li>
+          <li><Link to="/contact"><i className="fa-solid fa-phone"></i> Contact</Link></li>
         </ul>
+
         <div className="footer_details futup">
-          <p>
-            <small>
-              <i className="fa-solid fa-phone"></i>
-            </small>{" "}
-            09014886877
-          </p>
-          <a target="_blank" href="https://wa.me/2349014886853">
-            <p>
-              <small>
-                <i className="fa-brands fa-whatsapp"></i>
-              </small>{" "}
-              +123 912 234 4565
-            </p>
+          <p><i className="fa-solid fa-phone"></i> 09014886877</p>
+          <a href="https://wa.me/2349014886853" target="_blank" rel="noreferrer">
+            <p><i className="fa-brands fa-whatsapp"></i> +2349014886853</p>
           </a>
-          <a href="mailto:sundayudoh383@gmail.com">
-            <p>
-              <small>
-                <i className="fa-solid fa-envelope"></i>
-              </small>{" "}
-              Tim412@gmail.com
-            </p>
+          <a href="mailto:info@lbrcleaning.com">
+            <p><i className="fa-solid fa-envelope"></i> info@lbrcleaning.com</p>
           </a>
           <Link
             target="_blank"
-            to={
-              "https://www.google.com/maps/search/RCCG+NewSprings,+The+Capital+Building,+332+Ikorodu+Road,+Idiroko+Bus+Stop,+Maryland,+Lagos/@6.5643569,3.3673699,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI1MDExNS4wIKXMDSoASAFQAw%3D%3D"
-            }
+            to="https://www.google.com/maps?q=LBR+Cleaning+Services,+Lagos,+Nigeria"
           >
-            <p>
-              <small>
-                <i className="fa-solid fa-location-dot"></i> Address:
-              </small>{" "}
-              The Capital Building, 332 Ikorodu Road, Lagos, Nigeria 100211
-            </p>
+            <p><i className="fa-solid fa-location-dot"></i> 45 Clean Avenue, Ikeja, Lagos</p>
           </Link>
         </div>
       </div>
+
       <div className="copyright">
-        @2024 All Rights Copyright <span>Tim 412</span>. Design & Developed By
-        DavidFoster.
+        ©2024 All Rights Reserved <span>LBR Cleaning</span>. Designed & Built by DavidFoster.
       </div>
     </div>
   );

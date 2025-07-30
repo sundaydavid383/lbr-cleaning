@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'; // ✅ import
 import './portfolio.css';
 import img1 from "../../assets/cleaner11.jpg";
 import img2 from "../../assets/cleaner12.jpg";
@@ -23,13 +24,20 @@ const cardsData = [
 const Portfolio = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = cardsData.length;
+  const [direction, setDirection] = useState(0); // 🔄 Track direction for animation
 
   const moveLeft = () => {
-    if (activeIndex > 0) setActiveIndex(activeIndex - 1);
+    if (activeIndex > 0) {
+      setDirection(-1);
+      setActiveIndex(activeIndex - 1);
+    }
   };
 
   const moveRight = () => {
-    if (activeIndex < total - 1) setActiveIndex(activeIndex + 1);
+    if (activeIndex < total - 1) {
+      setDirection(1);
+      setActiveIndex(activeIndex + 1);
+    }
   };
 
   return (
@@ -54,15 +62,26 @@ const Portfolio = () => {
           </div>
         )}
 
-        <div className="portfolio_card">
-          <div className="person">{cardsData[activeIndex].name}</div>
-          <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} />
-          <div className="place">
-            <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
-            <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
-            <i className="fa-solid fa-circle-arrow-right"></i>
-          </div>
-        </div>
+       <div className="portfolio_card_wrapper">
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={activeIndex}
+      className="portfolio_card"
+      initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
+      transition={{ duration: 0.5, type: "spring" }}
+    >
+      <div className="person">{cardsData[activeIndex].name}</div>
+      <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} />
+      <div className="place">
+        <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
+        <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
+        <i className="fa-solid fa-circle-arrow-right"></i>
+      </div>
+    </motion.div>
+  </AnimatePresence>
+</div>
 
         {activeIndex < total - 1 && (
           <div className="moveright iconactive" onClick={moveRight}>

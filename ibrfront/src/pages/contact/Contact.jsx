@@ -6,6 +6,10 @@ import Loading from "../../component/loading/Loading";
 import Hero from "../../component/hero/Hero";
 import bgImage from "../../assets/cleaningbackground.jpg";
 import CustomAlert from "../../component/customAlert/CustomAlert";
+import backgroundVideo from "../../assets/cleaningvideo1.mp4";
+import star from  "../../assets/star.png"
+import spark from  "../../assets/spark.png"
+import heroimage1 from "../../assets/cleaner3.png"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -96,9 +100,9 @@ const Contact = () => {
         "Our friendly team is ready to assist you with quotes, service info, scheduling, or anything else you need.",
         "Reach out via phone, email, or WhatsApp – we respond quickly and professionally.",
       ],
-      sectionimage: "/images/contact-hero-person.png",
-      sectionimageStar: "/images/contact-stars.png",
-      sectionimageSpark: "/images/contact-spark.png",
+      sectionimage: heroimage1,
+      sectionimageStar: star,
+      sectionimageSpark: spark,
       talks: [
         "Need a custom cleaning plan? Just ask!",
         "We offer flexible scheduling for busy lives.",
@@ -111,17 +115,17 @@ const Contact = () => {
     {
       icon: "fas fa-envelope",
       title: "Quick Email Replies",
-      description: "We respond to every email within 24 hours — often much faster.",
+      description: "We respond to every email within 24 hours — often much faster on .",
     },
     {
       icon: "fas fa-phone-alt",
       title: "Call Us Directly",
-      description: "Have something urgent? Call and speak with a real person instantly.",
+      description: "Have something urgent? Call and speak with a real person instantly on +1 (234) 567-890.",
     },
     {
       icon: "fab fa-whatsapp",
       title: "Chat via WhatsApp",
-      description: "Send us a message on WhatsApp and get real-time answers and updates.",
+      description: "Send us a message on WhatsApp and get real-time answers and updates on +234 901 488 6853.",
     },
   ];
 

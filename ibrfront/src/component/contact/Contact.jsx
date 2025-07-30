@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./contact.css";
 import validator from "validator";
 import CustomAlert from "../customAlert/CustomAlert"; // ✅ Importing custom alert
-import Loading from "../component/loading/Loading";
+import Loading from "../loading/Loading";
 
 const Contact = ({ services }) => {
   const [service, setService] = useState("Kind of cleaning service");
@@ -94,7 +94,7 @@ const Contact = ({ services }) => {
         return;
       }
 
-      const response = await fetch("http://localhost:5100/appointments/book", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}appointments/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone, service }),

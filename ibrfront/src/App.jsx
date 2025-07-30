@@ -8,6 +8,8 @@ import Footer from './component/footer/Footer'
 import Contact from './pages/contact/Contact'
 import Blog from './pages/blog/Blog'
 import Home from './pages/home/Home'
+import NotifySubscribers from "./pages/notifySubscribers/NotifySubscribers"
+import AdminMessagePage from './pages/adminMessagePage/AdminMessagePage';
 
 const App = () => {
 
@@ -21,6 +23,9 @@ const App = () => {
        <Route path="/about" element={<About/>}/>
        <Route path="/services/:serviceId" element={<ServiceDetails />}/>
        <Route path="/contact" element={<Contact/>}/>
+       <Route path="/notify" element={<NotifySubscribers/>}/>
+       <Route path="/admin/message" element={<AdminMessagePage/>}/>
+       <Route path="*" element={<h1>Page not found</h1>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>

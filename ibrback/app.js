@@ -3,7 +3,6 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const app = express()
 const nodemailer = require("nodemailer")
-const EmailModel = require("./models/subscriber");
 require("dotenv").config();
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -23,48 +22,80 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-
+const OWNER_EMAIL = process.env.SMTP_USER;
 //create transporter
 const transporter = nodemailer.createTransport({
-  service:"gmail",
-  auth:{
-    user:"sundayudoh383@gmail.com",
-    pass:process.env.APPPASSWORD || "NO appPassword" // Use environment variable or fallback to hardcoded password
+  service: "gmail",
+  auth: {
+    user: "sundayudoh383@gmail.com",
+    pass: process.env.APPPASSWORD || "NO appPassword" // Use environment variable or fallback to hardcoded password
   },
-  pool:true
+  pool: true
 })
-  
-  
-  //endpoint
-app.post("/appointments/book", async (req,res) => {
-   console.log(req.body)
-   const {name, email, phone, service} = req.body
 
-   if(!name || !email || !phone ||!service){
-    return res.status(400).json({success:false, data:"Invalid user data"})
-   }
 
-   const mailOption = {
-    form:"from '<LBR cleaning>'",
-    to:email,
-    subject:"Welcome to LBR cleaning",
-    text: `Dear Valued Customer,\n\n
-    Thank you for choosing LBR Cleaning! We are excited to help keep your space spotless and fresh.\n\n
-    If this is your first time booking with us, welcome! We are committed to providing top-quality cleaning services tailored to your needs. Your satisfaction is our priority.\n\n
-    If you're a returning customer, we truly appreciate your trust in us. We’re thrilled to continue serving you and making your home or workspace shine.\n\n
-    Need assistance or have special requests? Feel free to reply to this email or contact our support team.\n\n
-    We look forward to serving you!\n\n
-    Best regards,\n
-    The LBR Cleaning Team`
-   }
+//endpoint
+app.post("/appointments/book", async (req, res) => {
+  console.log(req.body)
+  const { name, email, phone, service } = req.body
 
-   try {
-       transporter.sendMail(mailOption)
-       return res.status(500).json({success:true, data:"successfully send email to user"}) 
-   } catch (error) {
-      console.error("an error occured:", error.message)
-      return res.status(500).json({success:false, data:"an unexpected error occured try connecting to the internet and try again"})
-   }
+  if (!name || !email || !phone || !service) {
+    return res.status(400).json({ success: false, data: "Invalid user data" })
+  }
+  const sharedDetails = `
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Service: ${service}
+`;
+
+    // Email to the customer
+  const userMailOptions = {
+    from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
+    to: email,
+    subject: "Appointment Confirmation - LBR Cleaning",
+    text: `Dear ${name},
+
+Thank you for booking an appointment with LBR Cleaning!
+
+Here are the details of your request:
+${sharedDetails}
+
+We will reach out shortly to confirm and schedule your service.
+
+If you have any questions, feel free to reply to this email.
+
+Best regards,  
+The LBR Cleaning Team
+    `,
+  };
+
+  // Email to the owner
+  const ownerMailOptions = {
+    from: '"LBR Cleaning Alerts" <sundayudoh383@gmail.com>',
+    to: OWNER_EMAIL,
+    subject: "New Appointment Booking",
+    text: `Hello Admin,
+
+A new cleaning appointment has been booked. Here are the details:
+
+${sharedDetails}
+
+Please reach out to the customer as soon as possible.
+
+-- End of Message --`,
+  };
+
+  try {
+      await transporter.sendMail(userMailOptions);
+      console.log("User email sent successfully");
+      await transporter.sendMail(ownerMailOptions);
+      console.log("Owner email sent successfully");
+    return res.status(500).json({ success: true, data: "successfully send email to user" })
+  } catch (error) {
+    console.error("an error occured:", error.message)
+    return res.status(500).json({ success: false, data: "an unexpected error occured try connecting to the internet and try again" })
+  }
 })
 
 
@@ -74,44 +105,11 @@ app.use("/api/contact", contactRoutes);
 
 
 // Route to handle newsletter signup
-app.post('/api/subscribe', async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    const emailRegex = /^[A-Za-z0-9%._+-]{2,}@[A-Za-z0-9\-]{2,}\.[A-Za-z]{2,}$/;
-
-    if (!email || !emailRegex.test(email)) {
-      return res.status(400).json({ success: false, message: "Invalid email format" });
-    }
-
-    // TODO: Save email to database or file
-    console.log("New subscription:", email);
-    
-    // Check if email already exists
-    const existing = await EmailModel.findOne({email});
-    if(existing){
-      console.log("Email already subscribed:", email);
-      return res.status(400).json({ success: false, message: "Email already subscribed." });
-    }
-
-    const newSubscriber = await EmailModel.create({email});
-
-    if (newSubscriber){
-      console.log("New subscriber added:", newSubscriber);
-      return res.status(200).json({ success: true, message: "Subscription successful!" });
-    }
-    
-  } catch (error) {
-    console.error("Error in /api/subscribe:", error);
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred while processing your request",
-    });
-  }
-});
+const subscriberRouter = require("./routes/subscribe");
+app.use("/api", subscriberRouter);
 
 const notifyRoute = require("./routes/notify");
-app.use(notifyRoute);
+app.use("/api", notifyRoute);
 
 //i am listening
 async function connectDB() {
