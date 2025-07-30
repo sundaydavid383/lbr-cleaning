@@ -1,4 +1,4 @@
-const EmailModel = require("../models/Subscriber");
+const EmailModel = require("../models/subscriber");
 const nodemailer = require("nodemailer");
 require("dotenv").config()
 
