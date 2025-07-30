@@ -51,7 +51,7 @@ const Footer = () => {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5100/api/subscribe", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
