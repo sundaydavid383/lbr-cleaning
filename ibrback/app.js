@@ -34,7 +34,16 @@ const transporter = nodemailer.createTransport({
 })
 
 
-//endpoint
+app.get('/welcome', (req, res)=>{
+  try{
+    return res.status(200).json({ success: true, message: "Welcome to LBR Cleaning API" })
+  }
+  catch(err){
+    return res.status(500).json({ success: false, message: "An error occurred while processing your request" });
+  }
+})
+
+  //endpoint
 app.post("/appointments/book", async (req, res) => {
   console.log(req.body)
   const { name, email, phone, service } = req.body
