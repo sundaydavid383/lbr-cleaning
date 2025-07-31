@@ -104,7 +104,7 @@ const section = [
     sectionimageStar: star,
     sectionimageSpark: spark,
     talks: ["Get a quote", "Call for cleaning"],
-    talksReport: "09012345678"
+    talksReport: "+234 813 456 7890"
   },
   {
     questions: "Residential & Commercial",
@@ -118,7 +118,7 @@ const section = [
     sectionimageStar: star,
     sectionimageSpark: spark,
     talks: ["Schedule Now", "Free Consultation"],
-    talksReport: "09087654321"
+    talksReport: "+234 813 456 7890"
   },
   {
     questions: "Specialized Services",
@@ -132,7 +132,7 @@ const section = [
     sectionimageStar: star,
     sectionimageSpark: spark,
     talks: ["Book Sanitization", "Get Details"],
-    talksReport: "08123456789"
+    talksReport: "+234 813 456 7890"
   },
   {
     questions: "Why Choose Us?",
@@ -146,7 +146,7 @@ const section = [
     sectionimageStar: star,
     sectionimageSpark: spark,
     talks: ["Contact Now", "Let's Talk"],
-    talksReport: "08012349876"
+    talksReport: "+234 813 456 7890"
   }
 ];
 

@@ -65,7 +65,7 @@ useEffect(() => {
         <Link onClick={()=>setLinkActive(false)} to="/about"><p>ABOUT</p><div></div></Link>
         <Link onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
         </div>
-        <Link  to={"/contact"} className="btn">
+        <Link  to={"/contact"} onClick={()=>setLinkActive(false)} className="btn">
           <p>
             contact us <i className="fa-solid fa-arrow-right-long"></i>
           </p>

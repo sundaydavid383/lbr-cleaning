@@ -9,6 +9,7 @@
     "build": "vite build",
     "start": "vite preview"
   },
+  "homepage": ".",
   "keywords": [],
   "author": "",
   "license": "ISC",

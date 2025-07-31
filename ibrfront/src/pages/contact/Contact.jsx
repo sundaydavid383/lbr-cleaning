@@ -104,8 +104,8 @@ const Contact = () => {
       sectionimageStar: star,
       sectionimageSpark: spark,
       talks: [
-        "Need a custom cleaning plan? Just ask!",
-        "We offer flexible scheduling for busy lives.",
+        "Need a  cleaning service? ",
+        "We offer, Just ask us!",
       ],
       talksReport: "+234 813 456 7890",
     },

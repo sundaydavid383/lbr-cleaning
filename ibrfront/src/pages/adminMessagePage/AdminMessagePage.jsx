@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./adminMessagePage.css";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
-import useNavigate from "react-router-dom";
 const LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutes in ms
 
 const AdminMessagePage = () => {
@@ -12,62 +11,63 @@ const AdminMessagePage = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState(0);
+
 
   // Check lockOut on mount
-  useEffect(() => {
-     const lockoutTime = localStorage.getItem('adminLockoutTime');
-      if(lockoutTime){
-        const timeLeft = Date.now() - parseInt(lockoutTime);
-        if (timeLeft < LOCKOUT_DURATION) { 
-            setDisabled(true);
-            const timer = setTimeout(()=>{
-                setDisabled(false);
-                localStorage.removeItem('adminLockoutTime');
+useEffect(() => {
+  const lockoutTime = localStorage.getItem('adminLockoutTime');
 
-            }, LOCKOUT_DURATION - timeLeft);
-            return () => clearTimeout(timer);
-        }
-        else{
-            localStorage.removeItem('adminLockoutTime');
-        }
+  if (lockoutTime) {
+    const interval = setInterval(() => {
+      const timePassed = Date.now() - parseInt(lockoutTime);
+      const remaining = LOCKOUT_DURATION - timePassed;
+
+      if (remaining > 0) {
+        setTimeLeft(remaining);
+        setDisabled(true);
+      } else {
+        clearInterval(interval);
+        setTimeLeft(0);
+        setDisabled(false);
+        localStorage.removeItem('adminLockoutTime');
       }
-  }, []);
+    }, 1000); // update every second
+
+    return () => clearInterval(interval);
+  }
+}, []);
+
+const minutes = Math.floor(timeLeft / 60000);
+const seconds = Math.floor((timeLeft % 60000) / 1000);
+
 
   const login = async () => {
-    if (disabled) return 
+    if (disabled) return
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/admin-login`, {
+      const res = await fetch(`http://localhost:5100/api/admin-login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password, disabled }),
       });
 
       const data = await res.json();
       if (data.success) {
         setAuthenticated(true);
         setAlert({ message: "Authentication successful!", type: "success" });
-      } 
-      if(data && data.inputDisable) {
-        setDisabled(true);
-        setAlert({ message: "Too many failed attempts, please try again later", type: "error" });
-        setTimeout(()=>{
-        navigate('/')
-        },3000)
-      }else {
+      }
+      else {
+        if (data && data.inputDisable) {
+          setDisabled(true);
+          localStorage.setItem('adminLockoutTime', Date.now().toString());
+          setAlert({ message: "Too many failed attempts, please try again later", type: "error" });
+        }
         setAlert({ message: data.message || "Wrong password!", type: "error" });
       }
     } catch (err) {
       setAlert({ message: "Server error during login.", type: "error" });
-        if(err.data && err.data.inputDisable) {
-            setDisabled(true);
-        setAlert({ message: "Too many failed attempts, please try again later", type: "error" });
-        setTimeout(()=>{
-        navigate('/')
-        },3000)
-      }
     }
     setLoading(false);
   };
@@ -90,7 +90,7 @@ const AdminMessagePage = () => {
         setAlert({ message: `Message sent to ${data.count} people.`, type: "success" });
         setMessage("");
       }
-     else {
+      else {
         setAlert({ message: data.message || "Failed to send message.", type: "error" });
       }
     } catch (err) {
@@ -117,9 +117,14 @@ const AdminMessagePage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
+            disabled={disabled}
           />
-          <button onClick={login}>Login</button>
-        </div>
+          <button onClick={login} disabled={disabled}>Login</button>
+        {disabled && (
+  <p style={{ color: 'red' }}>
+  Wrong attempts locked input. Try again in {minutes}m {seconds}s.
+</p>
+)}</div>
       ) : (
         <div className="message-box">
           <h2>Broadcast Message</h2>

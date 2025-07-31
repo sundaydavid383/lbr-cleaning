@@ -58,22 +58,49 @@ exports.getAllSubscribers = async (req, res) => {
     });
   }
 }
+
+
 let wrongAttempt = 0;
+
 exports.adminLogin = async (req, res) => {
-  const { password } = req.body;
+  const { password, disabled } = req.body;
+  console.log("Admin login attempt with password:", password);
+
+  // If the input is not disabled, reset wrongAttempt
+  if (!disabled && wrongAttempt >= 5 ) {
+    wrongAttempt = 0;
+  }
+
+  if (!password || password.trim() === "") {
+    console.log("Password field is empty");
+    return res.status(400).json({ success: false, message: "Password cannot be empty" });
+  }
+
   if (password !== process.env.ADMIN_PASSWORD) {
-    console.log("Invalid admin password attempt");
     wrongAttempt += 1;
+    console.log(`Invalid password. wrongAttempt = ${wrongAttempt}`);
+
     if (wrongAttempt >= 5) {
       console.log("Too many failed attempts, locking out");
-      return res.status(403).json({ success: false, inputDisable: true, message: "Too many failed attempts, please try again later" });
+      return res.status(403).json({
+        success: false,
+        inputDisable: true,
+        message: "Too many failed attempts, please try again later"
+      });
     }
-    return res.status(401).json({ success: false, message: `Invalid password you only have ${5 - wrongAttempt}` });
 
+    return res.status(401).json({
+      success: false,
+      message: `Invalid password. You only have ${5 - wrongAttempt} attempts left.`
+    });
   }
+
+  // ✅ Correct password
+  wrongAttempt = 0;
   console.log("Admin login successful");
-  return res.status(401).json({ success: true, message: "Login successful" });
+  return res.status(200).json({ success: true, message: "Login successful" });
 };
+
 
 exports.sendMessage = async (req, res) => {
   const { message } = req.body;

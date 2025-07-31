@@ -73,7 +73,7 @@ button:hover {
 /* Responsive for mobile */
 @media screen and (max-width: 480px) {
   .admin-container {
-    margin: 2rem 1rem;
+    margin: 7rem 1rem;
     padding: 1.5rem;
   }
 

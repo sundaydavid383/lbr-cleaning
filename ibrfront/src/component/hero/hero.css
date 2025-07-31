@@ -207,7 +207,7 @@
 .speech {
   position: absolute;
   top: 5rem;
-  left: 0rem;
+  left: -4rem;
   display: flex;
 }
 .speech .circle {
@@ -226,6 +226,7 @@
   white-space: nowrap;
   border-right: 2px solid var(--tetiary-color);
   position: relative;
+  text-align: left;
   overflow: hidden;
   transition: ease-in-out;
 
@@ -291,7 +292,7 @@
     width: .5rem;
   }
   100% {
-    width: 8rem;
+    width: 11.5rem;
   }
 }
 @keyframes bubblemovement {
@@ -376,6 +377,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
+    margin-top: 3.5rem;
   }
     .hero .btn p{
       margin-left: -1rem;
@@ -406,4 +408,8 @@
     height: auto;
     width: 100%;
   }
+  .speech {
+  top: -.7rem;
+  left: -4rem;
+}
 }

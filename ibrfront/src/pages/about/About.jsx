@@ -28,7 +28,7 @@ const About = () => {
       sectionimageStar: star,
       sectionimageSpark: spark,
       talks: ["call us", "Help us"],
-      talksReport: "090125434"
+      talksReport: "+234 813 456 7890"
     },  {
       questions: "Our Professional Cleaning Services",
       header: "We Clean and Protize",
@@ -41,7 +41,7 @@ const About = () => {
       sectionimageStar: star,
       sectionimageSpark: spark,
       talks: ["Book a cleaning", "clean today"],
-      talksReport: "090876543"
+      talksReport: "+234 813 456 7890"
     },
     {
       questions: "Our Commitment to Excellence",
@@ -55,7 +55,7 @@ const About = () => {
       sectionimageStar: star,
       sectionimageSpark: spark,
       talks: ["Learn more", "free estimate"],
-      talksReport: "090112233"
+      talksReport: "+234 813 456 7890"
     },
     {
       questions: "About Us",
@@ -69,7 +69,7 @@ const About = () => {
       sectionimageStar: star,
       sectionimageSpark: spark,
       talks: ["Contact us", "Get a quote"],
-      talksReport: "090987654"
+      talksReport: "+234 813 456 7890"
     }
   ];
   const introRef = useRef();
