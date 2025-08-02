@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./CustomAlert.css";
+import "./customAlert.css";
 
 const CustomAlert = ({ message, type = "success", onClose }) => {
   const bgColors = {
