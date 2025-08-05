@@ -103,7 +103,7 @@ const section = [
     sectionimage: heroimage2,
     sectionimageStar: star,
     sectionimageSpark: spark,
-    talks: ["Get a quote", "Call for cleaning"],
+    talks: ["Reach out", "Let’s help you"],
     talksReport: "+234 813 456 7890"
   },
   {
@@ -117,7 +117,7 @@ const section = [
     sectionimage: heroimage1,
     sectionimageStar: star,
     sectionimageSpark: spark,
-    talks: ["Schedule Now", "Free Consultation"],
+    talks: ["Book now", "Free consult"],
     talksReport: "+234 813 456 7890"
   },
   {
@@ -131,7 +131,7 @@ const section = [
     sectionimage: heroimage3,
     sectionimageStar: star,
     sectionimageSpark: spark,
-    talks: ["Book Sanitization", "Get Details"],
+    talks: ["Sanitize Now", "More Info"],
     talksReport: "+234 813 456 7890"
   },
   {

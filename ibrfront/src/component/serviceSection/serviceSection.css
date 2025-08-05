@@ -28,7 +28,7 @@
 }
 
 .service-header p {
-  color: var(--gray);
+  color: var(--text-color);
   max-width: 400px;
   font-weight: 500;
 }

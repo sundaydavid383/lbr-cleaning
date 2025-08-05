@@ -8,21 +8,32 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
   const [printedTalk, setPrintedTalk] = useState(0);
   const [printedSection, setPrintedSection] = useState(0);
 
-  useEffect(() => {
-    const talkInterval = setInterval(() => {
-      setPrintedTalk((prev) => (prev + 1) % 2);
-    }, 9000);
+// Handles rotating talks (e.g., "Call us", "Get a quote")
+useEffect(() => {
+  const interval = setInterval(() => {
+    setPrintedTalk((prev) => {
+      const currentTalks = section[printedSection]?.talks || [];
+      if (currentTalks.length === 0) return 0;
+      return (prev + 1) % currentTalks.length;
+    });
+  }, 9000);
 
-    const sectionInterval = setInterval(() => {
-      setPrintedSection((prev) => (prev + 1) % section.length);
-    }, 44000);
+  return () => clearInterval(interval);
+}, [section, printedSection]);
 
-    return () => {
-      clearInterval(talkInterval);
-      clearInterval(sectionInterval);
-    };
-  }, [section.length]);
+// Handles rotating sections (e.g., different slides)
+useEffect(() => {
+  const interval = setInterval(() => {
+    setPrintedSection((prev) => (prev + 1) % section.length);
+  }, 44000);
 
+  return () => clearInterval(interval);
+}, [section.length]);
+
+// Reset talk index when section changes
+useEffect(() => {
+  setPrintedTalk(0);
+}, [printedSection]);
   const handleNext = () => {
     setPrintedSection((prev) => (prev + 1) % section.length);
   };
@@ -125,7 +136,8 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
           <img className="spark" src={page.sectionimageSpark} alt="" />
           <div className="speech">
             <div className="circle">
-              <p>{page.talks[printedTalk]}</p>
+              <p>{page.talks?.[printedTalk] || ""}</p>
+
               <h3>
                 <i className="fa-solid fa-phone-volume"></i>
                 {page.talksReport}

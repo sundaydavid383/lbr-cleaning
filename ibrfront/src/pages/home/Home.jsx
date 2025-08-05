@@ -108,7 +108,7 @@ const Home = () => {
       sectionimage: heroimage1,
       sectionimageStar: star,
       sectionimageSpark: spark,
-      talks: ["call us", "Help us"],
+      talks: ["Call now", "We’ve got you"],
       talksReport: "+234 813 456 7890"
     },  {
       questions: "Our Professional Cleaning Services",
@@ -121,7 +121,7 @@ const Home = () => {
       sectionimage: heroimage2,
       sectionimageStar: star,
       sectionimageSpark: spark,
-      talks: ["Book a cleaning", "clean today"],
+      talks: ["Book clean", "Clean now"],
       talksReport: "+234 813 456 7890"
     },
     {

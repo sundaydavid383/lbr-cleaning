@@ -103,10 +103,10 @@ const Contact = () => {
       sectionimage: heroimage1,
       sectionimageStar: star,
       sectionimageSpark: spark,
-      talks: [
-        "Need a  cleaning service? ",
-        "We offer, Just ask us!",
-      ],
+     talks: [
+  "Messy home?",
+  "We’re on it!",
+],
       talksReport: "+234 813 456 7890",
     },
   ];
