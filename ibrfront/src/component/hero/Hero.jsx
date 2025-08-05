@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./hero.css";
 import Feature from "../feature/Feature";
 import { Link } from "react-router-dom";
+import fallbackImage from "../../assets/about-intro.jpg";
 
 const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
   const [printedTalk, setPrintedTalk] = useState(0);
@@ -44,6 +45,7 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
               playsInline
               className="background-video"
               src={backgroundVideo}
+              poster={fallbackImage} // replace with your fallback image path
             />
           </div>
         ) : (
@@ -65,39 +67,39 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
         )}
 
         {/* Bubbles */}
-            <div className="bubble b1 ">
-        <small></small>
-      </div>
-      <div className="bubble b2">
-        <small></small>
-      </div>
-      <div className="bubble b3">
-        <small></small>
-      </div>
-      <div className="bubble b4">
-        <small></small>
-      </div>
-      <div className="bubble b5">
-        <small></small>
-      </div>
-      <div className="bubble b6">
-        <small></small>
-      </div>
-      <div className="bubble b7">
-        <small></small>
-      </div>
-      <div className="bubble b8">
-        <small></small>
-      </div>
-      <div className="bubble b9">
-        <small></small>
-      </div>
-      <div className="bubble b10">
-        <small></small>
-      </div>
-      <div className="bubble b11">
-        <small></small>
-      </div>
+        <div className="bubble b1 ">
+          <small></small>
+        </div>
+        <div className="bubble b2">
+          <small></small>
+        </div>
+        <div className="bubble b3">
+          <small></small>
+        </div>
+        <div className="bubble b4">
+          <small></small>
+        </div>
+        <div className="bubble b5">
+          <small></small>
+        </div>
+        <div className="bubble b6">
+          <small></small>
+        </div>
+        <div className="bubble b7">
+          <small></small>
+        </div>
+        <div className="bubble b8">
+          <small></small>
+        </div>
+        <div className="bubble b9">
+          <small></small>
+        </div>
+        <div className="bubble b10">
+          <small></small>
+        </div>
+        <div className="bubble b11">
+          <small></small>
+        </div>
 
         <div className="text">
           <div className="question">{page.questions}</div>

@@ -158,8 +158,8 @@ const services = [
     description:
       "Restore the sparkle and peace of your home with our professional residential cleaning. From living rooms to bedrooms, we’ve got you covered.",
     details: [
-      "Living room vacuuming and dusting",
-      "Bedroom cleaning and bed arrangement",
+      "Living room vacuuming & dusting",
+      "Bedroom cleaning & arrangement",
       "Bathroom and toilet scrubbing",
       "Kitchen surface wipe-down",
       "Window washing (interior)",
@@ -216,7 +216,7 @@ const services = [
     icon: "fa-solid fa-window-maximize"
   },
   {
-    id: "in-out-cleaning",
+    id: "move-cleaning",
     title: "In/Out Cleaning",
     image: service5,
     description:
@@ -238,7 +238,7 @@ const services = [
     description:
       "Protect your environment with our professional sanitization. Ideal for post-illness, high-traffic areas, and health-sensitive spaces.",
     details: [
-      "Surface disinfection with safe chemicals",
+      "Surface disinfection",
       "Touchpoint sanitation (handles, switches)",
       "Fogging and air purification (on request)",
       "Post-COVID space treatment",

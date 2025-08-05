@@ -10,9 +10,13 @@ import service6 from "../../assets/cleaner22.jpg"
 import TestimonialCarousel from "../testimonial/TestimonialCarousel"
 
 const services = [
-  {
+{
   id: "home-cleaning",
   title: "Home Cleaning",
+  tagline: "Sparkling homes, happy hearts!",
+  duration: "2–4 hours depending on home size",
+  pricing: "Starting from ₦15,000",
+  targetAudience: ["Homeowners", "Tenants", "Families", "Busy professionals"],
   image: service1,
   outlistimage: service1,
   description:
@@ -92,336 +96,440 @@ const services = [
     }
   ]
 },
-  {
+{
   id: "office-cleaning",
   title: "Office Cleaning",
+  tagline: "A clean office is a productive office.",
+  duration: "Flexible — before, during, or after office hours",
+  pricing: "Custom quote based on office size",
+  targetAudience: ["Startups", "Agencies", "Banks", "Corporate offices"],
   image: service2,
   outlistimage: service2,
   description:
-    "Maintain a spotless and healthy workplace that fuels productivity and leaves a great impression on clients and staff. Our customizable office cleaning services cater to startups, agencies, banks, and everything in between.",
+    "Boost productivity and first impressions with a spotless workplace. Our tailored office cleaning services cover everything from workstations to reception areas, ensuring a fresh and hygienic space that inspires daily excellence.",
   details: [
-    "Dusting of desks, chairs, and computer monitors",
-    "Keyboard and mouse sanitization (on request)",
-    "Emptying and sanitizing waste bins",
-    "Vacuuming and mopping of all flooring types",
-    "Glass partitions and surface polishing",
-    "Restroom cleaning, scrubbing, and restocking supplies",
-    "Break room and kitchenette cleaning",
-    "Sanitization of shared spaces: meeting rooms, lobbies, lounges",
-    "Door handles, elevator buttons, and switch disinfection",
-    "Reception desk polishing and paper organization"
+    "Workstation dusting, desk sanitization, and electronics wipe-down",
+    "Restroom cleaning with full disinfection and deodorizing",
+    "Breakroom/kitchenette surface cleaning and sink scrubbing",
+    "Trash bin emptying, liner replacement, and bin sanitization",
+    "Floor sweeping, vacuuming, and mopping of tiled/carpetted areas",
+    "Door handles, light switches, and elevator button disinfection",
+    "Glass surface cleaning (interior partitions and doors)",
+    "Reception and lobby area dusting and polishing",
+    "Conference room prep and table wipe-downs",
+    "Restocking of tissues, soap, and sanitizers if requested"
   ],
   benefits: [
-    "Creates a healthy work environment with fewer sick days",
-    "Enhances your company’s professionalism and credibility",
-    "Boosts employee focus and satisfaction",
-    "Tailored cleaning plans based on your working hours and office size",
-    "Reduces dust buildup on electronics and work equipment",
-    "Quiet and respectful staff trained for office settings",
-    "Increases hygiene in high-traffic zones",
-    "Flexible daily, weekly, or custom frequency options"
+    "Enhances employee well-being and reduces sick days",
+    "Creates a professional atmosphere for visitors and clients",
+    "Prevents dust buildup in electronics and office equipment",
+    "Customizable schedules — daily, weekly, or bi-weekly",
+    "Discreet and respectful cleaning staff for minimal disruption",
+    "Use of commercial-grade disinfectants for high-traffic zones",
+    "Flexible timing — mornings, evenings, or weekends",
+    "Add-on options like carpet or window cleaning available"
   ],
   preparation: [
-    "Notify your staff of the cleaning schedule to avoid disruptions",
-    "Secure sensitive files and electronics if desired",
-    "Clear personal items from desks when possible",
-    "List priority areas such as executive rooms or restrooms",
-    "Inform us of access procedures (keys, entry cards, security protocols)"
+    "Inform your team of the scheduled cleaning time",
+    "Secure sensitive documents or equipment if needed",
+    "Leave access instructions for locked rooms or cabinets",
+    "Communicate any problem areas (e.g. stained carpet, odors)",
+    "Let us know if you require after-hours service"
   ],
   faqs: [
     {
-      question: "Can cleaning be done after business hours?",
+      question: "Can you clean during office hours without disrupting work?",
       answer:
-        "Yes! We offer after-hours or weekend cleaning to ensure zero interruption to your workflow."
+        "Yes, our team is trained to work quietly and respectfully, or we can schedule outside working hours if preferred."
     },
     {
-      question: "Do you provide cleaning supplies?",
+      question: "Do you provide cleaning supplies and tools?",
       answer:
-        "Yes, we bring all necessary eco-friendly supplies unless you prefer to use your own."
+        "Yes, we come fully equipped with commercial-grade products and tools. If you have preferences, let us know!"
     },
     {
-      question: "How many staff do you assign per cleaning session?",
+      question: "Can we request cleaning of only specific areas?",
       answer:
-        "It depends on your office size. Small offices may have 1–2 staff, while large corporate spaces get a full team."
+        "Absolutely. We offer partial and full office cleaning depending on your needs and budget."
     },
     {
-      question: "Do you offer deep cleaning for offices?",
+      question: "Is it safe for our electronics and documents?",
       answer:
-        "Yes, we offer one-time deep cleaning for special occasions, renovations, or end-of-lease transitions."
+        "Yes, our team is trained in safe cleaning practices, and we avoid direct contact with sensitive items unless instructed."
     }
   ],
   testimonials: [
     {
-      quote: "Our office looks and smells amazing every week. Staff are friendlier in a clean space!",
-      author: "- Mr. Ade, Victoria Island",
+      quote: "Our office has never looked better. Staff morale went up instantly!",
+      author: "- Adewale, HR Manager, Lekki",
       image: service2
     },
     {
-      quote: "Their consistency is unmatched. Every Monday, the place is spotless!",
-      author: "- HR Manager, Yaba",
+      quote: "They clean after hours and everything smells fresh every morning.",
+      author: "- Uche, Tech Startup Founder",
       image: service2
     },
     {
-      quote: "Clients notice the difference. We've had compliments on how clean our reception area is!",
-      author: "- Beauty Studio Admin, Lekki",
+      quote: "Very reliable team — they’ve never missed a schedule.",
+      author: "- Mrs. Dada, Law Firm Admin",
       image: service2
     },
     {
-      quote: "We’ve never missed a cleaning day. Reliable, responsive, and affordable.",
-      author: "- IT Startup CEO, Ikeja",
+      quote: "From toilets to tables, everything is spotless. Highly recommended!",
+      author: "- Tunde, Creative Agency Director",
       image: service2
     }
   ]
 },
-  {
+{
   id: "carpet-cleaning",
   title: "Carpet Cleaning",
+  tagline: "Restore the softness under your feet.",
+  duration: "1–3 hours depending on carpet size",
+  pricing: "Starting from ₦10,000 per room",
+  targetAudience: ["Homes", "Schools", "Religious centers", "Office spaces"],
   image: service3,
   outlistimage: service3,
   description:
-    "Revive your carpets and rugs with our professional deep-cleaning service. Whether it’s dirt, stains, or lingering odors — we tackle it all using safe, fast-drying techniques that leave your floors spotless and refreshed.",
+    "Revive your carpets with deep-cleaning that lifts dirt, odors, and allergens. Whether it’s for a cozy home, a prayer hall, or your reception area, we leave your carpet fresh, fluffy, and free from hidden grime.",
   details: [
-    "Pre-inspection of carpet material and stain types",
-    "Pre-treatment of tough stains and high-traffic areas",
-    "Steam cleaning or low-moisture methods based on fabric type",
-    "Deep shampooing using child-safe and eco-friendly products",
-    "Hot water extraction for dirt, bacteria, and odor removal",
-    "Deodorizing and fiber-refreshing treatment",
-    "Edge-to-edge cleaning, including corners and edges",
-    "Furniture base spot cleaning and perimeter wipe-down",
-    "Drying enhancement with air movers for faster walk-ready time",
-    "Ideal for homes, offices, religious centers, and schools"
+    "Vacuuming to remove surface debris and dust",
+    "Pre-treatment of stains with targeted solutions",
+    "Deep shampooing or steam cleaning (depending on fabric)",
+    "Brushing and agitation to loosen deep-set dirt",
+    "Hot water extraction or foam cleaning (as needed)",
+    "Sanitization and odor neutralization",
+    "Carpet drying with high-velocity air movers",
+    "Edge and corner detailing",
+    "Deodorizer application for a fresh scent",
+    "Optional carpet protector for long-term stain resistance"
   ],
   benefits: [
-    "Removes embedded dirt, pet hair, and allergens",
-    "Restores carpet softness and vibrancy",
-    "Eliminates odors from spills, pets, or dampness",
-    "Prevents long-term damage and fiber breakdown",
-    "Reduces the risk of mold and mildew growth",
-    "Improves overall indoor air quality",
-    "Safe for homes with children, elderly, and pets",
-    "Protective treatment options available (e.g. stain guard)"
+    "Improves air quality by removing allergens and dust mites",
+    "Restores color, fluffiness, and softness of carpets",
+    "Eliminates stubborn stains, spills, and pet accidents",
+    "Removes odors caused by humidity, pets, or spills",
+    "Prevents mold growth with proper drying",
+    "Safe for children and pets",
+    "Extends the life of your carpets",
+    "Ideal for homes, prayer rooms, conference halls, and more"
   ],
   preparation: [
-    "Lightly vacuum the carpet before our team arrives (optional)",
-    "Remove small items, toys, or personal belongings from the carpeted area",
-    "Push furniture aside if you'd like full-area coverage",
-    "Point out any specific stains you’d like us to target",
-    "Ensure availability of water and electricity",
-    "Keep pets and children away from wet areas during drying time"
+    "Remove furniture and loose items from carpeted area if possible",
+    "Vacuum visible debris if you prefer a quicker session",
+    "Point out high-stain areas (coffee spills, pet stains, etc.)",
+    "Inform us of carpet material if known (wool, synthetic, etc.)",
+    "Keep children and pets away from wet carpet for several hours after cleaning"
   ],
   faqs: [
     {
-      question: "How long does it take for carpets to dry?",
+      question: "How long does it take for the carpet to dry?",
       answer:
-        "Typically 2–4 hours with proper ventilation. We also use air movers for quicker drying."
+        "Usually 2–6 hours depending on ventilation and carpet type. We use air movers to speed it up where possible."
     },
     {
-      question: "Can you remove wine, grease, or pet stains?",
+      question: "Do you clean rugs as well?",
       answer:
-        "Yes, we have specific treatments for common stains like wine, ink, grease, and pet accidents."
+        "Yes! We clean area rugs, runners, and custom carpets either on-site or via pick-up and return service."
     },
     {
-      question: "Is the cleaning process safe for all carpet types?",
+      question: "Can you remove old stains and odors?",
       answer:
-        "Absolutely. We adjust our methods based on your carpet's material — whether synthetic, wool, or blended fibers."
+        "Yes, our stain removers and deodorizing treatments are effective against most stubborn marks and smells."
     },
     {
-      question: "Do I need to move furniture?",
+      question: "Are your products safe for babies and pets?",
       answer:
-        "We can clean around larger items, but for a full-area clean, moving small and medium furniture is recommended."
+        "Absolutely. We use child-safe, pet-safe, eco-friendly products on all carpets unless otherwise requested."
     }
   ],
   testimonials: [
     {
-      quote: "They saved my favorite rug — looks brand new again!",
-      author: "- Chuka, Ajah",
+      quote: "Our church carpet looked brand new after cleaning. Amazing job!",
+      author: "- Pastor Mike, Shomolu",
       image: service3
     },
     {
-      quote: "Fast, professional, and no chemical smell. Highly recommend.",
-      author: "- Blessing, Ikeja",
+      quote: "The pet smell and stains disappeared completely. Highly impressed.",
+      author: "- Rita, Dog Mom in Ikeja",
       image: service3
     },
     {
-      quote: "I didn’t think the juice stains could come out. But they did!",
-      author: "- Adaora, Surulere",
+      quote: "Even my high-traffic hallway carpet looks revived. Thank you!",
+      author: "- Mr. Jude, Victoria Island",
       image: service3
     },
     {
-      quote: "This is the only carpet service that made my kids’ playroom feel fresh and safe.",
-      author: "- Mummy Tolu, Gbagada",
+      quote: "They were super fast and careful with our woven rug. 10/10!",
+      author: "- Zainab, Surulere",
       image: service3
     }
   ]
 }
 ,
-  {
+{
   id: "window-cleaning",
   title: "Window Cleaning",
+  tagline: "Let the sunshine in — streak-free.",
+  duration: "1–2 hours for standard apartments",
+  pricing: "Starting from ₦8,000",
+  targetAudience: ["Homes", "Showrooms", "Apartments", "Commercial spaces"],
   image: service4,
   outlistimage: service4,
   description:
-    "Let the light shine in with crystal-clear windows that transform your space. Our professional window cleaning removes dirt, streaks, and buildup—indoors and outdoors—leaving you with a flawless, gleaming view.",
+    "Crystal-clear windows do more than brighten a room — they elevate your entire space. Our expert window cleaning removes grime, water stains, and dust from glass panes, frames, and sills for a flawless finish inside and out.",
   details: [
-    "Exterior and interior window glass cleaning",
+    "Interior and exterior window pane washing",
     "Frame and sill dusting and wiping",
-    "Track vacuuming and dirt removal",
-    "Screen removal, washing, and reinstalling",
-    "Streak-free drying with microfiber cloths",
-    "Sliding glass door and patio door washing",
-    "Gutter edge and skylight frame wiping (optional)",
-    "Extension poles or ladders used for tall windows",
-    "Bird droppings and hard water stain treatment",
-    "Ideal for homes, apartments, showrooms, and offices"
+    "Removal of water spots, smudges, and streaks",
+    "Sliding door glass cleaning",
+    "Louvre, jalousie, or horizontal window detailing",
+    "Insect screen dusting or rinsing (where applicable)",
+    "Safe use of extension poles and ladders for high windows",
+    "Use of eco-friendly glass cleaning agents",
+    "Mirror cleaning (optional)",
+    "Protective gloves and no-drip technique for indoor areas"
   ],
   benefits: [
-    "Maximizes natural light and brightens interiors",
-    "Enhances your property's curb appeal",
-    "Improves mood and energy by reducing window grime",
-    "Safe cleaning with professional equipment—no ladder risk for you",
-    "Regular cleaning extends window lifespan by preventing corrosion",
-    "Clean windows improve real estate value and first impressions",
-    "Eco-friendly, non-abrasive solutions that leave no residue",
-    "Flexible scheduling for recurring or one-time cleanings"
+    "Improves light flow and brightens your interiors",
+    "Enhances curb appeal and professionalism",
+    "Removes built-up dust and pollutants on glass",
+    "Safe methods for high or hard-to-reach windows",
+    "No streaks, smudges, or cleaning residue left behind",
+    "Flexible scheduling to avoid disruption",
+    "Optional mirror and showcase glass polishing",
+    "Ideal for homes, offices, stores, and apartments"
   ],
   preparation: [
-    "Remove decorations, plants, or breakables from window sills",
-    "Open blinds or curtains before our arrival",
-    "Inform us of fragile or cracked windows beforehand",
-    "Ensure access to exterior windows (gates unlocked, balconies cleared)",
-    "Let us know if any windows are hard to open or tilt"
+    "Open curtains or blinds ahead of time for full access",
+    "Remove breakables from window sills and ledges",
+    "Inform us of fragile or stained glass features",
+    "Secure pets or children away from cleaning zones",
+    "Provide safe access to balconies or high windows (if any)"
   ],
   faqs: [
     {
-      question: "Do you clean multi-story or high-rise buildings?",
+      question: "Do you clean both inside and outside of the windows?",
       answer:
-        "Yes, we have equipment for upper floors and can clean up to several stories high safely."
+        "Yes, we clean both sides unless one is inaccessible (e.g. external panes on upper floors without safe access)."
     },
     {
-      question: "What’s the difference between regular and deep window cleaning?",
+      question: "Can you clean during rainy season?",
       answer:
-        "Regular cleaning includes glass and frame wiping. Deep cleaning adds screen washing, track vacuuming, and stain removal."
+        "We monitor the weather and may reschedule outdoor cleaning during rain, but interior windows can still be cleaned."
     },
     {
-      question: "Do you clean during rainy weather?",
+      question: "Do you remove paint or cement spots?",
       answer:
-        "We avoid cleaning during heavy rain for safety and effectiveness, but light showers don’t affect the quality."
+        "Yes, we can remove minor construction residues with care. Let us know in advance if it's a post-renovation job."
     },
     {
-      question: "Will the cleaning leave streaks or water marks?",
+      question: "Is there a discount for regular window cleaning?",
       answer:
-        "No — we use professional squeegees and lint-free cloths for a sparkling, streak-free finish every time."
+        "Yes! We offer discounts for monthly or bi-monthly service plans — perfect for showrooms or large properties."
     }
   ],
   testimonials: [
     {
-      quote: "I didn’t realize how dirty my windows were until they cleaned them—what a difference!",
-      author: "- Mrs. Joy, Gwarinpa",
+      quote: "Our balcony glass hasn't been this clear in years. The view is amazing now!",
+      author: "- Mrs. Ayo, Lekki Phase 1",
       image: service4
     },
     {
-      quote: "Professional, respectful, and efficient. My windows look amazing.",
-      author: "- Kingsley, Festac",
+      quote: "No streaks at all. They even cleaned the window frames!",
+      author: "- Chuka, Ikoyi",
       image: service4
     },
     {
-      quote: "They handled our tall stairwell windows with ease. No smears, no mess left behind.",
-      author: "- School Admin, Agege",
+      quote: "Our storefront windows sparkle — clients notice the difference!",
+      author: "- Toyin, Boutique Owner",
       image: service4
     },
     {
-      quote: "After their service, I had more sunlight in my living room than ever before.",
-      author: "- Sarah, Lekki",
+      quote: "They brought their own ladders and were very safe and professional.",
+      author: "- Mr. Dayo, 2nd-floor tenant, Yaba",
       image: service4
     }
   ]
 },
-  {
-  id: "in-out-cleaning",
+{
+  id: "move-cleaning",
   title: "In/Out Cleaning",
+  tagline: "Start fresh or leave spotless.",
+  duration: "4–8 hours depending on property size",
+  pricing: "Starting from ₦25,000",
+  targetAudience: ["Landlords", "Tenants", "Realtors", "New homeowners"],
   image: service5,
   outlistimage: service5,
   description:
-    "Moving in or moving out? Let us handle the mess. Our In/Out Cleaning service ensures your space is deeply cleaned and fully refreshed, whether you're settling into a new place or handing one over. From kitchen cabinets to bathroom grout, we scrub, sweep, and sanitize every inch so the space is ready for what’s next.",
+    "Moving is stressful enough — let us handle the cleaning. Whether you're moving in or out, we deep-clean every inch of your property to leave it sparkling and ready. Perfect for end-of-lease, pre-sale, or post-construction cleanups.",
   details: [
-    "Thorough cleaning of all rooms including bedrooms, kitchen, living areas, and bathrooms",
-    "Inside and outside of kitchen cabinets and drawers wiped and sanitized",
-    "Scrubbing and descaling of bathroom tiles, sinks, tubs, and toilets",
-    "Deep cleaning behind and beneath appliances (where accessible)",
-    "Floor mopping, vacuuming, and baseboard detailing",
-    "Dusting of ceiling fans, light fixtures, and vents",
-    "Interior window washing, track cleaning, and sill dusting",
-    "Wall spot cleaning for smudges, fingerprints, and mild stains",
-    "Light switch, doorknob, and handle disinfection",
-    "Final touch: air freshening to leave a clean scent behind"
+    "Deep cleaning of all rooms including floors, windows, and doors",
+    "Scrubbing of bathrooms, toilets, tiles, and fixtures",
+    "Kitchen deep-clean: cabinets, drawers, countertops, sinks, and stoves",
+    "Interior window and frame washing",
+    "Removal of cobwebs and dust from ceilings and corners",
+    "Light switch, socket, and door handle disinfection",
+    "Cleaning of baseboards, ledges, and skirting",
+    "Vacuuming and mopping of all floor surfaces",
+    "Trash removal and deodorizing of space",
+    "Optional extras: post-renovation residue removal, external sweeping"
   ],
   benefits: [
-    "Leaves your old home spotless and ready for inspection or turnover",
-    "Prepares your new space with a fresh, hygienic start before move-in",
-    "Reduces stress during relocation and helps avoid cleaning disputes",
-    "Increases the value and appeal of your property for sale or rent",
-    "Ensures every corner, cabinet, and surface is move-in or move-out ready",
-    "Ideal for landlords, tenants, property managers, and real estate agents",
-    "Service available for apartments, homes, offices, and short lets",
-    "Done by a trained team familiar with Lagos housing standards and layouts"
+    "Leaves a great impression for landlords, buyers, or new tenants",
+    "Removes construction dust, paint smudges, and packing residue",
+    "Ensures sanitary conditions for move-in readiness",
+    "Complies with end-of-tenancy agreements",
+    "Perfect for real estate photo shoots or open houses",
+    "Restores the 'like new' feel of your space",
+    "Customizable based on apartment or full house",
+    "Thorough attention to details often missed during regular cleaning"
   ],
   preparation: [
-    "Clear out all personal belongings and trash from the space (unless arranged otherwise)",
-    "Unplug and defrost any refrigerators or freezers at least 24 hours before cleaning",
-    "Ensure access to running water, power, and all rooms in the property",
-    "Inform us of any areas needing extra attention (e.g., stained walls, damaged tiles)",
-    "Secure your keys or entry codes for smooth access if you're not present"
+    "Ensure the space is mostly empty or notify us if some furniture remains",
+    "Disconnect appliances if deep-cleaning is needed behind them",
+    "Provide keys or arrange access with the landlord/agent",
+    "Inform us of any areas with post-renovation paint or debris",
+    "Let us know your move date so we can schedule accordingly"
   ],
   faqs: [
     {
-      question: "Do you bring your own cleaning supplies and tools?",
+      question: "Do I need to be present during the cleaning?",
       answer:
-        "Yes, we come fully equipped with professional cleaning products, brushes, vacuums, and disinfectants."
+        "Not at all. As long as we have access, we’ll handle everything and send updates/photos if needed."
     },
     {
-      question: "Can you clean a completely empty apartment?",
+      question: "Can you clean after renovation or painting?",
       answer:
-        "Absolutely. In fact, empty homes allow for deeper access to corners, cabinets, and appliances."
+        "Yes, we offer post-construction cleaning as an add-on to handle paint, cement dust, and debris."
     },
     {
-      question: "How long does in/out cleaning take?",
+      question: "Is this service suitable before handing over keys?",
       answer:
-        "It depends on the size and condition of the space, but most jobs take between 3 to 6 hours for standard 2–4 bedroom properties."
+        "Absolutely. We ensure the property meets top standards for inspection and handover."
     },
     {
-      question: "Do you offer same-day or urgent move-out cleaning?",
+      question: "Do you clean appliances too?",
       answer:
-        "Yes, subject to availability. We understand that Lagos moves can happen quickly—reach out and we’ll do our best to fit you in."
+        "Yes! We clean inside ovens, fridges, and microwaves if requested. Please mention it during booking."
     }
   ],
   testimonials: [
     {
-      quote: "They cleaned every inch of my apartment before I moved out—I got my full deposit back!",
-      author: "- Tolu, Lekki Phase 1",
+      quote: "The apartment was cleaner than when I moved in! I got my full deposit back.",
+      author: "- Ngozi, Former Tenant in Magodo",
       image: service5
     },
     {
-      quote: "The flat was spotless by the time I moved in. Smelled fresh, looked brand new.",
-      author: "- Ijeoma, Yaba",
+      quote: "They handled post-renovation dust like pros. No trace of cement left.",
+      author: "- Femi, Realtor",
       image: service5
     },
     {
-      quote: "This team saved me during a last-minute move-out. Efficient and thorough.",
-      author: "- Bayo, Surulere",
+      quote: "We moved into a spotless home — smelled fresh and looked perfect.",
+      author: "- Bukky & Tayo, New Homeowners",
       image: service5
     },
     {
-      quote: "I always use this service for my short-let properties. Guests love how clean everything is.",
-      author: "- Property Manager, Ikeja GRA",
+      quote: "Even the kitchen drawers and light switches were sparkling. 100% worth it.",
+      author: "- Tolu, Ikorodu",
       image: service5
     }
   ]
 }
 ,
- {
+{
+  id: "post-construction-cleaning",
+  title: "Post-Construction Cleaning",
+  tagline: "From dusty to dazzling.",
+  duration: "6–10 hours depending on property size",
+  pricing: "Starting from ₦35,000",
+  targetAudience: ["Builders", "Renovation projects", "New homeowners", "Real estate agents"],
+  image: service6,
+  outlistimage: service6,
+  description:
+    "Construction leaves a mess — we make it disappear. Our post-construction cleaning removes fine dust, paint spots, cement residue, and debris to reveal the beauty of your new or renovated space. We bring out the final shine so your property is move-in ready.",
+  details: [
+    "Thorough dusting and vacuuming of all surfaces, walls, and floors",
+    "Removal of paint splatter, cement smudges, and adhesives",
+    "Polishing of tiles, countertops, windows, and doors",
+    "Interior glass and mirror cleaning",
+    "Detailed cleaning of light switches, sockets, and vents",
+    "Scrubbing of bathroom fixtures, sinks, and grout lines",
+    "Wiping of cabinets inside and out",
+    "Debris removal and sweeping of entryways and balconies",
+    "Air vent and ceiling fan dust removal",
+    "Final floor cleaning (scrubbing, mopping, or polishing as needed)"
+  ],
+  benefits: [
+    "Removes hazardous construction dust and debris",
+    "Reveals the finished look of your construction work",
+    "Prepares the space for move-in, inspection, or handover",
+    "Protects new fixtures and finishes from dust buildup",
+    "Boosts property value and visual appeal",
+    "Includes attention to hard-to-reach or detailed areas",
+    "Ideal for homes, offices, showrooms, and event halls",
+    "Safe methods that won’t scratch delicate surfaces"
+  ],
+  preparation: [
+    "Ensure all construction work is fully completed",
+    "Clear major debris or notify us if removal is required",
+    "Turn on ventilation to help with dust removal and drying",
+    "Provide access to water and electricity for equipment use",
+    "Highlight fragile surfaces or newly installed items"
+  ],
+  faqs: [
+    {
+      question: "Can you remove cement and paint from tiles?",
+      answer:
+        "Yes, we use safe methods and products to remove tough residues without damaging your tiles or finishes."
+    },
+    {
+      question: "Do you offer debris removal?",
+      answer:
+        "We can help with small debris removal. For large-scale waste, we recommend booking our cleaning alongside a haulage service."
+    },
+    {
+      question: "How long should I wait after construction ends to clean?",
+      answer:
+        "We recommend cleaning immediately after the project is fully completed to avoid dust settling deeper over time."
+    },
+    {
+      question: "Is it safe for new surfaces and appliances?",
+      answer:
+        "Absolutely. We use soft cloths and non-abrasive products designed for new fixtures and surfaces."
+    }
+  ],
+  testimonials: [
+    {
+      quote: "They turned our dusty renovation mess into a sparkling clean home. Couldn’t believe the difference.",
+      author: "- Dunni, Gbagada",
+      image: service6
+    },
+    {
+      quote: "No scratches, no streaks — just flawless finishing after our office fit-out.",
+      author: "- Mr. Lanre, Facility Manager",
+      image: service6
+    },
+    {
+      quote: "Our showroom looked photo-ready after their cleaning. Highly detailed work.",
+      author: "- Grace, Interior Decorator",
+      image: service6
+    },
+    {
+      quote: "Paint stains gone, cement dust gone — they did it all in a day.",
+      author: "- Hassan, Contractor, Agege",
+      image: service6
+    }
+  ]
+},
+{
   id: "sanitization-service",
   title: "Sanitization Service",
+  tagline: "Invisible threats, visible care.",
+  duration: "1–2 hours depending on property size",
+  pricing: "Starting from ₦20,000",
+  targetAudience: ["Homes", "Churches", "Gyms", "Schools", "Offices", "Salons"],
   image: service6,
   outlistimage: service6,
   description:
@@ -501,6 +609,7 @@ const services = [
   ]
 }
 
+
 ];
 
 const useRevealOnScroll = () => {
@@ -543,111 +652,137 @@ const ServiceDetails = ({}) => {
     );
   }
 
-  return (
-    <div className="service-detail-page">
+return (
+  <div className="service-detail-page">
     <section
-  className="detail-banner"
-  style={{
-    backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${service.image})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat"
-  }}
->
-  <div className="overlay">
-    <h1>{service.title}</h1>
-    <p>{service.description}</p>
-  </div>
-</section>
+      className="detail-banner"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${service.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="overlay">
+        <h1>{service.title}</h1>
+        <p className="tagline">{service.tagline}</p>
+        <p>{service.description}</p>
 
-      {["detail-content", "why-section", "prep-section", "testimonial-section", "faq-section", "cta-section"].map((cls, i) => (
-        <section
-          key={cls}
-          className={`${cls} reveal`}
-          ref={(el) => (sectionsRef.current[i] = el)}
-        >
-          {cls === "detail-content" && (
-                  <>
-          <h2>What’s Included</h2>
-          <div className="inclusion-wrapper">
-            <ul className="inclusion-list">
-              {service.details.map((point, index) => (
-                <li key={index}>{point}</li>
+        {/* 🔥 Optional quick info row */}
+        <div className="quick-info">
+          <span><i className="fa-regular fa-clock"></i> {service.duration}</span>
+          <span><i className="fa-solid fa-money-bill-wave"></i> {service.pricing}</span>
+          {service.targetAudience && (
+            <span>
+              <i className="fa-solid fa-users"></i>{" "}
+              {service.targetAudience.slice(0, 3).join(", ")}{service.targetAudience.length > 3 && " + more"}
+            </span>
+          )}
+        </div>
+      </div>
+    </section>
+
+    {[
+      "detail-content",
+      "why-section",
+      "prep-section",
+      "testimonial-section",
+      "faq-section",
+      "cta-section",
+    ].map((cls, i) => (
+      <section
+        key={cls}
+        className={`${cls} reveal`}
+        ref={(el) => (sectionsRef.current[i] = el)}
+      >
+        {cls === "detail-content" && (
+          <>
+            <h2>What’s Included</h2>
+            <div className="inclusion-wrapper">
+              <ul className="inclusion-list">
+                {service.details.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
+              </ul>
+
+              <div className="inclusion-image">
+                <img src={service.outlistimage} alt={service.title} />
+              </div>
+            </div>
+          </>
+        )}
+
+        {cls === "why-section" && (
+          <>
+            <h2>Why Choose Our {service.title}?</h2>
+            <ul className="benefits-list">
+              {service.benefits?.map((item, idx) => (
+                <li key={idx}>✅ {item}</li>
               ))}
             </ul>
-
-            <div className="inclusion-image">
-              <img src={service.outlistimage} alt={service.title} />
-            </div>
-          </div>
-        </>
-          )}
-
-          {cls === "why-section" && (
-  <>
-    <h2>Why Choose Our {service.title}?</h2>
-    <ul className="benefits-list">
-      {service.benefits?.map((item, idx) => (
-        <li key={idx}>✅ {item}</li>
-      ))}
-    </ul>
-  </>
-)}
-
-{cls === "prep-section" && (
-  <>
-    <h2>How to Prepare</h2>
-    <ul className="prep-list">
-      {service.preparation?.map((item, idx) => (
-        <li key={idx}>{item}</li>
-      ))}
-    </ul>
-  </>
-)}
-
-{cls === "testimonial-section" && (
-  <TestimonialCarousel testimonials={service.testimonials} />
-)}
-
-{cls === "faq-section" && (
- <>
-  <h2>Frequently Asked Questions</h2>
-  <div className="faq-list">
-    {service.faqs?.map((faq, idx) => (
-      <div className="faq-item" key={idx}>
-        <button
-          className="faq-question"
-          onClick={() =>
-            setOpenFAQ(openFAQ === idx ? null : idx)
-          }
-        >
-          <span>{faq.question}</span>
-          <i className={`fa-solid ${openFAQ === idx ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-        </button>
-        {openFAQ === idx && (
-          <div className="faq-answer">
-            <p>{faq.answer}</p>
-          </div>
+          </>
         )}
-      </div>
+
+        {cls === "prep-section" && (
+          <>
+            <h2>How to Prepare</h2>
+            <ul className="prep-list">
+              {service.preparation?.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {cls === "testimonial-section" && (
+          <TestimonialCarousel testimonials={service.testimonials} />
+        )}
+
+        {cls === "faq-section" && (
+          <>
+            <h2>Frequently Asked Questions</h2>
+            <div className="faq-list">
+              {service.faqs?.map((faq, idx) => (
+                <div className="faq-item" key={idx}>
+                  <div
+                    className="faq-question"
+                    onClick={() => setOpenFAQ(openFAQ === idx ? null : idx)}
+                  >
+                    <span>{faq.question}</span>
+                    <i
+                      className={`fa-solid ${
+                        openFAQ === idx
+                          ? "fa-chevron-up"
+                          : "fa-chevron-down"
+                      }`}
+                    ></i>
+                  </div>
+                  {openFAQ === idx && (
+                    <div className="faq-answer">
+                      <p>{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {cls === "cta-section" && (
+          <>
+            <h2>Interested in {service.title}?</h2>
+            <p>
+              We're ready to bring excellence to your doorstep. Reach out now!
+            </p>
+            <a href="tel:+2349012345678" className="cta-button">
+              <i className="fa-solid fa-phone"></i> Call: 0901 234 5678
+            </a>
+          </>
+        )}
+      </section>
     ))}
   </div>
-</>
-)}
-
-          {cls === "cta-section" && (
-           <>
-  <h2>Interested in {service.title}?</h2>
-  <p>We're ready to bring excellence to your doorstep. Reach out now!</p>
-  <a href="tel:+2349012345678" className="cta-button">
-    <i className="fa-solid fa-phone"></i> Call: 0901 234 5678
-  </a>
-</>
-          )}
-        </section>
-      ))}
-    </div>
-  );
+);
 };
 
 export default ServiceDetails;

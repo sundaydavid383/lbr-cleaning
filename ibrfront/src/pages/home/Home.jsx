@@ -12,7 +12,7 @@ import imgi2 from "../../assets/cleaner15.jpg";
 import imgi3 from "../../assets/cleaner14.jpg";
 import image1 from "../../assets/cleaner1.jpg"
 import image2 from "../../assets/cleaner10.jpg"
-import image3 from "../../assets/cleaner8.jpg"
+import image3 from "../../assets/cleaner24.jpg"
 import image4 from "../../assets/cleaner9.jpg"
 import image5 from "../../assets/cleaner7.jpg"
 import imageBac from "../../assets/cleaningbackground.jpg"
