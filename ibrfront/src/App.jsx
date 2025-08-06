@@ -10,6 +10,7 @@ import Blog from './pages/blog/Blog'
 import Home from './pages/home/Home'
 import NotifySubscribers from "./pages/notifySubscribers/NotifySubscribers"
 import AdminMessagePage from './pages/adminMessagePage/AdminMessagePage';
+import NotFoundPage from './pages/notFoundPage/NotFoundPage';
 
 const App = () => {
 
@@ -20,12 +21,13 @@ const App = () => {
     <Routes>
        <Route path="" element={<Home/>}/>
        <Route path="/service" element={<Service/>}/>
+       <Route path="blog" element={<Blog/>}/>
        <Route path="/about" element={<About/>}/>
        <Route path="/services/:serviceId" element={<ServiceDetails />}/>
        <Route path="/contact" element={<Contact/>}/>
        <Route path="/notify" element={<NotifySubscribers/>}/>
        <Route path="/admin/message" element={<AdminMessagePage/>}/>
-       <Route path="*" element={<h1>Page not found</h1>}/>
+         <Route path="*" element={<NotFoundPage />} />
     </Routes>
     <Footer/>
     </BrowserRouter>
