@@ -413,3 +413,19 @@
   left: -4rem;
 }
 }
+/* Fix speech overlap around tablet widths */
+@media (max-width: 720px) and (min-width: 659px) {
+  .speech {
+    top: 1rem;       /* move it slightly down */
+    left: -6rem;     /* push it left so cone doesn't cover the image */
+    transform: scale(0.9); /* slightly smaller so it looks proportional */
+  }
+
+  .speech .cone {
+    top: 4rem;       /* adjust cone to match new speech position */
+  }
+
+  .image .person {
+    margin-right: -5rem; /* pull image closer so it balances visually */
+  }
+}

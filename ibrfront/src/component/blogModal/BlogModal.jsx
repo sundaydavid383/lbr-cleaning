@@ -18,25 +18,28 @@ const BlogModal = ({ article, onClose }) => {
     content,
   } = article;
 
+  // Debug log to see what is coming in
+  console.log("BlogModal article:", article);
+
   const renderParagraphs = (text) => {
-     if (!text) return <p className="modal-desc"> NO description available</p>
+    if (!text) return <p className="modal-desc"> NO description available</p>;
 
-     const sentences = text.split(". ").filter(Boolean);
-     const grouped = []
+    const sentences = text.split(". ").filter(Boolean);
+    const grouped = [];
 
-     for (let i = 0; i < sentences.length; i +=2){
-        const para = sentences[i] + (sentences[i].endsWith(".") ? "": ".");
-        const next = sentences[i + 1] ?
-        sentences[i + 1] + (sentences[i + 1].endsWith(".") ? "" : ".")
-        :"";
-        grouped.push(`${para} ${next}`.trim());
-     }
+    for (let i = 0; i < sentences.length; i += 2) {
+      const para = sentences[i] + (sentences[i].endsWith(".") ? "" : ".");
+      const next = sentences[i + 1]
+        ? sentences[i + 1] + (sentences[i + 1].endsWith(".") ? "" : ".")
+        : "";
+      grouped.push(`${para} ${next}`.trim());
+    }
 
-     return grouped.map((para, index)=>(
-        <p key={index} className="modal-desc">
-            {para} 
-        </p>
-     ))
+    return grouped.map((para, index) => (
+      <p key={index} className="modal-desc">
+        {para}
+      </p>
+    ));
   };
 
   return (
@@ -46,13 +49,16 @@ const BlogModal = ({ article, onClose }) => {
           &times;
         </button>
 
-        {image_url && (
+        {image_url ? (
           <img
             src={image_url}
             alt={title}
             className="modal-image"
+            style={{ width: "100%", height: "auto", display: "block" }}
             loading="lazy"
           />
+        ) : (
+          <p>No image available</p>
         )}
 
         <div className="modal-body">
@@ -84,7 +90,7 @@ const BlogModal = ({ article, onClose }) => {
 
           <div className="modal-content-block">
             <h4>Description:</h4>
-           {renderParagraphs(summary || description || content)}
+            {renderParagraphs(summary || description || content)}
           </div>
 
           {tags?.length > 0 && (

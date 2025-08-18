@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./nav.css"
 import houseimage from "../../assets/house-cleaning.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Nav = () => {
   const [linkActive, setLinkActive] = useState(false)
   const [active, setActive] = useState(false);
+  const location = useLocation();
 
 useEffect(() => {
   const handleScroll = () => {
-    if (window.scrollY > 300) {
+    if (window.scrollY >50) {
       setActive(true);
     } else {
       setActive(false);
@@ -22,6 +23,8 @@ useEffect(() => {
     window.removeEventListener("scroll", handleScroll);
   };
 }, []);
+
+const isActive = (path) => location.pathname === path;
    
   return (
     <div className={`nav ${active ? "active" : ""}`}>
@@ -58,12 +61,12 @@ useEffect(() => {
           <img src={houseimage} alt="" />
           <p>LBR Cleaning</p>
         </div>
-        <i onClick={()=>setLinkActive(prev=>!prev)} class="fa-solid fa-bars-staggered"></i>
+        <i onClick={()=>setLinkActive(prev=>!prev)} className="fa-solid fa-bars-staggered"></i>
         <div className={`links ${linkActive?"active":""}`}>
-        <Link onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>
-        <Link onClick={()=>setLinkActive(false)} to="/service"><p>SERVICE</p><div></div></Link>
-        <Link onClick={()=>setLinkActive(false)} to="/about"><p>ABOUT</p><div></div></Link>
-        <Link onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
+        <Link className={isActive("/") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>
+        <Link className={isActive("/service") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/service"><p>SERVICE</p><div></div></Link>
+        <Link className={isActive("/about") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/about"><p>ABOUT</p><div></div></Link>
+        <Link className={isActive("/blog") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
         </div>
         <Link  to={"/contact"} onClick={()=>setLinkActive(false)} className="btn">
           <p>

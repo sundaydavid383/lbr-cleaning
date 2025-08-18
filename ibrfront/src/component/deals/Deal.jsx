@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./deal.css"
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 
 const Deal = ({deal_Intro, plans}) => {
-  
+    useEffect(() => {
+       console.log(deal_Intro);
+    }, [])
+    
 
   return (
     <div className='deal'>
@@ -13,6 +16,7 @@ const Deal = ({deal_Intro, plans}) => {
           <img src={deal_Intro.image} alt="" />
         <a
   className="btn"
+  target="_blank"
   href={deal_Intro.email ? `mailto:${deal_Intro.email}` : `tel:${deal_Intro.phone}`}
 >
   <p>{deal_Intro.email ? `Email: ${deal_Intro.email}` : `Call: ${deal_Intro.phone}`}</p>

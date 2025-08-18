@@ -92,6 +92,13 @@
 .links a:hover {
   color: var(--primary-color);
 }
+.links a.active div {
+  width: 100%; /* show underline */
+}
+
+.links a.active {
+  color: var(--primary-color); /* optional: highlight text color */
+}
 @keyframes navtransform {
   0% {
     opacity: 0;

@@ -100,7 +100,7 @@
 }
 
 .article_card .btn p{
-    line-height: 3.4rem;
+  margin-top: -1.7rem;
 }
 .article_card:hover .date,
 .article_card:hover .author{

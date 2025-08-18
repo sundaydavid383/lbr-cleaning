@@ -1,4 +1,4 @@
-.blog-modal-overlay {
+.blog-modal-overlay { 
   position: fixed;
   top: 0;
   left: 0;
@@ -8,18 +8,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 88999;
-  padding: 2rem; /* adds space around modal */
-  overflow-y: auto;
+  z-index: 1188999;
+  padding: 2rem;
+  overflow-y: auto; /* allows whole modal to scroll if tall */
 }
 
 .blog-modal {
   background-color: var(--background-color);
   box-shadow: var(--box-shadow);
   width: 90%;
-  max-width: 900px; /* wider modal */
-  max-height: 85vh; /* limits height */
-  overflow-y: auto;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto; /* single scroll container */
   border-radius: 16px;
   animation: slideUp 0.3s ease-out;
   position: relative;
@@ -28,27 +28,32 @@
 }
 
 .modal-close-btn {
-  position: absolute;
-  top: 0.7rem;
-  right: 1rem;
-  font-size: 1.2rem;
-  background: none;
-  border: none;
-  color: var(--secondary-color);
-  cursor: pointer;
+  position: fixed;
+  top: 12px;
+  right: 10%;
+  z-index: 11;
+  font-size: 1.8rem;
   font-weight: bold;
-  z-index: 10;
-  transition: transform 0.2s ease;
+  color: var(--secondary-color);
+  background: transparent;
+  border: 1px solid var(--text-color);
+  background: var(--background-color);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .modal-close-btn:hover {
-  transform: scale(1.2);
+  color: var(--background-color);
+  transform: scale(1.1) rotate(90deg);
+  text-shadow: var(--primary-shadow);
 }
 
 .modal-image {
   width: 100%;
-  height: 180px; /* slightly smaller */
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
   border-bottom: 2px solid var(--light-secondary-color);
 }
 
@@ -56,7 +61,7 @@
   padding: 1.5rem;
   color: var(--text-color);
   font-family: "Segoe UI", sans-serif;
-    overflow-y: auto;
+  /* removed overflow-y: auto; ✅ */
 }
 
 

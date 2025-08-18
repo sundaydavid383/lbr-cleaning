@@ -130,7 +130,11 @@ const Footer = () => {
         </ul>
 
         <div className="footer_details futup">
-          <p><i className="fa-solid fa-phone"></i> 09014886877</p>
+          <a 
+  href="tel:09014886877" 
+>
+  <i className="fa-solid fa-phone"></i> 09014886877
+</a>
           <a href="https://wa.me/2349014886853" target="_blank" rel="noreferrer">
             <p><i className="fa-brands fa-whatsapp"></i> +2349014886853</p>
           </a>
