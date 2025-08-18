@@ -1,7 +1,7 @@
 // NewsBlog.jsx
 import React, { useEffect, useState } from "react";
-import Loading from "../../component/Loading/Loading";
-import BlogModal from "../../component/BlogModal/BlogModal";
+import Loading from "../../component/loading/Loading";
+import BlogModal from "../../component/blogModal/BlogModal";
 import blog1 from "../../assets/blog1.jpg"
 import blog2 from "../../assets/blog2.jpg"
 import blog3 from "../../assets/blog3.jpg"
