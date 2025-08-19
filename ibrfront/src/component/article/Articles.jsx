@@ -70,7 +70,7 @@ const Articles = ({ articles }) => {
                     pubDate: article.date || "",
                     image_url: article.image?.startsWith("http")
                       ? article.image
-                      : `/images/${article.image}`, // fallback if only filename
+                      : article.image, // fallback if only filename
                     summary: article.gist1 || "",
                     link: article.link || "",
                     readTime: article.readTime || "N/A",

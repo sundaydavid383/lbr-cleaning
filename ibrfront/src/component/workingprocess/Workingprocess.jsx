@@ -15,7 +15,7 @@ const Workingprocess = () => {
          <div className="workingProcess_container container">
          <div className="workingprocess_card">
   <p className="icon">
-    <small><i class="fa-solid fa-earth-americas"></i></small>
+    <small><i className="fa-solid fa-earth-americas"></i></small>
     <span>1</span>
     <small className='number'></small>
   </p>
@@ -26,7 +26,7 @@ const Workingprocess = () => {
 
 <div className="workingprocess_card">
   <p className="icon">
-    <small><i class="fa-solid fa-spa"></i></small>
+    <small><i className="fa-solid fa-spa"></i></small>
     <span>2</span>
     <small className='number'></small>
   </p>
@@ -37,7 +37,7 @@ const Workingprocess = () => {
 
 <div className="workingprocess_card">
   <p className="icon">
-    <small><i class="fa-solid fa-calendar-check"></i></small>
+    <small><i className="fa-solid fa-calendar-check"></i></small>
     <span>3</span>
     <small className='number'></small>
   </p>

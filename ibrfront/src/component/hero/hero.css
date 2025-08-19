@@ -317,12 +317,12 @@
   .hero.container{
     flex-wrap: wrap;
   }
-  .image .person {
+  .hero .image .person {
     width: 30rem;
 
     margin-right: -7rem;
   }
-  .image .stars {
+  .hero .image .stars {
     width: 3rem;
     right: 5rem;
     top: 2rem;
@@ -344,7 +344,7 @@
     height: 1rem;
     width: 1rem;
   }
-  .image .spark {
+  .hero .image .spark {
     bottom: 3rem;
     left: 0rem;
   }
@@ -356,12 +356,12 @@
   }
 }
 @media (max-width: 868px) {
-  .image .person {
+  .hero .image .person {
     width: 30rem;
     margin-right: -7rem;
     margin-top: 3rem;
   }
-  .image .stars {
+  .hero .image .stars {
     right: 0rem;
   }
   .speech {
@@ -411,6 +411,14 @@
   .speech {
   top: -.7rem;
   left: -4rem;
+}
+.hero .image{
+  margin-top:-4rem;
+}
+}
+@media (max-width: 398px) {
+.hero .image{
+  margin-top:-16rem;
 }
 }
 /* Fix speech overlap around tablet widths */

@@ -157,7 +157,7 @@
 /* Extra tweak for small screens */
 @media (max-width: 500px) {
   .testimonialCard {
-    width: 90%;      /* Make it fit better on small screens */
+    width: 70%;      /* Make it fit better on small screens */
   }
   .testimentcarrier {
     margin-left: 0.5rem;
