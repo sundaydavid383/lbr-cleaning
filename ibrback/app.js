@@ -51,56 +51,70 @@ app.post("/appointments/book", async (req, res) => {
   if (!name || !email || !phone || !service) {
     return res.status(400).json({ success: false, data: "Invalid user data" })
   }
-  const sharedDetails = `
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Service: ${service}
+  const sharedDetailsHTML = `
+  <table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+    <tr>
+      <td style="padding: 8px; font-weight: bold; background-color: rgb(187, 238, 187); color: rgb(8, 59, 8);">Name:</td>
+      <td style="padding: 8px; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8);">${name}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold; background-color: rgb(187, 238, 187); color: rgb(8, 59, 8);">Email:</td>
+      <td style="padding: 8px; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8);">${email}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold; background-color: rgb(187, 238, 187); color: rgb(8, 59, 8);">Phone:</td>
+      <td style="padding: 8px; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8);">${phone}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold; background-color: rgb(187, 238, 187); color: rgb(8, 59, 8);">Service:</td>
+      <td style="padding: 8px; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8);">${service}</td>
+    </tr>
+  </table>
 `;
 
-    // Email to the customer
-  const userMailOptions = {
-    from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
-    to: email,
-    subject: "Appointment Confirmation - LBR Cleaning",
-    text: `Dear ${name},
+// Email to the customer
+const userMailOptions = {
+  from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
+  to: email,
+  subject: "Appointment Confirmation - LBR Cleaning",
+  html: `
+    <div style="font-family: Arial, sans-serif; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px 4px rgba(34, 34, 34, 0.4);">
+      <h2 style="color: rgb(36, 170, 36);">Hello ${name},</h2>
+      <p>Thank you for booking an appointment with <strong>LBR Cleaning</strong>!</p>
+      <p>Here are the details of your request:</p>
+      ${sharedDetailsHTML}
+      <p>We will reach out shortly to confirm and schedule your service.</p>
+      <p>If you have any questions, feel free to reply to this email.</p>
+      <br>
+      <p style="color: rgb(8, 92, 8, 0.8);">Best regards,<br>
+      <strong>The LBR Cleaning Team</strong></p>
+    </div>
+  `,
+};
 
-Thank you for booking an appointment with LBR Cleaning!
-
-Here are the details of your request:
-${sharedDetails}
-
-We will reach out shortly to confirm and schedule your service.
-
-If you have any questions, feel free to reply to this email.
-
-Best regards,  
-The LBR Cleaning Team
-    `,
-  };
-
-  // Email to the owner
-  const ownerMailOptions = {
-    from: '"LBR Cleaning Alerts" <sundayudoh383@gmail.com>',
-    to: OWNER_EMAIL,
-    subject: "New Appointment Booking",
-    text: `Hello Admin,
-
-A new cleaning appointment has been booked. Here are the details:
-
-${sharedDetails}
-
-Please reach out to the customer as soon as possible.
-
--- End of Message --`,
-  };
+// Email to the owner
+const ownerMailOptions = {
+  from: '"LBR Cleaning Alerts" <sundayudoh383@gmail.com>',
+  to: OWNER_EMAIL,
+  subject: "New Appointment Booking",
+  html: `
+    <div style="font-family: Arial, sans-serif; background-color: rgb(245, 245, 228); color: rgb(8, 59, 8); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px 4px rgba(34, 34, 34, 0.4);">
+      <h2 style="color: rgb(36, 170, 36);">Hello Admin,</h2>
+      <p>A new cleaning appointment has been booked. Here are the details:</p>
+      ${sharedDetailsHTML}
+      <p>Please reach out to the customer as soon as possible.</p>
+      <hr style="border: none; border-top: 1px solid rgb(189, 185, 185);">
+      <p style="color: rgb(8, 92, 8, 0.8);">-- End of Message --</p>
+    </div>
+  `,
+};
 
   try {
       await transporter.sendMail(userMailOptions);
       console.log("User email sent successfully");
       await transporter.sendMail(ownerMailOptions);
       console.log("Owner email sent successfully");
-    return res.status(500).json({ success: true, data: "successfully send email to user" })
+    return res.status(500).json({ success: true, data: "Enquiry sent. We’ll contact you soon." })
   } catch (error) {
     console.error("an error occured:", error.message)
     return res.status(500).json({ success: false, data: "an unexpected error occured try connecting to the internet and try again" })

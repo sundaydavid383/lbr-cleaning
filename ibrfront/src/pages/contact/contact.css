@@ -110,6 +110,7 @@
   width: 100%;
   padding: 12px;
   border: 1px solid var(--gray);
+  background-color: white;
   border-radius: 8px;
   font-size: 1rem;
   margin-top: .4rem;

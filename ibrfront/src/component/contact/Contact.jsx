@@ -112,7 +112,6 @@ const Contact = ({ services }) => {
       setPhone("");
       setEmail("");
       setService("Kind of cleaning service");
-      selectlabel.textContent = "Kind of cleaning service";
   };
 }
 

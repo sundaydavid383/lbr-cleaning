@@ -32,18 +32,18 @@
     background-color: var(--secondary-color);
     
 }
-.testimonialCard{
-    width: 33rem;
-    border-radius: .8rem;
-    display: flex;
-    flex-direction: column;
-    background: var(--primary-color);
-    text-align: center;
-    align-items: center;
-    padding: .8rem;
-    gap:1.3rem;
-
-
+.testimonialCard {
+  width: 33rem;
+  max-width: 90%;   /* Prevents overflow on small screens */
+  margin: 0 auto;   /* Centers it with equal left/right margin */
+  border-radius: .8rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--primary-color);
+  text-align: center;
+  align-items: center;
+  padding: .8rem;
+  gap: 1.3rem;
 }
 .testimoniallCardUpper{
   display: flex;
@@ -154,49 +154,18 @@
     width: 80%;
   }
 }
+/* Extra tweak for small screens */
 @media (max-width: 500px) {
-  .testimentcarrier{
-
-    margin-left:1.2rem;
-    column-gap:26rem;
+  .testimonialCard {
+    width: 90%;      /* Make it fit better on small screens */
+  }
+  .testimentcarrier {
+    margin-left: 0.5rem;
+    column-gap: 18rem; /* Reduce the gap so it doesn’t overflow */
   }
 }
 
-/* @keyframes scrollImage {
-    0% {
-      transform: translateX(-0%);
-    }
-    10% {
-      transform: translateX(-19%);
-    }
-    20% {
-      transform: translateX(-39%);
-    }
-    30% {
-      transform: translateX(-55%);
-    }
-    40% {
-      transform: translateX(-70%);
-    }
-    50% {
-      transform: translateX(-55%);
-    }
-    60% {
-      transform: translateX(-39%);
-    }
-    70% {
-      transform: translateX(-19%);
-    }
-    80% {
-      transform: translateX(-20%);
-    }
-    90% {
-      transform: translateX(-10%);
-    }
-    100% {
-      transform: translateX(0%);
-    }
-  } */
+
 
 
    
