@@ -23,8 +23,20 @@ const About = () => {
       <h1>Making Your House Clean
       For Looks As a New</h1>
       <p className="p1">
-  Competently repurpose go forward benefits without goal-oriented ROI, conveniently target e-business opportunities, and leverage parallel task multimedia-based web services. We strategically align your business objectives with cutting-edge technology solutions to maximize growth and productivity. Our expertise in streamlining complex workflows ensures that your company stays ahead of the competition by implementing robust digital strategies. By integrating innovative tools and resources, we help drive sustained performance, scalability, and long-term success across various sectors.
-</p>
+LBR Cleaning Services is a cleaning service company registered in Nigeria. We provide excellent
+cleaning services.
+
+The services rendered includes: Janitorial/Office Cleaning, Housekeeping/Guest House Managements,
+Post Construction Cleaning, Floor Maintenance and Restoration Services, Residential Cleaning,
+Place of worship cleaning, Fumigation & Pest Control and disinfection.
+
+We build value for your business and making it easy for our clients to enjoy life by providing and
+enabling environment for business to strife and to also show your home as a direct representation
+of your life.
+
+We combine today’s technology with our innovative experience to address all your cleaning requirements.
+With our proven and well trained professionals, We tackle dirts, dust and grime to keep your
+Operations smooth and leave your home shining and sparkling.</p>
 
       <div className="award">
       <i className="fa-solid fa-trophy"></i>
@@ -34,7 +46,7 @@ const About = () => {
       <ul>
         <li>
           <i className="fa-solid fa-circle-check"></i>
-          <p>Cleeny Your Home or Office</p>
+          <p>Clean Your Home or Office</p>
         </li>
         <li>
         <i className="fa-solid fa-circle-check"></i>
@@ -42,8 +54,8 @@ const About = () => {
         </li>
         <li>
           <i className="fa-solid fa-circle-check"></i>
-          <p>Online Booking System available
-          </p>
+          <a href="#contact"><p>Online Booking System available</p></a>
+          
         </li>
       </ul>
       <div className="btn">

@@ -202,7 +202,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--primary-shadow);
 }
 
 .video-info-wrapper {

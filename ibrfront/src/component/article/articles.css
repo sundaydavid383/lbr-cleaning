@@ -134,7 +134,7 @@
     .nav-upper .social-platforms {
       display: flex;
       gap: 0.5rem;
-      background-color: rgb(229, 255, 0);
+      
     }
     .nav .fa-bars-staggered{
       display: flex;

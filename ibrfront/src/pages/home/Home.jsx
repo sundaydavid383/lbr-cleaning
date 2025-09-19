@@ -78,81 +78,82 @@ const Home = () => {
       btnText: "Choose Plan"
     }
   ];
-  const features = [
+const features = [
   {
     icon: "fa-solid fa-pump-medical",
     title: "Residential Cleaning",
-    description: "We ensure your home is spotless with services like dusting, vacuuming, and cleaning high-touch areas."
+    description: "We keep your home spotless with dusting, vacuuming, and sanitizing key areas."
   },
   {
     icon: "fa-solid fa-broom",
     title: "Commercial Cleaning",
-    description: "We offer cleaning services for offices and commercial spaces, ensuring a clean and healthy environment for everyone."
+    description: "We clean offices and commercial spaces, creating a healthier work environment."
   },
   {
     icon: "fa-brands fa-pagelines",
     title: "Eco-Friendly Products",
-    description: "Our eco-friendly, non-toxic cleaning products are safe for your family, pets, and the environment."
+    description: "Our non-toxic, eco-friendly products are safe for your family, pets, and environment."
   }
 ];
   const backgroundImage = imageBac
-  const section = [
-    {
-      questions: "Best cleeny Agency",
-      header: "Need cleeny? call",
-      headerspan: "us today",
-      ps: [
-        "Welcome to our website! We're glad you're here. Our goal is to provide you with the best services and resources to help you achieve your goals.",
-        "Explore our various pages to learn more about what we offer, from professional services to engaging blog posts and helpful resources. Whether you're looking for advice, inspiration, or solutions, we've got you covered!"
-      ],
-      sectionimage: heroimage1,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Call now", "We’ve got you"],
-      talksReport: "+234 813 456 7890"
-    },  {
-      questions: "Our Professional Cleaning Services",
-      header: "We Clean and Protize",
-      headerspan: " your satisfaction",
-      ps: [
-        "Our professional cleaning team uses state-of-the-art equipment and eco-friendly cleaning solutions to ensure the best results.",
-        "From homes to offices, we deliver comprehensive cleaning services that meet your specific needs, leaving your space sparkling clean."
-      ],
-      sectionimage: heroimage2,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Book clean", "Clean now"],
-      talksReport: "+234 813 456 7890"
-    },
-    {
-      questions: "Our Commitment to Excellence",
-      header: "Choose because?",
-      headerspan: "We go the extra mile",
-      ps: [
-        "We believe in providing exceptional cleaning services that not only meet but exceed your expectations.",
-        "Our dedicated team is always ready to help you with personalized services tailored to your specific cleaning needs."
-      ],
-      sectionimage: heroimage3,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Learn more", "free estimate"],
-      talksReport: "+234 813 456 7890"
-    },
-    {
-      questions: "About Us",
-      header: "Who are we?",
-      headerspan: "about our company",
-      ps: [
-        "We are a leading cleaning service provider committed to offering top-quality cleaning solutions tailored to your needs.",
-        "Our team is passionate about delivering exceptional services with a focus on customer satisfaction and eco-friendly practices."
-      ],
-      sectionimage: heroimage4,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Contact us", "Get a quote"],
-      talksReport: "+234 813 456 7890"
-    }
-  ];
+const section = [
+  {
+    questions: "Best cleeny Agency",
+    header: "Need cleeny? call",
+    headerspan: "us today",
+    ps: [
+      "Welcome to our website! We’re here to provide top-quality services and helpful resources to support your goals.",
+      "Explore our pages to discover professional services, advice, and solutions designed to meet your needs."
+    ],
+    sectionimage: heroimage1,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Call now", "We’ve got you"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "Our Professional Cleaning Services",
+    header: "We Clean and Protize",
+    headerspan: " your satisfaction",
+    ps: [
+      "Our skilled cleaning team uses advanced tools and eco-friendly products for the best results every time.",
+      "From homes to offices, we provide reliable cleaning tailored to your needs, leaving every space fresh and spotless."
+    ],
+    sectionimage: heroimage2,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Book clean", "Clean now"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "Our Commitment to Excellence",
+    header: "Choose because?",
+    headerspan: "We go the extra mile",
+    ps: [
+      "We’re dedicated to delivering cleaning services that not only meet but exceed your expectations.",
+      "Our team ensures personalized solutions that keep your spaces well cared for and shining."
+    ],
+    sectionimage: heroimage3,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Learn more", "free estimate"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "About Us",
+    header: "Who are we?",
+    headerspan: "about our company",
+    ps: [
+      "We are a trusted cleaning company committed to offering high-quality services tailored to your lifestyle and needs.",
+      "Our passion is delivering excellent results with eco-friendly practices and a focus on customer satisfaction."
+    ],
+    sectionimage: heroimage4,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Contact us", "Get a quote"],
+    talksReport: "+234 813 456 7890"
+  }
+];
 
     const services = [
       {

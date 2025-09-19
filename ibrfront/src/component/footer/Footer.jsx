@@ -131,27 +131,35 @@ const Footer = () => {
 
         <div className="footer_details futup">
           <a 
-  href="tel:09014886877" 
+  href="tel:08068686953" rel="noopener" aria-label="Call 08068686953" 
 >
-  <i className="fa-solid fa-phone"></i> 09014886877
-</a>
-          <a href="https://wa.me/2349014886853" target="_blank" rel="noreferrer">
-            <p><i className="fa-brands fa-whatsapp"></i> +2349014886853</p>
+  <i className="fa-solid fa-phone"></i> 08068686953
+  </a>
+
+ <a 
+  href="tel:08035331656"  rel="noopener" aria-label="Call 08035331656"
+>
+  <i className="fa-solid fa-phone"></i> 08035331656
           </a>
-          <a href="mailto:info@lbrcleaning.com">
-            <p><i className="fa-solid fa-envelope"></i> info@lbrcleaning.com</p>
+          <a href="whatsapp://send?phone=2348068686953">
+              <i className="fa-brands fa-whatsapp"></i> 2348068686953
           </a>
-          <Link
-            target="_blank"
-            to="https://www.google.com/maps?q=LBR+Cleaning+Services,+Lagos,+Nigeria"
-          >
-            <p><i className="fa-solid fa-location-dot"></i> 45 Clean Avenue, Ikeja, Lagos</p>
-          </Link>
+          <a href="mailto:info@lbrcleaningservices">
+            <p><i className="fa-solid fa-envelope"></i> info@lbrcleaningservices</p>
+          </a>
+        <a
+        href="https://www.google.com/maps?q=Block+A6,+suite+39,+Sura+shopping+complex+Simpson+Street,+Lagos+Island"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <i className="fa-solid fa-location-dot"></i> 
+        Block A6, suite 39, Sura shopping complex Simpson Street, Lagos Island
+      </a>
         </div>
       </div>
 
       <div className="copyright">
-        ©2024 All Rights Reserved <span>LBR Cleaning</span>. Designed & Built by DavidFoster.
+        ©{new Date().getFullYear()} All Rights Reserved <span>LBR Cleaning</span>. Designed & Built by DavidFoster.
       </div>
     </div>
   );

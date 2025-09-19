@@ -116,7 +116,7 @@ const Contact = ({ services }) => {
 }
 
   return (
-    <div className="contact">
+    <div className="contact" id="contact">
         {loading && <Loading message="Sending request for booking an appointment..." />}
       <CustomAlert
         message={alertData.message}
@@ -137,7 +137,7 @@ const Contact = ({ services }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             type="text"
-            placeholder="name"
+            placeholder="first and last name"
             className="input_name"
           />
           <div className="inputlabel">

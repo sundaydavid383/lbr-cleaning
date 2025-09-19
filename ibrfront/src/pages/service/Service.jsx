@@ -71,24 +71,24 @@ import dealimage1 from "../../assets/cleaner2.png"
     }
   ];
 const backgroundImage = imageBac
- const features = [
+const features = [
   {
     icon: "fa-solid fa-soap",
     title: "Post-Construction Cleaning",
     description:
-      "Recently renovated or completed a construction project? We handle debris removal, dust cleanup, and detailed sanitation to leave the space move-in ready and sparkling clean."
+      "Finished a project? We remove debris, dust, and sanitize to leave your space move-in ready."
   },
   {
     icon: "fa-solid fa-truck-ramp-box",
     title: "Move In/Out Cleaning",
     description:
-      "Planning a move? We provide comprehensive move-in/move-out cleaning to ensure your old place is spotless for handover and your new one is ready for a fresh start."
+      "Moving? We clean thoroughly so your old place is spotless and your new one fresh and ready."
   },
   {
     icon: "fa-solid fa-calendar-check",
     title: "Custom & Scheduled Plans",
     description:
-      "Need weekly, bi-weekly, or monthly service? We offer flexible scheduling tailored to your lifestyle or business needs, with reminders and consistent quality you can rely on."
+      "Need regular cleaning? Choose weekly, bi-weekly, or monthly plans with reliable quality."
   }
 ];
 const section = [ 
@@ -97,8 +97,8 @@ const section = [
     header: "Premium Cleaning",
     headerspan: "Services You Can Trust",
     ps: [
-      "Experience top-notch cleaning with our trained professionals and eco-friendly solutions tailored for homes, offices, and industrial spaces.",
-      "Whether it’s a one-time deep clean or regular maintenance, we guarantee a spotless, healthy, and refreshed environment for you."
+      "Get expert cleaning with trained staff and eco-friendly solutions for homes, offices, and more.",
+      "From one-time deep cleans to regular care, we keep your space spotless and healthy."
     ],
     sectionimage: heroimage2,
     sectionimageStar: star,
@@ -111,8 +111,8 @@ const section = [
     header: "Customized Plans",
     headerspan: "For Every Space",
     ps: [
-      "We understand every space is different. That’s why our cleaning services are flexible, reliable, and tailored to your needs.",
-      "From apartments to large offices, we handle it all with precision and care — leaving no corner untouched."
+      "Every space is unique, so our services are flexible, reliable, and tailored to you.",
+      "From apartments to offices, we clean with precision and care."
     ],
     sectionimage: heroimage1,
     sectionimageStar: star,
@@ -125,8 +125,8 @@ const section = [
     header: "Deep Cleaning &",
     headerspan: "Sanitization Experts",
     ps: [
-      "Go beyond basic cleaning. Our deep cleaning and sanitization services are perfect for post-construction, move-ins, or health-sensitive environments.",
-      "We ensure your space is not just clean, but hygienically safe with hospital-grade equipment and attention to detail."
+      "Our deep cleaning and sanitization go beyond basic cleaning for post-construction or move-ins.",
+      "We make spaces hygienically safe with hospital-grade tools and detail."
     ],
     sectionimage: heroimage3,
     sectionimageStar: star,
@@ -139,8 +139,8 @@ const section = [
     header: "Reliable Service",
     headerspan: "With a Personal Touch",
     ps: [
-      "We’re not just cleaners—we’re your trusted partners in maintaining a healthy environment. Punctual, professional, and passionate about what we do.",
-      "Clients choose us for our reliability, customer service, and consistent high-quality results. Your satisfaction is our top priority."
+      "We’re your trusted partners—punctual, professional, and passionate.",
+      "Clients love us for reliability, great service, and consistent results."
     ],
     sectionimage: heroimage4,
     sectionimageStar: star,

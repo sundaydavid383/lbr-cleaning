@@ -26,16 +26,7 @@
      background-color: black;
     align-self: center;
 }
-.portfolio_container{
-    width: 938%;
-    min-height: 100%;
-    margin-left: -1.7rem;
-    transition: .3s linear;
-    background-color: red;
-    padding-inline: 0rem;
-    gap:2rem;
-    /* animation: scrollingover 2s infinite; */
-}
+
 .portfolio_card_wrapper {
   min-height: 320px; /* adjust based on your card height */
   position: relative;
@@ -167,13 +158,12 @@
   
   }
   @media (max-width: 658px) {
-    .portfolio_container{
-        width: 958%;
-        margin-left: -1.7rem;
-        transition: .3s linear;
-        background-color: red;
-        padding-inline: 0rem;
-        gap:0rem;
-    }
+.portfolio_holder .moveright{
+    right:1rem;
+}
+ .portfolio_holder .moveleft{
+    left:1rem;  
+   }
+
   }
   

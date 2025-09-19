@@ -15,63 +15,64 @@ import team3 from "../../assets/user3.jpg";
 import team4 from "../../assets/user4.jpg";
 
 const About = () => {
-  const aboutHeroSection = [
-    {
-      questions: "Best cleeny Agency",
-      header: "Need cleeny? call",
-      headerspan: "us today",
-      ps: [
-        "Welcome to our website! We're glad you're here. Our goal is to provide you with the best services and resources to help you achieve your goals.",
-        "Explore our various pages to learn more about what we offer, from professional services to engaging blog posts and helpful resources. Whether you're looking for advice, inspiration, or solutions, we've got you covered!"
-      ],
-      sectionimage: heroimage1,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["call us", "Help us"],
-      talksReport: "+234 813 456 7890"
-    },  {
-      questions: "Our Professional Cleaning Services",
-      header: "We Clean and Protize",
-      headerspan: " your satisfaction",
-      ps: [
-        "Our professional cleaning team uses state-of-the-art equipment and eco-friendly cleaning solutions to ensure the best results.",
-        "From homes to offices, we deliver comprehensive cleaning services that meet your specific needs, leaving your space sparkling clean."
-      ],
-      sectionimage: heroimage2,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Book a cleaning", "clean today"],
-      talksReport: "+234 813 456 7890"
-    },
-    {
-      questions: "Our Commitment to Excellence",
-      header: "Choose because?",
-      headerspan: "We go the extra mile",
-      ps: [
-        "We believe in providing exceptional cleaning services that not only meet but exceed your expectations.",
-        "Our dedicated team is always ready to help you with personalized services tailored to your specific cleaning needs."
-      ],
-      sectionimage: heroimage3,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Learn more", "free estimate"],
-      talksReport: "+234 813 456 7890"
-    },
-    {
-      questions: "About Us",
-      header: "Who are we?",
-      headerspan: "about our company",
-      ps: [
-        "We are a leading cleaning service provider committed to offering top-quality cleaning solutions tailored to your needs.",
-        "Our team is passionate about delivering exceptional services with a focus on customer satisfaction and eco-friendly practices."
-      ],
-      sectionimage: heroimage4,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-      talks: ["Contact us", "Get a quote"],
-      talksReport: "+234 813 456 7890"
-    }
-  ];
+const aboutHeroSection = [
+  {
+    questions: "Why Choose Us?",
+    header: "Need Cleaning?",
+    headerspan: "Call Today",
+    ps: [
+      "We provide fast, reliable, and affordable cleaning services that save you time and stress.",
+      "From homes to offices, we deliver spotless results every time."
+    ],
+    sectionimage: heroimage1,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Call us", "Book now"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "Our Services",
+    header: "We Clean",
+    headerspan: "With Care",
+    ps: [
+      "Our team uses modern tools and eco-friendly products for deep cleaning.",
+      "Whether home or office, we leave every space fresh and shining."
+    ],
+    sectionimage: heroimage2,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Book now", "Schedule today"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "Excellence First",
+    header: "We Go",
+    headerspan: "The Extra Mile",
+    ps: [
+      "We aim to exceed expectations with every clean.",
+      "Healthier, cleaner, happier spaces—just for you."
+    ],
+    sectionimage: heroimage3,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Learn more", "Free quote"],
+    talksReport: "+234 813 456 7890"
+  },
+  {
+    questions: "About Us",
+    header: "Who We Are",
+    headerspan: "Trusted Cleaners",
+    ps: [
+      "A professional team dedicated to quality and eco-friendly solutions.",
+      "We value long-term client relationships built on satisfaction."
+    ],
+    sectionimage: heroimage4,
+    sectionimageStar: star,
+    sectionimageSpark: spark,
+    talks: ["Contact us", "Get a quote"],
+    talksReport: "+234 813 456 7890"
+  }
+];
   const introRef = useRef();
   const teamRef = useRef();
   const valuesRef = useRef();
@@ -117,15 +118,11 @@ const About = () => {
           <div className="intro-content">
             <h2>Who We Are</h2>
             <p>
-              SparkleClean is a family-owned cleaning service committed to
-              providing top-tier residential and commercial cleaning since 2010.
-              Our mission is simple: bring sparkle, comfort, and peace of mind to
-              every space we touch.
-            </p>
-            <p>
-              With a team of trained and friendly professionals, we use
-              eco-friendly products and modern equipment to ensure your spaces
-              aren't just clean—but healthy and safe.
+                           LBR Cleaning Services is a registered Nigerian company offering quality cleaning solutions. Our services include janitorial and office cleaning, housekeeping, post-construction cleaning, floor care, residential cleaning, worship centers, fumigation, pest control, and disinfection.
+           </p> <p>
+
+
+We create clean, safe spaces that add value to your business and home. With modern technology and skilled professionals, we handle dirt and dust to keep your operations smooth and your home sparkling..
             </p>
           </div>
 
@@ -174,6 +171,7 @@ const About = () => {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
         loading="lazy"
+        autoPlay="true"
       ></iframe>
     </div>
     <div className="info-text">

@@ -31,10 +31,10 @@ const isActive = (path) => location.pathname === path;
       <div className="nav-upper">
       <div className="media">
             <p className="phone">
-              <i className="fa-solid fa-phone-volume"></i>+16102458976
+              <i className="fa-solid fa-phone-volume"></i>+2348068698053
             </p>
             <a href="mailto:sundayudoh383@gmail.com" className="email">
-              <i className="fa-solid fa-envelope"></i>klanohelp@gmail.com
+              <i className="fa-solid fa-envelope"></i>lbrcleaningservices16@gmail.com
             </a>
           </div>
         <div className="social-platforms">
@@ -57,10 +57,10 @@ const isActive = (path) => location.pathname === path;
       
       </div>
       <div className="nav-lower">
-        <div className="logo">
+        <Link to="/" className="logo" >
           <img src={houseimage} alt="" />
           <p>LBR Cleaning</p>
-        </div>
+        </Link>
         <i onClick={()=>setLinkActive(prev=>!prev)} className="fa-solid fa-bars-staggered"></i>
         <div className={`links ${linkActive?"active":""}`}>
         <Link className={isActive("/") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>

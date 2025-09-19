@@ -13,8 +13,8 @@ const Video = ({ setSeeVideo }) => {
         <i className="fas fa-times"></i>
       </div>
       <iframe
-        width="853"
-        height="480"
+        width="800"
+        height="427"
         src="https://www.youtube.com/embed/pUWXTY_lmns?autoplay=1"
         title="Cillit Bang The Mechanic HD"
         frameborder="0"
