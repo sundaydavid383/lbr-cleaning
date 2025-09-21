@@ -240,3 +240,17 @@ exports.unSubscribe = async (req, res) => {
     });
   }
 };
+
+exports.deleteAllSubscribers = async (req, res) => {
+  try {
+    console.log("Deleting all subscribers...");
+    const result = await EmailModel.deleteMany({})
+    console.log(`Deleted ${result.deletedCount} subscribers.`);
+    res.status(200).json({ success: true, message: `Deleted ${result.deletedCount} subscribers.` });
+  }
+  catch (error) {
+    console.error("Error deleting subscribers:", error);
+    res.status(500).json({ success: false, message: "Failed to delete subscribers" });
+    
+  }
+}
