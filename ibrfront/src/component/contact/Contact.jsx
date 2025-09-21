@@ -39,15 +39,18 @@ const Contact = ({ services }) => {
     const emailinput = document.querySelector(".input_email");
 
     try {
-      setLoading(true)
+        setLoading(true)
         const now = Date.now();
       if (lastSubmitTime && now - lastSubmitTime < 2 * 60 * 1000) {
         showAlert("Please wait at least 2 minutes before submitting again.", "warning");
         return;
       }
-      if (name.trim() === "") {
+
+      const names = name.trim().split(/\s+/);
+
+      if (names.length < 2 || names.some(n => n.length < 2)) {
         nameinput.classList.add("alert");
-        showAlert("Please enter your name", "warning");
+        showAlert("Please enter your first and last name ", "warning");
         setTimeout(() => nameinput.classList.remove("alert"), 2000);
         return;
       }
