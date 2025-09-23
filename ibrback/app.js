@@ -27,11 +27,15 @@ const OWNER_EMAIL = process.env.SMTP_USER;
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "sundayudoh383@gmail.com",
+    user: process.env.SMTP_USER,
     pass: process.env.APPPASSWORD || "NO appPassword" // Use environment variable or fallback to hardcoded password
   },
   pool: true
 })
+
+function capitalizeWord(word) {
+   return word[0].toUpperCase() + word.slice(1).toLowerCase()
+}
 
 
 app.get('/welcome', (req, res)=>{
@@ -73,9 +77,16 @@ app.post("/appointments/book", async (req, res) => {
     </table>
   `;
 
-  // Email to the customer
+   const [firstName, lastName] = name.split(" ")
+
+   const abbrivatedFirstName = capitalizeWord(firstName)
+   const abbrivatedLastName = capitalizeWord(lastName)
+
+
+
+    // Email to the customer
   const userMailOptions = {
-    from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
+    from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
     to: email,
     subject: "✨ Appointment Confirmation - LBR Cleaning ✨",
     html: `
@@ -90,7 +101,7 @@ app.post("/appointments/book", async (req, res) => {
 
           <!-- Body -->
           <div style="padding: 25px;">
-            <h2 style="color: rgb(8, 92, 8); margin-top: 0;">Hello ${name},</h2>
+            <h2 style="color: rgb(8, 92, 8); margin-top: 0;">Hello ${abbrivatedFirstName} ${abbrivatedLastName},</h2>
             <p style="line-height: 1.6;">Thank you for booking an appointment with <strong>LBR Cleaning</strong>! 🎉</p>
             <p style="line-height: 1.6;">Here are the details of your request:</p>
             

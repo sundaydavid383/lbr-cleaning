@@ -105,16 +105,17 @@ const Contact = ({ services }) => {
       const data = await response.json();
       setLastSubmitTime(Date.now()); // Update last submit time
       showAlert(data.data || "Appointment booked successfully!", "success");
+      setName("");
+      setPhone("");
+      setEmail("");
+      setService("Kind of cleaning service");
     } catch (error) {
       showAlert("An error occurred. Please try again.", "danger");
       console.log("Error:", error.message);
     }
     finally {
       setLoading(false)
-      setName("");
-      setPhone("");
-      setEmail("");
-      setService("Kind of cleaning service");
+  
   };
 }
 
