@@ -1,7 +1,7 @@
 import React,{ useEffect, useState, useRef} from "react";
 import { useParams, Link } from "react-router-dom";
 import "./serviceDetails.css";
-import service1 from "../../assets/cleaner19.jpg"
+import service1 from "../../assets/cleaner19.jpeg"
 import service4 from "../../assets/cleaner25.jpg"
 import service2 from "../../assets/cleaner20.jpg"
 import service3 from "../../assets/cleaner21.jpg"

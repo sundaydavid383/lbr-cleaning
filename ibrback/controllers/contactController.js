@@ -26,7 +26,7 @@ exports.submitContactForm = async (req, res) => {
 
     // 📨 Email to YOU (admin)
     const adminMailOptions = {
-      from: process.env.SMTP_USER,
+      from: "LBR Cleaning AGENT",
       to: process.env.SMTP_USER,
       subject: `Contact Form: ${subject}`,
       text: `📥 New Contact Form Submission:\n\nName: ${name}\nEmail: ${email}\nWhatsApp: ${whatsapp}\n\nSubject: ${subject}\n\nMessage:\n${message}`,
@@ -34,10 +34,10 @@ exports.submitContactForm = async (req, res) => {
 
     // 📧 Confirmation Email to USER
     const userMailOptions = {
-      from: process.env.SMTP_USER,
+      from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: `Thanks for contacting SparkleClean!`,
-      text: `Hi ${name},\n\nThank you for reaching out to SparkleClean. We’ve received your message and will get back to you shortly.\n\nHere’s what you sent:\nSubject: ${subject}\nMessage: ${message}\n\nBest regards,\nThe SparkleClean Team`,
+      subject: `Thanks for contacting LBR Cleaning!`,
+      text: `Hi ${name},\n\nThank you for reaching out to LBR Cleaning. We’ve received your message and will get back to you shortly.\n\nHere’s what you sent:\nSubject: ${subject}\nMessage: ${message}\n\nBest regards,\nThe LBR Cleaning Team`,
     };
 
     // ✉️ Send Emails
@@ -54,7 +54,7 @@ exports.submitContactForm = async (req, res) => {
     });
 
     // ✅ WhatsApp confirmation to USER
-    const whatsappTextToUser = `Hi ${name}, thank you for contacting *SparkleClean*! 💧\n\nWe received your message and will respond shortly.\n\nGod bless you! ✨`;
+    const whatsappTextToUser = `Hi ${name}, thank you for contacting *LBR Cleaning*! 💧\n\nWe received your message and will respond shortly.\n\nGod bless you! ✨`;
     await twilioClient.messages.create({
       body: whatsappTextToUser,
       from: process.env.TWILIO_WHATSAPP_FROM,

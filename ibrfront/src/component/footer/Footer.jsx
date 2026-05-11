@@ -114,7 +114,7 @@ const Footer = () => {
         <div className="main futup">
           <div className="logo">
             <img src={houseimage} alt="" />
-            <p>LBR Cleaning</p>
+        
           </div>
           <p>
             At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.

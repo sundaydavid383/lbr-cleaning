@@ -1,9 +1,7 @@
 import React from 'react';
 import "./feature.css";
 
-
-
-const Feature = ({features}) => {
+const Feature = ({ features }) => {
   return (
     <div className='features container'>
       {features.map((feature, index) => (

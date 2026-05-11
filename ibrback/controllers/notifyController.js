@@ -26,7 +26,7 @@ exports.SendNotification = async (req, res) => {
     }
 
  const mailOptions = { 
-  from: "LBR Cleaning <sundayudoh383@gmail.com>",
+  from: "LBR Cleaning",
   to: emails.map((e) => e.email).join(","), // all subscribers
   subject: "New Notification from LBR Cleaning",
   html: `

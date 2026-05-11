@@ -1,5 +1,5 @@
 .about{
-    margin-top: 14rem;
+    margin-top: 10rem;
     gap:8rem
 }
 .about .about_image{
@@ -44,6 +44,9 @@
     width: 100%;
    
 }
+.about_text .btn{
+    margin-top: 3rem;
+}
 .about_text img{
  position: absolute;
  right: 0rem;
@@ -74,7 +77,7 @@
     flex-direction: column;
     align-items: center;
     position: absolute;
-    bottom: 0rem;
+    bottom: 4rem;
     right: 0rem;
     border-radius: 1rem;
     background: var(--tetiary-color);
@@ -125,7 +128,7 @@
         padding-inline: 1rem;
     }
     .about_text .award{
-        bottom: -2rem;
+        bottom: 5rem;
         right: 0rem;
         height: 7.7rem;
         line-height: .9rem;
@@ -165,7 +168,7 @@
         left: 50%;
     }
     .about_text .award{
-        bottom: 0rem;
+        bottom: 3rem;
         right: 0rem;
         height: 11.7rem;
         line-height: 1.4rem;

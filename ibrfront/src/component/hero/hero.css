@@ -1,444 +1,516 @@
+/* ========================================
+   LBR Cleaning - Hero Section Styles
+   ======================================== */
+
 .hero {
-  position: relative;
-  height: 97vh;
-  background-color: var(--secondary-color);
-  z-index: 0;
+    position: relative;
+    min-height: 75vh;
+    background-color: var(--secondary-color);
+    z-index: 0;
+    align-items: center;
+    overflow: hidden;
 }
 
+/* ========================================
+   Background Video
+   ======================================== */
 .background-video-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
 }
 
 .background-video-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--light-secondary-color); /* semi-transparent like rgba(0,0,0,0.3) */
-  z-index: 1;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-overlay);
+    z-index: 1;
 }
 
 .background-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
-/* For image fallback */
+
+/* ========================================
+   Background Image
+   ======================================== */
 .background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: var(--light-secondary-color);
-  background-size: cover;
-  background-blend-mode: multiply;
-  background-attachment: fixed;
-  z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: var(--light-secondary-color);
+    background-size: cover;
+    background-blend-mode: multiply;
+    background-attachment: fixed;
+    z-index: -1;
 }
-.bubble{
-  position: absolute;
-  width: 5rem;
-  height:5rem;
-  box-shadow: inset var(--bubbles-shadow);
-  border-radius: 50%; 
-  display: flex;
-  align-items: center; 
-  z-index: -11;
-  justify-content: center;
-}
-.b1{
-  top:20%;
-  left: 35%;
-  animation: bubblemovement 4.2s 1s infinite;
-}
-.b2{
-   top:50%;
-   left: 5%;
-   animation: bubblemovement 5.2s 3s infinite;
-}
-.b3{
-  top:60%;
-  right: 2%;
-  width: 3.7rem;
-  height:3.7rem;
-  animation: bubblemovement 5.2s 3s infinite;
-}
-.b4
-{
-  top:15%;
-  left: 10%;
-  width: 3rem;
-  height:3rem;
-  animation: bubblemovement 4.2s 1s infinite;
-}
-.b5{
-  top: 46%;
-  left: 8%;
-  width: 3rem;
-  height:3rem;
-  animation: bubblemovement 4.2s 2.4s infinite;
-}
-.b6{
- top:90%;
- left: 96%;
- width: 1.8rem;
- height:1.8rem;
- animation: bubblemovement 5.2s 2s infinite;
-}
-.b7
-{
- top:85%;
- left: 58%;
- width: 3rem;
- height:3rem;
- animation: bubblemovement 5.5s 2s infinite;
-}
-.b8
-{
- top:30%;
- left: 50%;
- width: 2.5rem;
- height:2.5rem;
- animation: bubblemovement 4.9s 1.4s infinite;
-}
-.b9{
-  top:7%;
-  left: 95%;
-  width: 2.9rem;
-  height:2.9rem;
-  animation: bubblemovement 5.2s 3s infinite;
- }
- .b10
- {
-  top:0%;
-  left: 93%;
-   width: 3.5rem;
- height:3.5rem;
- animation: bubblemovement 6.2s 2s infinite;
- }
- .b11
- {
-  top:75%;
-  left: 60%;
-  animation: bubblemovement 5.2s 1.8s infinite;
- }
-.bubble small{
-     content: '';
-     width: 30%;
-     margin-left: -58.6%;
-     height:30%;
-     background: var(--shadow-white);
-     box-shadow: inset var(--bubbles-shadow);
-     border-radius: 50%; 
-}
-.hero .text {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-}
-.hero .text .question {
-  color: var(--tetiary-color);
-  font-size: 1.1rem;
-  text-transform: uppercase;
-}
-.hero .text h1 {
-  margin-right: 2rem;
-  font-size: 3rem;
-  line-height: 2.8rem;
-  margin-block: 1rem;
-  color: var(--light-text);
-  text-transform: capitalize;
-}
-.hero .text h1 span {
-  color: var(--tetiary-color);
-}
-.hero .ps {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  margin-bottom: 0.8rem;
-}
-.hero .text p {
-  font-size: 0.95rem;
-  color: var(--light-text);
-  line-height: 1.4rem;
-}
-.hero .image {
-  position: relative;
-}
-.hero .btn p {
-  top: 30%;
-  color: var(--text-color);
-  left: 17%;
-}
-.hero .btn:hover p {
-  color: var(--light-text);
-}
-.image .person {
-  width: 42rem;
-  margin-top: 5rem;
-  margin-right: -10rem;
-}
-.image .stars {
-  width: 3.5rem;
-  position: absolute;
-  right: -0.5rem;
-  top: 5rem;
-  animation: scale 2s infinite;
-}
-.image .spark {
-  width: 4rem;
-  position: absolute;
-  bottom: 3rem;
-  left: -2rem;
-  z-index: -111;
-  animation: rotate 4s 1s infinite;
-}
-.speech {
-  position: absolute;
-  top: 5rem;
-  left: -1rem;
-  display: flex;
-}
-.speech .circle {
-  border: 1px solid var(--light-text);
-  padding: 1.3rem;
-  border-radius: 50%;
-  text-align: center;
-  align-items: center;
-  color: var(--light-text);
-  backdrop-filter: blur(5px);
-}
-.speech .circle p {
-  font-size: 1.1rem;
-  animation: changeWidth 3s infinite;
-  transition: none;
-  display: inline-flex;
-  white-space: nowrap;
-  border-right: 2px solid var(--tetiary-color);
-  position: relative;
-  text-align: left;
-  overflow: hidden;
-  transition: ease-in-out;
 
-}
-.speech .circle h3 i {
-  font-size: 1.1rem;
-  margin-right: 0.7rem;
-  font-size: 1.8rem;
-}
-.speech .cone {
-  position: absolute;
-  top: 5rem;
-  right: -1rem;
-  transform: rotate(305deg);
-}
-.speech .cone div {
-  border: 3px solid var(--light-text);
-  border-radius: 50%;
-  height: 1.3rem;
-  width: 1.4rem;
-  margin-bottom: 0.5rem;
-}
-.moveright,
-.moveleft{
-  position: absolute;
-  border: 2px solid var(--primary-color);
-  z-index: 111;
-  line-height: 2.6rem;
-}
-.moveright{
-  top:50%;
-  right:1rem;
-}
-.moveleft{
-  top:50%;
-  left:1rem;
-}
-.hero .iconactive{
-   background: var(--tetiary-color);
-}
-.hero .iconactive:hover{
-  background: var(--secondary-color);
-  animation: darkiconhover 4s infinite;
-}
-@keyframes scale {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.4);
-  }
-}
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes changeWidth {
-  0% {
-    width: .5rem;
-  }
-  100% {
-    width: 8rem;
-  }
-}
-@keyframes bubblemovement {
-  0% {
-    transform: translateX(0px) translateY(0px) scale(1) ;
-  }
-  25% {
-    transform: translateX(29px) translateY(0px) scale(1.1) ;
-  }
-  50% {
-    transform: translateX(29px) translateY(-22px) scale(.8) ;
-  }
-   70% {
-    transform: translateX(20px) translateY(-22px) scale(1.1) ;
-  }
-  100% {
-    transform: translateX(0px) translateY(0px) scale(1) ;
-
-  }
-}
-@media (max-width: 1168px) {
-  .hero.container{
-    flex-wrap: wrap;
-  }
-  .hero .image .person {
-    width: 30rem;
-
-    margin-right: -7rem;
-  }
-  .hero .image .stars {
-    width: 3rem;
-    right: 5rem;
-    top: 2rem;
-    z-index: -11;
-  }
-  .hero .text {
-    width: 50%;
-  }
-  .speech {
-  left: -5rem;
-}
-  .speech .circle p {
-    font-size: .91rem;
-  }
-  .speech .circle h3 i {
-    font-size: 1rem;
-  }
-  .speech .cone {
-    top: 4.5rem;
-  }
-  .speech .cone div {
-    height: 1rem;
-    width: 1rem;
-  }
-  .hero .image .spark {
-    bottom: 3rem;
-    left: 0rem;
-  }
-  .moveleft,.moveright{
-    width: 2.8rem !important;
-    height: 2.8rem !important;
-    line-height: 3rem !important;
-    font-size: 1.4rem !important;
-  }
-}
-@media (max-width: 868px) {
-  .hero .image .person {
-    width: 30rem;
-    margin-right: -7rem;
-    margin-top: 3rem;
-  }
-  .hero .image .stars {
-    right: 0rem;
-  }
-  .speech {
-    top: 0rem;
-  }
-  .hero {
-    height: 124vh;
-    z-index: 0;
-    position: relative;
-  }
-  .hero .text {
-    width: 100% !important;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin-top: 3.5rem;
-  }
-    .hero .btn p{
-      margin-left: -1rem;
-    }
-}
-@media (max-width: 658px) {
-  .nav .fa-bars-staggered{
+/* ========================================
+   Decorative Bubbles
+   ======================================== */
+.bubble {
+    position: absolute;
+    width: 5rem;
+    height: 5rem;
+    box-shadow: inset var(--bubbles-shadow);
+    border-radius: 50%;
     display: flex;
-  }
-  .links {
+    align-items: center;
+    z-index: 0;
+    justify-content: center;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.b1 { top: 20%; left: 35%; animation: bubblemovement 4.2s 1s infinite; }
+.b2 { top: 50%; left: 5%; animation: bubblemovement 5.2s 3s infinite; }
+.b3 { top: 60%; right: 2%; width: 3.7rem; height: 3.7rem; animation: bubblemovement 5.2s 3s infinite; }
+.b4 { top: 15%; left: 10%; width: 3rem; height: 3rem; animation: bubblemovement 4.2s 1s infinite; }
+.b5 { top: 46%; left: 8%; width: 3rem; height: 3rem; animation: bubblemovement 4.2s 2.4s infinite; }
+.b6 { top: 90%; left: 96%; width: 1.8rem; height: 1.8rem; animation: bubblemovement 5.2s 2s infinite; }
+.b7 { top: 85%; left: 58%; width: 3rem; height: 3rem; animation: bubblemovement 5.5s 2s infinite; }
+.b8 { top: 30%; left: 50%; width: 2.5rem; height: 2.5rem; animation: bubblemovement 4.9s 1.4s infinite; }
+.b9 { top: 7%; left: 95%; width: 2.9rem; height: 2.9rem; animation: bubblemovement 5.2s 3s infinite; }
+.b10 { top: 0%; left: 93%; width: 3.5rem; height: 3.5rem; animation: bubblemovement 6.2s 2s infinite; }
+.b11 { top: 75%; left: 60%; animation: bubblemovement 5.2s 1.8s infinite; }
+
+.bubble small {
+    content: '';
+    width: 30%;
+    margin-left: -58.6%;
+    height: 30%;
+    background: var(--shadow-white);
+    box-shadow: inset var(--bubbles-shadow);
+    border-radius: 50%;
+}
+
+@keyframes bubblemovement {
+    0%   { transform: translateX(0px) translateY(0px) scale(1); }
+    25%  { transform: translateX(29px) translateY(0px) scale(1.1); }
+    50%  { transform: translateX(29px) translateY(-22px) scale(0.8); }
+    70%  { transform: translateX(20px) translateY(-22px) scale(1.1); }
+    100% { transform: translateX(0px) translateY(0px) scale(1); }
+}
+
+/* ========================================
+   Hero Content Container
+   ======================================== */
+.hero .container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 3rem 2.7rem;
+    min-height: auto;
+    gap: 1rem;
+}
+
+/* ========================================
+   Hero Text Section
+   ======================================== */
+.hero .text {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    top: 9rem;
-    left: 50%;
-    align-items: center;
-    padding-block: 0rem;
-    transform: translateX(-50%);
-    width: 0%;
-    overflow: hidden;
-    position: fixed;
-    box-shadow: var(--box-shadow);
-    background: var(--background-color);
-    height: 0%;
-  }
-  .links.active{
-    padding-block: 1rem;
-    height: auto;
+    width: 50%;
+    max-width: 600px;
+    flex-shrink: 0;
+}
+
+.hero .text .question {
+    color: var(--tetiary-color);
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.hero .text h1 {
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
+    line-height: 1.15;
+    margin: 0.5rem 0 1.5rem;
+    color: var(--light-text);
+    text-transform: capitalize;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+}
+
+.hero .text h1 span {
+    color: var(--tetiary-color);
+    display: block;
+}
+
+.hero .ps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.hero .text p {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+}
+
+.hero .btn {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 0 2rem;
+}
+
+/* ========================================
+   Hero Image Section
+   ======================================== */
+.hero .image {
+    position: relative;
+    width: 45%;
+    max-width: 520px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.hero .image .person {
     width: 100%;
-  }
-  .speech {
-  top: 3rem;
-  left: -2.3rem;
+    max-width: 42rem;
+    object-fit: contain;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+    position: relative;
+    z-index: 1;
 }
-.hero .image{
-  margin-top:-4rem;
-}
-}
-@media (max-width: 398px) {
-.hero .image{
-  margin-top:-16rem;
-}
-}
-/* Fix speech overlap around tablet widths */
-@media (max-width: 720px) and (min-width: 659px) {
-  .speech {
-    top: 1rem;       /* move it slightly down */
-    left: -6rem;     /* push it left so cone doesn't cover the image */
-    transform: scale(0.9); /* slightly smaller so it looks proportional */
-  }
 
-  .speech .cone {
-    top: 4rem;       /* adjust cone to match new speech position */
-  }
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-20px); }
+}
 
-  .image .person {
-    margin-right: -5rem; /* pull image closer so it balances visually */
-  }
+.hero .image .stars {
+    width: clamp(2rem, 4vw, 3.5rem);
+    position: absolute;
+    right: 0;
+    top: 10%;
+    z-index: 2;
+    animation: scale 2s infinite;
+}
+
+.hero .image .spark {
+    width: clamp(2.5rem, 5vw, 4rem);
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    z-index: 0;
+    animation: rotate 4s linear infinite;
+}
+
+/* ========================================
+   Speech Bubble
+   ======================================== */
+.speech {
+    position: absolute;
+    top: 12%;
+    left: -4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 5;
+}
+
+.speech .circle {
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-xl, 1rem);
+    text-align: left;
+    color: var(--light-text);
+    backdrop-filter: blur(10px);
+    background: rgba(6, 78, 59, 0.85);
+    min-width: 160px;
+    max-width: 220px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+.speech .circle p {
+    font-size: clamp(0.85rem, 1.2vw, 1rem);
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 500;
+    white-space: pre-line;
+}
+
+.speech .circle h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
+    color: var(--tetiary-color);
+    white-space: nowrap;
+}
+
+.speech .circle h3 i {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.speech .cone {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: 1.5rem;
+    margin-top: 2px;
+}
+
+.speech .cone div {
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+}
+
+.speech .cone div:nth-child(1) { width: 18px; }
+.speech .cone div:nth-child(2) { width: 11px; }
+.speech .cone div:nth-child(3) { width: 5px; }
+
+/* ========================================
+   Navigation Arrows
+   ======================================== */
+.moveright,
+.moveleft {
+    position: absolute;
+    border: 2px solid var(--primary-color);
+    z-index: 10;
+    width: 2.8rem;
+    height: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--transition-normal, 0.2s ease);
+    border-radius: 50%;
+}
+
+.hero .moveright {
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+}
+
+.hero .moveleft {
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+}
+
+.hero .iconactive {
+    background: var(--tetiary-color);
+}
+
+.hero .iconactive:hover {
+    background: var(--secondary-color);
+}
+
+/* ========================================
+   Dot Indicators
+   ======================================== */
+.hero-dots {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+    padding: 0;
+}
+
+.hero-dot.active {
+    background: var(--tetiary-color);
+    transform: scale(1.3);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+@keyframes scale {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rotate {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Responsive — Large Tablet (≤1168px)
+   ======================================== */
+@media (max-width: 1168px) {
+    .hero .container {
+        padding: 5rem 2rem 1rem;
+        flex-wrap: wrap;
+    }
+
+    .hero .text {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .hero .btn {
+        align-self: center;
+    }
+
+    .hero .image {
+        width: 60%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .speech {
+        left: -1rem;
+        top: 8%;
+    }
+}
+
+/* ========================================
+   Responsive — Tablet (≤868px)
+   ======================================== */
+@media (max-width: 868px) {
+    .hero {
+        min-height: auto;
+    }
+
+    .hero .container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 7rem 1.5rem 12rem;
+        min-height: auto;
+        gap: 1.5rem;
+    }
+
+    .hero .text {
+        width: 100%;
+        text-align: center;
+        order: 1;
+    }
+
+    .hero .text .question {
+        font-size: 0.8rem;
+    }
+
+    .hero .text p {
+        font-size: 0.95rem;
+    }
+
+    .hero .image {
+        width: 85%;
+        max-width: 340px;
+        order: 2;
+        margin: 0 auto;
+    }
+
+    .hero .image .person {
+        max-width: 100%;
+    }
+
+    .speech {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-120%);
+        top: auto;
+        bottom: 7rem;
+    }
+
+    .moveright,
+    .moveleft {
+        display: none;
+    }
+}
+
+/* ========================================
+   Responsive — Mobile (≤600px)
+   ======================================== */
+@media (max-width: 600px) {
+    .hero .container {
+        padding: 6rem 1.25rem 14rem;
+    }
+
+    .hero .image {
+        width: 90%;
+        max-width: 280px;
+    }
+
+    .speech {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        transform: none;
+        align-self: center;
+        margin-top: 0.5rem;
+        order: 3;
+    }
+
+    .speech .circle {
+        min-width: 0;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .speech .circle h3 {
+        justify-content: center;
+    }
+
+    .speech .cone {
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .hero .btn {
+        width: 100%;
+        max-width: 260px;
+    }
+}
+
+/* ========================================
+   Responsive — Small Mobile (≤400px)
+   ======================================== */
+@media (max-width: 400px) {
+    .hero .text h1 {
+        font-size: 1.6rem;
+    }
+
+    .hero .image {
+        max-width: 240px;
+    }
 }
