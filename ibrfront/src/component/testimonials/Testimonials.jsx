@@ -8,6 +8,7 @@ import testimonial4 from "../../assets/user3.jpg";
 import testimonial2 from "../../assets/user4.jpg";
 import testimonial5 from "../../assets/user5.jpg";
 import testimonial6 from "../../assets/user6.jpg";
+import { FaStar, FaInstagram, FaFacebookF, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const Testimonial = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -78,7 +79,7 @@ const Testimonial = () => {
   const PrintStar = (ratings) => {
     let stars = [];
     for (let i = 1; i <= 5; i++) {
-      stars.push(i <= ratings ? "fa-solid fa-star" : "fa-regular fa-star");
+      stars.push(i <= ratings ? "solid" : "regular");
     }
     return stars;
   };
@@ -121,7 +122,7 @@ const Testimonial = () => {
                   <h2>{testimonials[activeIndex].name}</h2>
                   <div className="stars">
                     {PrintStar(testimonials[activeIndex].ratings).map((star, i) => (
-                      <i key={i} className={star}></i>
+                      <FaStar key={i} color={star === "solid" ? "#ffc107" : "#ddd"} />
                     ))}
                   </div>
                 </div>
@@ -133,22 +134,22 @@ const Testimonial = () => {
                   target="_blank"
                   to={testimonials[activeIndex].instagramLink}
                 >
-                  <i className="fa-brands fa-instagram"></i>
+                  <FaInstagram />
                 </Link>
                 <Link
                   className="iconactive"
                   target="_blank"
                   to={testimonials[activeIndex].facebookLink}
                 >
-                  <i className="fa-brands fa-facebook-f"></i>
+                  <FaFacebookF />
                 </Link>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
         <div className="arrows">
-          <i onClick={goPrev} className="moveleft fa-solid fa-arrow-left"></i>
-          <i onClick={goNext} className="moveright fa-solid fa-arrow-right"></i>
+          <FaArrowLeft onClick={goPrev} className="moveleft" />
+          <FaArrowRight onClick={goNext} className="moveright" />
         </div>
       </div>
     </div>

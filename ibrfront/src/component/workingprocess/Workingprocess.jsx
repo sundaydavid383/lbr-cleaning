@@ -2,6 +2,7 @@ import React from 'react'
 import "./workingprocess.css"
 import img1 from "../../assets/cleaner5.png"
 import img2 from "../../assets/cleaner6.png"
+import { FaGlobeAmericas, FaSpa, FaCalendarCheck } from 'react-icons/fa'
 
 const Workingprocess = () => {
   return (
@@ -15,7 +16,7 @@ const Workingprocess = () => {
          <div className="workingProcess_container container">
          <div className="workingprocess_card">
   <p className="icon">
-    <small><i className="fa-solid fa-earth-americas"></i></small>
+    <small><FaGlobeAmericas /></small>
     <span>1</span>
     <small className='number'></small>
   </p>
@@ -26,7 +27,7 @@ const Workingprocess = () => {
 
 <div className="workingprocess_card">
   <p className="icon">
-    <small><i className="fa-solid fa-spa"></i></small>
+    <small><FaSpa /></small>
     <span>2</span>
     <small className='number'></small>
   </p>
@@ -37,7 +38,7 @@ const Workingprocess = () => {
 
 <div className="workingprocess_card">
   <p className="icon">
-    <small><i className="fa-solid fa-calendar-check"></i></small>
+    <small><FaCalendarCheck /></small>
     <span>3</span>
     <small className='number'></small>
   </p>

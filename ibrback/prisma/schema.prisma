@@ -1,0 +1,121 @@
+// filepath: ibrback/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// SUBSCRIBER MODEL
+// ============================================
+model Subscriber {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  subscribedAt DateTime @default(now())
+  unsubscribedAt DateTime?
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+  @@index([isActive])
+}
+
+// ============================================
+// ORDER MODEL
+// ============================================
+model Order {
+  id            Int       @id @default(autoincrement())
+  customerName  String
+  email         String
+  phone         String
+  service       String
+  paymentOption PaymentOption @default(PAY_AFTER)
+  status        OrderStatus  @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentId     String?
+  amount        Float?
+  notes         String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  payments     Payment[]
+
+  @@index([email])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt(sort: Desc)])
+}
+
+enum PaymentOption {
+  PAY_BEFORE
+  PAY_AFTER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+// ============================================
+// PAYMENT MODEL
+// ============================================
+model Payment {
+  id                   Int            @id @default(autoincrement())
+  orderId              Int
+  amount               Float
+  currency             Currency       @default(NGN)
+  paymentMethod       PaymentMethod  @default(CARD)
+  paymentGateway      PaymentGateway @default(PAYSTACK)
+  gatewayTransactionId String?
+  status               PaymentStatus  @default(PENDING)
+  paymentDate         DateTime?
+  metadata             Json?
+  
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  // Relations
+  order                Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
+  @@index([paymentGateway])
+  @@index([createdAt(sort: Desc)])
+}
+
+enum Currency {
+  NGN
+  USD
+  EUR
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  CASH
+  WALLET
+}
+
+enum PaymentGateway {
+  STRIPE
+  PAYSTACK
+  FLUTTERWAVE
+  MANUAL
+}

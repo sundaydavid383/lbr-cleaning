@@ -1,5 +1,6 @@
 import React from "react";
 import "./video.css";
+import { FaTimes } from 'react-icons/fa';
 
 const Video = ({ setSeeVideo }) => {
   return (
@@ -10,7 +11,7 @@ const Video = ({ setSeeVideo }) => {
         }}
         className="removevideo iconactive"
       >
-        <i className="fas fa-times"></i>
+        <FaTimes />
       </div>
       <iframe
         width="800"

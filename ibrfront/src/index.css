@@ -16,26 +16,26 @@
     align-items: center;
   }
 :root{
-    --primary-color:rgb(36, 170, 36);
-    --secondary-color:rgb(8, 92, 8);
-    --light-secondary-color:rgb(8, 92, 8, .8);
-    --background-color: rgb(245, 245, 228);
-    --light-backgound: rgb(187, 238, 187);
-    --tetiary-color:rgb(212, 190, 62);
+    --primary-color:rgb(34, 153, 60);              /* vibrant green */
+    --secondary-color:rgb(10, 74, 30);             /* deep forest green */
+    --light-secondary-color:rgba(10, 74, 30, .8);
+    --background-color: rgb(247, 245, 235);        /* warm off-white, keeps yellow undertone */
+    --light-backgound: rgb(214, 238, 202);         /* pale green tint */
+    --tetiary-color:rgb(222, 178, 32);             /* punchier golden yellow */
     --light-gray: rgb(228, 222, 222);
     --lighter-gray:rgb(240, 233, 233);
     --gray: rgb(189, 185, 185);
-    --text-color : rgb(8, 59, 8);
+    --text-color : rgb(18, 18, 16);                /* near-black instead of dark green — pulls in the "black" of your theme */
     --light-text: rgb(243, 240, 240);
-    --box-shadow:0px 0px 15px 4px rgba(34, 34, 34,.4);
+    --box-shadow:0px 0px 15px 4px rgba(20, 20, 18, .4);
     --light-shadow: 0px 0px 5px 4px rgba(232, 248, 227, 0.4);
-    --bubbles-shadow: 0px 0px 7px 0px rgba(114, 121, 114, 0.7);
-    --shadow-white: rgba(77, 75, 75, 0.1);
-    --primary-shadow: 0px 0px 5px 4px rgba(36, 170, 36,.4);
+    --bubbles-shadow: 0px 0px 7px 0px rgba(20, 20, 18, 0.5);
+    --shadow-white: rgba(20, 20, 18, 0.1);
+    --primary-shadow: 0px 0px 5px 4px rgba(34, 153, 60, .4);
     --video-background: rgba(0,0,0,.9);
-    --large-shadow: 0px 0px 90px 30px rgba(113, 223, 49, 0.6);
+    --large-shadow: 0px 0px 90px 30px rgba(222, 178, 32, 0.5);   /* now glows gold instead of lime */
     --hero-background1: "../../assets/cleaningbackground.jpg";
- }
+}
  .logo{
     display: flex;
     align-items: flex-end;

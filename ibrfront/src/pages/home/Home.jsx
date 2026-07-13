@@ -8,7 +8,7 @@ import Deal from '../../component/deals/Deal'
 import Testimonial from '../../component/testimonials/Testimonials'
 import Articles from '../../component/article/Articles'
 import imgi1 from "../../assets/cleaner12.jpg";
-import imgi2 from "../../assets/cleaner15.jpg";
+import imgi2 from "../../assets/cleaner15a.jpeg";
 import imgi3 from "../../assets/cleaner14.jpg";
 import image1 from "../../assets/cleaner1.jpg"
 import image2 from "../../assets/cleaner10.jpg"

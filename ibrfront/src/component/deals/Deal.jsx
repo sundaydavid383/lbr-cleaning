@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import "./deal.css"
 import { Link } from 'react-router-dom'
+import { FaCheck } from 'react-icons/fa'
 
 
 const Deal = ({deal_Intro, plans}) => {
@@ -34,7 +35,7 @@ const Deal = ({deal_Intro, plans}) => {
               <div className='plan'>{plan.name}</div>
               <ul className='featues'>
                {plan.features.map((feature,idx)=>(
-                <li key={idx}><i className="fa-solid fa-check"></i> {feature}</li>
+                <li key={idx}><FaCheck /> {feature}</li>
                ))}
               </ul>
               

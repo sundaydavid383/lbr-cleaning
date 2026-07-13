@@ -8,6 +8,7 @@ import service3 from "../../assets/cleaner21.jpg"
 import service5 from "../../assets/cleaner24.jpg"
 import service6 from "../../assets/cleaner22.jpg"
 import TestimonialCarousel from "../testimonial/TestimonialCarousel"
+import { FaClock, FaMoneyBillWave, FaUsers } from 'react-icons/fa';
 
 const services = [
 {
@@ -670,11 +671,11 @@ return (
 
         {/* 🔥 Optional quick info row */}
         <div className="quick-info">
-          <span><i className="fa-regular fa-clock"></i> {service.duration}</span>
-          <span><i className="fa-solid fa-money-bill-wave"></i> {service.pricing}</span>
+          <span><FaClock /> {service.duration}</span>
+          <span><FaMoneyBillWave /> {service.pricing}</span>
           {service.targetAudience && (
             <span>
-              <i className="fa-solid fa-users"></i>{" "}
+              <FaUsers />{" "}
               {service.targetAudience.slice(0, 3).join(", ")}{service.targetAudience.length > 3 && " + more"}
             </span>
           )}

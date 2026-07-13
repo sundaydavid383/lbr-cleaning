@@ -1,16 +1,13 @@
-const EmailModel = require("../models/subscriber");
-const nodemailer = require("nodemailer");
-require("dotenv").config()
+// filepath: ibrback/src/controllers/notifyController.js
+const Subscriber = require('../models/subscriber');
+const { createTransporter } = require('../config/mailer');
+require("dotenv").config();
 
+/**
+ * Send notification to all subscribers
+ */
 exports.SendNotification = async (req, res) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "sundayudoh383@gmail.com",
-      pass: process.env.APPPASSWORD || "NO_APP_PASSWORD",
-    },
-    pool: true,
-  });
+  const transporter = createTransporter();
 
   const { message } = req.body;
 
@@ -19,17 +16,18 @@ exports.SendNotification = async (req, res) => {
   }
 
   try {
-    const emails = await EmailModel.find();
+    // Get only active subscribers
+    const subscribers = await Subscriber.findActive();
 
-    if (emails.length === 0) {
+    if (subscribers.length === 0) {
       return res.status(404).json({ success: false, message: "No subscribers found" });
     }
 
- const mailOptions = { 
-  from: "LBR Cleaning <sundayudoh383@gmail.com>",
-  to: emails.map((e) => e.email).join(","), // all subscribers
-  subject: "New Notification from LBR Cleaning",
-  html: `
+    const mailOptions = {
+      from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
+      to: subscribers.map((e) => e.email).join(","), // all subscribers
+      subject: "New Notification from LBR Cleaning",
+      html: `
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
       <div style="max-width: 650px; margin: auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         
@@ -52,8 +50,8 @@ exports.SendNotification = async (req, res) => {
         </div>
       </div>
     </div>
-  `
-};
+  `,
+    };
     await transporter.sendMail(mailOptions);
     return res.status(200).json({ success: true, message: "Notification sent to all subscribers" });
   } catch (error) {
@@ -65,5 +63,3 @@ exports.SendNotification = async (req, res) => {
     });
   }
 };
-
-

@@ -17,6 +17,7 @@ import service3 from "../../assets/cleaner21.jpg"
 import service5 from "../../assets/cleaner24.jpg"
 import service6 from "../../assets/cleaner22.jpg"
 import dealimage1 from "../../assets/cleaner2.png"
+import { FaSoap, FaBox, FaCalendarCheck, FaHouseUser, FaBriefcase, FaRubleSign, FaWindowMaximize, FaTruck, FaHandSparkles } from 'react-icons/fa';
 
 
     const deal_Intro  = {

@@ -1,20 +1,27 @@
-const express = require("express")
-const mongoose = require("mongoose")
-const cors = require("cors")
-const app = express()
-const nodemailer = require("nodemailer")
+// filepath: ibrback/app.js
+const express = require("express");
+const cors = require("cors");
+const app = express();
 require("dotenv").config();
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const contactRoutes = require("./routes/contact");
+const { createTransporter } = require("./src/config/mailer");
 
+// Import routes from src folder
+const contactRoutes = require("./src/routes/contact");
+const subscriberRouter = require("./src/routes/subscribe");
+const notifyRoute = require("./src/routes/notify");
+const paymentRoutes = require("./src/routes/payment");
 
-//usecase
-app.use(express.json())
-app.use(cors())
+// Middleware
+app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(helmet());
-
-
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -22,38 +29,40 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-const OWNER_EMAIL = process.env.SMTP_USER;
-//create transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.APPPASSWORD || "NO appPassword" // Use environment variable or fallback to hardcoded password
-  },
-  pool: true
-})
+const transporter = createTransporter();
 
 function capitalizeWord(word) {
-   return word[0].toUpperCase() + word.slice(1).toLowerCase()
+  return word[0].toUpperCase() + word.slice(1).toLowerCase();
 }
 
+const ApiResponse = (res, statusCode, success, data = null, message = "") => {
+  const response = { success };
+  if (data !== null) response.data = data;
+  if (message) response.message = message;
+  return res.status(statusCode).json(response);
+};
 
-app.get('/welcome', (req, res)=>{
-  try{
-    return res.status(200).json({ success: true, message: "Welcome to LBR Cleaning API" })
-  }
-  catch(err){
-    return res.status(500).json({ success: false, message: "An error occurred while processing your request" });
-  }
-})
+// Error handler middleware
+const errorHandler = (err, req, res, next) => {
+  console.error("Server Error:", err);
+  return res.status(500).json({
+    success: false,
+    message: "An unexpected error occurred. Try connecting to the internet and try again.",
+  });
+};
 
-// endpoint
+// Welcome endpoint
+app.get("/welcome", (req, res) => {
+  return ApiResponse(res, 200, true, null, "Welcome to LBR Cleaning API");
+});
+
+// Appointment booking endpoint
 app.post("/appointments/book", async (req, res) => {
   console.log(req.body);
   const { name, email, phone, service } = req.body;
 
   if (!name || !email || !phone || !service) {
-    return res.status(400).json({ success: false, data: "Invalid user data" });
+    return ApiResponse(res, 400, false, "Invalid user data");
   }
 
   const sharedDetailsHTML = `
@@ -77,14 +86,13 @@ app.post("/appointments/book", async (req, res) => {
     </table>
   `;
 
-   const [firstName, lastName] = name.split(" ")
+  const nameParts = name.split(" ");
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
 
-   const abbrivatedFirstName = capitalizeWord(firstName)
-   const abbrivatedLastName = capitalizeWord(lastName)
+  const capitalizedFirstName = capitalizeWord(firstName);
+  const capitalizedLastName = capitalizeWord(lastName);
 
-
-
-    // Email to the customer
   const userMailOptions = {
     from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
     to: email,
@@ -101,14 +109,14 @@ app.post("/appointments/book", async (req, res) => {
 
           <!-- Body -->
           <div style="padding: 25px;">
-            <h2 style="color: rgb(8, 92, 8); margin-top: 0;">Hello ${abbrivatedFirstName} ${abbrivatedLastName},</h2>
+            <h2 style="color: rgb(8, 92, 8); margin-top: 0;">Hello ${capitalizedFirstName} ${capitalizedLastName},</h2>
             <p style="line-height: 1.6;">Thank you for booking an appointment with <strong>LBR Cleaning</strong>! 🎉</p>
             <p style="line-height: 1.6;">Here are the details of your request:</p>
             
             ${sharedDetailsHTML}
 
             <p style="margin-top: 20px; line-height: 1.6;">
-              We’ll reach out shortly to confirm and schedule your service.  
+              We'll reach out shortly to confirm and schedule your service.  
               If you have any questions, feel free to reply to this email.
             </p>
 
@@ -129,10 +137,9 @@ app.post("/appointments/book", async (req, res) => {
     `,
   };
 
-  // Email to the owner/admin
   const ownerMailOptions = {
-    from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
-    to: "sundayudoh383@gmail.com>", // replace with real owner email
+    from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
+    to: process.env.OWNER_EMAIL || process.env.SMTP_USER,
     subject: "📩 New Appointment Booking - LBR Cleaning",
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9;">
@@ -150,43 +157,28 @@ app.post("/appointments/book", async (req, res) => {
     await transporter.sendMail(ownerMailOptions);
     console.log("Owner email sent successfully");
 
-    return res.status(200).json({ success: true, data: "Enquiry sent. We’ll contact you soon." });
+    return ApiResponse(res, 200, true, "Enquiry sent. We'll contact you soon.");
   } catch (error) {
     console.error("An error occurred:", error.message);
-    return res.status(500).json({ success: false, data: "An unexpected error occurred. Try connecting to the internet and try again." });
+    return ApiResponse(res, 500, false, "An unexpected error occurred. Try connecting to the internet and try again.");
   }
 });
 
-
-
+// API Routes
 app.use("/api/contact", contactRoutes);
-
-
-
-// Route to handle newsletter signup
-const subscriberRouter = require("./routes/subscribe");
 app.use("/api", subscriberRouter);
-
-const notifyRoute = require("./routes/notify");
 app.use("/api", notifyRoute);
+app.use("/api/payment", paymentRoutes);
 
-//i am listening
-async function connectDB() {
-  try {
-    const connection = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+// Error handler (must be after all routes)
+app.use(errorHandler);
 
-    console.log(`✅ MongoDB connected at: ${connection.connection.host}`);
+// Start server
+const PORT = process.env.PORT || 5100;
 
-    app.listen(process.env.PORT || 5100, () => {
-      console.log("🚀 Server running on port 5100...");
-    });
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`✅ PostgreSQL database ready (configure DATABASE_URL in .env)`);
+});
 
-  } catch (error) {
-    console.error(`❌ MongoDB connection failed: ${error}`);
-  }
-}
-
-connectDB();
+module.exports = app;
