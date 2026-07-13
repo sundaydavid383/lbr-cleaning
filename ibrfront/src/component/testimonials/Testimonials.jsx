@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./testimonials.css";
 import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +12,10 @@ import { FaStar, FaInstagram, FaFacebookF, FaArrowLeft, FaArrowRight } from 'rea
 
 const Testimonial = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const testimonialRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
 
   const testimonials = [
     {
@@ -92,6 +96,66 @@ const Testimonial = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  // Swipe handlers
+  const handleStart = (clientX) => {
+    setIsDragging(true);
+    setStartX(clientX);
+    setCurrentX(clientX);
+  };
+
+  const handleMove = (clientX) => {
+    if (!isDragging) return;
+    setCurrentX(clientX);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    const deltaX = startX - currentX;
+    const threshold = 50; // Minimum swipe distance
+
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX > 0) {
+        goNext(); // Swipe left
+      } else {
+        goPrev(); // Swipe right
+      }
+    }
+
+    setIsDragging(false);
+  };
+
+  // Touch events
+  const handleTouchStart = (e) => {
+    handleStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    handleMove(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    handleEnd();
+  };
+
+  // Mouse events
+  const handleMouseDown = (e) => {
+    handleStart(e.clientX);
+  };
+
+  const handleMouseMove = (e) => {
+    handleMove(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    handleEnd();
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      handleEnd();
+    }
+  };
+
   return (
     <div className="testimonailImage">
       <div className="Testimonial">
@@ -100,20 +164,32 @@ const Testimonial = () => {
           <h2>Professional Cleaning Services</h2>
         </div>
         <div className="testiment">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              className="testimonialCard"
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: -50 }}
-              transition={{
-                duration: 0.6,
-                type: "spring",
-                stiffness: 250,
-                damping: 20,
-              }}
-            >
+          <div
+            ref={testimonialRef}
+            className="testimonial-wrapper"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                className="testimonialCard"
+                initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: -50 }}
+                transition={{
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 250,
+                  damping: 20,
+                }}
+              >
               <div className="testimoniallCardUpper">
                 <div className="image">
                   <img src={testimonials[activeIndex].image} alt="" />
@@ -146,6 +222,7 @@ const Testimonial = () => {
               </div>
             </motion.div>
           </AnimatePresence>
+          </div>
         </div>
         <div className="arrows">
           <FaArrowLeft onClick={goPrev} className="moveleft" />

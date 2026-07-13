@@ -1,82 +1,173 @@
-/* src/components/Loading/Loading.css */
+/* ========================================
+   LBR Cleaning - Loading Styles
+   ======================================== */
 
 .loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999999;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(2, 36, 2, 0.98) 100%);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
 }
 
 .loading-box {
-  background: white;
-  padding: 2rem 3rem;
-  border-radius: 10px;
-  box-shadow: var(--box-shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  animation: fadeIn .3s ease-in-out;
+    background: white;
+    padding: 2.5rem 3.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    animation: fadeIn 0.3s ease-out;
+    max-width: 90%;
 }
 
+/* Logo inside loading */
+.loading-box::before {
+    content: '';
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.loading-box h3 {
+    color: var(--secondary-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* ========================================
+   Bar Loader
+   ======================================== */
 .bar-loader {
-  display: flex;
-  align-items: flex-end;
-  height: 40px;
-  gap: 6px;
+    display: flex;
+    align-items: flex-end;
+    height: 40px;
+    gap: 6px;
 }
 
 .bar-loader .bar {
-  width: 6px;
-  height: 100%;
-  background: var(--primary-color);
-  border-radius: 6px;
-  animation: barShock 1s infinite ease-in-out;
-}
-
-.bar-loader .bar:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.bar-loader .bar:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.bar-loader .bar:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.bar-loader .bar:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-@keyframes barShock {
-  0%, 100% {
-    height: 40%;
-    background-color: var(--light-secondary-color);
-  }
-  50% {
+    width: 6px;
     height: 100%;
-    background-color: var(--tetiary-color);
-  }
+    background: var(--primary-color);
+    border-radius: var(--radius-full);
+    animation: barWave 1.2s infinite ease-in-out;
 }
 
+.bar-loader .bar:nth-child(1) { animation-delay: 0s; }
+.bar-loader .bar:nth-child(2) { animation-delay: 0.1s; }
+.bar-loader .bar:nth-child(3) { animation-delay: 0.2s; }
+.bar-loader .bar:nth-child(4) { animation-delay: 0.3s; }
+.bar-loader .bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes barWave {
+    0%, 100% {
+        height: 20%;
+        background-color: var(--primary-color-light);
+        transform: scaleY(0.5);
+    }
+    50% {
+        height: 100%;
+        background-color: var(--primary-color);
+        transform: scaleY(1);
+    }
+}
+
+/* ========================================
+   Progress Ring (Alternative)
+   ======================================== */
+.progress-ring {
+    width: 60px;
+    height: 60px;
+}
+
+.progress-ring circle {
+    fill: transparent;
+    stroke: var(--primary-color-light);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    animation: progressRotate 1.5s linear infinite;
+}
+
+.progress-ring circle.progress {
+    stroke: var(--primary-color);
+    stroke-dasharray: 150;
+    stroke-dashoffset: 100;
+    animation: progressDash 1.5s ease-in-out infinite;
+}
+
+@keyframes progressRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes progressDash {
+    0% { stroke-dashoffset: 150; }
+    50% { stroke-dashoffset: 50; }
+    100% { stroke-dashoffset: 150; }
+}
+
+/* ========================================
+   Loading Text
+   ======================================== */
 .loading-box p {
-  margin: 0;
-  color: var(--secondary-color);
-  font-weight: 500;
-  font-size: 1rem;
-  text-align: center;
+    margin: 0;
+    color: var(--text-color-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: center;
+    animation: pulse 2s ease-in-out infinite;
 }
 
+/* ========================================
+   Animations
+   ======================================== */
 @keyframes fadeIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 480px) {
+    .loading-box {
+        padding: 2rem;
+    }
+    
+    .bar-loader {
+        height: 30px;
+    }
+    
+    .bar-loader .bar {
+        width: 5px;
+    }
+    
+    .loading-box p {
+        font-size: 0.85rem;
+    }
 }

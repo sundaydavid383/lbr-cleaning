@@ -1,35 +1,53 @@
-import React from 'react';
-import About from './pages/about/About';
-import Service from './pages/service/Service';
-import ServiceDetails from './component/serviceDetails/serviceDetails';
-import Nav from './component/nav/Nav';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // <-- small fix here
-import Footer from './component/footer/Footer';
-import Contact from './pages/contact/Contact';
-import Blog from './pages/blog/Blog';
-import Home from './pages/home/Home';
-import NotifySubscribers from "./pages/notifySubscribers/NotifySubscribers";
-import AdminMessagePage from './pages/adminMessagePage/AdminMessagePage';
-import NotFoundPage from './pages/notFoundPage/NotFoundPage';
-import ScrollToTop from './component/ScrollToTop'; // import it
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './component/ScrollToTop';
+import Loading from './component/loading/Loading';
+
+// Lazy load all page components for better performance
+const Home = lazy(() => import('./pages/home/Home'));
+const Service = lazy(() => import('./pages/service/Service'));
+const ServiceDetails = lazy(() => import('./component/serviceDetails/serviceDetails'));
+const Nav = lazy(() => import('./component/nav/Nav'));
+const Footer = lazy(() => import('./component/footer/Footer'));
+const Contact = lazy(() => import('./pages/contact/Contact'));
+const Blog = lazy(() => import('./pages/blog/Blog'));
+const About = lazy(() => import('./pages/about/About'));
+const NotifySubscribers = lazy(() => import('./pages/notifySubscribers/NotifySubscribers'));
+const AdminMessagePage = lazy(() => import('./pages/adminMessagePage/AdminMessagePage'));
+const NotFoundPage = lazy(() => import('./pages/notFoundPage/NotFoundPage'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div style={{ 
+    minHeight: '100vh', 
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    background: '#fafafa'
+  }}>
+    <Loading message="Loading..." />
+  </div>
+);
 
 const App = () => {
   return (
     <BrowserRouter>
-      <ScrollToTop /> {/* ensures scrolling back to top on navigation */}
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />   {/* small fix: "/" instead of "" */}
-        <Route path="/service" element={<Service />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services/:serviceId" element={<ServiceDetails />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/notify" element={<NotifySubscribers />} />
-        <Route path="/admin/message" element={<AdminMessagePage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      <Footer />
+      <ScrollToTop />
+      <Suspense fallback={<PageLoader />}>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/service" element={<Service />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services/:serviceId" element={<ServiceDetails />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/notify" element={<NotifySubscribers />} />
+          <Route path="/admin/message" element={<AdminMessagePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <Footer />
+      </Suspense>
     </BrowserRouter>
   );
 };

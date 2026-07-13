@@ -103,9 +103,11 @@
     z-index: -1;
  }
  .workingprocess .right{
-    right: -20rem;
+    /* right: -20rem; */
+    right: -2rem;
     top:10rem;
-    width: 50rem;
+    width: 18rem;
+    /* width: 50rem; */
     animation: goUpandDown 5s infinite;
  }
  .workingprocess .left{
@@ -154,9 +156,9 @@
         border-radius: 1rem !important;
     }
     .workingprocess .right{
-        right: -23rem;
+        /* right: -23rem; */
+        right: -5rem;
         top:40rem;
-        width: 50rem;
         animation: goUpandDown 5s infinite;
      }
      .workingprocess .left{

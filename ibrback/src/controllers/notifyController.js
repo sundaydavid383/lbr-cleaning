@@ -23,11 +23,19 @@ exports.SendNotification = async (req, res) => {
       return res.status(404).json({ success: false, message: "No subscribers found" });
     }
 
+<<<<<<< HEAD:ibrback/src/controllers/notifyController.js
     const mailOptions = {
       from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
       to: subscribers.map((e) => e.email).join(","), // all subscribers
       subject: "New Notification from LBR Cleaning",
       html: `
+=======
+ const mailOptions = { 
+  from: "LBR Cleaning",
+  to: emails.map((e) => e.email).join(","), // all subscribers
+  subject: "New Notification from LBR Cleaning",
+  html: `
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61:ibrback/controllers/notifyController.js
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
       <div style="max-width: 650px; margin: auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         

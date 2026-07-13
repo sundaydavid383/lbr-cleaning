@@ -6,74 +6,124 @@ import { Link, useLocation } from "react-router-dom";
 const Nav = () => {
   const [linkActive, setLinkActive] = useState(false)
   const [active, setActive] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (window.scrollY >50) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setActive(true);
+        setScrolled(true);
+      } else {
+        setActive(false);
+        setScrolled(false);
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, []);
+  // Close mobile menu on route change
+  useEffect(() => {
+    setLinkActive(false);
+  }, [location]);
 
-const isActive = (path) => location.pathname === path;
-   
+  const isActive = (path) => location.pathname === path;
+    
   return (
     <div className={`nav ${active ? "active" : ""}`}>
       <div className="nav-upper">
-      <div className="media">
-            <p className="phone">
-              <i className="fa-solid fa-phone-volume"></i>+2348068698053
-            </p>
-            <a href="mailto:sundayudoh383@gmail.com" className="email">
-              <i className="fa-solid fa-envelope"></i>lbrcleaningservices16@gmail.com
-            </a>
-          </div>
+        <div className="media">
+          <a href="tel:+2348068698053" className="phone" aria-label="Call us">
+            <i className="fa-solid fa-phone-volume"></i> 
+            <span>+234 806 869 8053</span>
+          </a>
+
+          <a href="mailto:lbrcleaningservices16@gmail.com" className="email" aria-label="Email us">
+            <i className="fa-solid fa-envelope"></i>
+            <span>lbrcleaningservices16@gmail.com</span>
+          </a>
+        </div>
+        
         <div className="social-platforms">
-        <Link className="iconactive" to="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-  <i className="fa-brands fa-facebook-f"></i>
-</Link>
-<Link className="iconactive" to="https://twitter.com" target="_blank" rel="noopener noreferrer">
-  <i className="fa-brands fa-twitter"></i>
-</Link>
-<Link className="iconactive" to="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-  <i className="fa-brands fa-linkedin"></i>
-</Link>
-<Link className="iconactive" to="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-  <i className="fa-brands fa-instagram"></i>
-</Link>
-<Link className="iconactive" to="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-  <i className="fa-brands fa-youtube"></i>
-</Link>
+          <a className="iconactive" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <i className="fa-brands fa-facebook-f"></i>
+          </a>
+          <a className="iconactive" href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+            <i className="fa-brands fa-twitter"></i>
+          </a>
+          <a className="iconactive" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <i className="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a className="iconactive" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <i className="fa-brands fa-instagram"></i>
+          </a>
+          <a className="iconactive" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <i className="fa-brands fa-youtube"></i>
+          </a>
         </div>
+      </div>
       
-      </div>
       <div className="nav-lower">
-        <Link to="/" className="logo" >
-          <img src={houseimage} alt="" />
-          <p>LBR Cleaning</p>
+        <Link to="/" className="logo" aria-label="LBR Cleaning Home">
+          <img src={houseimage} alt="LBR Cleaning Services Logo" />
+          
         </Link>
-        <i onClick={()=>setLinkActive(prev=>!prev)} className="fa-solid fa-bars-staggered"></i>
-        <div className={`links ${linkActive?"active":""}`}>
-        <Link className={isActive("/") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/"><p>HOME</p><div></div></Link>
-        <Link className={isActive("/service") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/service"><p>SERVICE</p><div></div></Link>
-        <Link className={isActive("/about") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/about"><p>ABOUT</p><div></div></Link>
-        <Link className={isActive("/blog") ? "active" : ""} onClick={()=>setLinkActive(false)} to="/blog"><p>BLOG</p><div></div></Link>
-        </div>
-        <Link  to={"/contact"} onClick={()=>setLinkActive(false)} className="btn">
-          <p>
-            contact us <i className="fa-solid fa-arrow-right-long"></i>
-          </p>
+        
+        <button 
+          className="mobile-menu-toggle" 
+          onClick={() => setLinkActive(!linkActive)}
+          aria-label={linkActive ? "Close menu" : "Open menu"}
+          aria-expanded={linkActive}
+        >
+          <i className={`fa-solid ${linkActive ? 'fa-xmark' : 'fa-bars-staggered'}`}></i>
+        </button>
+        
+        <nav className={`links ${linkActive ? "active" : ""}`} aria-label="Main navigation">
+          <Link 
+            className={isActive("/") ? "active" : ""} 
+            to="/"
+          >
+            <span>Home</span>
+            <div></div>
+          </Link>
+          <Link 
+            className={isActive("/service") ? "active" : ""} 
+            to="/service"
+          >
+            <span>Services</span>
+            <div></div>
+          </Link>
+          <Link 
+            className={isActive("/about") ? "active" : ""} 
+            to="/about"
+          >
+            <span>About</span>
+            <div></div>
+          </Link>
+          <Link 
+            className={isActive("/blog") ? "active" : ""} 
+            to="/blog"
+          >
+            <span>Blog</span>
+            <div></div>
+          </Link>
+        </nav>
+        
+        <Link to="/contact" className="btn">
+          <p>Contact Us <i className="fa-solid fa-arrow-right-long"></i></p>
         </Link>
       </div>
+      
+      {/* Mobile overlay */}
+      <div 
+        className={`mobile-menu-overlay ${linkActive ? "active" : ""}`}
+        onClick={() => setLinkActive(false)}
+        aria-hidden="true"
+      />
     </div>
   );
 };

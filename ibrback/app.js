@@ -32,7 +32,11 @@ app.use(limiter);
 const transporter = createTransporter();
 
 function capitalizeWord(word) {
+<<<<<<< HEAD
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
+=======
+  return word[0].toUpperCase() + word.slice(1).toLowerCase()
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
 }
 
 const ApiResponse = (res, statusCode, success, data = null, message = "") => {
@@ -42,6 +46,7 @@ const ApiResponse = (res, statusCode, success, data = null, message = "") => {
   return res.status(statusCode).json(response);
 };
 
+<<<<<<< HEAD
 // Error handler middleware
 const errorHandler = (err, req, res, next) => {
   console.error("Server Error:", err);
@@ -50,6 +55,16 @@ const errorHandler = (err, req, res, next) => {
     message: "An unexpected error occurred. Try connecting to the internet and try again.",
   });
 };
+=======
+app.get('/welcome', (req, res) => {
+  try {
+    return res.status(200).json({ success: true, message: "Welcome to LBR Cleaning API" })
+  }
+  catch (err) {
+    return res.status(500).json({ success: false, message: "An error occurred while processing your request" });
+  }
+})
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
 
 // Welcome endpoint
 app.get("/welcome", (req, res) => {
@@ -58,13 +73,37 @@ app.get("/welcome", (req, res) => {
 
 // Appointment booking endpoint
 app.post("/appointments/book", async (req, res) => {
-  console.log(req.body);
+  console.log("---- NEW /appointments/book REQUEST ----");
+  console.log("Raw req.body:", req.body);
+
   const { name, email, phone, service } = req.body;
 
+  console.log("Extracted fields:", { name, email, phone, service });
+
   if (!name || !email || !phone || !service) {
+<<<<<<< HEAD
     return ApiResponse(res, 400, false, "Invalid user data");
+=======
+    console.log("❌ Validation failed: Missing required fields");
+    return res.status(400).json({ success: false, data: "Invalid user data" });
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
   }
 
+  console.log("✔ Validation passed");
+
+  console.log("Splitting name...");
+  const [firstName, lastName] = name.split(" ");
+  console.log("Split result:", { firstName, lastName });
+
+  const abbrivatedFirstName = capitalizeWord(firstName);
+  const abbrivatedLastName = capitalizeWord(lastName);
+
+  console.log("Capitalized names:", {
+    abbrivatedFirstName,
+    abbrivatedLastName,
+  });
+
+  console.log("Building sharedDetailsHTML...");
   const sharedDetailsHTML = `
     <table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 15px;">
       <tr>
@@ -85,7 +124,9 @@ app.post("/appointments/book", async (req, res) => {
       </tr>
     </table>
   `;
+  console.log("sharedDetailsHTML created");
 
+<<<<<<< HEAD
   const nameParts = name.split(" ");
   const firstName = nameParts[0] || "";
   const lastName = nameParts.slice(1).join(" ") || "";
@@ -93,74 +134,95 @@ app.post("/appointments/book", async (req, res) => {
   const capitalizedFirstName = capitalizeWord(firstName);
   const capitalizedLastName = capitalizeWord(lastName);
 
+=======
+  console.log("Preparing userMailOptions...");
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
   const userMailOptions = {
     from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
     to: email,
-    subject: "✨ Appointment Confirmation - LBR Cleaning ✨",
+    subject: "Appointment Confirmation - LBR Cleaning",
     html: `
       <div style="font-family: Arial, sans-serif; background-color: #f5f5e4; color: rgb(8, 59, 8); padding: 0; margin: 0;">
         <div style="max-width: 600px; margin: 20px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0px 0px 15px 4px rgba(34, 34, 34, 0.2);">
-          
-          <!-- Header -->
           <div style="background-color: rgb(36, 170, 36); padding: 20px; text-align: center;">
             <h1 style="margin: 0; color: white; font-size: 22px;">LBR Cleaning</h1>
             <p style="margin: 0; color: white; font-size: 14px;">Making your space shine ✨</p>
           </div>
-
-          <!-- Body -->
           <div style="padding: 25px;">
             <h2 style="color: rgb(8, 92, 8); margin-top: 0;">Hello ${capitalizedFirstName} ${capitalizedLastName},</h2>
             <p style="line-height: 1.6;">Thank you for booking an appointment with <strong>LBR Cleaning</strong>! 🎉</p>
             <p style="line-height: 1.6;">Here are the details of your request:</p>
-            
             ${sharedDetailsHTML}
-
             <p style="margin-top: 20px; line-height: 1.6;">
+<<<<<<< HEAD
               We'll reach out shortly to confirm and schedule your service.  
               If you have any questions, feel free to reply to this email.
+=======
+              We’ll reach out shortly to confirm and schedule your service.  
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
             </p>
-
-            <!-- Call to Action Button -->
             <div style="text-align: center; margin-top: 25px;">
-              <a href="mailto:support@lbrcleaning.com" style="background-color: rgb(36, 170, 36); color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; display: inline-block;">
+              <a href="mailto:lbrcleaningservices16@gmail.com" style="background-color: rgb(36, 170, 36); color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; display: inline-block;">
                 Contact Support
               </a>
             </div>
-          </div>
-
-          <!-- Footer -->
-          <div style="background-color: rgb(245, 245, 228); padding: 15px; text-align: center; font-size: 13px; color: rgba(8, 92, 8, 0.8);">
-            <p style="margin: 0;">Best regards,<br><strong>The LBR Cleaning Team</strong></p>
           </div>
         </div>
       </div>
     `,
   };
+  console.log("userMailOptions prepared:", userMailOptions);
 
+<<<<<<< HEAD
   const ownerMailOptions = {
     from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
     to: process.env.OWNER_EMAIL || process.env.SMTP_USER,
+=======
+  console.log("Preparing ownerMailOptions...");
+  const ownerMailOptions = {
+    from: '"LBR Cleaning" <sundayudoh383@gmail.com>',
+    to: "sundayudoh383@gmail.com",
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
     subject: "📩 New Appointment Booking - LBR Cleaning",
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9;">
         <h2 style="color: rgb(8, 92, 8);">New Appointment Received</h2>
         <p>You have a new appointment booking with the following details:</p>
         ${sharedDetailsHTML}
-        <p style="margin-top: 20px;">Please follow up with the customer as soon as possible.</p>
       </div>
     `,
   };
+  console.log("ownerMailOptions prepared:", ownerMailOptions);
 
   try {
+    console.log("Attempting to send user email...");
     await transporter.sendMail(userMailOptions);
-    console.log("User email sent successfully");
-    await transporter.sendMail(ownerMailOptions);
-    console.log("Owner email sent successfully");
+    console.log("✔ User email sent successfully");
 
+<<<<<<< HEAD
     return ApiResponse(res, 200, true, "Enquiry sent. We'll contact you soon.");
   } catch (error) {
     console.error("An error occurred:", error.message);
     return ApiResponse(res, 500, false, "An unexpected error occurred. Try connecting to the internet and try again.");
+=======
+    console.log("Attempting to send owner email...");
+    await transporter.sendMail(ownerMailOptions);
+    console.log("✔ Owner email sent successfully");
+
+    console.log("---- REQUEST COMPLETED SUCCESSFULLY ----");
+    return res.status(200).json({ success: true, data: "Enquiry sent. We’ll contact you soon." });
+
+  } catch (error) {
+    console.error("❌ ERROR sending email:", error);
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+
+    return res.status(500).json({
+      success: false,
+      data: "An unexpected error occurred. Try connecting to the internet and try again."
+    });
+>>>>>>> ffd8f6b299daf1744d0ceb9c5b590e82cc51df61
   }
 });
 
