@@ -42,9 +42,9 @@ const Nav = () => {
             <span>+234 806 869 8053</span>
           </a>
 
-          <a href="mailto:lbrcleaningservices16@gmail.com" className="email" aria-label="Email us">
+          <a href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL}`} className="email" aria-label="Email us">
             <i className="fa-solid fa-envelope"></i>
-            <span>lbrcleaningservices16@gmail.com</span>
+            <span>{import.meta.env.VITE_CONTACT_EMAIL}</span>
           </a>
         </div>
         

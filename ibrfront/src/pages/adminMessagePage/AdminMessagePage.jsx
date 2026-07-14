@@ -5,6 +5,7 @@ import Loading from "../../component/loading/Loading";
 const LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutes in ms
 
 const AdminMessagePage = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [message, setMessage] = useState("");
@@ -12,6 +13,11 @@ const AdminMessagePage = () => {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+
+  const getAuthHeader = () => {
+    const token = localStorage.getItem('adminToken');
+    return token ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } : { 'Content-Type': 'application/json' };
+  };
 
 
   // Check lockOut on mount
@@ -47,15 +53,16 @@ const seconds = Math.floor((timeLeft % 60000) / 1000);
 
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5100/api/admin-login`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/admin-login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, disabled }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
       if (data.success) {
         setAuthenticated(true);
+        localStorage.setItem('adminToken', data.token);
         setAlert({ message: "Authentication successful!", type: "success" });
       }
       else {
@@ -81,8 +88,8 @@ const seconds = Math.floor((timeLeft % 60000) / 1000);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/send-message`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, password }),
+        headers: getAuthHeader(),
+        body: JSON.stringify({ message }),
       });
 
       const data = await res.json();
@@ -111,7 +118,14 @@ const seconds = Math.floor((timeLeft % 60000) / 1000);
 
       {!authenticated ? (
         <div className="login-box">
-          <h2>Enter Admin Password</h2>
+          <h2>Enter Admin Credentials</h2>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
+            disabled={disabled}
+          />
           <input
             type="password"
             value={password}

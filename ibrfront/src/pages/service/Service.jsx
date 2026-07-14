@@ -23,7 +23,7 @@ import { FaSoap, FaBox, FaCalendarCheck, FaHouseUser, FaBriefcase, FaRubleSign, 
     const deal_Intro  = {
     image:dealimage1,
     h2: "You Are welcome our service dear esteemed customer",
-    email:"sundayudoh383@gmail.com",
+    email: null,
     phone: "+123 934 43845"
 
   }
