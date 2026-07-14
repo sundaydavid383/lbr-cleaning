@@ -44,7 +44,7 @@ const Articles = ({ articles }) => {
           const [year, month, day] = article.date ? article.date.split("-") : ["", "", ""];
 
           return (
-            <div key={index} className={`article_card art${index}`}>
+            <div key={index} className={`article_card art${index}`} data-index={`#${String(index + 1).padStart(2, '0')}`}>
               <div className="articles_image">
                 <img src={article.image} alt={article.title} />
               </div>

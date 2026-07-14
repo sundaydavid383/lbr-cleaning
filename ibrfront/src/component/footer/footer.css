@@ -1,10 +1,56 @@
 /* ========================================
-   LBR Cleaning - Footer Styles
+   LBR Cleaning — Footer Styles
+   Premium / Tech-Systematic Refactor
+   All colors derived from the existing :root tokens
    ======================================== */
 
+:root {
+    /* Footer-scoped aliases — every value below is either
+       a direct root variable or a transparency mix of one */
+    --footer-bg: var(--secondary-color);
+    --footer-text: var(--light-text);
+    --footer-text-muted: color-mix(in srgb, var(--light-text) 65%, transparent);
+    --footer-text-faint: color-mix(in srgb, var(--light-text) 40%, transparent);
+    --footer-border: color-mix(in srgb, var(--light-text) 8%, transparent);
+    --footer-border-soft: color-mix(in srgb, var(--light-text) 5%, transparent);
+    --footer-glass: color-mix(in srgb, var(--light-text) 4%, transparent);
+    --footer-glass-hover: color-mix(in srgb, var(--light-text) 7%, transparent);
+    --footer-accent: var(--primary-color-light);
+    --footer-accent-solid: var(--primary-color);
+    --footer-accent-dark: var(--primary-color-dark);
+    --footer-gold: var(--tetiary-color);
+    --footer-glow: var(--light-shadow);
+    --footer-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --footer-ease-fast: 0.4s var(--footer-ease);
+}
+
+/* ========================================
+   Footer Shell
+   ======================================== */
 .footer {
-    background: var(--secondary-color);
-    color: var(--light-text);
+    position: relative;
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    overflow: hidden;
+}
+
+/* Ambient top glow, reusing the existing primary-tinted shadow token */
+.footer::before {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 220px;
+    background: radial-gradient(ellipse at center, var(--footer-glow) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.footer > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* ========================================
@@ -14,89 +60,121 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3rem;
-    padding-bottom: 2rem;
-    padding-top: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3.5rem 3rem 2.25rem;
+    border-bottom: 1px solid var(--footer-border);
     max-width: 1400px;
     margin: 0 auto;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
 
 .subscribe h2 {
-    font-size: 1.75rem;
-    color: var(--light-text);
+    font-size: 1.85rem;
+    color: var(--footer-text);
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
     font-family: 'Outfit', sans-serif;
 }
 
 .subscribe form {
     display: flex;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.5rem;
+    border: 1px solid var(--footer-border);
+    padding: 0.4rem;
     position: relative;
     border-radius: var(--radius-full);
     flex: 1;
-    max-width: 500px;
-    min-width: 250px;
-    background: rgba(255, 255, 255, 0.05);
-    transition: var(--transition-normal);
+    max-width: 480px;
+    min-width: 260px;
+    background: var(--footer-glass);
+    backdrop-filter: blur(12px);
+    transition: border-color var(--footer-ease-fast), background var(--footer-ease-fast), box-shadow var(--footer-ease-fast);
 }
 
 .subscribe form:focus-within {
-    border-color: var(--primary-color);
-    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--footer-accent-solid);
+    background: var(--footer-glass-hover);
+    box-shadow: var(--light-shadow);
 }
 
 .subscribe form input {
     background: transparent;
     flex: 1;
     font-weight: 400;
-    font-size: 1rem;
-    color: var(--light-text);
+    font-size: 0.975rem;
+    letter-spacing: 0.01em;
+    color: var(--footer-text);
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.1rem;
     outline: none;
 }
 
 .subscribe form input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--footer-text-faint);
 }
 
 .subscribe form .btn {
     min-width: auto;
     height: 2.75rem;
-    padding: 0 1.5rem;
-    font-size: 0.875rem;
+    padding: 0 1.6rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-full);
+    background: var(--footer-accent-solid);
+    color: var(--footer-text);
+    border: none;
+    cursor: pointer;
+    transition: background var(--footer-ease-fast), transform var(--footer-ease-fast), box-shadow var(--footer-ease-fast);
+}
+
+.subscribe form .btn:hover {
+    background: var(--footer-accent-dark);
+    box-shadow: var(--primary-shadow);
+    transform: translateY(-1px);
 }
 
 .subscribe form .btn p {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+.subscribe form .btn i {
+    font-size: 0.75rem;
+    transition: transform var(--footer-ease-fast);
+}
+
+.subscribe form .btn:hover i {
+    transform: translateX(3px);
 }
 
 .subscribe .socials {
     display: flex;
-    gap: 1rem;
+    gap: 0.9rem;
     align-items: center;
 }
 
 .subscribe .socials a {
-    background: var(--primary-color);
-    width: 2.5rem;
-    height: 2.5rem;
+    background: var(--footer-glass);
+    border: 1px solid var(--footer-border);
+    width: 2.6rem;
+    height: 2.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: var(--transition-normal);
+    color: var(--footer-text);
+    transition: background var(--footer-ease-fast), border-color var(--footer-ease-fast),
+        color var(--footer-ease-fast), transform var(--footer-ease-fast), box-shadow var(--footer-ease-fast);
 }
 
 .subscribe .socials a:hover {
-    background: var(--tetiary-color);
+    background: var(--footer-accent-solid);
+    border-color: var(--footer-accent-solid);
     color: var(--secondary-color);
     transform: translateY(-3px);
+    box-shadow: var(--primary-shadow);
 }
 
 /* ========================================
@@ -105,34 +183,33 @@
 .main_footer {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1.2fr;
-    gap: 3rem;
-    padding: 3rem;
+    gap: 3.5rem;
+    padding: 3.5rem 3rem;
     max-width: 1400px;
     margin: 0 auto;
-    position: relative;
 }
 
 .footer .main {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    color: var(--light-text);
+    gap: 1.1rem;
+    color: var(--footer-text);
 }
 
 .footer .main .logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .footer .main .logo img {
-    width: 19rem;
+    width: 15rem;
     object-fit: contain;
 }
 
 .footer .main .logo p {
-    color: var(--light-text);
+    color: var(--footer-text);
     font-weight: 700;
     font-size: 1.5rem;
     font-family: 'Outfit', sans-serif;
@@ -141,8 +218,9 @@
 .footer .main p {
     font-weight: 300;
     font-size: 0.95rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.75;
+    color: var(--footer-text-muted);
+    max-width: 34ch;
 }
 
 /* ========================================
@@ -151,15 +229,33 @@
 .footer .explore {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.9rem;
 }
 
-.footer .explore h2 {
-    color: var(--light-text);
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
+.footer .explore h2,
+.footer_details h2 {
+    color: var(--footer-text);
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     font-family: 'Outfit', sans-serif;
+    position: relative;
+    padding-bottom: 0.85rem;
+}
+
+/* Micro-border under section headings — structural, not decorative */
+.footer .explore h2::after,
+.footer_details h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1.75rem;
+    height: 2px;
+    background: var(--footer-accent-solid);
+    border-radius: var(--radius-full);
 }
 
 .footer .explore li {
@@ -167,27 +263,31 @@
 }
 
 .footer .explore li a {
-    color: rgba(255, 255, 255, 0.8);
-    transition: var(--transition-fast);
+    color: var(--footer-text-muted);
+    transition: color var(--footer-ease-fast), transform var(--footer-ease-fast);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.25rem 0;
+    gap: 0.7rem;
+    padding: 0.3rem 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    text-decoration: none;
 }
 
 .footer .explore li a:hover {
-    color: var(--tetiary-color);
-    transform: translateX(5px);
+    color: var(--footer-text);
+    transform: translateX(4px);
 }
 
 .footer .explore li i {
-    color: var(--primary-color);
-    font-size: 0.75rem;
-    transition: var(--transition-fast);
+    color: var(--footer-accent);
+    font-size: 0.7rem;
+    transition: transform var(--footer-ease-fast), color var(--footer-ease-fast);
 }
 
 .footer .explore li:hover i {
-    color: var(--tetiary-color);
+    color: var(--footer-gold);
+    transform: scale(1.15);
 }
 
 /* ========================================
@@ -196,68 +296,73 @@
 .footer_details {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-}
-
-.footer_details h2 {
-    color: var(--light-text);
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    font-family: 'Outfit', sans-serif;
+    gap: 0.9rem;
 }
 
 .footer_details a {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--footer-text-muted);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
-    transition: var(--transition-fast);
+    transition: color var(--footer-ease-fast), transform var(--footer-ease-fast);
     text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .footer_details a:hover {
-    color: var(--tetiary-color);
+    color: var(--footer-text);
+    transform: translateX(4px);
 }
 
 .footer_details a i {
-    color: var(--primary-color);
-    font-size: 1rem;
-    width: 1.5rem;
+    color: var(--footer-accent);
+    font-size: 0.95rem;
+    width: 1.4rem;
     text-align: center;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    transition: color var(--footer-ease-fast);
 }
 
 .footer_details a:hover i {
-    color: var(--tetiary-color);
+    color: var(--footer-gold);
 }
 
 .footer_details p {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--footer-text-muted);
     font-size: 0.95rem;
-    transition: var(--transition-fast);
+    transition: color var(--footer-ease-fast);
 }
 
 /* ========================================
    Copyright
    ======================================== */
 .copyright {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--footer-text-faint);
     text-align: center;
     padding: 1.5rem;
-    font-size: 0.875rem;
-    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    background: color-mix(in srgb, var(--secondary-color) 78%, black 22%);
+    border-top: 1px solid var(--footer-border-soft);
 }
 
 .copyright span {
-    color: var(--primary-color);
+    color: var(--footer-accent);
     font-weight: 600;
 }
 
 /* ========================================
    Animations
    ======================================== */
+.futup {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
 .futup.active {
-    animation: bottomfadeIn 0.8s ease forwards;
+    animation: bottomfadeIn 0.8s var(--footer-ease) forwards;
 }
 
 @keyframes bottomfadeIn {
@@ -271,15 +376,39 @@
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .futup {
+        opacity: 1;
+        transform: none;
+    }
+    .futup.active {
+        animation: none;
+    }
+}
+
 /* ========================================
-   Responsive - Tablet
+   Responsive — Wide screens
+   ======================================== */
+@media (min-width: 1600px) {
+    .subscribe,
+    .main_footer {
+        max-width: 1600px;
+    }
+
+    .main_footer {
+        gap: 4.5rem;
+    }
+}
+
+/* ========================================
+   Responsive — Tablet
    ======================================== */
 @media (max-width: 1024px) {
     .main_footer {
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
     }
-    
+
     .footer .main {
         grid-column: span 2;
     }
@@ -289,80 +418,91 @@
     .subscribe {
         flex-direction: column;
         text-align: center;
-        padding: 2rem 1.5rem;
+        padding: 2.25rem 1.5rem;
     }
-    
+
     .subscribe h2 {
         font-size: 1.5rem;
     }
-    
+
     .subscribe form {
         width: 100%;
         max-width: 100%;
     }
-    
+
     .subscribe .socials {
         justify-content: center;
     }
-    
+
     .main_footer {
         grid-template-columns: 1fr;
-        padding: 2rem 1.5rem;
-        gap: 2rem;
+        padding: 2.5rem 1.5rem;
+        gap: 2.25rem;
     }
-    
+
     .footer .main {
         grid-column: auto;
         text-align: center;
         align-items: center;
     }
-    
+
+    .footer .main p {
+        max-width: 40ch;
+    }
+
     .footer .main .logo {
         justify-content: center;
     }
-    
-    .footer .explore {
+
+    .footer .explore,
+    .footer_details {
         align-items: center;
     }
-    
-    .footer_details {
+
+    .footer .explore h2::after,
+    .footer_details h2::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer_details a {
         align-items: center;
     }
 }
 
 /* ========================================
-   Responsive - Mobile
+   Responsive — Mobile
    ======================================== */
 @media (max-width: 480px) {
     .subscribe {
-        padding: 1.5rem 1rem;
+        padding: 1.75rem 1rem;
     }
-    
+
     .subscribe h2 {
         font-size: 1.25rem;
     }
-    
+
     .subscribe form {
         flex-direction: column;
         gap: 0.75rem;
         border-radius: var(--radius-lg);
         padding: 0.75rem;
     }
-    
+
     .subscribe form input {
         width: 100%;
         text-align: center;
         padding: 0.75rem;
     }
-    
+
     .subscribe form .btn {
         width: 100%;
     }
-    
+
     .main_footer {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1rem;
     }
-    
+
     .copyright {
         font-size: 0.75rem;
         padding: 1rem;

@@ -1,5 +1,7 @@
 /* ========================================
    LBR Cleaning - Contact Form Styles
+   Refined: glass surfaces, layered shadows,
+   premium carousel with snap scrolling
    ======================================== */
 
 .contact {
@@ -14,7 +16,7 @@
     background-size: cover;
     background-attachment: fixed;
     position: relative;
-    padding-block: 4rem;
+    padding-block: clamp(3rem, 6vw, 5rem);
     overflow: hidden;
 }
 
@@ -22,11 +24,8 @@
 .contact::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(2, 36, 2, 0.95) 100%);
+    inset: 0;
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(2, 20, 12, 0.96) 100%);
     z-index: 0;
 }
 
@@ -36,7 +35,8 @@
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
-    background: rgba(34, 197, 94, 0.1);
+    background: rgba(34, 197, 94, 0.08);
+    filter: blur(1px);
     z-index: 1;
 }
 
@@ -51,7 +51,7 @@
 }
 
 /* ========================================
-   Main Contact Form
+   Main Contact Form — glass panel
    ======================================== */
 .contact .main_contact {
     display: flex;
@@ -60,16 +60,32 @@
     max-width: 600px;
     position: relative;
     z-index: 2;
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    border-radius: var(--radius-2xl, 1.5rem);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .contact .main_contact h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     line-height: 1.2;
-    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
     color: var(--light-text);
     text-align: center;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
+}
+
+.contact .main_contact > p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 0.01em;
 }
 
 .contact .main_contact form {
@@ -77,6 +93,7 @@
     flex-direction: column;
     gap: 2.4rem;
     width: 100%;
+    margin-top: 1rem;
 }
 
 .contact .main_contact form .inputlabel {
@@ -88,38 +105,41 @@
     width: 100%;
     position: absolute;
     top: -1.5rem;
-    left: 0;
+    left: 0.1rem;
     text-transform: capitalize;
     font-weight: 500;
+    letter-spacing: 0.02em;
     color: var(--tetiary-color);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 }
 
 .contact .main_contact form input,
 .contact .main_contact form select {
     width: 100%;
     margin-bottom: 0;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     outline: none;
     border-radius: var(--radius-lg);
     font-size: 1rem;
     padding: 1rem;
     height: 3.5rem;
     text-transform: capitalize;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--light-text);
     transition: var(--transition-normal);
 }
 
 .contact .main_contact form input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     text-transform: none;
+    font-weight: 300;
 }
 
 .contact .main_contact form input:focus,
 .contact .main_contact form select:focus {
     border-color: var(--primary-color);
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
 }
 
 select {
@@ -131,9 +151,9 @@ select {
     border-radius: var(--radius-lg);
     font-size: 1rem;
     outline: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--light-text);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 #cleaning_service option {
@@ -169,7 +189,15 @@ select {
     margin-top: 1rem;
     width: 100%;
     height: 3.5rem;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.25);
+    transition: var(--transition-normal);
+}
+
+.contact .main_contact .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.35);
 }
 
 .contact .main_contact .btn p {
@@ -182,7 +210,7 @@ select {
    ======================================== */
 .contact_service {
     width: 100%;
-    padding: 3rem 1rem;
+    padding: clamp(2.5rem, 5vw, 4rem) 1rem 1rem;
     overflow-x: hidden;
     text-align: center;
     position: relative;
@@ -190,70 +218,84 @@ select {
 }
 
 .contact_service .title {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     color: var(--light-text);
+}
+
+.contact_service .title span {
+    color: var(--tetiary-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 .contact_service .title h2 {
     color: var(--light-text);
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    letter-spacing: -0.01em;
+    margin-top: 0.5rem;
 }
 
 /* ========================================
-   Service Carousel
+   Service Carousel — premium overhaul
    ======================================== */
 .service-holder-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1.5rem;
+    margin-top: 1rem;
     position: relative;
 }
 
 .services-container {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     width: 100%;
-    max-width: calc(380px * 3 + 2rem * 2); /* Show up to 3 cards */
-    padding: 0 1rem;
+    max-width: calc(380px * 3 + 1.5rem * 2);
+    padding: 1rem 0.5rem 1.5rem;
+
+    /* hide native scrollbar, keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .services-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.services-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
-
-.services-container::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-.services-container::-webkit-scrollbar-thumb:hover {
-    background: var(--tetiary-color);
+    display: none;
+    height: 0;
 }
 
 .single_service_display {
-    flex: 0 0 380px;
-    border-radius: var(--radius-xl);
+    flex: 0 0 340px;
+    border-radius: 1rem;
     overflow: hidden;
     position: relative;
-    transform-style: preserve-3d;
-    transition: transform var(--transition-normal);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     scroll-snap-align: start;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease;
+    opacity: 0.7;
+    transform: scale(0.96);
 }
 
 .single_service_display.active {
-    transform: scale(1.02);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    transform: scale(1);
+    border-color: rgba(212, 190, 62, 0.35);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(212, 190, 62, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .single_service_display .service {
@@ -261,96 +303,120 @@ select {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background: var(--secondary-color);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    transition: box-shadow var(--transition-normal);
+    position: relative;
 }
 
 .single_service_display .service img {
     width: 100%;
-    height: 220px;
+    height: 230px;
     object-fit: cover;
-    transition: transform var(--transition-normal);
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .single_service_display:hover .service img {
-    transform: scale(1.05);
+    transform: scale(1.06);
+}
+
+/* image caption gradient overlay */
+.single_service_display .service::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 230px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(2, 20, 12, 0.55) 100%);
+    pointer-events: none;
 }
 
 .single_service_display .text {
-    background: var(--secondary-color);
+    background: transparent;
     color: var(--light-text);
     padding: 1.5rem;
     text-align: left;
-    transition: all var(--transition-normal);
+    position: relative;
+    z-index: 2;
 }
 
 .single_service_display .text .h2 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin-bottom: 1rem;
     text-transform: capitalize;
     font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--light-text);
 }
 
 .single_service_display ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .single_service_display ul li {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
+    gap: 0.7rem;
+    margin-bottom: 0.55rem;
+    font-size: 0.87rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .single_service_display ul li i {
     color: var(--tetiary-color);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     flex-shrink: 0;
+}
+
+.single_service_display .btn {
+    width: fit-content;
+    padding-inline: 1.25rem;
+    height: 2.75rem;
+    font-size: 0.85rem;
 }
 
 /* ========================================
    Hover Effects
    ======================================== */
 .single_service_display:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    transform: translateY(-6px) scale(1.01);
 }
 
-.single_service_display:hover .text {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+.single_service_display.active:hover {
+    transform: translateY(-6px) scale(1.03);
 }
 
 .single_service_display:hover ul li i {
-    color: var(--tetiary-color);
+    color: var(--tetiary-color-light, var(--tetiary-color));
 }
 
 /* ========================================
    Carousel Navigation
    ======================================== */
 .carousel-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    font-size: 1rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--light-text);
+    font-size: 0.95rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
     cursor: pointer;
     transition: var(--transition-normal);
     display: flex;
     align-items: center;
     justify-content: center;
+    backdrop-filter: blur(8px);
+    flex-shrink: 0;
 }
 
 .carousel-btn:hover {
     background: var(--tetiary-color);
-    transform: scale(1.1);
+    border-color: var(--tetiary-color);
+    color: var(--secondary-color);
+    transform: scale(1.08);
 }
 
 /* ========================================
@@ -360,29 +426,31 @@ select {
     .contact {
         padding-block: 3rem;
     }
-    
-    .contact .main_contact h1 {
-        font-size: 2rem;
+
+    .contact .main_contact {
+        padding: 1.5rem;
     }
-    
+
+    .contact .main_contact h1 {
+        font-size: 1.9rem;
+    }
+
     .service-holder-wrapper {
-        flex-direction: column;
         gap: 1rem;
     }
-    
+
     .services-container {
         max-width: 100%;
-        padding: 0;
+        padding: 0.5rem 1rem 1.5rem;
     }
-    
+
     .single_service_display {
-        flex: 0 0 320px;
+        flex: 0 0 300px;
     }
-    
+
     .carousel-btn {
-        width: 100%;
-        max-width: 200px;
-        margin-top: 1rem;
+        width: 2.6rem;
+        height: 2.6rem;
     }
 }
 
@@ -393,43 +461,62 @@ select {
     .contact {
         padding-block: 2rem;
     }
-    
+
+    .contact .main_contact {
+        padding: 1.25rem;
+        border-radius: var(--radius-xl, 1rem);
+    }
+
     .contact .main_contact h1 {
         font-size: 1.5rem;
     }
-    
+
+    .contact .main_contact form {
+        gap: 2rem;
+    }
+
     .contact .main_contact form input,
     .contact .main_contact form select {
         height: 3rem;
         font-size: 0.9rem;
         padding: 0.75rem;
     }
-    
+
     select {
         height: 3rem;
     }
-    
+
     .contact .main_contact .btn {
         height: 3rem;
     }
-    
+
+    .service-holder-wrapper {
+        gap: 0.75rem;
+    }
+
     .services-container {
-        gap: 0.5rem;
+        gap: 1rem;
     }
-    
+
     .single_service_display {
-        flex: 0 0 280px;
+        flex: 0 0 260px;
     }
-    
-    .single_service_display .service img {
-        height: 180px;
+
+    .single_service_display .service img,
+    .single_service_display .service::after {
+        height: 170px;
     }
-    
+
     .single_service_display .text {
-        padding: 1.25rem;
+        padding: 1.1rem;
     }
-    
+
     .single_service_display .text .h2 {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+    }
+
+    .carousel-btn {
+        width: 2.4rem;
+        height: 2.4rem;
     }
 }

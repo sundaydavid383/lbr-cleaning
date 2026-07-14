@@ -1,6 +1,3 @@
-/* ========================================
-   Feature Strip
-   ======================================== */
 .features {
     background: transparent;
     position: relative;
@@ -19,22 +16,22 @@
 .features .feature {
     flex: 1 1 260px;
     max-width: 340px;
-    height: auto;
     background: var(--lighter-gray);
-    padding: 1.25rem;
-    border-radius: 0.4rem;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     position: relative;
-    transition: 0.2s linear;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     z-index: 20;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .feature:hover {
-    border-radius: 0;
     transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
 }
 
 .feature:hover .feature_loader {
@@ -42,37 +39,37 @@
 }
 
 .feature_loader {
-    background: var(--primary-color);
-    height: 0.4rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--tetiary-color));
+    height: 0.3rem;
     width: 0%;
     position: absolute;
     bottom: 0;
     left: 0;
-    border-radius: 0 0 0.4rem 0.4rem;
-    transition: 0.25s ease-in-out;
+    transition: 0.3s ease-in-out;
+}
+
+.feature .icon {
+    width: 3.75rem;
+    min-width: 3.75rem;
+    height: 3.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    background: var(--light-gray);
 }
 
 .features .feature i {
-    font-size: 2.4rem;
+    font-size: 1.7rem;
     color: var(--primary-color);
     flex-shrink: 0;
 }
 
-.feature .icon {
-    width: 4rem;
-    min-width: 4rem;
-    height: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    object-fit: contain;
-    background: transparent;
-}
-
 .feature h2 {
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
+    color: var(--secondary-color);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
     line-height: 1.3;
 }
 
@@ -82,66 +79,44 @@
     font-weight: 400;
     font-size: 0.82rem;
     letter-spacing: 0.2px;
+    opacity: 0.85;
 }
 
-/* ========================================
-   Responsive — Tablet (≤1168px)
-   ======================================== */
 @media (max-width: 1168px) {
     .features {
         margin-top: -5rem;
     }
-
     .features .feature {
-        flex: 1 1 200px;
+        flex: 1 1 220px;
         max-width: none;
     }
 }
 
-/* ========================================
-   Responsive — Mobile (≤868px)
-   ======================================== */
 @media (max-width: 868px) {
     .features {
         margin-top: -3rem;
-        padding: 0 1.25rem .5rem;
+        padding: 0 1.25rem 0.5rem;
         gap: 0.75rem;
     }
-
     .features .feature {
         flex: 1 1 100%;
         max-width: 100%;
     }
-
-    .feature .icon {
-        width: 3.5rem;
-        min-width: 3.5rem;
-        height: 3.5rem;
-    }
-
-    .features .feature i {
-        font-size: 2rem;
-    }
 }
 
-/* ========================================
-   Responsive — Small Mobile (≤480px)
-   ======================================== */
 @media (max-width: 480px) {
     .features {
         margin-top: -2.5rem;
         padding: 0 1rem 1.25rem;
     }
-
     .feature .icon {
-        width: 3rem;
-        min-width: 3rem;
+        width: 3.25rem;
+        min-width: 3.25rem;
+        height: 3.25rem;
     }
-
     .features .feature i {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
-
     .feature h2 {
         font-size: 1rem;
     }

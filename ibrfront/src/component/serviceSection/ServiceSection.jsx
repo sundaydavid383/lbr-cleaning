@@ -16,11 +16,13 @@ const ServiceSection = ({ services }) => {
       <div className="service-cards">
         {services.map((service, index) => (
           <div className="service-card" key={index}>
-            <img
-              src={service.image}
-              alt={service.title}
-              className="service-image"
-            />
+            <div className="service-image-wrap">
+              <img
+                src={service.image}
+                alt={service.title}
+                className="service-image"
+              />
+            </div>
 
             <div className="card-content">
               <h2>{service.title}</h2>

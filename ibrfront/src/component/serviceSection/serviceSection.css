@@ -1,250 +1,359 @@
-.service-section {
-  background-color: var(--background-color);
-  padding: 4rem 2rem;
-  padding-top: 10rem;
+/* ========================================
+   LBR Cleaning — Service Section
+   Premium Refactor
+   All colors derived from the existing :root tokens.
+   Signature element: a diagonal "shine sweep" across
+   each card on hover — a nod to the brand's actual
+   product (a clean, polished surface catching light).
+   ======================================== */
+
+:root {
+    --svc-bg: var(--background-color);
+    --svc-divider: var(--light-secondary-color);
+    --svc-eyebrow: var(--primary-color);
+    --svc-heading: var(--secondary-color);
+    --svc-text: var(--text-color);
+    --svc-text-muted: var(--text-color-muted);
+    --svc-card-bg: var(--light-backgound);
+    --svc-card-border: color-mix(in srgb, var(--secondary-color) 8%, transparent);
+    --svc-chip-bg: var(--primary-color);
+    --svc-chip-text: var(--light-text);
+    --svc-footer-bg: var(--secondary-color);
+    --svc-footer-text: var(--light-text);
+    --svc-shine: color-mix(in srgb, var(--light-text) 35%, transparent);
+    --svc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --svc-ease-slow: 0.6s var(--svc-ease);
+    --svc-ease-fast: 0.35s var(--svc-ease);
 }
 
+.service-section,
+.service-section * {
+    box-sizing: border-box;
+}
+
+/* ========================================
+   Section Shell
+   ======================================== */
+.service-section {
+    background-color: var(--svc-bg);
+    padding: 6rem 2rem;
+    padding-top: clamp(6rem, 14vw, 10rem);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ========================================
+   Header
+   ======================================== */
 .service-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-  border-bottom: 2px solid var(--light-secondary-color);
-  padding-bottom: 1rem;
-  padding-inline: 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 0 auto 4rem;
+    max-width: 1400px;
+    width: 100%;
+    border-bottom: 1px solid var(--svc-divider);
+    padding-bottom: 1.75rem;
+}
+
+.service-header .first_te {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
 }
 
 .service-header .first_te h2 {
-  font-size: 1.8rem;
-  color: var(--primary-color);
-  margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--svc-eyebrow);
+    margin: 0;
+    position: relative;
+    padding-left: 1.9rem;
+}
+
+/* Small accent rule before the eyebrow — a quiet structural marker,
+   not a numbered sequence, since these services aren't ordinal */
+.service-header .first_te h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.4rem;
+    height: 2px;
+    background: var(--svc-eyebrow);
+    border-radius: var(--radius-full);
 }
 
 .service-header .first_te h1 {
-  font-size: 2.5rem;
-  color: var(--secondary-color);
-  margin: 0.2rem 0;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: var(--svc-heading);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
 }
 
 .service-header p {
-  color: var(--text-color);
-  max-width: 400px;
-  font-weight: 500;
+    color: var(--svc-text-muted);
+    max-width: 380px;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
+/* ========================================
+   Card Grid
+   ======================================== */
 .service-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.25rem;
+    justify-content: center;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
+/* ========================================
+   Service Card
+   ======================================== */
 .service-card {
-  background: var(--light-backgound);
-  border-radius: 20px;
-  overflow: hidden;
-  width: 20rem;
-  height: 400px;
-  box-shadow: var(--primary-shadow);
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-  position: relative;
-  perspective: 1500px;
-  transform-style: preserve-3d;
+    background: var(--svc-card-bg);
+    border: 1px solid var(--svc-card-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    width: 20rem;
+    height: 400px;
+    box-shadow: var(--box-shadow);
+    transition: transform var(--svc-ease-slow), box-shadow var(--svc-ease-slow);
+    position: relative;
+    perspective: 1500px;
+    transform-style: preserve-3d;
 }
 
 .service-card:hover {
-  transform: rotateY(3deg) scale(1.06);
-  box-shadow: var(--large-shadow);
+    transform: rotateY(3deg) scale(1.04) translateY(-6px);
+    box-shadow: var(--large-shadow);
+}
+
+.service-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
 }
 
 .service-image {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-bottom: 3px solid var(--secondary-color);
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--svc-ease-slow);
+}
+
+.service-card:hover .service-image {
+    transform: scale(1.08);
+}
+
+/* Signature element: a diagonal shine sweeps across the image
+   on hover, echoing a polished/cleaned surface catching light */
+.service-image-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+        115deg,
+        transparent 0%,
+        var(--svc-shine) 50%,
+        transparent 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.9s var(--svc-ease);
+    pointer-events: none;
+}
+
+.service-card:hover .service-image-wrap::after {
+    left: 130%;
 }
 
 .card-content {
-  padding: 1.5rem;
-  background-color: var(--light-backgound);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  transform: translateY(50%);
-  transition: transform 0.5s ease;
+    padding: 1.5rem;
+    background-color: var(--svc-card-bg);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    transform: translateY(50%);
+    transition: transform var(--svc-ease-slow);
 }
 
 .service-card:hover .card-content {
-  transform: translateY(-30%);
+    transform: translateY(-30%);
 }
 
 .card-content h2 {
-  color: var(--secondary-color);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+    color: var(--svc-heading);
+    margin-bottom: 0.9rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    font-family: 'Outfit', sans-serif;
 }
 
 .card-content ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .card-content ul li {
-  background-color: var(--primary-color);
-  margin-bottom: 0.4rem;
-  padding: 0.5rem;
-  border-radius: 8px;
-  text-wrap: no-wrap;
-  color: var(--light-text);
-  font-weight: 400;
-  font-size: .9rem;
-  transform: translateX(-20px);
-  opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+    background-color: var(--svc-chip-bg);
+    padding: 0.5rem 0.7rem;
+    border-radius: var(--radius-md);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--svc-chip-text);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.01em;
+    transform: translateX(-16px);
+    opacity: 0;
+    transition: transform var(--svc-ease-fast), opacity var(--svc-ease-fast);
 }
 
 .service-card:hover .card-content ul li {
-  transform: translateX(0);
-  opacity: 1;
+    transform: translateX(0);
+    opacity: 1;
 }
 
-.service-card:hover .card-content ul li:nth-child(1) {
-  transition-delay: 0.2s;
-}
-.service-card:hover .card-content ul li:nth-child(2) {
-  transition-delay: 0.4s;
-}
-.service-card:hover .card-content ul li:nth-child(3) {
-  transition-delay: 0.6s;
-}
-.service-card:hover .card-content ul li:nth-child(4) {
-  transition-delay: 0.8s;
-}
+.service-card:hover .card-content ul li:nth-child(1) { transition-delay: 0.1s; }
+.service-card:hover .card-content ul li:nth-child(2) { transition-delay: 0.2s; }
+.service-card:hover .card-content ul li:nth-child(3) { transition-delay: 0.3s; }
+.service-card:hover .card-content ul li:nth-child(4) { transition-delay: 0.4s; }
 
+/* ========================================
+   Card Link / Footer
+   ======================================== */
 .card-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--light-text);
-  background: var(--secondary-color);
-  font-weight: bold;
-  gap: 0.5rem;
-  transition: transform 0.5s ease;
-  margin-top: 1rem;
-  cursor: pointer;
-  padding: 2rem .6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--svc-footer-text);
+    background: var(--svc-footer-bg);
+    font-weight: 600;
+    gap: 0.5rem;
+    transition: background var(--svc-ease-fast);
+    margin-top: 1.1rem;
+    cursor: pointer;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    letter-spacing: 0.01em;
 }
 
-.card-link i {
-  font-size: 2.2rem;
-  transition: transform 1s ease-in-out;
-}
-.card-link p i{
-    font-size: 1.2rem;
-}
-.service-card:hover .card-link i {
-  transform: rotate(360deg);
+.card-link:hover {
+    background: var(--primary-color-dark);
 }
 
 .card-link p {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.card-link p i {
+    font-size: 0.8rem;
+    transition: transform var(--svc-ease-fast);
+}
+
+.card-link:hover p i {
+    transform: translateX(4px);
+}
+
+.card-link > i {
+    font-size: 1.3rem;
+    transition: transform 0.7s var(--svc-ease);
+}
+
+.service-card:hover .card-link > i {
+    transform: rotate(360deg);
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 1024px) {
+    .service-cards {
+        gap: 1.75rem;
+    }
 }
 
 @media (max-width: 768px) {
-  .service-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 19rem;
-  }
+    .service-section {
+        padding: 4rem 1.25rem;
+        padding-top: clamp(5rem, 30vw, 8rem);
+    }
 
-  .service-cards {
-    flex-direction: column;
-    align-items: center;
-    
-  }
-  .service-card{
-    width: 90%
-  }
-}
-  border-radius: 8px;
-  text-wrap: no-wrap;
-  color: var(--light-text);
-  font-weight: 400;
-  font-size: .9rem;
-  transform: translateX(-20px);
-  opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
+    .service-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
 
-/* Animate each li in sequence on hover */
-.service-card:hover .card-content ul li {
-  transform: translateX(0);
-  opacity: 1;
+    .service-header p {
+        max-width: 100%;
+    }
+
+    .service-cards {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .service-card {
+        width: 100%;
+        max-width: 22rem;
+    }
 }
 
-.service-card:hover .card-content ul li:nth-child(1) {
-  transition-delay: 0.2s;
-}
-.service-card:hover .card-content ul li:nth-child(2) {
-  transition-delay: 0.4s;
-}
-.service-card:hover .card-content ul li:nth-child(3) {
-  transition-delay: 0.6s;
-}
-.service-card:hover .card-content ul li:nth-child(4) {
-  transition-delay: 0.8s;
+@media (max-width: 380px) {
+    .service-section {
+        padding-inline: 0.85rem;
+    }
+
+    .service-card {
+        height: 380px;
+    }
 }
 
-.card-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--light-text);
-  background: var(--secondary-color);
-  font-weight: bold;
-  gap: 0.5rem;
-  transition: transform 0.5s ease;
-  margin-top: 1rem;
-  cursor: pointer;
-  padding: 2rem .6rem;
-}
+@media (prefers-reduced-motion: reduce) {
+    .service-card,
+    .service-image,
+    .card-content,
+    .card-content ul li,
+    .card-link,
+    .card-link i,
+    .service-image-wrap::after {
+        transition: none;
+    }
 
-.card-link i {
-  font-size: 2.2rem;
-  transition: transform 1s ease-in-out;
-}
-.card-link p i{
-    font-size: 1.2rem;
-}
-.service-card:hover .card-link i {
-  transform: rotate(360deg);
-}
-
-.card-link p {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .service-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 19rem;
-  }
-
-  .service-cards {
-    flex-direction: column;
-    align-items: center;
-    
-  }
-  .service-card{
-    width: 90%
-  }
+    .service-card:hover {
+        transform: none;
+    }
 }

@@ -1,169 +1,248 @@
-.workingprocess{
-   display: flex;
-   flex-direction: column;
-   padding-top: 4rem;
-   position: relative;
+.workingprocess {
+  display: flex;
+  flex-direction: column;
+  padding-block: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
-.workingProcess_container{
-    margin-top: 4rem;
-}
-.workingProcessHolder{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.workingProcessHolder h2{
-    font-weight: 300;
-    font-size: 1rem;
-    color: var(--text-color);
-    width: 40rem;
-    text-align: center;
-}
-.workingprocess_card {
-    width: 20rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    backdrop-filter: blur(15px);
-    padding: 2rem;
-    border-radius: 12rem;
-}
-.workingprocess_card .icon{
-    width: 7rem;
-    height: 7rem;
-    border-radius: 1rem;
-    background: var(--light-text);
-    box-shadow: var(--large-shadow);
-    padding: 2rem;
-    text-align: center;
-    position: relative;
-}
-.workingprocess_card .icon small i{
-    font-size: 3rem;
-    color: var(--primary-color);
-    position: absolute;
-    top: 24%;
-    left: 25%;
-    padding: .4rem;
-    z-index: 11;
-}
-.workingprocess_card .icon span{
-    width: 1.7rem;
-    height: 1.7rem;
-    border-radius: 50%;
-    color: var(--text-color);
-    background: var(--tetiary-color);
-    position: absolute;
-    line-height: 1.9rem;
-    font-size: .94rem;
-    top:30%;
-    right: -1rem;
-    z-index: 11;
-}
-.workingprocess_card .icon .number{
-     transition: .3s linear;
-     width: .01rem;
-     height: .02rem; 
-    background: var(--primary-color);
-    position: absolute;
-    top: 0%;
-    left:0%;
 
-    border-radius: 1rem;
+.workingProcess_container {
+  margin-top: 3rem;
 }
-.workingprocess_card h2{
-    font-weight: 500;
-    font-size: 1.4rem;
-    margin-top: 1.3rem;
+
+.workingProcessHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-inline: 1.5rem;
 }
-.header_line{
-    width: 4rem;
-    border-radius: 1rem;
-    height: .23rem;
-    margin-bottom: 1.4rem;
-    margin-top: .4rem;
-    background: var(--primary-color);
+
+.workingProcessHolder h2 {
+  font-weight: 400;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  color: var(--text-color);
+  max-width: 42rem;
+  text-align: center;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  opacity: 0.85;
 }
-.workingprocess_card p{
-    font-weight: 300;
-    font-size: .94rem;
-    line-height: 1.3rem;
+
+.workingProcess_container.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2.25rem;
+  max-width: 1200px;
+  margin-inline: auto;
+  position: relative;
+  z-index: 20; /* interactive content always above decorations */
 }
-.workingprocess_card:hover .icon .number{
-    width: 7rem;
-     height: 7rem; 
+
+.workingprocess_card {
+  width: 19rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--lighter-gray);
+  padding: 2.5rem 1.75rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px rgba(8, 59, 8, 0.06);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.workingprocess_card:hover .icon i{
-    color: var(--light-text);
+
+.workingprocess_card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 34px rgba(8, 59, 8, 0.13);
 }
-.workingprocess img{
-    position: absolute;
-    width: 25rem;
-    z-index: -1;
- }
- .workingprocess .right{
-    /* right: -20rem; */
-    right: -2rem;
-    top:10rem;
-    width: 18rem;
-    /* width: 50rem; */
-    animation: goUpandDown 5s infinite;
- }
- .workingprocess .left{
-    left: 0rem;
-    top:18rem;
-    animation: goUpandDown 7s infinite;
- }
- @keyframes goUpandDown {
-      0%{
-        transform: translateY(0px);
-      }
-      30%{
-        transform: translateY(-10px);
-      }
-      70%{
-        transform: translateY(0px);
-      }
-      100%{
-        transform: translateY(10px);
-      }
- }
- @media (max-width: 1168px) {
-    .workingprocess_card {
-        width: 16rem;
-        backdrop-filter: blur(15px);
-        padding: 1.8rem;
-        border-radius: 1rem;
-    }
+
+.workingprocess_card .icon {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 1.25rem;
+  background: var(--light-text);
+  box-shadow: var(--large-shadow);
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.workingprocess_card .icon > small:first-child {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.workingprocess_card .icon > small:first-child i {
+  font-size: 2.4rem;
+  color: var(--primary-color);
+  transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.workingprocess_card .icon span {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  color: var(--light-text);
+  background: var(--tetiary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  position: absolute;
+  top: -0.6rem;
+  right: -0.6rem;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.workingprocess_card .icon .number {
+  content: "";
+  width: 0;
+  height: 0;
+  background: var(--primary-color);
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.workingprocess_card:hover .icon .number {
+  width: 100%;
+  height: 100%;
+}
+
+.workingprocess_card:hover .icon > small:first-child i {
+  color: var(--light-text);
+}
+
+.workingprocess_card h2 {
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--secondary-color);
+  margin-top: 0.25rem;
+}
+
+.header_line {
+  width: 3rem;
+  height: 0.2rem;
+  border-radius: 1rem;
+  margin-block: 0.75rem 1.1rem;
+  background: var(--tetiary-color);
+}
+
+.workingprocess_card p {
+  font-weight: 300;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+/* ========================================
+   Decorative Background Images
+   Strictly isolated: absolute inside a
+   relative parent, percentage-based bounds,
+   always behind content (z-index below 20)
+   ======================================== */
+.workingprocess img {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  filter: saturate(0.9) brightness(1.05);
+  object-fit: contain;
+  transition: opacity 0.6s ease;
+}
+
+.workingprocess .right {
+  top: 6%;
+  right: 2%;
+  width: clamp(9rem, 16vw, 15rem);
+  animation: goUpandDown 6s ease-in-out infinite;
+  mask-image: radial-gradient(circle at 70% 30%, black 55%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 70% 30%, black 55%, transparent 85%);
+}
+
+.workingprocess .left {
+  top: 55%;
+  left: 2%;
+  width: clamp(8rem, 14vw, 13rem);
+  animation: goUpandDown 7s ease-in-out infinite;
+  mask-image: radial-gradient(circle at 30% 70%, black 55%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 30% 70%, black 55%, transparent 85%);
+}
+
+@keyframes goUpandDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@media (max-width: 1168px) {
+  .workingprocess_card {
+    width: 16rem;
+    padding: 2rem 1.5rem;
   }
-  @media (max-width: 868px) {
-     .workingProcess_container{
-         margin-top: 2rem;
-         flex-wrap: wrap
-     }
-     .workingprocess_card {
-         width: 50%;
-         border-radius: 1rem !important;
-     }
+
+  .workingprocess img {
+    opacity: 0.24;
   }
-  @media (max-width: 658px) {
-     .workingProcess_container{
-        gap: 2rem;
-     }
-    .workingprocess_card {
-        width: 60%;
-        border-radius: 1rem !important;
-    }
-    .workingprocess .right{
-        /* right: -23rem; */
-        right: -5rem;
-        top:40rem;
-        animation: goUpandDown 5s infinite;
-     }
-     .workingprocess .left{
-        left: 0rem;
-        top:18rem;
-        animation: goUpandDown 7s infinite;
-     }
+}
+
+@media (max-width: 868px) {
+  .workingProcess_container.container {
+    gap: 1.5rem;
   }
+
+  .workingprocess_card {
+    width: min(90%, 22rem);
+  }
+
+  .workingprocess .right {
+    top: 1%;
+    right: -4%;
+    width: 6.5rem;
+    opacity: 0.18;
+  }
+
+  .workingprocess .left {
+    top: auto;
+    bottom: 1%;
+    left: -4%;
+    width: 6rem;
+    opacity: 0.18;
+  }
+}
+
+@media (max-width: 480px) {
+  .workingprocess_card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .workingprocess_card .icon {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .workingprocess_card .icon > small:first-child i {
+    font-size: 2rem;
+  }
+
+  .workingprocess .right,
+  .workingprocess .left {
+    width: 4.5rem;
+    opacity: 0.14;
+  }
+}

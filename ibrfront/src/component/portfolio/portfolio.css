@@ -1,169 +1,320 @@
-.portfolio_heading{
+/* ========================================
+   Portfolio — premium carousel
+   ======================================== */
+
+.portfolio_heading {
     display: flex;
     justify-content: space-between;
-    padding-inline: 3rem;
     align-items: center;
+    gap: 1.5rem;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+    max-width: 1400px;
+    margin-inline: auto;
 }
-.portfolio{
-    margin-top: 8rem;
+
+.portfolio {
+    margin-top: clamp(4rem, 8vw, 8rem);
     background: var(--light-gray);
-    padding: 3rem .2rem;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
     display: flex;
     flex-direction: column;
     position: relative;
 }
-.portfolio_heading .title{
+
+.portfolio_heading .title {
     text-align: left;
-    width: 36%;
+    max-width: 34rem;
 }
-.portfolio_heading .btn{
-    width: 11rem;
+
+.portfolio_heading .title span.priamry {
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
-.portfolio_holder{
-    width: 31rem;
+
+.portfolio_heading .title h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+    color: var(--secondary-color);
+    margin-top: 0.5rem;
+    line-height: 1.3;
+}
+
+.portfolio_heading .title .tracker {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--text-color);
+    opacity: 0.7;
+    letter-spacing: 0.02em;
+}
+
+.portfolio_heading .btn {
+    flex-shrink: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio_heading .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(36, 170, 36, 0.25);
+}
+
+/* ========================================
+   Carousel shell
+   ======================================== */
+.portfolio_holder {
+    width: min(100%, 34rem);
+    margin-inline: auto;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
     position: relative;
+    border-radius: 1.25rem;
     overflow: hidden;
-     background-color: black;
-    align-self: center;
+    box-shadow: 0 20px 50px rgba(8, 59, 8, 0.14);
 }
 
 .portfolio_card_wrapper {
-  min-height: 320px; /* adjust based on your card height */
-  position: relative;
-}
-.portfolio_holder .iconactive{
-   width: 2rem;
-   height: 2rem;
-   font-size: 1rem;
-   line-height: 2rem;
-}
-.portfolio_card{ 
-    height: 100%;
+    position: relative;
+    min-height: 22rem;
+    border-radius: 1.25rem;
     overflow: hidden;
-    position: absolute; /* 👈 ensures cards overlap */
+}
+
+.portfolio_holder .iconactive {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--light-text);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+}
+
+.portfolio_holder .moveleft { left: 1rem; }
+.portfolio_holder .moveright { right: 1rem; }
+
+.portfolio_holder .iconactive:hover {
+    background: var(--tetiary-color);
+    color: var(--secondary-color);
+    transform: translateY(-50%) scale(1.08);
+}
+
+/* ========================================
+   Card
+   ======================================== */
+.portfolio_card {
+    height: 100%;
     width: 100%;
-    min-height: 220px;  /* 👈 avoids flicker and collapse */
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 1.25rem;
     background: var(--lighter-gray);
     box-shadow: var(--box-shadow);
 }
-.portfolio_card .person{
-    position: absolute;
-    top:.4rem;
-    left:.8rem;
-    background: var(--tetiary-color);
-    padding: .6rem;
-    border-radius: 1.4rem;
-    font-weight: 400;
-    color: var(--text-color);
-    transition: .3s linear;
-    cursor: pointer;
-    width: 0%;
-    height: 0%;
-    overflow: hidden;
-}
-.portfolio_card .person:hover{
-    background: var(--secondary-color);
-    color:var(--tetiary-color)
-} 
-.portfolio_card .place{
-   position: absolute;
-   display: flex;
-   flex-direction: column;
-   justify-content: space-around;
-   bottom: .3rem;
-   background: var(--secondary-color);
-   height: 8rem;
-   border-radius: .7rem .7rem 0rem 0rem;
-   border-bottom: 5px solid var(--tetiary-color);
-   padding: 1rem;
-   text-align: left;
-   color: var(--light-text);
-   text-transform: capitalize;
-   width: 25rem;
-  left: -27rem;
-   transition:.2s linear
-}
-.portfolio_card .place span{
-  font-size: .92rem;
-  font-weight: 300;
 
+.portfolio_card img {
+    width: 100%;
+    height: 22rem;
+    object-fit: cover;
+    display: block;
+    border-radius: 1.25rem;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.portfolio_card .place span i{
-    margin-right: .4rem;
-    font-size: 1.2rem;
+
+.portfolio_card:hover img {
+    transform: scale(1.05);
 }
-.portfolio_card .place p{
-     font-size: 1.1rem;
-     font-weight: 300;
+
+/* subtle top-to-bottom fade so the "place" panel always reads clean against any photo */
+.portfolio_card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(2, 20, 12, 0.55) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
-.portfolio_card .fa-circle-arrow-right{
+
+.portfolio_card .person {
     position: absolute;
     top: 1rem;
-    right:2rem;
-    font-size: 2rem;
-    transform: rotate(310deg);
+    left: 1rem;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.6rem 1rem;
+    border-radius: 2rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--light-text);
+    cursor: pointer;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.4s ease;
+    z-index: 3;
+}
+
+.portfolio_card:hover .person {
+    width: fit-content;
+    height: auto;
+    opacity: 1;
+}
+
+.portfolio_card .person:hover {
+    background: var(--secondary-color);
     color: var(--tetiary-color);
 }
-.portfolio_card img{
-    width: 100%;
-    border-radius: .3rem;
-}
-.portfolio_card:hover .place
-{
-  left: 0rem;
-}
-.portfolio_card:hover .person{
-    width:fit-content;
-    height: fit-content;
-}
-@keyframes scrollingover {
-    0% {
-      transform: translateX(0px);
-    }
-    /* 10% {
-      transform: translateX(-260px);
-    }
-    20% {
-      transform: translateX(-510px);
-    }
-    30% {
-      transform: translateX(-800px);
-    }
-    40% {
-      transform: translateX(-1020px);
-    }
-    50% {
-      transform: translateX(-1350px);
-    }
-    60% {
-      transform: translateX(-1020px);
-    }
-    70% {
-      transform: translateX(-800px);
-    }
-    80% {
-      transform: translateX(-510px);
-    }
-    90% {
-      transform: translateX(-260px);
-    } */
-    100% {
-      transform: translateX(-4100px);
-    }
-  }
-@media (max-width: 1168px) {
- 
-  }
-  @media (max-width: 868px) {
-  
-  }
-  @media (max-width: 658px) {
-.portfolio_holder .moveright{
-    right:1rem;
-}
- .portfolio_holder .moveleft{
-    left:1rem;  
-   }
 
-  }
-  
+.portfolio_card .place {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    background: rgba(8, 59, 8, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 3px solid var(--tetiary-color);
+    border-radius: 0.9rem 0.9rem 0 0;
+    padding: 1.1rem 1.4rem;
+    text-align: left;
+    color: var(--light-text);
+    text-transform: capitalize;
+    width: 100%;
+    transform: translateY(6px);
+    opacity: 0.92;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+}
+
+.portfolio_card .place span {
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+}
+
+.portfolio_card .place span i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    color: var(--tetiary-color);
+}
+
+.portfolio_card .place p {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.4;
+}
+
+.portfolio_card .fa-circle-arrow-right {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.6rem;
+    color: var(--tetiary-color);
+    z-index: 3;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio_card:hover .fa-circle-arrow-right {
+    transform: rotate(45deg);
+}
+
+.portfolio_card:hover .place {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 1168px) {
+    .portfolio_holder {
+        width: min(100%, 30rem);
+    }
+    .portfolio_card img {
+        height: 20rem;
+    }
+    .portfolio_card_wrapper {
+        min-height: 20rem;
+    }
+}
+
+@media (max-width: 868px) {
+    .portfolio_heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+    .portfolio_heading .title {
+        max-width: 100%;
+    }
+    .portfolio_heading .btn {
+        align-self: flex-start;
+    }
+    .portfolio_holder {
+        width: min(100%, 26rem);
+    }
+}
+
+@media (max-width: 658px) {
+    .portfolio_holder {
+        width: 92%;
+    }
+    .portfolio_holder .moveright {
+        right: 0.75rem;
+    }
+    .portfolio_holder .moveleft {
+        left: 0.75rem;
+    }
+    .portfolio_card img {
+        height: 17rem;
+    }
+    .portfolio_card_wrapper {
+        min-height: 17rem;
+    }
+    .portfolio_card .place {
+        padding: 0.9rem 1.1rem;
+    }
+    .portfolio_card .place p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .portfolio_holder {
+        width: 94%;
+    }
+    .portfolio_card img {
+        height: 15rem;
+    }
+    .portfolio_card_wrapper {
+        min-height: 15rem;
+    }
+}

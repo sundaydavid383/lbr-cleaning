@@ -1,193 +1,212 @@
-.about{
-    margin-top: 10rem;
-    gap:8rem
+.about {
+    margin-top: clamp(3rem, 8vw, 6rem);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
 }
-.about .about_image{
-    width:80%;
+
+.about .about_image {
+    width: 100%;
+    max-width: 32rem;
     position: relative;
+    flex-shrink: 0;
 }
-.about img{
+
+.about img {
     width: 5rem;
 }
-.about .image1{
-    width: 90%;
+
+.about .image1 {
+    width: 88%;
+    border-radius: 0.75rem;
+    box-shadow: var(--box-shadow);
 }
-.about .image2{
-    width: 90%;
+
+.about .image2 {
+    width: 60%;
     position: absolute;
     bottom: -2rem;
-    border: 10px solid var(--background-color);
-    left: 8rem;
+    right: -1rem;
+    left: auto;
+    border: 8px solid var(--background-color);
+    border-radius: 0.75rem;
+    box-shadow: var(--box-shadow);
 }
-.videoicon{
+
+.videoicon {
     position: absolute;
-    top:50%;
-    left:70%;
-    font-size: 6rem;
-    z-index: 111;
+    top: 45%;
+    left: 40%;
+    font-size: 4rem;
+    z-index: 30;
     color: var(--tetiary-color);
-    width: 6rem;
-    transition: .2s;
-    height: 6rem;
-    animation: iconhoverLarge 4s infinite;
+    width: 4.5rem;
+    height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: 0.25s ease;
 }
-.videoicon:hover{
-  background: var(--tetiary-color);
+
+.videoicon:hover {
+    background: var(--tetiary-color);
+    transform: scale(1.08);
 }
-.videoicon:hover i{
-    color: var(--secondary-color);
+
+.videoicon:hover i {
+    color: var(--light-text);
 }
-.about_text{
+
+.about_text {
     display: flex;
     flex-direction: column;
     position: relative;
     width: 100%;
-   
+    max-width: 40rem;
 }
-.about_text .btn{
-    margin-top: 3rem;
+
+.about_text .btn {
+    margin-top: 2.5rem;
+    align-self: flex-start;
 }
-.about_text img{
- position: absolute;
- right: 0rem;
- top:-3rem;
- animation: rotate 4s infinite;
+
+.about_text > img {
+    position: absolute;
+    right: 0;
+    top: -2.5rem;
+    width: 3rem;
+    animation: rotate 4s linear infinite;
 }
-.about_text h4{
-   color: var(--primary-color);
-   font-weight: 500;
-   font-size: 1.2rem;
-   margin-bottom: 1rem;
+
+.about_text h4 {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
 }
-.about_text h1{
+
+.about_text h1 {
     color: var(--secondary-color);
-   font-weight: 600;
-   font-size: 2.5rem;
-   line-height: 3rem;
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 1.25;
 }
-.about_text .p1{
+
+.about_text .p1 {
     color: var(--text-color);
     font-weight: 300;
-    font-size: .94rem;
-    margin-top: 1rem;
-    line-height: 1.5rem;
- }
- .about_text .award{
+    font-size: 0.94rem;
+    margin-top: 1.25rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+.about_text .award {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: absolute;
-    bottom: 4rem;
-    right: 0rem;
+    justify-content: center;
     border-radius: 1rem;
     background: var(--tetiary-color);
-    height: 11rem;
-    width: 12rem;
-    justify-content: center;
-    padding: .5rem;
-    gap:.5rem;
- }
- .about_text .award i{
-     color: var(--primary-color);
-     font-size: 3rem;
- }
- .about_text .award h1{
-    font-size: 3rem;
- }
- .about_text .award p{
-    font-size: 1rem;
+    padding: 1.25rem;
+    gap: 0.4rem;
+    width: 9rem;
+    margin-top: 1.5rem;
+    align-self: flex-start;
+    box-shadow: var(--box-shadow);
+}
+
+.about_text .award i {
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.about_text .award h1 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.about_text .award p {
     color: var(--text-color);
-    font-weight: 300;
-    font-size: 1.2rem;
- }
- .about_text ul{
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.about_text ul {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    margin-block: 1.5rem;
- }
- .about_text ul li{
+    gap: 0.9rem;
+    margin-block: 1.75rem;
+}
+
+.about_text ul li {
     display: flex;
     align-items: center;
     gap: 1rem;
- }
- .about_text ul li i{
+}
+
+.about_text ul li i {
     color: var(--primary-color);
- }
- .about_text ul li p{
+    font-size: 1.1rem;
+}
+
+.about_text ul li p,
+.about_text ul li a p {
     color: var(--text-color);
-    font-weight : 400;
-    font-size: .94rem;
- }
- 
+    font-weight: 400;
+    font-size: 0.94rem;
+}
+
 @media (max-width: 1168px) {
-    .about{
-        margin-top: 29rem;
-        gap:8rem;
-        padding-inline: 1rem;
-    }
-    .about_text .award{
-        bottom: 5rem;
-        right: 0rem;
-        height: 7.7rem;
-        line-height: .9rem;
-        width: 7.2rem;
-        padding: .2rem;
-        gap:0rem;
-     }
-     .about_text .award i{
-        color: var(--primary-color);
-        font-size: 2rem;
-    }
-    .about_text .award h1{
-       font-size: 2rem;
-    }
-    .about_text .award p{
-       font-size: 1rem;
-       font-size: 1rem;
-       text-align: center;
-    }
-  }
-  @media (max-width: 868px) {
-    .about{
-        margin-top: 29rem;
-        gap:8rem;
-        padding-inline: 1rem;
-    }
-    .about.container{
+    .about {
         flex-wrap: wrap;
-        padding-inline: 2.4rem;
+        padding-inline: 1rem;
     }
-    .about .image1{
-        width: 70%;
+    .about .about_image {
+        max-width: 26rem;
+        margin-inline: auto;
     }
-    .about .image2{
-        width: 70%;
-        bottom: -1rem;
-        left: 50%;
+}
+
+@media (max-width: 868px) {
+    .about.container {
+        flex-direction: column;
+        padding-inline: 1.5rem;
+        text-align: center;
     }
-    .about_text .award{
-        bottom: 3rem;
-        right: 0rem;
-        height: 11.7rem;
-        line-height: 1.4rem;
-        width: 10.2rem;
-        padding: .2rem;
-        gap:.5rem;
-     }
-     .about_text .award i{
-        color: var(--primary-color);
-        font-size: 3rem;
+    .about .about_image {
+        max-width: 22rem;
     }
-    .about_text .award h1{
-       font-size: 3rem;
+    .about_text {
+        align-items: center;
+        max-width: 100%;
     }
-    .about_text .award p{
-       font-size: 1.3rem;
-       color: var(--text-color);
-       font-weight: 300;
-       text-align: center;
+    .about_text .award {
+        align-self: center;
     }
-  }
-  
+    .about_text ul li {
+        justify-content: center;
+    }
+    .about_text .btn {
+        align-self: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .about .about_image {
+        max-width: 100%;
+    }
+    .about_text h1 {
+        font-size: 1.6rem;
+    }
+    .about_text .p1 {
+        font-size: 0.9rem;
+    }
+}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion'; // ✅ import
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import './portfolio.css';
 import img1 from "../../assets/cleaner11.jpg";
 import img2 from "../../assets/cleaner12.jpg";
@@ -24,21 +24,71 @@ const cardsData = [
 const Portfolio = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = cardsData.length;
-  const [direction, setDirection] = useState(0); // 🔄 Track direction for animation
+  const [direction, setDirection] = useState(0);
+  const wrapperRef = useRef(null);
+  const wheelCooldown = useRef(false);
 
-  const moveLeft = () => {
-    if (activeIndex > 0) {
-      setDirection(-1);
-      setActiveIndex(activeIndex - 1);
+  const moveLeft = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev > 0) {
+        setDirection(-1);
+        return prev - 1;
+      }
+      return prev;
+    });
+  }, []);
+
+  const moveRight = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev < total - 1) {
+        setDirection(1);
+        return prev + 1;
+      }
+      return prev;
+    });
+  }, [total]);
+
+  // Swipe / drag handling (covers touch on mobile + mouse-drag on desktop)
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 60;
+    const velocityThreshold = 400;
+
+    if (info.offset.x < -swipeThreshold || info.velocity.x < -velocityThreshold) {
+      moveRight();
+    } else if (info.offset.x > swipeThreshold || info.velocity.x > velocityThreshold) {
+      moveLeft();
     }
   };
 
-  const moveRight = () => {
-    if (activeIndex < total - 1) {
-      setDirection(1);
-      setActiveIndex(activeIndex + 1);
-    }
-  };
+  // Trackpad / mouse-wheel horizontal scroll support (desktop)
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+
+    const handleWheel = (e) => {
+      // Only react to meaningfully horizontal intent
+      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+      if (Math.abs(e.deltaX) < 15) return;
+
+      e.preventDefault();
+
+      if (wheelCooldown.current) return;
+      wheelCooldown.current = true;
+
+      if (e.deltaX > 0) {
+        moveRight();
+      } else {
+        moveLeft();
+      }
+
+      setTimeout(() => {
+        wheelCooldown.current = false;
+      }, 500);
+    };
+
+    node.addEventListener('wheel', handleWheel, { passive: false });
+    return () => node.removeEventListener('wheel', handleWheel);
+  }, [moveLeft, moveRight]);
 
   return (
     <div className="portfolio">
@@ -62,26 +112,32 @@ const Portfolio = () => {
           </div>
         )}
 
-       <div className="portfolio_card_wrapper">
-  <AnimatePresence mode="wait">
-    <motion.div
-      key={activeIndex}
-      className="portfolio_card"
-      initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
-      transition={{ duration: 0.5, type: "spring" }}
-    >
-      <div className="person">{cardsData[activeIndex].name}</div>
-      <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} />
-      <div className="place">
-        <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
-        <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
-        <i className="fa-solid fa-circle-arrow-right"></i>
-      </div>
-    </motion.div>
-  </AnimatePresence>
-</div>
+        <div className="portfolio_card_wrapper" ref={wrapperRef}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              className="portfolio_card"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.15}
+              onDragEnd={handleDragEnd}
+              initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
+              transition={{ duration: 0.5, type: "spring" }}
+              style={{ cursor: 'grab', touchAction: 'pan-y' }}
+              whileDrag={{ cursor: 'grabbing' }}
+            >
+              <div className="person">{cardsData[activeIndex].name}</div>
+              <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} draggable={false} />
+              <div className="place">
+                <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
+                <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
+                <i className="fa-solid fa-circle-arrow-right"></i>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {activeIndex < total - 1 && (
           <div className="moveright iconactive" onClick={moveRight}>
