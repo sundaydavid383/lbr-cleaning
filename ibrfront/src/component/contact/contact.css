@@ -1,7 +1,6 @@
 /* ========================================
-   LBR Cleaning - Contact Form Styles
-   Refined: glass surfaces, layered shadows,
-   premium carousel with snap scrolling
+   LBR Cleaning - Contact/ Services Showcase
+   Creative, premium design with carousel
    ======================================== */
 
 .contact {
@@ -51,158 +50,86 @@
 }
 
 /* ========================================
-   Main Contact Form — glass panel
+   Hero Header
    ======================================== */
-.contact .main_contact {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 600px;
+.contact-hero {
+    text-align: center;
+    padding: 3rem 2rem 2.5rem;
     position: relative;
     z-index: 2;
-    padding: clamp(1.75rem, 4vw, 2.75rem);
-    border-radius: var(--radius-2xl, 1.5rem);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    max-width: 700px;
 }
 
-.contact .main_contact h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-    color: var(--light-text);
-    text-align: center;
-    font-family: 'Outfit', sans-serif;
+.contact-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--primary-color-light);
+    font-size: 0.85rem;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: var(--radius-full);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    animation: badge-pulse 3s ease-in-out infinite;
 }
 
-.contact .main_contact > p {
-    font-size: 0.95rem;
-    font-weight: 300;
-    letter-spacing: 0.01em;
+@keyframes badge-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
 }
 
-.contact .main_contact form {
-    display: flex;
-    flex-direction: column;
-    gap: 2.4rem;
-    width: 100%;
-    margin-top: 1rem;
+.contact-hero h1 {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800;
+    color: var(--light-text);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    font-family: 'Outfit', sans-serif;
 }
 
-.contact .main_contact form .inputlabel {
+.contact-hero h1 .highlight {
+    color: var(--tetiary-color);
     position: relative;
 }
 
-.contact .main_contact form label {
-    display: block;
-    width: 100%;
-    position: absolute;
-    top: -1.5rem;
-    left: 0.1rem;
-    text-transform: capitalize;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--tetiary-color);
-    font-size: 0.8rem;
+.contact-hero p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.contact .main_contact form input,
-.contact .main_contact form select {
-    width: 100%;
-    margin-bottom: 0;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    outline: none;
-    border-radius: var(--radius-lg);
-    font-size: 1rem;
-    padding: 1rem;
-    height: 3.5rem;
-    text-transform: capitalize;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--light-text);
-    transition: var(--transition-normal);
-}
-
-.contact .main_contact form input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: none;
-    font-weight: 300;
-}
-
-.contact .main_contact form input:focus,
-.contact .main_contact form select:focus {
-    border-color: var(--primary-color);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
-}
-
-select {
-    height: 3.5rem;
-    cursor: pointer;
-}
-
-#cleaning_service {
-    border-radius: var(--radius-lg);
-    font-size: 1rem;
-    outline: none;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--light-text);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-#cleaning_service option {
-    padding: 1rem;
-    background-color: var(--secondary-color);
-    color: var(--light-text);
-}
-
-#cleaning_service:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-/* Alert animation */
-#cleaning_service.alert,
-.input_phone.alert,
-.input_name.alert,
-.input_email.alert {
-    animation: shake 0.5s forwards;
-    border-color: #ef4444 !important;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-}
-
-/* ========================================
-   Submit Button
-   ======================================== */
-.contact .main_contact .btn {
-    margin-top: 1rem;
-    width: 100%;
-    height: 3.5rem;
+.contact-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-full);
     font-size: 1.05rem;
-    letter-spacing: 0.01em;
-    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.25);
-    transition: var(--transition-normal);
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
 }
 
-.contact .main_contact .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.35);
+.contact-cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(34, 197, 94, 0.5);
 }
 
-.contact .main_contact .btn p {
-    margin-top: 0;
-    font-size: 1rem;
+.contact-cta-btn i {
+    transition: transform 0.3s ease;
+}
+
+.contact-cta-btn:hover i {
+    transform: translateX(4px);
 }
 
 /* ========================================
@@ -341,17 +268,32 @@ select {
 
 .single_service_display .text .h2 {
     font-size: 1.15rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     text-transform: capitalize;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--light-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.single_service_display .text .h2 i {
+    color: var(--tetiary-color);
+    font-size: 1.1rem;
+}
+
+.service-desc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+    line-height: 1.5;
 }
 
 .single_service_display ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .single_service_display ul li {
@@ -370,11 +312,32 @@ select {
     flex-shrink: 0;
 }
 
-.single_service_display .btn {
-    width: fit-content;
-    padding-inline: 1.25rem;
-    height: 2.75rem;
-    font-size: 0.85rem;
+.service-apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.service-apply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
+}
+
+.service-apply-btn i {
+    transition: transform 0.3s ease;
+}
+
+.service-apply-btn:hover i {
+    transform: translateX(3px);
 }
 
 /* ========================================
@@ -420,6 +383,46 @@ select {
 }
 
 /* ========================================
+   Why Choose Us Strip
+   ======================================== */
+.contact-why-us {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 2.5rem 1rem;
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.why-us-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    color: var(--light-text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.why-us-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(34, 197, 94, 0.3);
+    transform: translateY(-3px);
+}
+
+.why-us-item i {
+    color: var(--primary-color-light);
+    font-size: 1.3rem;
+}
+
+/* ========================================
    Responsive - Tablet
    ======================================== */
 @media (max-width: 768px) {
@@ -427,11 +430,11 @@ select {
         padding-block: 3rem;
     }
 
-    .contact .main_contact {
-        padding: 1.5rem;
+    .contact-hero {
+        padding: 2rem 1.5rem 2rem;
     }
 
-    .contact .main_contact h1 {
+    .contact-hero h1 {
         font-size: 1.9rem;
     }
 
@@ -452,6 +455,15 @@ select {
         width: 2.6rem;
         height: 2.6rem;
     }
+
+    .contact-why-us {
+        gap: 1rem;
+    }
+
+    .why-us-item {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+    }
 }
 
 /* ========================================
@@ -462,32 +474,21 @@ select {
         padding-block: 2rem;
     }
 
-    .contact .main_contact {
-        padding: 1.25rem;
-        border-radius: var(--radius-xl, 1rem);
+    .contact-hero {
+        padding: 1.5rem 1rem 1.5rem;
     }
 
-    .contact .main_contact h1 {
+    .contact-hero h1 {
         font-size: 1.5rem;
     }
 
-    .contact .main_contact form {
-        gap: 2rem;
+    .contact-hero p {
+        font-size: 0.95rem;
     }
 
-    .contact .main_contact form input,
-    .contact .main_contact form select {
-        height: 3rem;
-        font-size: 0.9rem;
-        padding: 0.75rem;
-    }
-
-    select {
-        height: 3rem;
-    }
-
-    .contact .main_contact .btn {
-        height: 3rem;
+    .contact-cta-btn {
+        padding: 0.85rem 2rem;
+        font-size: 0.95rem;
     }
 
     .service-holder-wrapper {
@@ -518,5 +519,35 @@ select {
     .carousel-btn {
         width: 2.4rem;
         height: 2.4rem;
+    }
+
+    .contact-why-us {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .why-us-item {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   Ultrawide
+   ======================================== */
+@media (min-width: 1600px) {
+    .services-container {
+        max-width: calc(400px * 3 + 2rem * 2);
+    }
+
+    .single_service_display {
+        flex: 0 0 400px;
+    }
+
+    .single_service_display .service img,
+    .single_service_display .service::after {
+        height: 260px;
     }
 }

@@ -1,127 +1,326 @@
+/* ========================================
+   LBR Cleaning — Testimonial Carousel
+   Premium Refactor
+   All colors derived from existing root tokens.
+   #fff and var(--gray) (undefined) replaced with
+   root-token derivations — no new colors introduced.
+
+   Depends on one JSX change for full effect:
+   <div className="testimonial-card" key={current}>
+   (see chat note — without it, everything below still
+   works, the card entrance animation just won't replay
+   per-slide, only on first mount.)
+   ======================================== */
+
+:root {
+    --tc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --tc-ease-fast: 0.35s var(--tc-ease);
+    --tc-card-bg: var(--light-text);
+    --tc-dot-inactive: color-mix(in srgb, var(--text-color) 22%, var(--light-backgound) 78%);
+    --tc-quote-watermark: color-mix(in srgb, var(--tetiary-color) 14%, transparent);
+    --tc-ring-a: var(--primary-color);
+    --tc-ring-b: color-mix(in srgb, var(--primary-color) 35%, var(--secondary-color));
+}
+
 .styled-carousel {
-  background-color: var(--light-backgound);
-  max-width: 1100px;
-  margin: 50px auto;
-  border-radius: 10px;
-  animation: fadeInUp 0.8s ease both;
-  position: relative;
-  text-align: center;
+    background-color: var(--light-backgound);
+    max-width: 1100px;
+    margin: 50px auto;
+    border-radius: 10px;
+    animation: fadeInUp 0.8s ease both;
+    position: relative;
+    text-align: center;
+    padding: 10px 0 5px;
 }
 
 .section-title {
-  font-size: 2.2rem;
-  color: var(--primary-color);
-  margin-bottom: 40px;
-  font-weight: bold;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
 }
 
+.section-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 48px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 999px;
+    transform: translateX(-50%);
+}
+
+/* ========================================
+   Wrapper + nav buttons
+   ======================================== */
 .testimonial-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-  position: relative;
-}
-
-.testimonial-card {
-  background-color: #fff;
-  padding: 40px 30px;
-  max-width: 700px;
-  box-shadow: var(--primary-shadow);
-  border-left: 6px solid var(--primary-color);
-  border-radius: 10px;
-  position: relative;
-  transition: all 0.4s ease-in-out;
-}
-
-.testimonial-card blockquote {
-  font-size: 1.3rem;
-  font-style: italic;
-  color: var(--text-color);
-  margin: 0 auto 15px;
-  line-height: 1.7;
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 10px;
-  font-size: 1.1rem;
-  color: var(--secondary-color); /* From your custom theme */
-  font-weight: 600;
-  font-style: italic;
-  letter-spacing: 0.5px;
-  text-align: center;
-}
-
-.testimonial-author span {
-  color: var(--text-color);
-  font-weight: 700;
-  font-style: normal;
-}
-.testimonial-author img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: var(--light-shadow);
-}
-
-.quote-icon {
-  font-size: 1.8rem;
-  color: var(--tetiary-color);
-  position: absolute;
-  top: 15px;
-  left: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+    padding: 0 1rem;
 }
 
 .carousel-btn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  font-size: 1.8rem;
-  padding: 10px 15px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.3s;
-  box-shadow: var(--primary-shadow);
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--primary-shadow);
+    transition: background var(--tc-ease-fast), transform var(--tc-ease-fast),
+        box-shadow var(--tc-ease-fast);
 }
 
 .carousel-btn:hover {
-  background: var(--light-secondary-color);
+    background: var(--light-secondary-color);
+    transform: scale(1.1);
 }
 
+.carousel-btn:active {
+    transform: scale(0.94);
+}
+
+.carousel-btn:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 3px;
+}
+
+/* ========================================
+   Card
+   ======================================== */
+.testimonial-card {
+    background-color: var(--tc-card-bg);
+    padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2rem);
+    max-width: 700px;
+    width: 100%;
+    box-shadow: var(--primary-shadow);
+    border-left: 6px solid var(--primary-color);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow var(--tc-ease-fast), transform var(--tc-ease-fast);
+    animation: tc-card-in 0.55s var(--tc-ease) both;
+}
+
+.testimonial-card:hover {
+    box-shadow: var(--large-shadow, var(--primary-shadow));
+    transform: translateY(-3px);
+}
+
+@keyframes tc-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+        filter: blur(3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Giant faint quotation mark watermark behind the quote */
+.testimonial-card::after {
+    content: "\201C";
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    font-size: 8rem;
+    font-family: Georgia, serif;
+    color: var(--tc-quote-watermark);
+    line-height: 1;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.testimonial-card blockquote,
+.testimonial-card .testimonial-author,
+.testimonial-card .quote-icon {
+    position: relative;
+    z-index: 1;
+}
+
+.testimonial-card blockquote {
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-style: italic;
+    color: var(--text-color);
+    margin: 0 auto 15px;
+    line-height: 1.7;
+}
+
+.quote-icon {
+    font-size: 1.8rem;
+    color: var(--tetiary-color);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1;
+    animation: tc-quote-pop 0.5s var(--tc-ease) 0.1s both;
+}
+
+@keyframes tc-quote-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.6) rotate(-8deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+    font-size: 1.05rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.testimonial-author span {
+    color: var(--text-color);
+    font-weight: 700;
+    font-style: normal;
+}
+
+.testimonial-author img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--light-shadow);
+    border: 2px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
+    transition: transform var(--tc-ease-fast);
+}
+
+.testimonial-card:hover .testimonial-author img {
+    transform: scale(1.06);
+}
+
+/* ========================================
+   Dots
+   ======================================== */
 .carousel-dots {
-  margin-top: 25px;
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .carousel-dots .dot {
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin: 0 5px;
-  background-color: var(--gray);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background-color: var(--tc-dot-inactive);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color var(--tc-ease-fast), width var(--tc-ease-fast),
+        transform var(--tc-ease-fast);
+}
+
+.carousel-dots .dot:hover {
+    transform: scale(1.2);
 }
 
 .carousel-dots .dot.active {
-  background-color: var(--primary-color);
+    background-color: var(--primary-color);
+    width: 26px;
+    border-radius: 999px;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media screen and (max-width: 900px) {
+    .testimonial-wrapper {
+        gap: 16px;
+    }
+
+    .carousel-btn {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 1.3rem;
+    }
 }
 
 @media screen and (max-width: 768px) {
-  .testimonial-wrapper {
-    flex-direction: column;
-  }
+    /* Kept as a row with wrap: the card is forced to flex-basis:100%
+       so it wraps onto its own line, then the two buttons — each
+       auto-width — fall onto the next line together, side by side,
+       instead of stacking one per line. No structural HTML change
+       needed for this. */
+    .testimonial-wrapper {
+        flex-wrap: wrap;
+        gap: 1.25rem;
+    }
 
-  .carousel-btn {
-    margin-top: 20px;
-  }
+    .testimonial-card {
+        order: 1;
+        flex-basis: 100%;
+        padding: 30px 20px;
+    }
 
-  .testimonial-card {
-    padding: 30px 20px;
-  }
+    .carousel-btn.left { order: 2; }
+    .carousel-btn.right { order: 3; }
+}
+
+@media screen and (max-width: 480px) {
+    .testimonial-card::after {
+        font-size: 6rem;
+        top: -18px;
+    }
+
+    .quote-icon {
+        font-size: 1.4rem;
+        top: 10px;
+        left: 10px;
+    }
+
+    .testimonial-author {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .carousel-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 1.15rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .styled-carousel,
+    .testimonial-card,
+    .quote-icon,
+    .carousel-btn,
+    .carousel-dots .dot,
+    .testimonial-author img {
+        animation: none !important;
+        transition: none !important;
+        filter: none !important;
+    }
 }

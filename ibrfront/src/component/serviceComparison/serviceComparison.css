@@ -1,0 +1,179 @@
+/* filepath: ibrfront/src/component/serviceComparison/serviceComparison.css */
+.service-comparison {
+  padding: 6rem 2rem;
+  background: var(--background-color-alt);
+}
+
+.service-comparison-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.comparison-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 3.5rem;
+}
+
+.comparison-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--box-shadow);
+  background: white;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.comparison-table th {
+  background: var(--light-backgound);
+  font-weight: 600;
+  color: var(--secondary-color);
+  position: relative;
+}
+
+.feature-col {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.popular-col {
+  background: rgba(22, 163, 74, 0.04);
+  border-top: 3px solid var(--primary-color);
+}
+
+.popular-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.5rem;
+}
+
+.plan-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 0.25rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.plan-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.check-col .check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--primary-color);
+  border-radius: 50%;
+  font-size: 0.85rem;
+}
+
+.check-col .times-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: rgba(120, 113, 108, 0.1);
+  color: var(--text-color-muted);
+  border-radius: 50%;
+  font-size: 0.85rem;
+}
+
+.comparison-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-color-muted);
+  font-size: 0.95rem;
+}
+
+.text-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.text-link:hover {
+  border-bottom-color: var(--primary-color);
+}
+
+.comparison-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.comparison-table tbody tr:hover {
+  background: rgba(22, 163, 74, 0.02);
+}
+
+@media (max-width: 1024px) {
+  .comparison-table th,
+  .comparison-table td {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .service-comparison {
+    padding: 4rem 1rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.85rem;
+    font-size: 0.9rem;
+  }
+  .comparison-header {
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-comparison {
+    padding: 3rem 0.5rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  .plan-name {
+    font-size: 1rem;
+  }
+  .plan-price {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .service-comparison-container {
+    max-width: 1200px;
+  }
+}

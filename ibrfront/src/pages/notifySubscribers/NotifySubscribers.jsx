@@ -19,13 +19,12 @@ const NotifySubscribers = () => {
       setLoading(true);
       const res = await axios.post(`${import.meta.env.VITE_API_URL}api/notify-subscribers`, { message });
 
-      // ✅ use backend message
       setAlert({
         message: res.data.message || "Message sent successfully",
         type: "success",
       });
 
-      setMessage(""); // clear textarea
+      setMessage("");
     } catch (err) {
       setAlert({
         message: err.response?.data?.message || "Something went wrong",
@@ -38,26 +37,52 @@ const NotifySubscribers = () => {
   };
 
   return (
-    <div className="notify-subscribers">
-      {/* ✅ Show alert */}
+    <div className="notify-subscribers-page">
       <CustomAlert
         message={alert.message}
         type={alert.type}
         onClose={() => setAlert({ message: "", type: "success" })}
       />
 
-      {/* ✅ Show loader if sending */}
       {loading && <Loading message="Sending message to subscribers..." />}
 
-      <h2>Notify All Subscribers</h2>
-      <textarea
-        placeholder="Type your message here..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        rows={5}
-      ></textarea>
+      <div className="notify-hero">
+        <div className="notify-hero-content">
+          <span className="notify-tag">Admin Tool</span>
+          <h1>Broadcast Message</h1>
+          <p>
+            Send a message to all active newsletter subscribers. Use this to share
+            promotions, updates, or important announcements.
+          </p>
+        </div>
+      </div>
 
-      <button onClick={handleSend}>Send Message</button>
+      <div className="notify-guidelines">
+        <h3>Best Practices</h3>
+        <ul>
+          <li>Keep messages concise and actionable</li>
+          <li>Include a clear call-to-action or next step</li>
+          <li>Send during business hours for better engagement</li>
+          <li>Avoid sending too frequently to prevent unsubscribes</li>
+        </ul>
+      </div>
+
+      <div className="notify-card">
+        <h2>Compose Your Message</h2>
+        <textarea
+          placeholder="Type your message here..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={6}
+          aria-label="Message to subscribers"
+        ></textarea>
+        <div className="notify-actions">
+          <button onClick={handleSend} disabled={loading || !message.trim()}>
+            {loading ? "Sending..." : "Send to All Subscribers"}
+          </button>
+          <span className="char-count">{message.length} characters</span>
+        </div>
+      </div>
     </div>
   );
 };

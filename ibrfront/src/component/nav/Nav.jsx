@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./nav.css"
 import houseimage from "../../assets/house-cleaning.png";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Nav = () => {
   const [linkActive, setLinkActive] = useState(false)
   const [active, setActive] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,13 +28,12 @@ const Nav = () => {
     };
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setLinkActive(false);
   }, [location]);
 
   const isActive = (path) => location.pathname === path;
-    
+
   return (
     <div className={`nav ${active ? "active" : ""}`}>
       <div className="nav-upper">
@@ -48,29 +49,33 @@ const Nav = () => {
           </a>
         </div>
         
-        <div className="social-platforms">
-          <a className="iconactive" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <i className="fa-brands fa-facebook-f"></i>
-          </a>
-          <a className="iconactive" href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-            <i className="fa-brands fa-twitter"></i>
-          </a>
-          <a className="iconactive" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <i className="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a className="iconactive" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <i className="fa-brands fa-instagram"></i>
-          </a>
-          <a className="iconactive" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-            <i className="fa-brands fa-youtube"></i>
-          </a>
+        <div className="nav-upper-actions">
+          {isAuthenticated ? (
+            <div className="auth-buttons logged-in">
+              <span className="user-greeting">
+                <i className="fa-solid fa-circle-check"></i>
+                {user?.name || "User"}
+              </span>
+              <button onClick={logout} className="btn-logout">
+                <i className="fa-solid fa-right-from-bracket"></i> Sign Out
+              </button>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <Link to="/login" className="btn-login">
+                <i className="fa-solid fa-right-to-bracket"></i> Sign In
+              </Link>
+              <Link to="/signup" className="btn-signup">
+                <i className="fa-solid fa-user-plus"></i> Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       
       <div className="nav-lower">
         <Link to="/" className="logo" aria-label="LBR Cleaning Home">
           <img src={houseimage} alt="LBR Cleaning Services Logo" />
-          
         </Link>
         
         <button 
@@ -111,11 +116,25 @@ const Nav = () => {
             <span>Blog</span>
             <div></div>
           </Link>
+          
+          {isAuthenticated && (
+            <Link 
+              className={isActive("/notify") ? "active" : ""} 
+              to="/notify"
+            >
+              <span>Notify</span>
+              <div></div>
+            </Link>
+          )}
         </nav>
         
-        <Link to="/contact" className="btn">
-          <p>Contact Us <i className="fa-solid fa-arrow-right-long"></i></p>
-        </Link>
+        {!isAuthenticated && (
+          <Link to="/apply" className="btn apply-btn">
+            <p>
+              Apply <i className="fa-solid fa-arrow-right-long"></i>
+            </p>
+          </Link>
+        )}
       </div>
       
       {/* Mobile overlay */}

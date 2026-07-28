@@ -1,8 +1,17 @@
 import React from "react";
 import "./video.css";
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes } from "react-icons/fa";
 
 const Video = ({ setSeeVideo }) => {
+  useEffect(() => {
+  document.body.style.overflow = "hidden";
+  const handleKey = (e) => e.key === "Escape" && setSeeVideo(false);
+  window.addEventListener("keydown", handleKey);
+  return () => {
+    document.body.style.overflow = "";
+    window.removeEventListener("keydown", handleKey);
+  };
+}, [setSeeVideo]);
   return (
     <div className="video">
       <div
@@ -14,6 +23,7 @@ const Video = ({ setSeeVideo }) => {
         <FaTimes />
       </div>
       <iframe
+        onClick={(e) => e.stopPropagation()}
         width="800"
         height="427"
         src="https://www.youtube.com/embed/pUWXTY_lmns?autoplay=1"

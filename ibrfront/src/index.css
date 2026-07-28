@@ -166,6 +166,11 @@ html {
     }
 }
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes darkiconhover {
     0% {
         box-shadow: 0 0 1px 0px rgba(197, 194, 19, 0.1);

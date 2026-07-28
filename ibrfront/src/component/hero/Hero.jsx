@@ -153,9 +153,9 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
               <p key={i}>{p}</p>
             ))}
           </div>
-          <Link to="/contact" className="btn">
+          <Link to="/apply" className="btn">
             <p>
-              contact us <i className="fa-solid fa-arrow-right-long"></i>
+              Apply Now <i className="fa-solid fa-arrow-right-long"></i>
             </p>
           </Link>
         </div>

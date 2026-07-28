@@ -3,6 +3,9 @@ import "./service.css";
 import Deal from '../../component/deals/Deal'
 import Hero from '../../component/hero/Hero'
 import ServiceSection from '../../component/serviceSection/ServiceSection'
+import ServiceProcess from '../../component/serviceProcess/ServiceProcess'
+import ServiceComparison from '../../component/serviceComparison/ServiceComparison'
+import ServiceGuarantee from '../../component/serviceGuarantee/ServiceGuarantee'
 import imageBac from "../../assets/cleaningbackground.jpg"
 import star from  "../../assets/star.png"
 import spark from  "../../assets/spark.png"
@@ -92,7 +95,7 @@ const features = [
       "Need regular cleaning? Choose weekly, bi-weekly, or monthly plans with reliable quality."
   }
 ];
-const section = [ 
+const section = [
   {
     questions: "Our Cleaning Expertise",
     header: "Premium Cleaning",
@@ -104,7 +107,7 @@ const section = [
     sectionimage: heroimage2,
     sectionimageStar: star,
     sectionimageSpark: spark,
-    talks: ["Reach out", "Let’s help you"],
+    talks: ["Reach out", "Let's help you"],
     talksReport: "+234 813 456 7890"
   },
   {
@@ -140,7 +143,7 @@ const section = [
     header: "Reliable Service",
     headerspan: "With a Personal Touch",
     ps: [
-      "We’re your trusted partners—punctual, professional, and passionate.",
+      "We're your trusted partners—punctual, professional, and passionate.",
       "Clients love us for reliability, great service, and consistent results."
     ],
     sectionimage: heroimage4,
@@ -157,7 +160,7 @@ const services = [
     title: "Home Cleaning",
     image: service1,
     description:
-      "Restore the sparkle and peace of your home with our professional residential cleaning. From living rooms to bedrooms, we’ve got you covered.",
+      "Restore the sparkle and peace of your home with our professional residential cleaning. From living rooms to bedrooms, we've got you covered.",
     details: [
       "Living room vacuuming & dusting",
       "Bedroom cleaning & arrangement",
@@ -254,7 +257,10 @@ export default function Services() {
   return (
     <>
         <Hero section={section} features={features} backgroundImage={backgroundImage}  backgroundVideo={null}/>
+        <ServiceProcess />
         <ServiceSection services={services}/>
+        <ServiceComparison />
+        <ServiceGuarantee />
          <Deal deal_Intro={deal_Intro} plans={plans}/>
-  </>);
+   </>);
 }

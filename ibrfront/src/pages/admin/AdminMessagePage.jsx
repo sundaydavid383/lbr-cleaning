@@ -2,74 +2,72 @@ import React, { useState, useEffect } from "react";
 import "./adminMessagePage.css";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
+import { apiFetch } from "../../utils/api";
+
 const LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutes in ms
 
 const AdminMessagePage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState(() => localStorage.getItem("adminToken"));
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem('adminToken');
-    return token ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } : { 'Content-Type': 'application/json' };
-  };
+  // If we already have a token from a previous session, skip the login screen
+  useEffect(() => {
+    if (token) setAuthenticated(true);
+  }, [token]);
 
+  // Check lockout on mount
+  useEffect(() => {
+    const lockoutTime = localStorage.getItem("adminLockoutTime");
 
-  // Check lockOut on mount
-useEffect(() => {
-  const lockoutTime = localStorage.getItem('adminLockoutTime');
+    if (lockoutTime) {
+      const interval = setInterval(() => {
+        const timePassed = Date.now() - parseInt(lockoutTime);
+        const remaining = LOCKOUT_DURATION - timePassed;
 
-  if (lockoutTime) {
-    const interval = setInterval(() => {
-      const timePassed = Date.now() - parseInt(lockoutTime);
-      const remaining = LOCKOUT_DURATION - timePassed;
+        if (remaining > 0) {
+          setTimeLeft(remaining);
+          setDisabled(true);
+        } else {
+          clearInterval(interval);
+          setTimeLeft(0);
+          setDisabled(false);
+          localStorage.removeItem("adminLockoutTime");
+        }
+      }, 1000);
 
-      if (remaining > 0) {
-        setTimeLeft(remaining);
-        setDisabled(true);
-      } else {
-        clearInterval(interval);
-        setTimeLeft(0);
-        setDisabled(false);
-        localStorage.removeItem('adminLockoutTime');
-      }
-    }, 1000); // update every second
+      return () => clearInterval(interval);
+    }
+  }, []);
 
-    return () => clearInterval(interval);
-  }
-}, []);
-
-const minutes = Math.floor(timeLeft / 60000);
-const seconds = Math.floor((timeLeft % 60000) / 1000);
-
+  const minutes = Math.floor(timeLeft / 60000);
+  const seconds = Math.floor((timeLeft % 60000) / 1000);
 
   const login = async () => {
-    if (disabled) return
+    if (disabled) return;
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/admin-login`, {
+      const { data } = await apiFetch("/api/admin-login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: { email, password },
       });
 
-      const data = await res.json();
       if (data.success) {
         setAuthenticated(true);
-        localStorage.setItem('adminToken', data.token);
+        setToken(data.token);
+        localStorage.setItem("adminToken", data.token);
         setAlert({ message: "Authentication successful!", type: "success" });
-      }
-      else {
-        if (data && data.inputDisable) {
+      } else {
+        if (data.inputDisable) {
           setDisabled(true);
-          localStorage.setItem('adminLockoutTime', Date.now().toString());
-          setAlert({ message: "Too many failed attempts, please try again later", type: "error" });
+          localStorage.setItem("adminLockoutTime", Date.now().toString());
         }
         setAlert({ message: data.message || "Wrong password!", type: "error" });
       }
@@ -86,18 +84,22 @@ const seconds = Math.floor((timeLeft % 60000) / 1000);
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/send-message`, {
+      const { data } = await apiFetch("/api/send-message", {
         method: "POST",
-        headers: getAuthHeader(),
-        body: JSON.stringify({ message }),
+        body: { message },
+        token,
       });
 
-      const data = await res.json();
       if (data.success) {
-        setAlert({ message: `Message sent to ${data.count} people.`, type: "success" });
+        setAlert({ message: data.message, type: "success" });
         setMessage("");
-      }
-      else {
+      } else {
+        if (data.message === "Invalid or expired token") {
+          // Session expired — send back to the login screen
+          setAuthenticated(false);
+          setToken(null);
+          localStorage.removeItem("adminToken");
+        }
         setAlert({ message: data.message || "Failed to send message.", type: "error" });
       }
     } catch (err) {
@@ -134,11 +136,12 @@ const seconds = Math.floor((timeLeft % 60000) / 1000);
             disabled={disabled}
           />
           <button onClick={login} disabled={disabled}>Login</button>
-        {disabled && (
-  <p style={{ color: 'red' }}>
-  Wrong attempts locked input. Try again in {minutes}m {seconds}s.
-</p>
-)}</div>
+          {disabled && (
+            <p style={{ color: "red" }}>
+              Wrong attempts locked input. Try again in {minutes}m {seconds}s.
+            </p>
+          )}
+        </div>
       ) : (
         <div className="message-box">
           <h2>Broadcast Message</h2>

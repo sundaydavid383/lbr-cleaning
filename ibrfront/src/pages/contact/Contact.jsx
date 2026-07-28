@@ -4,6 +4,7 @@ import "./contact.css";
 import axios from "axios";
 import Loading from "../../component/loading/Loading";
 import Hero from "../../component/hero/Hero";
+import TrustSection from "../../component/trustSection/TrustSection";
 import bgImage from "../../assets/cleaningbackground.jpg";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import backgroundVideo from "../../assets/cleaningvideo1.mp4";
@@ -218,6 +219,8 @@ const Contact = () => {
           <p>We serve most of Lagos. Contact us to check for availability in your location.</p>
         </div>
       </section>
+
+      <TrustSection />
 
       <section className="encouragement-banner">
         <h3>Not sure where to start?</h3>

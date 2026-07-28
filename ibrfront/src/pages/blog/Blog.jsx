@@ -1,7 +1,10 @@
 // NewsBlog.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Loading from "../../component/loading/Loading";
 import BlogModal from "../../component/blogModal/BlogModal";
+import FeaturedPost from "../../component/featuredPost/FeaturedPost";
+import CategoryFilter from "../../component/categoryFilter/CategoryFilter";
+import NewsletterSignup from "../../component/newsletterSignup/NewsletterSignup";
 import blog1 from "../../assets/blog1.jpg"
 import blog2 from "../../assets/blog2.jpg"
 import blog3 from "../../assets/blog3.jpg"
@@ -565,20 +568,34 @@ const [modalOpen, setModalOpen] = useState(false);
   const [useManual, setUseManual] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState("All");
 
   const blogsPerPage = 6;
 
+  const allCategories = useMemo(() => {
+    const cats = new Set(["All"]);
+    manualArticles.forEach((a) => a.tags?.forEach((t) => cats.add(t)));
+    return Array.from(cats);
+  }, []);
 
-const filteredArticles = useManual
-  ? searchTerm.trim()
-    ? articles.filter(
+  const filteredArticles = useMemo(() => {
+    let result = useManual ? [...manualArticles] : articles;
+
+    if (activeCategory !== "All") {
+      result = result.filter((a) => a.tags?.includes(activeCategory));
+    }
+
+    if (useManual && searchTerm.trim()) {
+      result = result.filter(
         (a) =>
           a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           a.tags?.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase())) ||
           a.summary?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : articles
-  : articles;
+      );
+    }
+
+    return result;
+  }, [useManual, articles, searchTerm, activeCategory]);
    const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = filteredArticles.slice(indexOfFirstBlog, indexOfLastBlog);
@@ -660,6 +677,17 @@ useEffect(() => {
           {useManual ? "Showing Manual Blogs" : "Showing Live News"} — Click to Switch
         </button>
       </div>
+
+      {!loading && useManual && (
+        <>
+          <FeaturedPost articles={manualArticles} />
+          <CategoryFilter
+            categories={allCategories}
+            activeCategory={activeCategory}
+            onSelect={setActiveCategory}
+          />
+        </>
+      )}
 
       {loading ? (
         <Loading message="Fetching expert cleaning insights..." />
@@ -744,6 +772,7 @@ useEffect(() => {
     {modalOpen && selectedArticle && (
   <BlogModal article={selectedArticle} onClose={closeModal} />
 )}
+    <NewsletterSignup />
      </>
   );
 };

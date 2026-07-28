@@ -1,34 +1,115 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./contact.css";
-import validator from "validator";
-import CustomAlert from "../customAlert/CustomAlert";
+import { Link } from "react-router-dom";
 import Loading from "../loading/Loading";
 
-const Contact = ({ services }) => {
-  const [service, setService] = useState("Select a cleaning service");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [alertData, setAlertData] = useState({ message: "", type: "success" });
-  const [lastSubmitTime, setLastSubmitTime] = useState(null);
-  const scrollContainerRef = useRef(null);
+const services = [
+  {
+    id: 1,
+    title: "Home Cleaning",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-house-chimney",
+    description: "Professional residential cleaning for sparkling homes",
+    features: [
+      { icon: "fa-solid fa-broom", text: "Deep vacuuming and mopping" },
+      { icon: "fa-solid fa-spray-can", text: "Kitchen and bathroom sanitization" },
+      { icon: "fa-solid fa-window-maximize", text: "Interior window cleaning" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 2,
+    title: "Office Cleaning",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-briefcase",
+    description: "Hygienic workspace solutions for modern offices",
+    features: [
+      { icon: "fa-solid fa-desktop", text: "Workstation sanitization" },
+      { icon: "fa-solid fa-toilet", text: "Restroom deep cleaning" },
+      { icon: "fa-solid fa-mug-hot", text: "Breakroom cleanup" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 3,
+    title: "Carpet Cleaning",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-rug",
+    description: "Deep carpet cleaning that removes stains and odors",
+    features: [
+      { icon: "fa-solid fa-pump-soap", text: "Deep shampoo treatment" },
+      { icon: "fa-solid fa-wind", text: "Fast-drying extraction" },
+      { icon: "fa-solid fa-leaf", text: "Eco-friendly solutions" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 4,
+    title: "Window Cleaning",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-window-maximize",
+    description: "Streak-free crystal clear windows",
+    features: [
+      { icon: "fa-solid fa-sun", text: "Interior and exterior cleaning" },
+      { icon: "fa-solid fa-ruler", text: "Frame and sill detailing" },
+      { icon: "fa-solid fa-shield-halved", text: "Safe access methods" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 5,
+    title: "Move In/Out Cleaning",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-truck-moving",
+    description: "Thorough cleaning for stress-free moves",
+    features: [
+      { icon: "fa-solid fa-boxes-stacked", text: "Complete property sweep" },
+      { icon: "fa-solid fa-oven", text: "Appliance interior cleaning" },
+      { icon: "fa-solid fa-spray-can-sparkles", text: "Deodorizing and sanitizing" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 6,
+    title: "Sanitization Service",
+    image: "https://images.unsplash.com/photo-1584463717955-2d3c3c3c3c3c?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-hand-sparkles",
+    description: "Hospital-grade disinfection for your space",
+    features: [
+      { icon: "fa-solid fa-virus-slash", text: "99.9% germ elimination" },
+      { icon: "fa-solid fa-spray-can", text: "Fogging and misting" },
+      { icon: "fa-solid fa-baby", text: "Child and pet safe" },
+    ],
+    btnText: "Apply Now",
+  },
+  {
+    id: 7,
+    title: "Post-Construction Cleaning",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop",
+    icon: "fa-solid fa-building",
+    description: "Remove construction dust and debris",
+    features: [
+      { icon: "fa-solid fa-dust", text: "Fine dust removal" },
+      { icon: "fa-solid fa-paint-roller", text: "Paint and cement cleanup" },
+      { icon: "fa-solid fa-gem", text: "Surface polishing" },
+    ],
+    btnText: "Apply Now",
+  },
+];
 
-  const showAlert = (message, type = "success") => {
-    setAlertData({ message, type });
-    setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);
-  };
+const Contact = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollContainerRef = useRef(null);
 
   const nextService = () => {
     const container = scrollContainerRef.current;
     if (container) {
-      const cardWidth = container.children[0]?.offsetWidth || 380;
+      const cardWidth = container.children[0]?.offsetWidth || 340;
       const nextIndex = (activeIndex + 1) % services.length;
       setActiveIndex(nextIndex);
       container.scrollTo({
         left: nextIndex * cardWidth,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
@@ -36,12 +117,12 @@ const Contact = ({ services }) => {
   const prevService = () => {
     const container = scrollContainerRef.current;
     if (container) {
-      const cardWidth = container.children[0]?.offsetWidth || 380;
+      const cardWidth = container.children[0]?.offsetWidth || 340;
       const prevIndex = activeIndex - 1 < 0 ? services.length - 1 : activeIndex - 1;
       setActiveIndex(prevIndex);
       container.scrollTo({
         left: prevIndex * cardWidth,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
@@ -49,7 +130,7 @@ const Contact = ({ services }) => {
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (container) {
-      const cardWidth = container.children[0]?.offsetWidth || 380;
+      const cardWidth = container.children[0]?.offsetWidth || 340;
       const scrollLeft = container.scrollLeft;
       const newIndex = Math.round(scrollLeft / cardWidth);
       if (newIndex !== activeIndex && newIndex >= 0 && newIndex < services.length) {
@@ -61,132 +142,13 @@ const Contact = ({ services }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
     }
   }, [activeIndex]);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    
-    const selectlabel = document.getElementById("selectlabel");
-    const phonelabel = document.getElementById("phonelabel");
-    const emaillabel = document.getElementById("emaillabel");
-    const select = document.getElementById("cleaning_service");
-    const phoneinput = document.querySelector(".input_phone");
-    const nameinput = document.querySelector(".input_name");
-    const emailinput = document.querySelector(".input_email");
-
-    try {
-        setLoading(true);
-        
-        // Rate limiting check
-        const now = Date.now();
-        if (lastSubmitTime && now - lastSubmitTime < 2 * 60 * 1000) {
-          showAlert("Please wait 2 minutes before submitting another request. We appreciate your patience!", "warning");
-          return;
-        }
-
-        // Name validation
-        const names = name.trim().split(/\s+/);
-        if (names.length < 2 || names.some(n => n.length < 2)) {
-          nameinput?.classList.add("alert");
-          showAlert("Please enter both your first and last name", "warning");
-          setTimeout(() => nameinput?.classList.remove("alert"), 2000);
-          return;
-        }
-        
-        // Phone validation
-        if (phone.trim() === "") {
-          phoneinput?.classList.add("alert");
-          showAlert("Please provide your phone number so we can reach you", "warning");
-          setTimeout(() => phoneinput?.classList.remove("alert"), 2000);
-          return;
-        }
-        
-        if (!validator.isMobilePhone(phone, "any")) {
-          phoneinput?.classList.add("alert");
-          phonelabel.textContent = "Please enter a valid phone number";
-          showAlert("Please enter a valid phone number", "danger");
-          setTimeout(() => {
-            phoneinput?.classList.remove("alert");
-            phonelabel.textContent = "";
-          }, 2000);
-          return;
-        }
-        
-        // Email validation
-        if (email.trim() === "") {
-          emailinput?.classList.add("alert");
-          showAlert("Please provide your email address", "warning");
-          setTimeout(() => emailinput?.classList.remove("alert"), 2000);
-          return;
-        }
-        
-        if (!validator.isEmail(email)) {
-          emailinput?.classList.add("alert");
-          emaillabel.textContent = "Please enter a valid email";
-          showAlert("Please enter a valid email address", "danger");
-          setTimeout(() => {
-            emailinput?.classList.remove("alert");
-            emaillabel.textContent = "";
-          }, 2000);
-          return;
-        }
-        
-        // Service validation
-        if (service === "Select a cleaning service" || service === "Kind of cleaning service") {
-          selectlabel.textContent = "Please select a service";
-          select?.classList.add("alert");
-          showAlert("Please select the type of cleaning service you need", "warning");
-          setTimeout(() => {
-            select?.classList.remove("alert");
-            selectlabel.textContent = "";
-          }, 2000);
-          return;
-        }
-
-      // Submit booking
-      const response = await fetch(`${import.meta.env.VITE_API_URL}appointments/book`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, service }),
-      });
-      
-      const data = await response.json();
-      
-      setLastSubmitTime(Date.now());
-      
-      if (response.ok) {
-        showAlert("🎉 Fantastic! Your booking request has been sent successfully! We'll contact you within 24 hours to confirm your appointment.", "success");
-        // Clear form
-        setName("");
-        setPhone("");
-        setEmail("");
-        setService("Select a cleaning service");
-      } else {
-        showAlert(data.data || "Something went wrong. Please try again or call us directly.", "danger");
-      }
-      
-    } catch (error) {
-      showAlert("We're having trouble connecting. Please check your internet and try again, or call us directly!", "danger");
-      console.log("Error:", error.message);
-    }
-    finally {
-      setLoading(false);
-    };
-  }
-
   return (
     <div className="contact" id="contact">
-        {loading && <Loading message="We're processing your booking request..." />}
-        
-      <CustomAlert
-        message={alertData.message}
-        type={alertData.type}
-        onClose={() => setAlertData({ message: "", type: "success" })}
-      />
-
       {/* Decorative bubbles */}
       {[...Array(11)].map((_, i) => (
         <div className={`bubble b${i + 1}`} key={i}>
@@ -194,91 +156,23 @@ const Contact = ({ services }) => {
         </div>
       ))}
 
-      <div className="main_contact">
-        <h1>Book Your Cleaning Appointment</h1>
-        
-        <p style={{ color: 'rgba(255,255,255,0.8)', textAlign: 'center', marginBottom: '2rem' }}>
-          Fill out the form below and we'll get back to you within 24 hours
-        </p>
-        
-        <form onSubmit={onSubmit}>
-          <div className="inputlabel">
-            <label id="namelabel" htmlFor="input_name">Your Full Name</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="Enter your full name"
-              className="input_name"
-              id="input_name"
-              name="full name"
-              aria-label="Full name"
-            />
-          </div>
-          
-          <div className="inputlabel">
-            <label id="phonelabel" htmlFor="input_phone">Phone Number</label>
-            <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              type="tel"
-              placeholder="Your phone number"
-              className="input_phone"
-              id="input_phone"
-              name="phone number"
-              aria-label="Phone number"
-            />
-          </div>
-          
-          <div className="inputlabel">
-            <label id="emaillabel" htmlFor="input_email">Email Address</label>
-            <input
-              type="email"
-              value={email}
-              placeholder="your.email@example.com"
-              onChange={(e) => setEmail(e.target.value)}
-              className="input_email"
-              id="input_email"
-              name="email address"
-              aria-label="Email address"
-            />
-          </div>
-          
-          <div className="inputlabel">
-            <label id="selectlabel" htmlFor="cleaning_service">Cleaning Service</label>
-            <select
-              onChange={(e) => setService(e.target.value)}
-              value={service}
-              id="cleaning_service"
-              aria-label="Select cleaning service"
-            >
-              <option value="Select a cleaning service">Select a cleaning service</option>
-              <option value="residential">Residential Cleaning</option>
-              <option value="commercial">Commercial Cleaning</option>
-              <option value="deep_cleaning">Deep Cleaning</option>
-              <option value="move_in_move_out">Move In/Move Out Cleaning</option>
-              <option value="post_construction">Post-Construction Cleaning</option>
-              <option value="carpet_cleaning">Carpet Cleaning</option>
-              <option value="window_cleaning">Window Cleaning</option>
-              <option value="office_cleaning">Office Cleaning</option>
-            </select>
-          </div>
-           
-          {(name || phone || email) && (
-            <button type="submit" className="btn">
-              <p>
-                Book Now <i className="fa-solid fa-arrow-right-long"></i>
-              </p>
-            </button>
-          )}
-        </form>
+      {/* Hero Header */}
+      <div className="contact-hero">
+        <div className="contact-hero-content">
+          <span className="contact-badge">Our Services</span>
+          <h1>Professional Cleaning <span className="highlight">Solutions</span></h1>
+          <p>From homes to offices, we deliver spotless results with eco-friendly products and trained professionals.</p>
+          <Link to="/apply" className="contact-cta-btn">
+            Apply for Service <i className="fa-solid fa-arrow-right"></i>
+          </Link>
+        </div>
       </div>
 
       {/* Services Carousel */}
       <div className="contact_service">
         <div className="title">
-          <span>Our Services</span>
-          <h2>Professional Cleaning Services</h2>
+          <span>What We Offer</span>
+          <h2>Explore Our Cleaning Services</h2>
         </div>
 
         <div className="service-holder-wrapper">
@@ -288,29 +182,28 @@ const Contact = ({ services }) => {
 
           <div className="services-container" ref={scrollContainerRef}>
             {services.map((serviceItem, index) => (
-              <div className={`single_service_display ${index === activeIndex ? 'active' : ''}`} key={index}>
+              <div
+                className={`single_service_display ${index === activeIndex ? "active" : ""}`}
+                key={serviceItem.id}
+              >
                 <div className="service">
-                  <img
-                    src={serviceItem.image}
-                    alt={serviceItem.title}
-                    loading="lazy"
-                  />
+                  <img src={serviceItem.image} alt={serviceItem.title} loading="lazy" />
                   <div className="text">
-                    <div className="h2">{serviceItem.title}</div>
+                    <div className="h2">
+                      <i className={serviceItem.icon}></i> {serviceItem.title}
+                    </div>
+                    <p className="service-desc">{serviceItem.description}</p>
                     <ul>
-                      {serviceItem.features?.slice(0, 4).map((f, i) => (
+                      {serviceItem.features?.map((f, i) => (
                         <li key={i}>
                           <i className={f.icon}></i>
                           <p>{f.text}</p>
                         </li>
                       ))}
                     </ul>
-                    <div className="btn">
-                      <p>
-                        {serviceItem.btnText || "Book Now"}{" "}
-                        <i className="fa-solid fa-arrow-right-long"></i>
-                      </p>
-                    </div>
+                    <Link to="/apply" className="service-apply-btn">
+                      {serviceItem.btnText} <i className="fa-solid fa-arrow-right"></i>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -320,6 +213,26 @@ const Contact = ({ services }) => {
           <button onClick={nextService} className="carousel-btn right" aria-label="Next service">
             <i className="fa-solid fa-chevron-right"></i>
           </button>
+        </div>
+      </div>
+
+      {/* Why Choose Us Strip */}
+      <div className="contact-why-us">
+        <div className="why-us-item">
+          <i className="fa-solid fa-shield-halved"></i>
+          <span>Fully Insured</span>
+        </div>
+        <div className="why-us-item">
+          <i className="fa-solid fa-leaf"></i>
+          <span>Eco-Friendly</span>
+        </div>
+        <div className="why-us-item">
+          <i className="fa-solid fa-clock"></i>
+          <span>Flexible Schedule</span>
+        </div>
+        <div className="why-us-item">
+          <i className="fa-solid fa-star"></i>
+          <span>Satisfaction Guaranteed</span>
         </div>
       </div>
     </div>

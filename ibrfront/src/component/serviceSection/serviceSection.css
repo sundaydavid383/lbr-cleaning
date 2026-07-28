@@ -1,10 +1,17 @@
 /* ========================================
    LBR Cleaning — Service Section
-   Premium Refactor
+   Premium Refactor v2
    All colors derived from the existing :root tokens.
-   Signature element: a diagonal "shine sweep" across
-   each card on hover — a nod to the brand's actual
-   product (a clean, polished surface catching light).
+   No new colors introduced.
+
+   Signature elements:
+   1. Scroll-driven reveal (animation-timeline: view())
+      — cards rise into place as the section enters view.
+   2. Conic-gradient "glow ring" border on hover — a rotating
+      light source, not a static glow.
+   3. Multi-layer shine sweep — two passes at different speeds
+      and opacities instead of one flat gradient.
+   4. Staggered per-letter reveal on the H1.
    ======================================== */
 
 :root {
@@ -21,6 +28,10 @@
     --svc-footer-bg: var(--secondary-color);
     --svc-footer-text: var(--light-text);
     --svc-shine: color-mix(in srgb, var(--light-text) 35%, transparent);
+    --svc-shine-soft: color-mix(in srgb, var(--light-text) 14%, transparent);
+    --svc-glow-a: var(--primary-color);
+    --svc-glow-b: color-mix(in srgb, var(--primary-color) 40%, var(--secondary-color));
+    --svc-glow-c: var(--secondary-color);
     --svc-ease: cubic-bezier(0.16, 1, 0.3, 1);
     --svc-ease-slow: 0.6s var(--svc-ease);
     --svc-ease-fast: 0.35s var(--svc-ease);
@@ -75,8 +86,6 @@
     padding-left: 1.9rem;
 }
 
-/* Small accent rule before the eyebrow — a quiet structural marker,
-   not a numbered sequence, since these services aren't ordinal */
 .service-header .first_te h2::before {
     content: "";
     position: absolute;
@@ -96,6 +105,27 @@
     letter-spacing: -0.01em;
     margin: 0;
     font-family: 'Outfit', sans-serif;
+    /* Split into spans via the React tweak below for the letter
+       stagger. If you don't want to touch the JSX, this line alone
+       still renders correctly — the animation just applies to the
+       whole heading instead of per-letter. */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.service-header .first_te h1 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+    animation: svc-letter-in 0.6s var(--svc-ease) forwards;
+    animation-delay: calc(var(--i, 0) * 35ms);
+}
+
+@keyframes svc-letter-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .service-header p {
@@ -121,10 +151,8 @@
 
 /* ========================================
    Service Card
-   ======================================== */
-.service-card {
+   ======================================== */.service-card {
     background: var(--svc-card-bg);
-    border: 1px solid var(--svc-card-border);
     border-radius: var(--radius-xl);
     overflow: hidden;
     width: 20rem;
@@ -134,6 +162,41 @@
     position: relative;
     perspective: 1500px;
     transform-style: preserve-3d;
+    border: 1px solid var(--svc-card-border);
+}
+
+/* Rotating conic-gradient glow ring, isolated on its own pseudo-
+   element so :hover animating it can never clobber the scroll-
+   reveal animation running on the card itself. */
+.service-card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--angle, 0deg), var(--svc-glow-a), var(--svc-glow-b), var(--svc-glow-c), var(--svc-glow-a));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity var(--svc-ease-fast);
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes svc-rotate-glow {
+    to { --angle: 360deg; }
+}
+
+.service-card:hover::after {
+    opacity: 1;
+    animation: svc-rotate-glow 3.5s linear infinite;
 }
 
 .service-card:hover {
@@ -141,11 +204,31 @@
     box-shadow: var(--large-shadow);
 }
 
+/* Scroll-driven entrance — untouched by hover now, since hover
+   never writes to `.service-card`'s own `animation` property. */
+@supports (animation-timeline: view()) {
+    .service-card {
+        opacity: 0;
+        transform: translateY(40px);
+        animation: svc-card-reveal 0.8s var(--svc-ease) both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+    }
+
+    @keyframes svc-card-reveal {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
 .service-image-wrap {
     position: relative;
     width: 100%;
     height: 300px;
     overflow: hidden;
+    z-index: 1;
 }
 
 .service-image {
@@ -153,31 +236,45 @@
     height: 300px;
     object-fit: cover;
     display: block;
-    transition: transform var(--svc-ease-slow);
+    transition: transform var(--svc-ease-slow), filter var(--svc-ease-slow);
+    filter: saturate(0.96);
 }
 
 .service-card:hover .service-image {
     transform: scale(1.08);
+    filter: saturate(1.08);
 }
 
-/* Signature element: a diagonal shine sweeps across the image
-   on hover, echoing a polished/cleaned surface catching light */
+
+/* Multi-layer shine: a fast, soft pass followed by a slower,
+   sharper one — reads as light catching a polished surface rather
+   than a single gradient sliding across */
+.service-image-wrap::before,
 .service-image-wrap::after {
     content: "";
     position: absolute;
     top: 0;
     left: -60%;
-    width: 40%;
+    width: 35%;
     height: 100%;
-    background: linear-gradient(
-        115deg,
-        transparent 0%,
-        var(--svc-shine) 50%,
-        transparent 100%
-    );
     transform: skewX(-20deg);
-    transition: left 0.9s var(--svc-ease);
     pointer-events: none;
+}
+
+.service-image-wrap::before {
+    background: linear-gradient(115deg, transparent 0%, var(--svc-shine-soft) 50%, transparent 100%);
+    transition: left 1.1s var(--svc-ease);
+    transition-delay: 0.05s;
+}
+
+.service-image-wrap::after {
+    background: linear-gradient(115deg, transparent 0%, var(--svc-shine) 50%, transparent 100%);
+    width: 18%;
+    transition: left 0.75s var(--svc-ease);
+}
+
+.service-card:hover .service-image-wrap::before {
+    left: 140%;
 }
 
 .service-card:hover .service-image-wrap::after {
@@ -194,6 +291,7 @@
     height: 200px;
     transform: translateY(50%);
     transition: transform var(--svc-ease-slow);
+    z-index: 1;
 }
 
 .service-card:hover .card-content {
@@ -262,10 +360,30 @@
     border-radius: var(--radius-md);
     text-decoration: none;
     letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
 }
 
-.card-link:hover {
+.card-link::after {
+    /* Quiet fill-sweep on hover — cheap to render, reads expensive */
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--primary-color-dark);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--svc-ease-fast);
+    z-index: 0;
+}
+
+.card-link:hover::after {
+    transform: scaleX(1);
+}
+
+.card-link p,
+.card-link > i {
+    position: relative;
+    z-index: 1;
 }
 
 .card-link p {
@@ -349,11 +467,17 @@
     .card-content ul li,
     .card-link,
     .card-link i,
-    .service-image-wrap::after {
+    .service-image-wrap::before,
+    .service-image-wrap::after,
+    .service-header .first_te h1 span {
         transition: none;
+        animation: none;
+        opacity: 1;
+        transform: none;
     }
 
     .service-card:hover {
         transform: none;
+        animation: none;
     }
 }

@@ -142,7 +142,7 @@
     margin: 0 auto;
     padding: 6rem 3rem 2.7rem;
     min-height: auto;
-    gap: 1.5rem;
+    gap: .5rem;
 }
 
 /* ========================================
@@ -222,9 +222,30 @@
     z-index: 20;
 }
 
+/* Soft glow behind the person cutout. It doubles as the loading
+   placeholder — since .person now reserves its own height via
+   aspect-ratio below, this glow occupies the right space
+   immediately instead of the box collapsing while the image decodes. */
+.hero .image::before {
+    content: "";
+    position: absolute;
+    inset: 6% 14%;
+    z-index: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--tetiary-color) 20%, transparent) 0%, transparent 72%);
+    pointer-events: none;
+}
+
 .hero .image .person {
     width: 100%;
     max-width: 42rem;
+    /* Reserves the image's real footprint before it decodes, so
+       .stars / .spark / .speech (positioned as a % of this
+       container) never compute their offsets against a collapsed
+       0-height box. Tune this if your cutout photos run
+       noticeably wider or narrower than roughly 4:5. */
+    aspect-ratio: 0.78;
+    height: auto;
     object-fit: contain;
     animation: float 6s ease-in-out infinite;
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
@@ -463,9 +484,14 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 7rem 1.5rem 12rem;
+        /* Was 12rem — that much bottom padding only made sense
+           while .speech was an absolute overlay needing clearance.
+           Now that .speech is back in normal flow (below), it
+           contributes its own real height, so the container only
+           needs a small buffer for the absolute .hero-dots. */
+        padding: 5rem 1.5rem 3rem;
         min-height: auto;
-        gap: 1.5rem;
+        gap: .3rem;
     }
 
     .hero .text {
@@ -487,47 +513,30 @@
         max-width: 340px;
         order: 2;
         margin: 0 auto;
+        /* Stack .person above .speech instead of the default row —
+           without this, .speech (once in normal flow) would sit
+           beside the person image rather than beneath it. */
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
 
     .hero .image .person {
         max-width: 100%;
     }
 
-    .speech {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-120%);
-        top: auto;
-        bottom: 7rem;
-    }
-
-    .moveright,
-    .moveleft {
-        display: none;
-    }
-}
-
-/* ========================================
-   Responsive — Mobile (≤600px)
-   ======================================== */
-@media (max-width: 600px) {
-    .hero .container {
-        padding: 6rem 1.25rem 14rem;
-    }
-
-    .hero .image {
-        width: 90%;
-        max-width: 280px;
-    }
-
+    /* .speech now joins normal flow as a stacked flex child of
+       .hero .image, instead of floating via position:absolute with
+       a guessed bottom offset. This is what removes the dependency
+       on the oversized container padding above, and keeps it
+       correctly below the image instead of squeezed beside it. */
     .speech {
         position: relative;
         left: auto;
+        top: auto;
         bottom: auto;
         transform: none;
         align-self: center;
-        margin-top: 0.5rem;
-        order: 3;
     }
 
     .speech .circle {
@@ -543,6 +552,31 @@
     .speech .cone {
         align-items: center;
         margin-left: 0;
+    }
+
+    .moveright,
+    .moveleft {
+        display: none;
+    }
+}
+
+/* ========================================
+   Responsive — Mobile (≤600px)
+   ======================================== */
+@media (max-width: 600px) {
+    /* Was 6rem 1.25rem 14rem — that 14rem bottom padding was left
+       over from when .speech still needed clearance as an absolute
+       overlay. By this breakpoint .speech was already in normal
+       flow (see original ≤600px rule), so that padding was pure
+       dead space with nothing reserved for it — the "vacuum" at
+       the bottom of the section on mobile. */
+    .hero .container {
+        padding: 4.5rem 1.25rem 3rem;
+    }
+
+    .hero .image {
+        width: 90%;
+        max-width: 280px;
     }
 
     .hero .btn {

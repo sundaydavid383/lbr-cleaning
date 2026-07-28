@@ -1,22 +1,168 @@
-.video{
-    background: var(--video-background);
+/* ========================================
+   LBR Cleaning — Video Modal
+   Premium Refactor
+   All colors derived from existing root tokens
+   (--video-background, --primary-shadow) plus
+   color-mix() derivations of the same — no new
+   colors introduced.
+
+   Fixes from the original:
+   - height: 60% -> 100vh (the overlay was only
+     covering the top 60% of the screen)
+   - iframe height was fixed at 427px via the HTML
+     attribute regardless of CSS width, distorting
+     the video on resize — now driven by aspect-ratio
+   ======================================== */
+
+:root {
+    --video-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --video-ease-fast: 0.3s var(--video-ease);
+    --video-vignette: color-mix(in srgb, black 35%, transparent);
+    --video-close-bg: color-mix(in srgb, black 30%, transparent);
+    --video-close-bg-hover: color-mix(in srgb, black 50%, transparent);
+    --video-glow: color-mix(in srgb, var(--primary-color) 45%, transparent);
+}
+
+.video {
+    background: radial-gradient(circle at 50% 40%, transparent 0%, var(--video-vignette) 100%),
+        var(--video-background);
     position: fixed;
-    top:0;
-    left:0;
+    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 60%;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 111111;
+    padding: 1.5rem;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    animation: video-overlay-in 0.35s var(--video-ease) both;
 }
-.video iframe{
-    border-radius: .7rem;
-    width: 55%;
-    box-shadow:  var(--primary-shadow)
+
+@keyframes video-overlay-in {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0);
+        -webkit-backdrop-filter: blur(0);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+    }
 }
-.video .removevideo{
+
+.video iframe {
+    border-radius: 0.9rem;
+    width: min(900px, 90vw);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-height: 82vh;
+    box-shadow: var(--primary-shadow), 0 0 0 1px color-mix(in srgb, white 8%, transparent);
+    animation: video-frame-in 0.45s var(--video-ease) 0.05s both,
+        video-frame-glow 3.5s ease-in-out 0.5s infinite alternate;
+}
+
+@keyframes video-frame-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes video-frame-glow {
+    from {
+        box-shadow: var(--primary-shadow), 0 0 0 1px color-mix(in srgb, white 8%, transparent);
+    }
+    to {
+        box-shadow: var(--primary-shadow), 0 0 32px 4px var(--video-glow),
+            0 0 0 1px color-mix(in srgb, white 8%, transparent);
+    }
+}
+
+.video .removevideo {
     position: absolute;
-    top:4rem;
-    right:4rem;
+    top: max(1.25rem, env(safe-area-inset-top));
+    right: max(1.25rem, env(safe-area-inset-right));
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--video-close-bg);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 2;
+    transition: background var(--video-ease-fast), transform var(--video-ease-fast);
+    animation: video-close-in 0.4s var(--video-ease) 0.15s both;
+}
+
+@keyframes video-close-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) rotate(-45deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.video .removevideo:hover {
+    background: var(--video-close-bg-hover);
+    transform: scale(1.1) rotate(90deg);
+}
+
+.video .removevideo:active {
+    transform: scale(0.95) rotate(90deg);
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 768px) {
+    .video {
+        padding: 1rem;
+    }
+
+    .video iframe {
+        width: 94vw;
+        max-height: 70vh;
+        border-radius: 0.6rem;
+    }
+
+    .video .removevideo {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+        top: max(0.85rem, env(safe-area-inset-top));
+        right: max(0.85rem, env(safe-area-inset-right));
+    }
+}
+
+@media (max-width: 420px) {
+    .video iframe {
+        width: 96vw;
+        border-radius: 0.4rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .video,
+    .video iframe,
+    .video .removevideo {
+        animation: none !important;
+        transition: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
 }

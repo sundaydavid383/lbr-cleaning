@@ -8,7 +8,11 @@ const ServiceSection = ({ services }) => {
       <div className="service-header">
         <div className="first_te">
           <h2>What We Offer</h2>
-          <h1>Our Services</h1>
+          <h1>
+  {"Our Services".split("").map((char, i) => (
+    <span key={i} style={{ "--i": i }}>{char === " " ? "\u00A0" : char}</span>
+  ))}
+</h1>
         </div>
         <p>Discover our professional cleaning solutions for every need.</p>
       </div>

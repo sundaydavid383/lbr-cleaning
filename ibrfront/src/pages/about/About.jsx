@@ -9,6 +9,7 @@ import heroimage4 from "../../assets/cleaner4.png"
 import image1 from "../../assets/about-intro.jpg"
 import bgImage from "../../assets/cleaningbackground.jpg";
 import Hero from "../../component/hero/Hero";
+import AboutTimeline from "../../component/aboutTimeline/AboutTimeline";
 import team1 from "../../assets/user1.jpg";
 import team2 from "../../assets/user2.jpg";
 import team3 from "../../assets/user3.jpg";
@@ -232,6 +233,8 @@ We create clean, safe spaces that add value to your business and home. With mode
           </div>
         </div>
       </section>
+
+      <AboutTimeline />
     </main>
   );
 };

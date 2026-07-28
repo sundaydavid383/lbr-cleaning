@@ -1,0 +1,134 @@
+/* filepath: ibrfront/src/component/trustSection/trustSection.css */
+.trust-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(180deg, var(--background-color-alt) 0%, var(--background-color) 100%);
+}
+
+.trust-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.trust-header {
+  margin-bottom: 3.5rem;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.badge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.75rem 1rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+.badge-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.badge-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(22, 163, 74, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.badge-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.trust-footer {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--box-shadow);
+  border-left: 4px solid var(--primary-color);
+}
+
+.trust-footer p {
+  font-size: 1.05rem;
+  color: var(--text-color);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.trust-footer strong {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+  .badges-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .trust-section {
+    padding: 4rem 1.5rem;
+  }
+  .badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .badge-card {
+    padding: 1.5rem 1rem;
+  }
+  .badge-label {
+    font-size: 0.78rem;
+  }
+  .trust-footer {
+    padding: 1.5rem;
+  }
+  .trust-footer p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-section {
+    padding: 3rem 1rem;
+  }
+  .badge-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .badges-grid {
+    gap: 2rem;
+  }
+  .badge-card {
+    padding: 2rem 1.5rem;
+  }
+}
