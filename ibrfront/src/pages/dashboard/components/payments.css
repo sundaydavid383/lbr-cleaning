@@ -1,0 +1,43 @@
+/* filepath: ibrfront/src/pages/dashboard/components/payments.css */
+.payments-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.payments-summary-card {
+  text-align: center;
+}
+
+.payments-total {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.payments-total.pending {
+  color: var(--tetiary-color);
+}
+
+.payments-summary-text {
+  font-size: 0.85rem;
+  color: var(--text-color-muted);
+  margin: 0;
+}
+
+.payments-table-wrapper {
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .payments-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .payments-total {
+    font-size: 1.75rem;
+  }
+}

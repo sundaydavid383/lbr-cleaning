@@ -2,46 +2,60 @@
 import React from "react";
 import "./ctaBanner.css";
 import { Link } from "react-router-dom";
+import { useCmsCategory } from "../../hooks/useCmsContent";
 
 const CTABanner = () => {
+  const { value: ctaData, loading: ctaLoading } = useCmsCategory("cta_banner", {});
+
+  if (ctaLoading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!ctaData) {
+    return null;
+  }
+
   return (
     <section className="cta-banner">
       <div className="cta-bg-pattern"></div>
       <div className="cta-container">
         <div className="cta-content">
-          <span className="cta-tag">Get Started Today</span>
-          <h2 className="cta-title">
-            Ready for a <span className="highlight">Spotless</span> Space?
-          </h2>
-          <p className="cta-subtitle">
-            Book your cleaning appointment in under 60 seconds. Our team is standing by
-            to bring freshness back to your home or office.
-          </p>
+          {ctaData.tag && <span className="cta-tag">{ctaData.tag}</span>}
+          {ctaData.title && (
+            <h2 className="cta-title">
+              {ctaData.title.split('<span class="highlight">')[0]}
+              {ctaData.title.includes('highlight') && <span className="highlight">{ctaData.title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
+              {ctaData.title.split('</span>')[1] || ''}
+            </h2>
+          )}
+          {ctaData.subtitle && <p className="cta-subtitle">{ctaData.subtitle}</p>}
 
-          <div className="cta-features">
-            <div className="cta-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>Free consultation & quote</span>
+          {ctaData.features?.length > 0 && (
+            <div className="cta-features">
+              {ctaData.features.map((feature, index) => (
+                <div className="cta-feature" key={index}>
+                  <i className="fa-solid fa-check-circle"></i>
+                  <span>{feature}</span>
+                </div>
+              ))}
             </div>
-            <div className="cta-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>No hidden fees</span>
-            </div>
-            <div className="cta-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>Satisfaction guaranteed</span>
-            </div>
-          </div>
+          )}
 
           <div className="cta-buttons">
             <Link to="/contact" className="btn btn-primary">
               <p>
-                Book Now <i className="fa-solid fa-arrow-right-long"></i>
+                {ctaData.primary_button || "Book Now"} <i className="fa-solid fa-arrow-right-long"></i>
               </p>
             </Link>
-            <a href="tel:+2348134567890" className="btn btn-secondary">
+            <a href={`tel:${ctaData.phone || "+234 801 234 5678"}`} className="btn btn-secondary">
               <p>
-                <i className="fa-solid fa-phone"></i> Call Us
+                <i className="fa-solid fa-phone"></i> {ctaData.secondary_button || "Call Us"}
               </p>
             </a>
           </div>

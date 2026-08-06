@@ -293,6 +293,13 @@ body {
     overflow-x: hidden;
     color: var(--text-color);
     line-height: 1.6;
+    padding-top: 4.5rem;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 4rem;
+    }
 }
 
 /* ========================================

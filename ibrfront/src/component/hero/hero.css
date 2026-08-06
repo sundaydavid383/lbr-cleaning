@@ -214,7 +214,7 @@
 .hero .image {
     position: relative;
     width: 45%;
-    max-width: 520px;
+    max-width: 620px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -237,15 +237,15 @@
 }
 
 .hero .image .person {
-    width: 100%;
-    max-width: 42rem;
+    width: 150%;
+    max-width: 62rem;
     /* Reserves the image's real footprint before it decodes, so
        .stars / .spark / .speech (positioned as a % of this
        container) never compute their offsets against a collapsed
        0-height box. Tune this if your cutout photos run
        noticeably wider or narrower than roughly 4:5. */
     aspect-ratio: 0.78;
-    height: auto;
+    height: 20rem;
     object-fit: contain;
     animation: float 6s ease-in-out infinite;
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
@@ -446,7 +446,7 @@
    ======================================== */
 @media (max-width: 1168px) {
     .hero .container {
-        padding: 5rem 2rem 1rem;
+        padding: .8rem 2rem 1rem;
         flex-wrap: wrap;
     }
 
@@ -465,16 +465,22 @@
         max-width: 420px;
         margin: 0 auto;
     }
+    .hero .image .person{
+    width: 100%;
+    max-width: 42rem;
+    height: 23rem;
+    object-fit: cover;
+    }
 
     .speech {
-        left: -1rem;
+        left: -3rem;
         top: 8%;
     }
 }
 
 /* ========================================
-   Responsive — Tablet (≤868px)
-   ======================================== */
+    Responsive — Tablet (≤868px)
+    ======================================== */
 @media (max-width: 868px) {
     .hero {
         min-height: auto;
@@ -484,12 +490,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        /* Was 12rem — that much bottom padding only made sense
-           while .speech was an absolute overlay needing clearance.
-           Now that .speech is back in normal flow (below), it
-           contributes its own real height, so the container only
-           needs a small buffer for the absolute .hero-dots. */
-        padding: 5rem 1.5rem 3rem;
+        padding: 4rem 1.5rem 2rem;
         min-height: auto;
         gap: .3rem;
     }
@@ -510,33 +511,25 @@
 
     .hero .image {
         width: 85%;
-        max-width: 340px;
+        max-width: 420px;
         order: 2;
         margin: 0 auto;
-        /* Stack .person above .speech instead of the default row —
-           without this, .speech (once in normal flow) would sit
-           beside the person image rather than beneath it. */
         flex-direction: column;
         align-items: center;
         gap: 1rem;
     }
 
-    .hero .image .person {
-        max-width: 100%;
-    }
 
-    /* .speech now joins normal flow as a stacked flex child of
-       .hero .image, instead of floating via position:absolute with
-       a guessed bottom offset. This is what removes the dependency
-       on the oversized container padding above, and keeps it
-       correctly below the image instead of squeezed beside it. */
+
+    /* Speech bubble BEFORE character on mobile for comic-book feel */
     .speech {
         position: relative;
-        left: auto;
+        left: -3rem;
         top: auto;
         bottom: auto;
         transform: none;
         align-self: center;
+        order: -1;
     }
 
     .speech .circle {
@@ -564,19 +557,13 @@
    Responsive — Mobile (≤600px)
    ======================================== */
 @media (max-width: 600px) {
-    /* Was 6rem 1.25rem 14rem — that 14rem bottom padding was left
-       over from when .speech still needed clearance as an absolute
-       overlay. By this breakpoint .speech was already in normal
-       flow (see original ≤600px rule), so that padding was pure
-       dead space with nothing reserved for it — the "vacuum" at
-       the bottom of the section on mobile. */
     .hero .container {
-        padding: 4.5rem 1.25rem 3rem;
+        padding: 3.5rem 1rem 2rem;
     }
 
     .hero .image {
         width: 90%;
-        max-width: 280px;
+        max-width: 420px;
     }
 
     .hero .btn {

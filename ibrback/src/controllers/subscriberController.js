@@ -1,13 +1,10 @@
-// filepath: ibrback/src/controllers/subscriberController.js
 require("dotenv").config();
 const { createTransporter } = require("../config/mailer");
-const Subscriber = require('../models/subscriber');
+const { repositories } = require("../repositories");
 
+const { subscriberRepository } = repositories;
 const transporter = createTransporter();
 
-/**
- * Subscribe a new user
- */
 exports.subscribe = async (req, res) => {
   try {
     const { email } = req.body;
@@ -18,19 +15,16 @@ exports.subscribe = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid email format" });
     }
 
-    // Check if email already exists
-    const existing = await Subscriber.findByEmail(email);
+    const existing = await subscriberRepository.findByEmail(email);
     if (existing) {
       if (!existing.isActive) {
-        // Reactivate subscription
-        await Subscriber.update(existing.id, { isActive: true, unsubscribedAt: null });
+        await subscriberRepository.update(existing.id, { isActive: true, unsubscribedAt: null });
         return res.status(200).json({ success: true, message: "Subscription reactivated!" });
       }
       return res.status(400).json({ success: false, message: "Email already subscribed." });
     }
 
-    // Create new subscriber
-    const newSubscriber = await Subscriber.create({ email });
+    const newSubscriber = await subscriberRepository.create({ email });
 
     const mailOptions = {
       from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
@@ -46,17 +40,17 @@ exports.subscribe = async (req, res) => {
           You'll be the first to know about our latest updates, offers, and cleaning tips.
         </p>
         <p style="font-size: 15px; color: #333; margin-top: 20px;">
-          Thank you for trusting <strong>LBR Cleaning</strong>.  
+          Thank you for trusting <strong>LBR Cleaning</strong>.
           <br>
           We look forward to serving you!
-          </p>
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-          <p style="font-size: 13px; color: #777; text-align: center;">
+        </p>
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+        <p style="font-size: 13px; color: #777; text-align: center;">
           © ${new Date().getFullYear()} LBR Cleaning. All rights reserved.
-          </p>
-          </div>
-          </div>
-          `,
+        </p>
+      </div>
+    </div>
+  `,
     };
 
     if (newSubscriber) {
@@ -64,7 +58,6 @@ exports.subscribe = async (req, res) => {
       console.log("New subscriber added:", newSubscriber);
       return res.status(200).json({ success: true, message: "Subscription successful!" });
     }
-
   } catch (error) {
     console.error("Error in /api/subscribe:", error);
     return res.status(500).json({
@@ -74,13 +67,10 @@ exports.subscribe = async (req, res) => {
   }
 };
 
-/**
- * Get all subscribers
- */
 exports.getAllSubscribers = async (req, res) => {
   try {
-    const allSubscribers = await Subscriber.findAll({
-      orderBy: { subscribedAt: 'desc' },
+    const allSubscribers = await subscriberRepository.findAll({
+      orderBy: { subscribedAt: "desc" },
     });
     res.status(200).json({ success: true, data: allSubscribers });
   } catch (error) {
@@ -92,72 +82,24 @@ exports.getAllSubscribers = async (req, res) => {
   }
 };
 
-/**
- * Admin login
- */
-let wrongAttempt = 0;
+// adminLogin moved to src/controllers/authController.js — it's now backed
+// by the User collection/table (with bcrypt + JWT) instead of a hardcoded
+// env-var password, so it lives with the rest of the auth logic.
 
-exports.adminLogin = async (req, res) => {
-  const { password, disabled } = req.body;
-  console.log("Admin login attempt with password:", password);
-
-  // If the input is not disabled, reset wrongAttempt
-  if (!disabled && wrongAttempt >= 5) {
-    wrongAttempt = 0;
-  }
-
-  if (!password || password.trim() === "") {
-    console.log("Password field is empty");
-    return res.status(400).json({ success: false, message: "Password cannot be empty" });
-  }
-
-  if (password !== process.env.ADMIN_PASSWORD) {
-    wrongAttempt += 1;
-    console.log(`Invalid password. wrongAttempt = ${wrongAttempt}`);
-
-    if (wrongAttempt >= 5) {
-      console.log("Too many failed attempts, locking out");
-      return res.status(403).json({
-        success: false,
-        inputDisable: true,
-        message: "Too many failed attempts, please try again later",
-      });
-    }
-
-    return res.status(401).json({
-      success: false,
-      message: `Invalid password. You only have ${5 - wrongAttempt} attempts left.`,
-    });
-  }
-
-  // ✅ Correct password
-  wrongAttempt = 0;
-  console.log("Admin login successful");
-  return res.status(200).json({ success: true, message: "Login successful" });
-};
-
-/**
- * Send message to all subscribers
- */
 exports.sendMessage = async (req, res) => {
   const { message } = req.body;
   if (!message || message.trim() === "") {
-    console.log("message field is empty");
     return res.status(400).json({ success: false, message: "Message cannot be empty" });
   }
   try {
-    const subscribers = await Subscriber.findActive();
+    const subscribers = await subscriberRepository.findActive();
     if (subscribers.length === 0) {
-      console.log("there are no subscribers");
       return res.status(401).json({ success: false, message: "There are no subscribers to send message to" });
     }
-
-    console.log("Sending message to subscribers:", subscribers.length);
 
     let sentCount = 0;
     let failCount = 0;
 
-    // Loop through active subscribers
     for (let sub of subscribers) {
       const mailOptions = {
         from: `"LBR Cleaning" <${process.env.SMTP_USER}>`,
@@ -186,7 +128,6 @@ exports.sendMessage = async (req, res) => {
       }
     }
 
-    console.log(`Message sent: ${sentCount} success, ${failCount} failed`);
     return res.status(200).json({
       success: true,
       message: `Message sent to ${sentCount} subscribers. ${failCount} failed.`,
@@ -200,9 +141,6 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-/**
- * Unsubscribe
- */
 exports.unSubscribe = async (req, res) => {
   try {
     const { email } = req.body;
@@ -211,12 +149,12 @@ exports.unSubscribe = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email is required" });
     }
 
-    const subscriber = await Subscriber.findByEmail(email);
+    const subscriber = await subscriberRepository.findByEmail(email);
     if (!subscriber) {
       return res.status(404).json({ success: false, message: "Subscriber not found" });
     }
 
-    await Subscriber.unsubscribe(subscriber.id);
+    await subscriberRepository.unsubscribe(subscriber.id);
 
     return res.status(200).json({ success: true, message: "Unsubscribed successfully" });
   } catch (error) {
@@ -228,12 +166,9 @@ exports.unSubscribe = async (req, res) => {
   }
 };
 
-/**
- * Delete all subscribers (admin use)
- */
 exports.deleteAllSubscribers = async (req, res) => {
   try {
-    const result = await Subscriber.deleteAll();
+    const result = await subscriberRepository.deleteAll();
     return res.status(200).json({
       success: true,
       message: `Deleted ${result.count} subscribers`,

@@ -2,20 +2,38 @@
 import React, { useState } from "react";
 import "./newsletterSignup.css";
 import { Link } from "react-router-dom";
+import { useCmsCategory } from "../../hooks/useCmsContent";
 
 const NewsletterSignup = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
+  const { value: newsletterData, loading: newsletterLoading } = useCmsCategory("newsletter", {});
+
+  if (newsletterLoading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email) {
-      setStatus("Please enter your email address.");
+      setStatus(newsletterData?.error_message || "Please enter your email address.");
       return;
     }
-    setStatus("Thanks for subscribing! Check your inbox for a welcome surprise.");
+    setStatus(newsletterData?.success_message || "Thanks for subscribing! Check your inbox for a welcome surprise.");
     setEmail("");
   };
+
+  const title = newsletterData?.title || "Stay in the Loop";
+  const subtitle = newsletterData?.subtitle || "Get weekly cleaning tips, exclusive offers, and helpful guides delivered straight to your inbox. No spam — just useful stuff.";
+  const placeholder = newsletterData?.placeholder || "Enter your email address";
+  const buttonText = newsletterData?.button_text || "Subscribe";
+  const privacyText = newsletterData?.privacy_text || "We respect your privacy. Unsubscribe at any time.";
 
   return (
     <section className="newsletter-signup">
@@ -25,34 +43,33 @@ const NewsletterSignup = () => {
             <i className="fa-solid fa-envelope-open-text"></i>
           </div>
           <h2 className="newsletter-title">
-            Stay in the <span className="highlight">Loop</span>
+            {title.split('<span class="highlight">')[0]}
+            {title.includes('highlight') && <span className="highlight">{title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
+            {title.split('</span>')[1] || ''}
           </h2>
-          <p className="newsletter-subtitle">
-            Get weekly cleaning tips, exclusive offers, and helpful guides delivered
-            straight to your inbox. No spam — just useful stuff.
-          </p>
+          <p className="newsletter-subtitle">{subtitle}</p>
 
           <form className="newsletter-form" onSubmit={handleSubmit}>
             <input
               type="email"
-              placeholder="Enter your email address"
+              placeholder={placeholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="newsletter-input"
             />
             <button type="submit" className="newsletter-btn">
-              Subscribe
+              {buttonText}
             </button>
           </form>
 
           {status && (
-            <p className={`newsletter-status ${status.includes("Thanks") ? "success" : "error"}`}>
+            <p className={`newsletter-status ${status.includes("Thanks") || status.includes("success") || status.includes("welcome") ? "success" : "error"}`}>
               {status}
             </p>
           )}
 
           <p className="newsletter-privacy">
-            We respect your privacy. Unsubscribe at any time.
+            {privacyText}
           </p>
         </div>
       </div>

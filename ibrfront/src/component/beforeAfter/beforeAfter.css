@@ -1,0 +1,202 @@
+/* ========================================
+   LBR Cleaning - Before & After Showcase
+   ======================================== */
+
+.before-after-showcase {
+    padding: 5rem 2rem;
+    background: var(--background-color-alt);
+}
+
+.before-after-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.before-after-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.before-after-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-family: 'Outfit', sans-serif;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.before-after-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-color-muted);
+    line-height: 1.6;
+}
+
+.before-after-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.before-after-card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background: var(--light-text);
+    cursor: ew-resize;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.before-after-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.card-label {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+    background: var(--secondary-color);
+    color: var(--light-text);
+    padding: 0.35rem 0.9rem;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.ba-images {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.ba-after {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ba-before {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.ba-slider-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--light-text);
+    z-index: 5;
+    transform: translateX(-50%);
+    transition: background var(--transition-fast);
+}
+
+.ba-slider-handle.active {
+    background: var(--tetiary-color);
+}
+
+.ba-slider-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.ba-slider-thumb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--light-text);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    transition: transform var(--transition-normal), background var(--transition-normal);
+}
+
+.ba-slider-handle.active .ba-slider-thumb {
+    transform: translate(-50%, -50%) scale(1.15);
+    background: var(--tetiary-color);
+    color: var(--secondary-color);
+}
+
+.ba-slider-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.before-label {
+    top: 0.75rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--light-text);
+}
+
+.after-label {
+    bottom: 0.75rem;
+    background: var(--primary-color);
+    color: var(--light-text);
+}
+
+@media (max-width: 1024px) {
+    .before-after-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .before-after-showcase {
+        padding: 3rem 1.25rem;
+    }
+
+    .before-after-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 498px) {
+    .before-after-showcase {
+        padding: 2.5rem 1rem;
+    }
+
+    .before-after-title {
+        font-size: 1.5rem;
+    }
+
+    .ba-slider-thumb {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.7rem;
+    }
+}

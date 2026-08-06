@@ -41,10 +41,10 @@ const Deal = ({ deal_Intro, plans }) => {
               <div className="monthly_price">
                 <div className="monthly_hover"></div>
                 <div className="monthly_price_upper">
-                  <small>{plan.price[0]}</small>
-                  <h2>{plan.price.split("/")[1].slice(0, 2)}</h2>
+                  <small>₦</small>
+                  <h2>{plan.price.split(",")[0].slice(0,-1)}</h2>
                 </div>
-                <p>{plan.price.split("/")[1].slice(2)}</p>
+                <p>,{plan.price.split(",")[1]}</p>
               </div>
 
               <div className='plan'>{plan.name}</div>

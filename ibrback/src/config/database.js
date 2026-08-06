@@ -1,8 +1,10 @@
-// filepath: ibrback/src/config/database.js
-const { PrismaClient } = require('@prisma/client');
+// Lazily require @prisma/client so that projects running purely on
+// MongoDB (no `npx prisma generate` run yet) don't crash on boot.
+let prisma = null;
 
-const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-});
+if ((process.env.DATABASE_PROVIDER || "mongodb").toLowerCase() === "postgres") {
+  const { PrismaClient } = require("@prisma/client");
+  prisma = new PrismaClient();
+}
 
 module.exports = prisma;

@@ -1,119 +1,179 @@
 // filepath: ibrback/src/controllers/paymentController.js
-const Payment = require('../models/payment');
-const Order = require('../models/order');
+const { repositories } = require("../repositories");
+const { paymentRepository, orderRepository } = repositories;
+const { initializePayment: gatewayInitialize, verifyPayment: gatewayVerify, verifyWebhookSignature, parseWebhookEvent } = require("../services/paymentService");
 
 /**
- * Initialize payment (for pay-before option)
+ * Initialize a payment via the configured gateway (Paystack/Flutterwave).
+ * Public — used by the frontend after booking for PAY_BEFORE orders.
  */
 exports.initializePayment = async (req, res) => {
   try {
-    const { orderId, amount, paymentMethod, paymentGateway } = req.body;
+    const { orderId, email, amount, currency = "NGN", customerName, phone, service } = req.body;
 
-    if (!orderId || !amount) {
-      return res.status(400).json({ success: false, message: 'Order ID and amount are required' });
+    if (!orderId || !email || !amount) {
+      return res.status(400).json({ success: false, message: "orderId, email, and amount are required" });
     }
 
-    // Verify order exists and is eligible for payment
-    const order = await Order.findById(orderId);
+    const order = await orderRepository.findById(orderId);
     if (!order) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
 
-    if (order.paymentOption !== 'PAY_BEFORE') {
-      return res.status(400).json({ success: false, message: 'Payment not required for this order' });
+    if (order.paymentOption !== "PAY_BEFORE") {
+      return res.status(400).json({ success: false, message: "Payment not required for this order" });
     }
 
-    if (order.paymentStatus === 'PAID') {
-      return res.status(400).json({ success: false, message: 'Payment already completed' });
+    if (order.paymentStatus === "PAID") {
+      return res.status(400).json({ success: false, message: "Payment already completed" });
     }
 
-    // Create payment record
-    const payment = await Payment.create({
-      orderId: Number(orderId),
+    const gatewayResult = await gatewayInitialize({
+      email,
       amount: Number(amount),
-      paymentMethod: paymentMethod || 'CARD',
-      paymentGateway: paymentGateway || 'PAYSTACK',
-      status: 'PENDING',
+      currency,
+      customerName: customerName || order.customerName,
+      phone: phone || order.phone,
+      orderId: order.id,
+      service: service || order.service,
     });
 
-    // Here you would integrate with actual payment gateway (Paystack, Stripe, etc.)
-    // For now, we'll simulate a payment initialization
+    await paymentRepository.create({
+      orderId: order.id,
+      amount: Number(amount),
+      currency: gatewayResult.currency,
+      paymentMethod: "CARD",
+      paymentGateway: gatewayResult.provider.toUpperCase(),
+      gatewayTransactionId: gatewayResult.reference,
+      status: "PENDING",
+      metadata: gatewayResult.metadata || {},
+    });
 
     res.status(200).json({
       success: true,
-      message: 'Payment initialized successfully',
+      message: "Payment initialized successfully",
       payment: {
-        id: payment.id,
-        orderId: payment.orderId,
-        amount: payment.amount,
-        status: payment.status,
-        gateway: payment.paymentGateway,
+        id: gatewayResult.reference,
+        orderId: order.id,
+        amount: Number(amount),
+        currency: gatewayResult.currency,
+        status: "PENDING",
+        gateway: gatewayResult.provider,
+        authorizationUrl: gatewayResult.authorizationUrl,
+        accessCode: gatewayResult.accessCode,
       },
     });
   } catch (error) {
-    console.error('Payment initialization error:', error);
-    res.status(500).json({ success: false, message: 'Failed to initialize payment' });
+    console.error("Payment initialization error:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to initialize payment" });
   }
 };
 
 /**
- * Verify payment (webhook or callback from payment gateway)
+ * Payment callback (user redirected back from gateway).
+ * Verifies payment status by reference and updates order/payment.
  */
 exports.verifyPayment = async (req, res) => {
   try {
-    const { paymentId, transactionId, status } = req.body;
+    const { reference, trxref, orderId } = req.query;
+    const gatewayReference = reference || trxref;
 
-    const payment = await Payment.findById(paymentId);
-    if (!payment) {
-      return res.status(404).json({ success: false, message: 'Payment not found' });
+    if (!gatewayReference) {
+      return res.status(400).json({ success: false, message: "Payment reference is required" });
     }
 
-    // Map string status to enum
-    const statusMap = {
-      'completed': 'COMPLETED',
-      'pending': 'PENDING',
-      'failed': 'FAILED',
-      'cancelled': 'CANCELLED',
-    };
-    const mappedStatus = statusMap[status?.toLowerCase()] || status;
+    const verification = await gatewayVerify(gatewayReference);
 
-    // Update payment status
-    await Payment.updateStatus(payment.id, mappedStatus, transactionId);
+    const payment = await paymentRepository.findByTransactionId(gatewayReference);
+    if (!payment) {
+      return res.status(404).json({ success: false, message: "Payment record not found" });
+    }
 
-    // Update order payment status
-    const order = await Order.findById(payment.orderId);
+    await paymentRepository.updateStatus(payment.id, verification.status, verification.transactionId);
+
+    const order = await orderRepository.findById(payment.orderId);
     if (order) {
-      const orderPaymentStatus = mappedStatus === 'COMPLETED' ? 'PAID' : mappedStatus.toLowerCase();
-      await Order.updatePaymentStatus(order.id, orderPaymentStatus);
-      
-      if (mappedStatus === 'COMPLETED') {
-        await Order.updateStatus(order.id, 'CONFIRMED');
+      await orderRepository.updatePaymentStatus(order.id, verification.status);
+
+      if (verification.status === "PAID") {
+        await orderRepository.updateStatus(order.id, "CONFIRMED");
+      } else if (verification.status === "FAILED") {
+        await orderRepository.updateStatus(order.id, "CANCELLED");
       }
     }
 
-    const updatedPayment = await Payment.findById(paymentId);
+    const updatedPayment = await paymentRepository.findById(payment.id);
 
     res.status(200).json({
       success: true,
-      message: 'Payment verified successfully',
+      message: verification.status === "PAID" ? "Payment successful!" : "Payment verification completed",
       payment: updatedPayment,
     });
   } catch (error) {
-    console.error('Payment verification error:', error);
-    res.status(500).json({ success: false, message: 'Failed to verify payment' });
+    console.error("Payment verification error:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to verify payment" });
   }
 };
 
 /**
- * Get payment status
+ * Payment webhook (gateway posts here asynchronously).
+ * Verifies signature, updates status, sends notification email.
+ */
+exports.handleWebhook = async (req, res) => {
+  try {
+    const signature = req.headers["x-paystack-signature"] || req.headers["x-flutterwave-signature"];
+    const rawBody = req.body;
+    const provider = process.env.PAYMENT_PROVIDER || "paystack";
+
+    if (signature && !verifyWebhookSignature(provider, rawBody, signature)) {
+      console.warn("Invalid webhook signature");
+      return res.status(401).json({ success: false, message: "Invalid signature" });
+    }
+
+    const body = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const event = parseWebhookEvent(provider, body);
+
+    if (!event.reference) {
+      return res.status(400).json({ success: false, message: "Missing reference in webhook" });
+    }
+
+    const payment = await paymentRepository.findByTransactionId(event.reference);
+    if (!payment) {
+      console.warn(`Webhook: payment not found for reference ${event.reference}`);
+      return res.status(404).json({ success: false, message: "Payment not found" });
+    }
+
+    await paymentRepository.updateStatus(payment.id, event.status, event.reference);
+
+    const order = await orderRepository.findById(payment.orderId);
+    if (order) {
+      await orderRepository.updatePaymentStatus(order.id, event.status);
+
+      if (event.status === "PAID") {
+        await orderRepository.updateStatus(order.id, "CONFIRMED");
+      } else if (event.status === "FAILED") {
+        await orderRepository.updateStatus(order.id, "CANCELLED");
+      }
+    }
+
+    console.log(`Webhook processed: ${event.event} for reference ${event.reference} -> ${event.status}`);
+    res.status(200).json({ success: true, received: true });
+  } catch (error) {
+    console.error("Webhook processing error:", error);
+    res.status(500).json({ success: false, message: "Webhook processing failed" });
+  }
+};
+
+/**
+ * Get payment status by payment ID.
  */
 exports.getPaymentStatus = async (req, res) => {
   try {
     const { paymentId } = req.params;
 
-    const payment = await Payment.findById(paymentId);
+    const payment = await paymentRepository.findById(paymentId);
     if (!payment) {
-      return res.status(404).json({ success: false, message: 'Payment not found' });
+      return res.status(404).json({ success: false, message: "Payment not found" });
     }
 
     res.status(200).json({
@@ -128,26 +188,34 @@ exports.getPaymentStatus = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Get payment status error:', error);
-    res.status(500).json({ success: false, message: 'Failed to get payment status' });
+    console.error("Get payment status error:", error);
+    res.status(500).json({ success: false, message: "Failed to get payment status" });
   }
 };
 
 /**
- * Get payments for an order
+ * Get all payments for a specific order.
  */
 exports.getOrderPayments = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    const payments = await Payment.findByOrderId(orderId);
+    const payments = await paymentRepository.findByOrderId(orderId);
 
     res.status(200).json({
       success: true,
-      payments: payments,
+      payments: payments.map((p) => ({
+        id: p.id,
+        amount: p.amount,
+        currency: p.currency,
+        status: p.status,
+        paymentDate: p.paymentDate,
+        gateway: p.paymentGateway,
+        transactionId: p.gatewayTransactionId,
+      })),
     });
   } catch (error) {
-    console.error('Get order payments error:', error);
-    res.status(500).json({ success: false, message: 'Failed to get order payments' });
+    console.error("Get order payments error:", error);
+    res.status(500).json({ success: false, message: "Failed to get order payments" });
   }
 };

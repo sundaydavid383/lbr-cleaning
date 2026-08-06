@@ -1,0 +1,247 @@
+/* ========================================
+   LBR Cleaning - Loyalty Program
+   ======================================== */
+
+.loyalty-program {
+    padding: 5rem 2rem;
+    background: var(--background-color);
+}
+
+.loyalty-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.loyalty-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.loyalty-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-family: 'Outfit', sans-serif;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.loyalty-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-color-muted);
+    line-height: 1.6;
+}
+
+.loyalty-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.loyalty-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    background: var(--light-text);
+    border: 1px solid var(--light-gray);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    overflow: hidden;
+}
+
+.loyalty-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--tier-color, var(--primary-color));
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.loyalty-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.loyalty-card:hover::before {
+    opacity: 1;
+}
+
+.tier-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: rgba(22, 163, 74, 0.08);
+    color: var(--primary-color);
+    transition: all var(--transition-normal);
+}
+
+.loyalty-card:hover .tier-icon {
+    background: var(--primary-color);
+    color: var(--light-text);
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
+}
+
+.tier-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-family: 'Outfit', sans-serif;
+    margin-bottom: 0.25rem;
+}
+
+.tier-threshold {
+    font-size: 0.85rem;
+    color: var(--text-color-muted);
+    margin-bottom: 1.25rem;
+}
+
+.tier-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+    text-align: left;
+}
+
+.tier-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.tier-benefits li i {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.btn-tier {
+    width: 100%;
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.btn-tier:hover {
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-tier p {
+    color: var(--light-text);
+}
+
+.referral-card {
+    border: 2px dashed var(--tetiary-color);
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.04) 0%, rgba(234, 179, 8, 0.08) 100%);
+}
+
+.referral-card::before {
+    background: var(--tetiary-color);
+}
+
+.referral-icon {
+    background: rgba(234, 179, 8, 0.12);
+    color: var(--tetiary-color);
+}
+
+.referral-card:hover .referral-icon {
+    background: var(--tetiary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 8px 24px rgba(234, 179, 8, 0.3);
+}
+
+.referral-amount {
+    margin-bottom: 1rem;
+}
+
+.referral-amount .amount {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1;
+}
+
+.referral-amount .amount-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-color-muted);
+    margin-top: 0.25rem;
+}
+
+.referral-benefits {
+    margin-bottom: 1.25rem;
+}
+
+.btn-referral {
+    width: 100%;
+    background: transparent;
+    border: 2px solid var(--tetiary-color);
+    color: var(--tetiary-color);
+}
+
+.btn-referral:hover {
+    background: var(--tetiary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 6px 25px rgba(234, 179, 8, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-referral p {
+    color: inherit;
+}
+
+@media (max-width: 1024px) {
+    .loyalty-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .loyalty-program {
+        padding: 3rem 1.25rem;
+    }
+
+    .loyalty-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 498px) {
+    .loyalty-program {
+        padding: 2.5rem 1rem;
+    }
+
+    .loyalty-title {
+        font-size: 1.5rem;
+    }
+
+    .loyalty-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .referral-amount .amount {
+        font-size: 1.75rem;
+    }
+}

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./serviceDetails.css";
 import TestimonialCarousel from "../testimonial/TestimonialCarousel";
+import { useCmsContent } from "../../hooks/useCmsContent";
 import {
   FaClock,
   FaMoneyBillWave,
@@ -721,6 +722,13 @@ const ServiceDetails = ({}) => {
   const { serviceId } = useParams();
   const [openFAQ, setOpenFAQ] = useState(null);
   const service = services.find((s) => s.id === serviceId);
+  const { value: cmsServiceDetails } = useCmsContent(
+    service ? `service_details.${service.id}` : null,
+    null
+  );
+  const description = cmsServiceDetails?.description ?? service?.description;
+  const faqs = cmsServiceDetails?.faqs ?? service?.faqs;
+  const testimonials = cmsServiceDetails?.testimonials ?? service?.testimonials;
   const sectionsRef = useRevealOnScroll();
 
   if (!service) {
@@ -752,7 +760,7 @@ const ServiceDetails = ({}) => {
           <div className="banner-badge">{service.heroBadge}</div>
           <h1>{service.title}</h1>
           <p className="tagline">{service.tagline}</p>
-          <p className="banner-description">{service.description}</p>
+          <p className="banner-description">{description}</p>
 
           <div className="quick-info">
             <span>
@@ -889,7 +897,7 @@ const ServiceDetails = ({}) => {
               <h2>What Our Clients Say</h2>
               <p>Real feedback from real customers</p>
             </div>
-            <TestimonialCarousel testimonials={service.testimonials} />
+            <TestimonialCarousel testimonials={testimonials} />
           </section>
 
           {/* FAQ */}
@@ -900,7 +908,7 @@ const ServiceDetails = ({}) => {
               <p>Everything you need to know before booking</p>
             </div>
             <div className="faq-list">
-              {service.faqs?.map((faq, idx) => (
+              {faqs?.map((faq, idx) => (
                 <div className="faq-item" key={idx}>
                   <div
                     className="faq-question"

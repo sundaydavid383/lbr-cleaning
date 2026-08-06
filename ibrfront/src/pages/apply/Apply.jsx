@@ -1,34 +1,58 @@
 // filepath: ibrfront/src/pages/apply/Apply.jsx
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./apply.css";
 import validator from "validator";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
+import { useAuth } from "../../context/AuthContext";
 
 const services = [
-  { value: "residential", label: "Residential Cleaning", icon: "fa-solid fa-house" },
-  { value: "commercial", label: "Office Cleaning", icon: "fa-solid fa-briefcase" },
-  { value: "deep_cleaning", label: "Deep Cleaning", icon: "fa-solid fa-spray-can" },
-  { value: "move_in_move_out", label: "Move In/Out Cleaning", icon: "fa-solid fa-truck-moving" },
-  { value: "post_construction", label: "Post-Construction Cleaning", icon: "fa-solid fa-building" },
-  { value: "carpet_cleaning", label: "Carpet Cleaning", icon: "fa-solid fa-rug" },
-  { value: "window_cleaning", label: "Window Cleaning", icon: "fa-solid fa-window-maximize" },
-  { value: "sanitization", label: "Sanitization Service", icon: "fa-solid fa-hand-sparkles" },
+  { value: "residential", label: "Residential Cleaning", icon: "fa-solid fa-house", price: 15000 },
+  { value: "commercial", label: "Office Cleaning", icon: "fa-solid fa-briefcase", price: 25000 },
+  { value: "deep_cleaning", label: "Deep Cleaning", icon: "fa-solid fa-spray-can", price: 30000 },
+  { value: "move_in_move_out", label: "Move In/Out Cleaning", icon: "fa-solid fa-truck-moving", price: 35000 },
+  { value: "post_construction", label: "Post-Construction Cleaning", icon: "fa-solid fa-building", price: 45000 },
+  { value: "carpet_cleaning", label: "Carpet Cleaning", icon: "fa-solid fa-rug", price: 18000 },
+  { value: "window_cleaning", label: "Window Cleaning", icon: "fa-solid fa-window-maximize", price: 12000 },
+  { value: "sanitization", label: "Sanitization Service", icon: "fa-solid fa-hand-sparkles", price: 20000 },
 ];
 
+const formatNGN = (amount) =>
+  new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 0,
+  }).format(amount);
+
 const Apply = () => {
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     service: "residential",
     message: "",
+    paymentOption: "PAY_AFTER",
   });
   const [loading, setLoading] = useState(false);
   const [alertData, setAlertData] = useState({ message: "", type: "success" });
   const [focusedField, setFocusedField] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [prefilled, setPrefilled] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user && !prefilled) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }));
+      setPrefilled(true);
+    }
+  }, [isAuthenticated, user, prefilled]);
 
   const showAlert = (message, type = "success") => {
     setAlertData({ message, type });
@@ -39,6 +63,8 @@ const Apply = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const selectedService = services.find((s) => s.value === formData.service);
 
   const validate = () => {
     const { name, email, phone, service, message } = formData;
@@ -78,24 +104,36 @@ const Apply = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}appointments/book`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          service: services.find((s) => s.value === formData.service)?.label || formData.service,
+          service: selectedService?.label || formData.service,
+          message: formData.message,
+          paymentOption: formData.paymentOption,
         }),
       });
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) {
+        if (data.payment && data.payment.authorizationUrl) {
+          sessionStorage.setItem("lbr_booking_success", JSON.stringify({
+            orderId: data.order?.id,
+            amount: data.payment.amount,
+            service: selectedService?.label,
+          }));
+          window.location.href = data.payment.authorizationUrl;
+          return;
+        }
+
         setSubmitted(true);
-        setFormData({ name: "", email: "", phone: "", service: "residential", message: "" });
+        setFormData({ name: "", email: "", phone: "", service: "residential", message: "", paymentOption: "PAY_AFTER" });
       } else {
-        showAlert(data.data || "Something went wrong. Please try again.", "danger");
+        showAlert(data.message || data.data || "Something went wrong. Please try again.", "danger");
       }
     } catch (error) {
       showAlert("We're having trouble connecting. Please check your internet and try again.", "danger");
@@ -111,8 +149,8 @@ const Apply = () => {
           <div className="success-icon">
             <i className="fa-solid fa-check"></i>
           </div>
-          <h1>Application Received!</h1>
-          <p>Thank you for choosing LBR Cleaning. We've received your application and will contact you within 24 hours to confirm your appointment.</p>
+          <h1>Booking Received!</h1>
+          <p>Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment.</p>
           <div className="success-actions">
             <Link to="/" className="btn-primary">Back to Home</Link>
             <Link to="/service" className="btn-secondary">Browse More Services</Link>
@@ -130,13 +168,13 @@ const Apply = () => {
         onClose={() => setAlertData({ message: "", type: "success" })}
       />
 
-      {loading && <Loading message="Submitting your application..." />}
+      {loading && <Loading message="Processing your booking..." />}
 
       {/* Hero Section */}
       <section className="apply-hero">
         <div className="apply-hero-bg"></div>
         <div className="apply-hero-content">
-          <span className="apply-badge">Apply Now</span>
+          <span className="apply-badge">Book Now</span>
           <h1>Book Your <span className="highlight">Cleaning</span> Service</h1>
           <p>Fill out the form below and our team will get back to you within 24 hours to confirm your appointment.</p>
           <div className="apply-hero-features">
@@ -163,12 +201,37 @@ const Apply = () => {
             <div className="form-header">
               <h2>Tell Us About Your Needs</h2>
               <p>We'll match you with the perfect cleaning solution</p>
+              {isAuthenticated && (
+                <p className="form-prefilled-note">
+                  <i className="fa-solid fa-circle-check"></i>
+                  Your profile information has been pre-filled from your account
+                </p>
+              )}
             </div>
 
             <form onSubmit={onSubmit} className="apply-form">
+              {isAuthenticated && (
+                <div className="form-profile-picture">
+                  <div className="profile-picture-preview">
+                    {user?.avatar ? (
+                      <img src={user.avatar} alt="Profile" />
+                    ) : (
+                      <div className="profile-picture-placeholder">
+                        <i className="fa-solid fa-camera"></i>
+                        <span>Add Photo</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="profile-picture-info">
+                    <p className="profile-picture-label">Profile Picture</p>
+                    <p className="profile-picture-hint">Optional — helps our team recognize you</p>
+                  </div>
+                </div>
+              )}
+
               <div className="form-row">
                 <div className={`form-group ${focusedField === 'name' || formData.name ? 'focused' : ''}`}>
-                  <label htmlFor="name">Full Name</label>
+                  <label htmlFor="name">Full Name {isAuthenticated && formData.name ? <span className="prefilled-badge"><i className="fa-solid fa-check"></i> From profile</span> : ''}</label>
                   <div className="input-wrapper">
                     <i className="fa-solid fa-user"></i>
                     <input
@@ -186,7 +249,7 @@ const Apply = () => {
                 </div>
 
                 <div className={`form-group ${focusedField === 'email' || formData.email ? 'focused' : ''}`}>
-                  <label htmlFor="email">Email Address</label>
+                  <label htmlFor="email">Email Address {isAuthenticated && formData.email ? <span className="prefilled-badge"><i className="fa-solid fa-check"></i> From profile</span> : ''}</label>
                   <div className="input-wrapper">
                     <i className="fa-solid fa-envelope"></i>
                     <input
@@ -206,7 +269,7 @@ const Apply = () => {
 
               <div className="form-row">
                 <div className={`form-group ${focusedField === 'phone' || formData.phone ? 'focused' : ''}`}>
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="phone">Phone Number {isAuthenticated && formData.phone ? <span className="prefilled-badge"><i className="fa-solid fa-check"></i> From profile</span> : ''}</label>
                   <div className="input-wrapper">
                     <i className="fa-solid fa-phone"></i>
                     <input
@@ -244,6 +307,54 @@ const Apply = () => {
                 </div>
               </div>
 
+              {/* Service Price Preview */}
+              {selectedService && (
+                <div className="service-price-preview">
+                  <div className="service-price-label">Estimated starting price</div>
+                  <div className="service-price-amount">{formatNGN(selectedService.price)}</div>
+                  <div className="service-price-note">Final price may vary based on space size and requirements</div>
+                </div>
+              )}
+
+              {/* Payment Option */}
+              <div className="form-group full-width">
+                <label>Payment Preference</label>
+                <div className="payment-options">
+                  <label className={`payment-option ${formData.paymentOption === "PAY_AFTER" ? "selected" : ""}`}>
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="PAY_AFTER"
+                      checked={formData.paymentOption === "PAY_AFTER"}
+                      onChange={handleChange}
+                    />
+                    <div className="payment-option-content">
+                      <div className="payment-option-title">
+                        <i className="fa-solid fa-calendar-check"></i>
+                        Pay After Service
+                      </div>
+                      <div className="payment-option-desc">Pay once the job is done to your satisfaction</div>
+                    </div>
+                  </label>
+                  <label className={`payment-option ${formData.paymentOption === "PAY_BEFORE" ? "selected" : ""}`}>
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="PAY_BEFORE"
+                      checked={formData.paymentOption === "PAY_BEFORE"}
+                      onChange={handleChange}
+                    />
+                    <div className="payment-option-content">
+                      <div className="payment-option-title">
+                        <i className="fa-solid fa-lock"></i>
+                        Pay Now to Secure Booking
+                      </div>
+                      <div className="payment-option-desc">Secure your slot instantly with instant payment</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               <div className={`form-group full-width ${focusedField === 'message' || formData.message ? 'focused' : ''}`}>
                 <label htmlFor="message">Tell Us More <span className="optional">(optional)</span></label>
                 <div className="input-wrapper textarea-wrapper">
@@ -264,11 +375,11 @@ const Apply = () => {
                 {loading ? (
                   <span className="btn-loading">
                     <span className="spinner"></span>
-                    Submitting...
+                    Processing...
                   </span>
                 ) : (
                   <span>
-                    Submit Application <i className="fa-solid fa-arrow-right"></i>
+                    {formData.paymentOption === "PAY_BEFORE" ? "Proceed to Payment" : "Submit Booking"} <i className="fa-solid fa-arrow-right"></i>
                   </span>
                 )}
               </button>

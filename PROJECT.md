@@ -123,7 +123,9 @@ flowchart LR
     P[Professional / Operator] -->|HTTPS| FE
     A[Admin] -->|HTTPS| FE
     FE -->|REST API| BE[Express API]
-    BE --> DB[(PostgreSQL)]
+    BE --> REPO[Repository Layer]
+    REPO --> |DATABASE_PROVIDER=mongodb| MONGO[(MongoDB)]
+    REPO --> |DATABASE_PROVIDER=postgres| PG[(PostgreSQL via Prisma)]
     BE --> EMAIL[Email/WhatsApp Provider]
     BE --> PAY[Payment Gateway]
     BE --> AI[AI Service / Local Model]
@@ -141,17 +143,19 @@ flowchart TB
       API[Express 4 API :5100]
       ROUTES[Routers: contact, subscribe, notify, payment]
       CTRL[Controllers]
-      MODELS[Prisma Data Models]
+      REPOS[Repositories (MongoDB / PostgreSQL)]
     end
     subgraph Data
-      PG[(PostgreSQL via Prisma)]
+      MONGO_DB[(MongoDB - dev)]
+      PG_DB[(PostgreSQL - prod)]
     end
     SPA -->|/api/*| API
-    API --> CTRL --> MODELS --> PG
+    API --> CTRL --> REPOS --> MONGO_DB
+    API --> CTRL --> REPOS --> PG_DB
     API --> SMTP[Gmail SMTP / future Brevo]
 ```
 
-Today the API is a **single Node process**. The migration boundary is already drawn (`src/` is the PostgreSQL/Prisma world; root `controllers/`, `models/`, `routes/` are legacy MongoDB leftovers — see Technical Debt).
+Today the API is a **single Node process**. The data layer is database-agnostic via the Repository pattern. Switching databases requires only changing `DATABASE_PROVIDER` in `.env` — no controller changes needed.
 
 ---
 
@@ -170,17 +174,21 @@ lbr-cleaning/
 │   ├── vercel.json           # SPA rewrite rules
 │   └── vite.config.js
 ├── ibrback/                  # Express API
-│   ├── src/                  # ✅ Active Prisma/PostgreSQL code
-│   │   ├── config/           # database.js (Prisma client)
-│   │   ├── models/           # subscriber, order, payment (Prisma wrappers)
-│   │   ├── controllers/      # business logic
-│   │   └── routes/          # Express routers
-│   ├── controllers/          # ⚠️ LEGACY MongoDB code (duplicate)
-│   ├── models/               # ⚠️ LEGACY mongoose schemas
-│   ├── routes/               # ⚠️ LEGACY routers (unused by app.js)
+│   ├── src/
+│   │   ├── config/           # database.js (Prisma client), mongodb.js (Mongoose), mailer.js
+│   │   ├── models/           # Prisma wrappers (PostgreSQL implementation)
+│   │   │   └── mongodb/      # Mongoose schemas (MongoDB implementation)
+│   │   ├── repositories/     # ✅ Database-agnostic data access layer
+│   │   │   ├── interfaces/   # Abstract contracts (ISubscriberRepository, etc.)
+│   │   │   ├── mongodb/      # MongoDB implementations
+│   │   │   ├── postgres/     # PostgreSQL implementations (wraps models/)
+│   │   │   └── index.js      # Factory: returns correct impl based on DATABASE_PROVIDER
+│   │   ├── controllers/      # business logic (uses repositories, not DB directly)
+│   │   └── routes/           # Express routers
 │   ├── prisma/
-│   │   └── schema.prisma     # ✅ Source of truth for DB
-│   ├── app.js                # Entrypoint (wires src/ routers)
+│   │   ├── schema.prisma     # ✅ PostgreSQL schema source of truth
+│   │   └── migrations/       # DB migrations
+│   ├── app.js                # Entrypoint (wires src/ routers, calls repositories.init())
 │   └── MIGRATION_GUIDE.md
 ├── python/                   # Automation / content tooling
 │   ├── extract_pdf_content.py# PyMuPDF PDF→text/images extractor
@@ -195,8 +203,10 @@ lbr-cleaning/
 | Layer | Current | Choice rationale | Future |
 |---|---|---|---|
 | Frontend | React 19, Vite 6, react-router-dom 7, framer-motion, react-toastify, axios | Fast, free, huge ecosystem | Add TanStack Query, Zod; maybe React Native / PWA for mobile |
-| Backend | Node 18+, Express 4, Prisma 5 | Minimal, free, typed schema | NestJS or fastify if complexity grows |
-| DB | PostgreSQL (Prisma ORM) | Relational integrity, free tiers abundant | Same engine; read replicas later |
+| Backend | Node 18+, Express 4 | Minimal, free, flexible | NestJS or fastify if complexity grows |
+| Data Access | Repository pattern (MongoDB dev / PostgreSQL prod) | Swappable DB without changing controllers | Same pattern; add caching layer |
+| DB (dev) | MongoDB (Mongoose) | Free tier, schema-flexible for rapid dev | — |
+| DB (prod) | PostgreSQL (Prisma ORM) | Relational integrity, free tiers abundant | Same engine; read replicas later |
 | Email | Gmail SMTP (nodemailer) | $0 to start | Brevo/Resend free tier |
 | Messaging | (planned) Twilio/WhatsApp | package present but unused | Twilio WhatsApp sandbox (free) |
 | Payments | schema only (Paystack/Flutterwave/Stripe enums) | Local-market fit | Real gateway integration |
@@ -347,10 +357,16 @@ flowchart LR
 
 ## 13. Backend Architecture
 
-- **Entry:** `app.js` — sets Express, `cors`, `helmet`, global `rateLimit` (50 req / 15 min), JSON body parser, nodemailer transporter, and mounts routers.
-- **Layered:** `routes → controllers → models`. Clean and extensible.
-- **Email:** Nodemailer with Gmail. Each controller re-creates its own transporter (duplicated config) — consolidate into `src/config/mailer.js`.
-- **No centralized error handler** — each controller does `try/catch` returning `{success, message}`. Add an `errorHandler` middleware + consistent response shape (`ApiResponse` util).
+- **Entry:** `app.js` — sets Express, `cors`, `helmet`, global `rateLimit` (50 req / 15 min), JSON body parser, nodemailer transporter, mounts routers, and calls `repositories.init()`.
+- **Layered:** `routes → controllers → repositories → (MongoDB | PostgreSQL)`. Controllers never touch the database directly; they call repository interfaces.
+- **Repository pattern:** `src/repositories/` contains:
+  - `interfaces/` — abstract contracts (`ISubscriberRepository`, `IOrderRepository`, `IPaymentRepository`)
+  - `mongodb/` — Mongoose implementations (active in dev)
+  - `postgres/` — Prisma wrappers (active in prod)
+  - `index.js` — factory that returns the correct implementation based on `DATABASE_PROVIDER` env var
+- **Switching databases:** Change `DATABASE_PROVIDER=mongodb` (dev) or `DATABASE_PROVIDER=postgres` (prod) in `.env`. No controller changes required.
+- **Email:** Nodemailer with Gmail, centralized in `src/config/mailer.js`.
+- **Centralized error handler** exists in `app.js` with consistent `ApiResponse` envelope.
 - **No request validation** beyond inline checks — add `zod` schemas per route.
 
 ---
@@ -577,29 +593,31 @@ npm run dev          # Vite dev server
 
 ## 26. Technical Debt (tracked)
 
-| ID | Debt | Impact | Fix |
-|---|---|---|---|
-| T1 | Duplicate legacy `controllers/models/routes` | Maintenance confusion | Delete root legacy folders after verifying `src/` parity |
-| T2 | Missing Prisma migrations | Non-reproducible DB | Generate & commit migrations |
-| T3 | No authz on admin routes | Security risk | JWT + middleware |
-| T4 | In-memory lockout | Bypassable, resets | Move to DB/Redis |
-| T5 | Hardcoded emails | Leak, rigidity | Centralize in `src/config` |
-| T6 | Serial email blast | Slow, blocks req | Queue (BullMQ) |
-| T7 | Local binary assets | Bundle bloat | Move to storage/CDN |
-| T8 | No tests/CI | Regressions | Add Vitest + GitHub Actions |
+| ID | Debt | Impact | Fix | Status |
+|---|---|---|---|---|
+| T1 | Duplicate legacy `controllers/models/routes` | Maintenance confusion | Delete root legacy folders after verifying `src/` parity | ⚠️ Still present |
+| T2 | Missing Prisma migrations | Non-reproducible DB | Generate & commit migrations | ⚠️ Not committed |
+| T3 | No authz on admin routes | Security risk | JWT + middleware | ⏳ Planned |
+| T4 | In-memory lockout | Bypassable, resets | Move to DB/Redis | ⏳ Planned |
+| T5 | Hardcoded emails | Leak, rigidity | Centralize in `src/config` | ✅ Fixed in active code |
+| T6 | Serial email blast | Slow, blocks req | Queue (BullMQ) | ⏳ Planned |
+| T7 | Local binary assets | Bundle bloat | Move to storage/CDN | ⏳ Planned |
+| T8 | No tests/CI | Regressions | Add Vitest + GitHub Actions | ⏳ Planned |
+| T9 | DB coupling in controllers | Hard to switch DBs | Repository pattern implemented | ✅ Done |
 
 ---
 
 ## 27. Priority Tasks (next 30–60 days)
 
-1. **P0 — Security:** Add JWT auth + `authorize` middleware; protect `/api/send-message`, `/api/notify-subscribers`, `/api/delete/subscribe`, GET `/api/subscribe`.
-2. **P0 — Cleanup:** Delete legacy root `controllers/models/routes`; commit Prisma migrations.
-3. **P1 — Env hygiene:** Remove hardcoded emails; add `.env.example`; verify `.gitignore`.
-4. **P1 — Production DB:** Provision free Postgres (Supabase/Neon); deploy API to free tier (Render/Fly/Oracle).
-5. **P1 — Email:** Switch to Brevo/Resend free tier; centralize mailer config.
-6. **P2 — Booking persistence:** Move `/appointments/book` into `src/routes/booking.js` + `Order` create.
-7. **P2 — Tests:** Add Vitest + a smoke API test; wire GitHub Actions.
-8. **P2 — Assets:** Offload images/video to R2/Cloudinary.
+1. **P0 — DB Agnostic (DONE):** Repository pattern implemented; MongoDB is default dev DB; PostgreSQL ready for prod via `DATABASE_PROVIDER`.
+2. **P0 — Security:** Add JWT auth + `authorize` middleware; protect `/api/send-message`, `/api/notify-subscribers`, `/api/delete/subscribe`, GET `/api/subscribe`.
+3. **P0 — Cleanup:** Delete legacy root `controllers/models/routes`; commit Prisma migrations.
+4. **P1 — Booking route:** Extract `/appointments/book` into `src/routes/booking.js` with proper validation and status tracking.
+5. **P1 — Auth models:** Add `User` + `LoginAttempt` Prisma/Mongoose models and repositories.
+6. **P1 — Production DB:** Provision free Postgres (Supabase/Neon); deploy API to free tier (Render/Fly/Oracle).
+7. **P1 — Email:** Switch to Brevo/Resend free tier; centralize mailer config.
+8. **P2 — Tests:** Add Vitest + a smoke API test; wire GitHub Actions.
+9. **P2 — Assets:** Offload images/video to R2/Cloudinary.
 
 ---
 

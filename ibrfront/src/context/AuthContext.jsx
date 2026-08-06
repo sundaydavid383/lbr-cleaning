@@ -46,10 +46,10 @@ export const AuthProvider = ({ children }) => {
     return { success: true };
   };
 
-  const signup = async ({ name, email, phone, password }) => {
+  const signup = async ({ name, email, phone, password, address, city, propertyType, referralSource, avatar }) => {
     const { ok, data } = await apiFetch("/api/auth/signup", {
       method: "POST",
-      body: { name, email, phone, password },
+      body: { name, email, phone, password, address, city, propertyType, referralSource, avatar },
     });
 
     if (!ok || !data.success) {
@@ -58,6 +58,21 @@ export const AuthProvider = ({ children }) => {
 
     setUser(data.user);
     setToken(data.token);
+    return { success: true };
+  };
+
+  const updateProfile = async (updates) => {
+    const { ok, data } = await apiFetch("/api/auth/profile", {
+      method: "PUT",
+      body: updates,
+      token,
+    });
+
+    if (!ok || !data.success) {
+      return { success: false, message: data.message || "Update failed" };
+    }
+
+    setUser((prev) => ({ ...prev, ...data.user }));
     return { success: true };
   };
 
@@ -72,6 +87,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user && !!token,
     login,
     signup,
+    updateProfile,
     logout,
   };
 

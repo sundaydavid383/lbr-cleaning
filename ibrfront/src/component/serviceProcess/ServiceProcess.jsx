@@ -1,40 +1,27 @@
 // filepath: ibrfront/src/component/serviceProcess/ServiceProcess.jsx
 import React from "react";
 import "./serviceProcess.css";
-import { FaCalendarCheck, FaPhone, FaBroom, FaThumbsUp } from "react-icons/fa6";
-
-const steps = [
-  {
-    icon: <FaCalendarCheck />,
-    number: "01",
-    title: "Book Online",
-    description:
-      "Choose your service, select a date and time, and tell us about your space. It takes less than a minute.",
-  },
-  {
-    icon: <FaPhone />,
-    number: "02",
-    title: "We Confirm",
-    description:
-      "Our team calls or messages you within minutes to confirm details, answer questions, and lock in your slot.",
-  },
-  {
-    icon: <FaBroom />,
-    number: "03",
-    title: "We Clean",
-    description:
-      "A vetted, uniformed professional arrives on time with all supplies and equipment. We clean to our checklist.",
-  },
-  {
-    icon: <FaThumbsUp />,
-    number: "04",
-    title: "You Approve",
-    description:
-      "Inspect the work. If anything falls short, we re-clean it for free within 24 hours — guaranteed.",
-  },
-];
+import { useCmsCategory } from "../../hooks/useCmsContent";
 
 const ServiceProcess = () => {
+  const { value: processData, loading: processLoading } = useCmsCategory("service_process", {});
+
+  if (processLoading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
+
+  const steps = processData?.steps || [];
+
+  if (!steps.length) {
+    return null;
+  }
+
   return (
     <section className="service-process">
       <div className="service-process-container">
@@ -57,7 +44,7 @@ const ServiceProcess = () => {
               </div>
               <div className="step-card">
                 <div className="step-number">{step.number}</div>
-                <div className="step-icon">{step.icon}</div>
+                <div className="step-icon"><i className={step.icon}></i></div>
                 <h3 className="step-title">{step.title}</h3>
                 <p className="step-description">{step.description}</p>
               </div>

@@ -1,0 +1,53 @@
+/* filepath: ibrfront/src/pages/dashboard/components/bookings.css */
+.bookings-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.bookings-filter-btn {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--light-gray);
+  background: white;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.bookings-filter-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.bookings-filter-btn.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
+}
+
+.bookings-table-wrapper {
+  overflow-x: auto;
+}
+
+.bookings-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .bookings-filters {
+    gap: 0.4rem;
+  }
+
+  .bookings-filter-btn {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+  }
+}

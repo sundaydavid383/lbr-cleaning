@@ -2,13 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./statsSection.css";
 import RecentActivity from "../recentActivity/RecentActivity";
-
-const stats = [
-  { label: "Years Experience", value: 8, suffix: "+", icon: "fa-solid fa-award" },
-  { label: "Happy Clients", value: 2500, suffix: "+", icon: "fa-solid fa-face-smile" },
-  { label: "Cleaning Projects", value: 15000, suffix: "+", icon: "fa-solid fa-broom" },
-  { label: "Team Members", value: 120, suffix: "+", icon: "fa-solid fa-users" },
-];
+import { useCmsCategory } from "../../hooks/useCmsContent";
 
 const AnimatedCounter = ({ end, duration, suffix, started }) => {
   const [value, setValue] = useState(0);
@@ -30,6 +24,7 @@ const AnimatedCounter = ({ end, duration, suffix, started }) => {
 };
 
 const StatsSection = () => {
+  const { value: statsData, loading: statsLoading } = useCmsCategory("homepage_stats", {});
   const [started, setStarted] = useState(false);
   const sectionRef = useRef(null);
 
@@ -47,6 +42,22 @@ const StatsSection = () => {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  if (statsLoading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
+
+  const stats = statsData?.stats || [];
+
+  if (!stats.length) {
+    return null;
+  }
 
   return (
     <section className="stats-section" ref={sectionRef}>

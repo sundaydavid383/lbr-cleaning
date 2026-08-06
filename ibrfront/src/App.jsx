@@ -1,60 +1,89 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './component/ScrollToTop';
-import Loading from './component/loading/Loading';
 import { AuthProvider } from './context/AuthContext';
+import Nav from './component/nav/Nav';
+import Footer from './component/footer/Footer';
+import { EditModeProvider } from "./context/EditModeContext";
+import AdminEditLayout from './component/adminEditLayout/AdminEditLayout';
 
 const Home = lazy(() => import('./pages/home/Home'));
 const Service = lazy(() => import('./pages/service/Service'));
 const ServiceDetails = lazy(() => import('./component/serviceDetails/serviceDetails'));
-const Nav = lazy(() => import('./component/nav/Nav'));
-const Footer = lazy(() => import('./component/footer/Footer'));
 const Contact = lazy(() => import('./component/contact/Contact'));
 const Blog = lazy(() => import('./pages/blog/Blog'));
 const About = lazy(() => import('./pages/about/About'));
 const NotifySubscribers = lazy(() => import('./pages/notifySubscribers/NotifySubscribers'));
-const AdminMessagePage = lazy(() => import('./pages/adminMessagePage/AdminMessagePage'));
+const AdminMessagePage = lazy(() => import('./pages/admin/AdminMessagePage'));
 const NotFoundPage = lazy(() => import('./pages/notFoundPage/NotFoundPage'));
 const Apply = lazy(() => import('./pages/apply/Apply'));
+const Payment = lazy(() => import('./pages/payment/Payment'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Signup = lazy(() => import('./pages/auth/Signup'));
+const InformationHub = lazy(() => import('./pages/information/InformationHub'));
+const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
+const CmsDashboard = lazy(() => import('./pages/admin/cms/CmsDashboard'));
+const CmsEditor = lazy(() => import('./pages/admin/cms/CmsEditor'));
+const CmsBatchEditor = lazy(() => import('./pages/admin/cms/CmsBatchEditor'));
 
-const PageLoader = () => (
+const RouteSkeleton = () => (
   <div style={{ 
-    minHeight: '100vh', 
+    minHeight: '60vh', 
     display: 'flex', 
     alignItems: 'center', 
     justifyContent: 'center',
-    background: '#fafafa'
+    background: 'var(--background-color)'
   }}>
-    <Loading message="Loading..." />
+    <div className="loading-bars" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
   </div>
 );
 
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Suspense fallback={<PageLoader />}>
+      <EditModeProvider>
+        <BrowserRouter>
+          <ScrollToTop />
           <Nav />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/service" element={<Service />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services/:serviceId" element={<ServiceDetails />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/apply" element={<Apply />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/notify" element={<NotifySubscribers />} />
-            <Route path="/admin/message" element={<AdminMessagePage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <Suspense fallback={<RouteSkeleton />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/service" element={<Service />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services/:serviceId" element={<ServiceDetails />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/apply" element={<Apply />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route path="/information" element={<InformationHub />} />
+              <Route path="/dashboard/*" element={<Dashboard />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/notify" element={<NotifySubscribers />} />
+              <Route path="/admin/message" element={<AdminMessagePage />} />
+              <Route path="/admin/cms" element={<CmsDashboard />} />
+              <Route path="/admin/cms/:key" element={<CmsEditor />} />
+              <Route path="/admin/cms/batch" element={<CmsBatchEditor />} />
+
+              {/* Visual, in-place editor — same live pages, edit mode on */}
+              <Route path="/admin/edit" element={<AdminEditLayout />}>
+                <Route index element={<Navigate to="/admin/edit/about" replace />} />
+                <Route path="home" element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="services" element={<Service />} />
+                <Route path="services/:serviceId" element={<ServiceDetails />} />
+                <Route path="blog" element={<Blog />} />
+                <Route path="contact" element={<Contact />} />
+              </Route>
+
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
           <Footer />
-        </Suspense>
-      </BrowserRouter>
+        </BrowserRouter>
+      </EditModeProvider>
     </AuthProvider>
   );
 };

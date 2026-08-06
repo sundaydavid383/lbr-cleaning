@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./contact.css";
 import axios from "axios";
@@ -7,10 +7,8 @@ import Hero from "../../component/hero/Hero";
 import TrustSection from "../../component/trustSection/TrustSection";
 import bgImage from "../../assets/cleaningbackground.jpg";
 import CustomAlert from "../../component/customAlert/CustomAlert";
-import backgroundVideo from "../../assets/cleaningvideo1.mp4";
-import star from  "../../assets/star.png"
-import spark from  "../../assets/spark.png"
-import heroimage1 from "../../assets/cleaner3.png"
+import { useCmsCategory } from "../../hooks/useCmsContent";
+import { ContactSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +21,19 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("success");
+  const { value: contactContent, loading: contactLoading } = useCmsCategory("contact", {});
+
+  if (contactLoading) {
+    return <ContactSkeleton />;
+  }
+
+  if (!contactContent) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>No content available. Please configure the CMS.</p>
+      </div>
+    );
+  }
 
   const validateInputs = () => {
     const { name, email, subject, message, whatsapp } = formData;
@@ -92,48 +103,12 @@ const Contact = () => {
     }
   };
 
-  const contactHeroSection = [
-    {
-      questions: "Have a question, request, or feedback?",
-      header: "We’d Love to",
-      headerspan: "Hear from You!",
-      ps: [
-        "Our friendly team is ready to assist you with quotes, service info, scheduling, or anything else you need.",
-        "Reach out via phone, email, or WhatsApp – we respond quickly and professionally.",
-      ],
-      sectionimage: heroimage1,
-      sectionimageStar: star,
-      sectionimageSpark: spark,
-     talks: [
-  "Messy home?",
-  "We’re on it!",
-],
-      talksReport: "+234 813 456 7890",
-    },
-  ];
-
-  const contactPageFeatures = [
-    {
-      icon: "fas fa-envelope",
-      title: "Quick Email Replies",
-      description: "We respond to every email within 24 hours — often much faster on .",
-    },
-    {
-      icon: "fas fa-phone-alt",
-      title: "Call Us Directly",
-      description: "Have something urgent? Call and speak with a real person instantly on +1 (234) 567-890.",
-    },
-    {
-      icon: "fab fa-whatsapp",
-      title: "Chat via WhatsApp",
-      description: "Send us a message on WhatsApp and get real-time answers and updates on +234 901 488 6853.",
-    },
-  ];
-
-  
+  const contactHeroSection = contactContent.hero || [];
+  const contactPageFeatures = contactContent.features || [];
+  const businessHours = contactContent.business_hours || [];
+  const faqs = contactContent.faq || [];
 
   return (
-    
     <main className="contact-page">
       {loading && <Loading message="Sending request..." />}
       <CustomAlert
@@ -142,100 +117,91 @@ const Contact = () => {
         onClose={() => setAlertMessage("")}
       />
       
-      <Hero
-        section={contactHeroSection}
-        features={contactPageFeatures}
-        backgroundImage={bgImage}
-      />
+      {contactHeroSection.length > 0 && (
+        <Hero section={contactHeroSection} features={contactPageFeatures} backgroundImage={bgImage} />
+      )}
 
       <section className="contact-info">
         <a
-          href="https://www.google.com/maps/search/?api=1&query=123+Sparkle+Dr,+Freshville,+Cleanstate"
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactContent.address || "")}`}
           className="info-card"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i className="fas fa-map-marker-alt"></i>
           <h3>Office Address</h3>
-          <p>123 Sparkle Dr, Freshville, Cleanstate</p>
+          <p>{contactContent.address}</p>
         </a>
 
-        <a href="mailto:info@lbrcleaning.com" className="info-card">
+        <a href={`mailto:${contactContent.email}`} className="info-card">
           <i className="fas fa-envelope"></i>
           <h3>Email Us</h3>
-          <p>info@lbrcleaning.com</p>
+          <p>{contactContent.email}</p>
         </a>
 
-        <a href="tel:+1234567890" className="info-card">
+        <a href={`tel:${contactContent.phone}`} className="info-card">
           <i className="fas fa-phone"></i>
           <h3>Call Us</h3>
-          <p>+1 (234) 567-890</p>
+          <p>{contactContent.phone}</p>
         </a>
       </section>
 
-      <section className="contact-map">
-        <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=3.35%2C6.62%2C3.37%2C6.64&layer=mapnik&marker=6.63%2C3.36"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          loading="lazy"
-          title="LBR Cleaning Location"
-        ></iframe>
-        <small>
-          <a
-            href="https://www.google.com/maps/dir/6.5568768,3.3685504/5,+6+Amadasun+Street,+Lagos/@6.5851421,3.3519511,13z"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View Larger Map
-          </a>
-        </small>
-      </section>
+      {contactContent.map_embed && (
+        <section className="contact-map">
+          <iframe
+            src={contactContent.map_embed}
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            title="LBR Cleaning Location"
+          ></iframe>
+        </section>
+      )}
 
-      <section className="business-hours">
-        <div className="hours-wrapper">
-          <h2>Business Hours</h2>
-          <ul>
-            <li><strong>Monday – Friday:</strong> 8:00 AM – 6:00 PM</li>
-            <li><strong>Saturday:</strong> 9:00 AM – 4:00 PM</li>
-            <li><strong>Sunday:</strong> Closed</li>
-          </ul>
-          <p>If you contact us outside business hours, we’ll respond the next working day.</p>
-        </div>
-      </section>
+      {businessHours.length > 0 && (
+        <section className="business-hours">
+          <div className="hours-wrapper">
+            <h2>Business Hours</h2>
+            <ul>
+              {businessHours.map((item, idx) => (
+                <li key={idx}><strong>{item.days}:</strong> {item.hours}</li>
+              ))}
+            </ul>
+            {contactContent.hours_note && <p>{contactContent.hours_note}</p>}
+          </div>
+        </section>
+      )}
 
-      <section className="faq-section">
-        <h2>Frequently Asked Questions</h2>
-        <div className="faq-item">
-          <h4>How soon will I get a reply?</h4>
-          <p>We respond to all inquiries within 24 hours. WhatsApp replies are usually instant during working hours.</p>
-        </div>
-        <div className="faq-item">
-          <h4>Can I request same-day service?</h4>
-          <p>Yes! If available in your area, we’ll try to fit you in. Contact us early in the day.</p>
-        </div>
-        <div className="faq-item">
-          <h4>Do you offer services outside Lagos?</h4>
-          <p>We serve most of Lagos. Contact us to check for availability in your location.</p>
-        </div>
-      </section>
+      {faqs.length > 0 && (
+        <section className="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          {faqs.map((item, idx) => (
+            <div key={idx} className="faq-item">
+              <h4>{item.question}</h4>
+              <p>{item.answer}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       <TrustSection />
 
-      <section className="encouragement-banner">
-        <h3>Not sure where to start?</h3>
-        <p>Don’t worry — we’ll walk with you every step of the way. Just send us a message, and let’s talk!</p>
-        <Link to="/service" className="explore-btn">Explore Our Services</Link>
-      </section>
+      {contactContent.encouragement_heading && (
+        <section className="encouragement-banner">
+          <h3>{contactContent.encouragement_heading}</h3>
+          <p>{contactContent.encouragement_text}</p>
+          <Link to="/service" className="explore-btn">{contactContent.encouragement_cta || "Explore Our Services"}</Link>
+        </section>
+      )}
 
       <section className="contact-form-section">
         <div className="form-wrapper">
-          <h2>Send Us a Message</h2>
+          <h2>{contactContent.form_heading || "Send Us a Message"}</h2>
           <form className="contact-form" onSubmit={handleSubmit}>
             <input
               type="text"
               name="name"
-              placeholder="Your Name"
+              placeholder={contactContent.form_placeholder_name || "Your Name"}
               value={formData.name}
               onChange={handleChange}
               required
@@ -243,7 +209,7 @@ const Contact = () => {
             <input
               type="email"
               name="email"
-              placeholder="Your Email"
+              placeholder={contactContent.form_placeholder_email || "Your Email"}
               value={formData.email}
               onChange={handleChange}
               required
@@ -251,7 +217,7 @@ const Contact = () => {
             <input
               type="tel"
               name="whatsapp"
-              placeholder="Your WhatsApp Number (e.g. +2348012345678)"
+              placeholder={contactContent.form_placeholder_whatsapp || "Your WhatsApp Number (e.g. +2348012345678)"}
               value={formData.whatsapp}
               onChange={handleChange}
               required
@@ -259,21 +225,21 @@ const Contact = () => {
             <input
               type="text"
               name="subject"
-              placeholder="Subject"
+              placeholder={contactContent.form_placeholder_subject || "Subject"}
               value={formData.subject}
               onChange={handleChange}
               required
             />
             <textarea
               name="message"
-              placeholder="Your Message"
+              placeholder={contactContent.form_placeholder_message || "Your Message"}
               rows="6"
               value={formData.message}
               onChange={handleChange}
               required
             ></textarea>
             <button type="submit" className="submit-btn">
-              Send Message
+              {contactContent.form_button || "Send Message"}
             </button>
           </form>
         </div>

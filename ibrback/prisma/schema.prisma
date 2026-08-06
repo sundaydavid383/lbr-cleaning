@@ -1,4 +1,3 @@
-// filepath: ibrback/prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,44 +7,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// SUBSCRIBER MODEL
-// ============================================
-model Subscriber {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  subscribedAt DateTime @default(now())
-  unsubscribedAt DateTime?
-  isActive    Boolean  @default(true)
+model User {
+  id                  Int       @id @default(autoincrement())
+  name                String?
+  email               String    @unique
+  phone               String?
+  passwordHash        String
+  role                Role      @default(user)
+  isActive            Boolean   @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockUntil           DateTime?
+  lastLoginAt         DateTime?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  address      String?
+  city         String?
+  propertyType String?
+  referralSource String?
+  avatar       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role])
+}
+
+enum Role {
+  admin
+  user
+}
+
+model Subscriber {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+  isActive       Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([isActive])
 }
 
-// ============================================
-// ORDER MODEL
-// ============================================
 model Order {
-  id            Int       @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   customerName  String
   email         String
   phone         String
   service       String
   paymentOption PaymentOption @default(PAY_AFTER)
-  status        OrderStatus  @default(PENDING)
+  status        OrderStatus   @default(PENDING)
   paymentStatus PaymentStatus @default(PENDING)
   paymentId     String?
   amount        Float?
   notes         String?
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
 
-  // Relations
-  payments     Payment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payments Payment[]
 
   @@index([email])
   @@index([status])
@@ -73,26 +94,22 @@ enum PaymentStatus {
   REFUNDED
 }
 
-// ============================================
-// PAYMENT MODEL
-// ============================================
 model Payment {
   id                   Int            @id @default(autoincrement())
   orderId              Int
   amount               Float
   currency             Currency       @default(NGN)
-  paymentMethod       PaymentMethod  @default(CARD)
-  paymentGateway      PaymentGateway @default(PAYSTACK)
+  paymentMethod        PaymentMethod  @default(CARD)
+  paymentGateway       PaymentGateway @default(PAYSTACK)
   gatewayTransactionId String?
   status               PaymentStatus  @default(PENDING)
-  paymentDate         DateTime?
+  paymentDate          DateTime?
   metadata             Json?
-  
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
 
-  // Relations
-  order                Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
   @@index([status])
@@ -118,4 +135,21 @@ enum PaymentGateway {
   PAYSTACK
   FLUTTERWAVE
   MANUAL
+}
+
+model CmsContent {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique @db.VarChar(255)
+  type        String   @db.VarChar(50)
+  value       Json?
+  label       String?  @db.VarChar(255)
+  description String?
+  category    String?  @db.VarChar(100)
+  isPublic    Boolean  @default(true)
+  updatedBy   String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([key])
 }

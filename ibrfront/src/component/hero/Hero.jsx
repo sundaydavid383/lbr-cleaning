@@ -2,9 +2,16 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./hero.css";
 import Feature from "../feature/Feature";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import fallbackImage from "../../assets/about-intro.jpg";
 
 const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
+  console.log(`[HERO] Render | section.length=${section?.length || 0} | features.length=${features?.length || 0}`);
+  if (section?.length > 0) {
+    console.log(`[HERO] first slide:`, section[0]);
+  }
+
+  const { isAuthenticated } = useAuth();
   const [printedTalk, setPrintedTalk] = useState(0);
   const [printedSection, setPrintedSection] = useState(0);
 
@@ -153,11 +160,13 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
               <p key={i}>{p}</p>
             ))}
           </div>
-          <Link to="/apply" className="btn">
-            <p>
-              Apply Now <i className="fa-solid fa-arrow-right-long"></i>
-            </p>
-          </Link>
+          {!isAuthenticated && (
+            <Link to="/apply" className="btn">
+              <p>
+                Apply Now <i className="fa-solid fa-arrow-right-long"></i>
+              </p>
+            </Link>
+          )}
         </div>
 
         <div className="image">

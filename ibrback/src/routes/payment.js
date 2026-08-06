@@ -1,18 +1,14 @@
 // filepath: ibrback/src/routes/payment.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
+const paymentController = require("../controllers/paymentController");
+const receiptController = require("../controllers/receiptController");
 
-// Initialize payment
-router.post('/initialize', paymentController.initializePayment);
-
-// Verify payment (webhook/callback)
-router.post('/verify', paymentController.verifyPayment);
-
-// Get payment status
-router.get('/:paymentId/status', paymentController.getPaymentStatus);
-
-// Get payments for an order
-router.get('/order/:orderId', paymentController.getOrderPayments);
+router.post("/initialize", paymentController.initializePayment);
+router.get("/verify", paymentController.verifyPayment);
+router.post("/webhook", paymentController.handleWebhook);
+router.get("/:paymentId/status", paymentController.getPaymentStatus);
+router.get("/:paymentId/receipt", receiptController.getReceipt);
+router.get("/order/:orderId", paymentController.getOrderPayments);
 
 module.exports = router;

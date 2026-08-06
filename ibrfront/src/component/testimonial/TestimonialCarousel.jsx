@@ -14,7 +14,7 @@ import "./testimonialCarousel.css"
 
   return (
     <section className="testimonial-section styled-carousel">
-      <h2 className="section-title">What Our Clients Say</h2>
+     
 
       <div className="testimonial-wrapper">
         <button className="carousel-btn left" onClick={prevSlide}>❮</button>

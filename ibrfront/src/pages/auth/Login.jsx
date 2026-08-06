@@ -17,7 +17,7 @@ const Login = () => {
     setError("");
 
     if (!email || !password) {
-      setError("Please fill in all fields");
+      setError("Please enter your email and password");
       return;
     }
 
@@ -47,8 +47,14 @@ const Login = () => {
             <Link to="/" className="auth-logo">
               <img src="/house-cleaning.png" alt="LBR Cleaning" />
             </Link>
+            <div className="auth-badge-row">
+              <span className="auth-badge">Member Login</span>
+            </div>
             <h1>Welcome Back</h1>
-            <p>Sign in to your LBR Cleaning account</p>
+            <p>
+              Sign in to manage your bookings, track cleaning schedules, and access exclusive member
+              offers.
+            </p>
           </div>
 
           {error && (
@@ -59,7 +65,7 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit} className="auth-form">
-            <div className={`auth-form-group ${focusedField === 'email' || email ? 'focused' : ''}`}>
+            <div className={`auth-form-group ${focusedField === "email" || email ? "focused" : ""}`}>
               <label htmlFor="email">Email Address</label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-envelope"></i>
@@ -68,7 +74,7 @@ const Login = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setFocusedField('email')}
+                  onFocus={() => setFocusedField("email")}
                   onBlur={() => setFocusedField(null)}
                   placeholder="you@example.com"
                   required
@@ -76,7 +82,7 @@ const Login = () => {
               </div>
             </div>
 
-            <div className={`auth-form-group ${focusedField === 'password' || password ? 'focused' : ''}`}>
+            <div className={`auth-form-group ${focusedField === "password" || password ? "focused" : ""}`}>
               <label htmlFor="password">Password</label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-lock"></i>
@@ -85,7 +91,7 @@ const Login = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setFocusedField('password')}
+                  onFocus={() => setFocusedField("password")}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Enter your password"
                   required
@@ -118,26 +124,87 @@ const Login = () => {
 
           <div className="auth-footer">
             <p>
-              Don't have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
+              Don&apos;t have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
             </p>
           </div>
         </div>
 
         <div className="auth-info">
-          <h2>Welcome to LBR Cleaning</h2>
-          <p>Sign in to manage your bookings, track cleaning schedules, and access exclusive offers.</p>
-          <div className="auth-features">
-            <div className="auth-feature">
-              <i className="fa-solid fa-calendar-check"></i>
-              <span>Manage Bookings</span>
+          <div className="auth-info-inner">
+            <div className="auth-info-badge">Trusted by 2,500+ customers</div>
+            <h2>Your Cleaning Dashboard Awaits</h2>
+            <p>
+              Book, reschedule, and track your cleaning services — all from one place. Join thousands
+              of Lagos residents who trust LBR Cleaning.
+            </p>
+
+            <div className="auth-stats">
+              <div className="auth-stat">
+                <span className="auth-stat-number">8+</span>
+                <span className="auth-stat-label">Years Experience</span>
+              </div>
+              <div className="auth-stat">
+                <span className="auth-stat-number">15K+</span>
+                <span className="auth-stat-label">Projects Done</span>
+              </div>
+              <div className="auth-stat">
+                <span className="auth-stat-number">4.9</span>
+                <span className="auth-stat-label">Client Rating</span>
+              </div>
             </div>
-            <div className="auth-feature">
-              <i className="fa-solid fa-bell"></i>
-              <span>Get Notifications</span>
+
+            <div className="auth-features">
+              <div className="auth-feature">
+                <div className="auth-feature-icon">
+                  <i className="fa-solid fa-calendar-check"></i>
+                </div>
+                <div>
+                  <strong>Manage Bookings</strong>
+                  <p>View upcoming, completed, and cancelled appointments</p>
+                </div>
+              </div>
+              <div className="auth-feature">
+                <div className="auth-feature-icon">
+                  <i className="fa-solid fa-bell"></i>
+                </div>
+                <div>
+                  <strong>Smart Notifications</strong>
+                  <p>Get reminders before your scheduled cleaning</p>
+                </div>
+              </div>
+              <div className="auth-feature">
+                <div className="auth-feature-icon">
+                  <i className="fa-solid fa-tag"></i>
+                </div>
+                <div>
+                  <strong>Exclusive Offers</strong>
+                  <p>Members-only discounts and loyalty rewards</p>
+                </div>
+              </div>
+              <div className="auth-feature">
+                <div className="auth-feature-icon">
+                  <i className="fa-solid fa-receipt"></i>
+                </div>
+                <div>
+                  <strong>Payment History</strong>
+                  <p>Download invoices and track transactions</p>
+                </div>
+              </div>
             </div>
-            <div className="auth-feature">
-              <i className="fa-solid fa-tag"></i>
-              <span>Exclusive Offers</span>
+
+            <div className="auth-testimonial">
+              <div className="auth-testimonial-stars">
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+              </div>
+              <p className="auth-testimonial-text">
+                &ldquo;The dashboard makes it so easy to rebook. I&apos;ve been using LBR Cleaning for
+                over a year now and the consistency is unmatched.&rdquo;
+              </p>
+              <p className="auth-testimonial-author">— Emeka Nwosu, Lekki Phase 1</p>
             </div>
           </div>
         </div>

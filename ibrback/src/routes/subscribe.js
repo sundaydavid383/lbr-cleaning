@@ -1,20 +1,21 @@
-// filepath: ibrback/src/routes/subscribe.js
 const express = require("express");
 const router = express.Router();
+const { authenticate, requireAdmin } = require("../middleware/auth");
 const {
   subscribe,
   getAllSubscribers,
-  adminLogin,
   sendMessage,
   unSubscribe,
   deleteAllSubscribers,
 } = require("../controllers/subscriberController");
 
-router.post('/subscribe', subscribe);
-router.get('/subscribe', getAllSubscribers);
-router.delete('/delete/subscribe', deleteAllSubscribers); // For deleting all subscribers (admin use)
-router.post('/admin-login', adminLogin);
-router.post('/send-message', sendMessage);
-router.post('/unsubscribe', unSubscribe);
+// Public
+router.post("/subscribe", subscribe);
+router.post("/unsubscribe", unSubscribe);
+
+// Admin-only — must send "Authorization: Bearer <token>" from /api/admin-login
+router.get("/subscribe", authenticate, requireAdmin, getAllSubscribers);
+router.delete("/delete/subscribe", authenticate, requireAdmin, deleteAllSubscribers);
+router.post("/send-message", authenticate, requireAdmin, sendMessage);
 
 module.exports = router;

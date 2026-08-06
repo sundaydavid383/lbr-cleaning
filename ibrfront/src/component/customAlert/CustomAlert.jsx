@@ -1,30 +1,44 @@
-import React from "react";
+// filepath: ibrfront/src/component/customAlert/CustomAlert.jsx
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./customAlert.css";
 
-const CustomAlert = ({ message, type = "success", onClose }) => {
-  const bgColors = {
-    success: "rgba(46, 204, 113, 0.95)",  // green
-    warning: "rgba(241, 196, 15, 0.95)", // yellow
-    danger: "rgba(231, 76, 60, 0.95)",   // red
+const CustomAlert = ({ message, type = "success", onClose, duration = 5000 }) => {
+  useEffect(() => {
+    if (!message || !onClose) return;
+    const timer = setTimeout(onClose, duration);
+    return () => clearTimeout(timer);
+  }, [message, onClose, duration]);
+
+  const icons = {
+    success: "fa-solid fa-circle-check",
+    warning: "fa-solid fa-triangle-exclamation",
+    danger: "fa-solid fa-circle-xmark",
+    info: "fa-solid fa-circle-info",
   };
 
   return (
     <AnimatePresence>
       {message && (
-        <div className="custom-alert-holder">
-          <motion.div
-            className="custom-alert"
-            style={{ backgroundColor: bgColors[type] || bgColors.success }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
-          >
-            <p>{message}</p>
-            <button onClick={onClose} className="alert-close">×</button>
-          </motion.div>
-        </div>
+        <motion.div
+          className={`custom-alert-holder custom-alert-${type}`}
+          initial={{ opacity: 0, y: -20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          role="alert"
+          aria-live="assertive"
+        >
+          <div className="custom-alert-icon">
+            <i className={icons[type] || icons.info} />
+          </div>
+          <p className="custom-alert-message">{message}</p>
+          {onClose && (
+            <button onClick={onClose} className="custom-alert-close" aria-label="Dismiss">
+              <i className="fa-solid fa-xmark" />
+            </button>
+          )}
+        </motion.div>
       )}
     </AnimatePresence>
   );

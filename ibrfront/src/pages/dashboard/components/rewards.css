@@ -1,0 +1,138 @@
+/* filepath: ibrfront/src/pages/dashboard/components/rewards.css */
+.rewards-progress-card {
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  border: 1px solid rgba(234, 179, 8, 0.15);
+}
+
+.rewards-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.rewards-progress-points {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--secondary-color);
+  margin: 0.25rem 0 0;
+  line-height: 1;
+}
+
+.rewards-tier-badge {
+  padding: 0.4rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
+}
+
+.rewards-progress-bar {
+  width: 100%;
+  height: 0.75rem;
+  background: rgba(234, 179, 8, 0.15);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.rewards-progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rewards-progress-text {
+  font-size: 0.85rem;
+  color: var(--text-color-muted);
+  margin: 0;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.rewards-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(13, 13, 11, 0.04);
+  border: 1px solid rgba(13, 13, 11, 0.04);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.rewards-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(13, 13, 11, 0.08);
+}
+
+.rewards-card-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.rewards-card-green .rewards-card-icon {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--primary-color);
+}
+
+.rewards-card-gold .rewards-card-icon {
+  background: rgba(234, 179, 8, 0.1);
+  color: var(--tetiary-color);
+}
+
+.rewards-card-blue .rewards-card-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.rewards-card-purple .rewards-card-icon {
+  background: rgba(147, 51, 234, 0.1);
+  color: #9333ea;
+}
+
+.rewards-card-content h4 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin: 0 0 0.4rem;
+}
+
+.rewards-card-content p {
+  font-size: 0.85rem;
+  color: var(--text-color-muted);
+  margin: 0 0 1rem;
+}
+
+.rewards-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rewards-card-points {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--tetiary-color);
+}
+
+@media (max-width: 768px) {
+  .rewards-grid {
+    grid-template-columns: 1fr;
+  }
+}

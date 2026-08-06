@@ -1,11 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 import "./footer.css";
 import houseimage from "../../assets/house-cleaning.png";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import { apiUrl } from "../../utils/api";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
+import { SITE_CONFIG } from "../../config/site";
+import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
 
 const Footer = () => {
+  const { value: footerContent, loading: footerLoading } = useCmsCategory("footer", {});
+  const { isEditMode } = useEditMode();
   const [email, setEmail] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [loading, setLoading] = useState(false);
@@ -13,6 +21,12 @@ const Footer = () => {
   const observer = useRef(null);
 
   useEffect(() => {
+    // Don't query .futup while the loading spinner is still showing —
+    // the real footer content isn't in the DOM yet, so nothing gets
+    // observed and nothing ever gets the "active" class that makes it
+    // visible. Wait until footerLoading flips to false.
+    if (footerLoading) return;
+
     observer.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -35,7 +49,7 @@ const Footer = () => {
         elements.forEach((em) => observer.current.unobserve(em));
       }
     };
-  }, []);
+  }, [footerLoading]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +65,7 @@ const Footer = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/subscribe`, {
+      const res = await fetch(apiUrl('/api/subscribe'), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -71,6 +85,31 @@ const Footer = () => {
     }
   };
 
+  if (footerLoading) {
+    return (
+      <div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
+
+  const footerAbout = footerContent?.about || "At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.";
+  const subscribeHeading = footerContent?.subscribe_heading || "Stay in Touch";
+  const subscribePlaceholder = footerContent?.subscribe_placeholder || "Enter Your Email";
+  const exploreLinks = footerContent?.explore_links || [
+    { label: "Blog", to: "/blog", icon: "fa-solid fa-blog" },
+    { label: "About Us", to: "/about", icon: "fa-solid fa-address-card" },
+    { label: "Services", to: "/services", icon: "fa-brands fa-servicestack" },
+    { label: "Contact", to: "/contact", icon: "fa-solid fa-phone" }
+  ];
+  const socialLinks = footerContent?.social_links || [
+    { url: "https://www.facebook.com/lbrcleaning", icon: "fa-brands fa-facebook-f" },
+    { url: "https://www.instagram.com/lbrcleaning", icon: "fa-brands fa-instagram" },
+    { url: "https://www.youtube.com/@lbrcleaning", icon: "fa-brands fa-youtube" }
+  ];
+
   return (
     <div className="footer">
       {loading && <Loading message="Subscribing..." />}
@@ -81,16 +120,25 @@ const Footer = () => {
       />
 
       <div className="subscribe container">
-        <h2>Stay in Touch</h2>
+        <h2><EditableText cmsKey="footer.subscribe_heading" type="text" value={subscribeHeading} /></h2>
+
+        {isEditMode && (
+          <div className="editable-inline-note">
+            <span className="editable-inline-note-label">Placeholder text:</span>
+            <EditableText cmsKey="footer.subscribe_placeholder" type="text" value={subscribePlaceholder} />
+          </div>
+        )}
+
         <form onSubmit={onSubmit}>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             name="email"
-            placeholder="Enter Your Email"
+            placeholder={subscribePlaceholder}
+            disabled={isEditMode}
           />
-          <button type="submit" className="btn">
+          <button type="submit" className="btn" disabled={isEditMode}>
             <p>
               Subscribe <i className="fa-solid fa-arrow-right-long"></i>
             </p>
@@ -98,15 +146,22 @@ const Footer = () => {
         </form>
 
         <div className="socials">
-          <Link className="iconactive" target="_blank" to="https://www.facebook.com/lbrcleaning">
-            <i className="fa-brands fa-facebook-f"></i>
-          </Link>
-          <Link className="iconactive" target="_blank" to="https://www.instagram.com/lbrcleaning">
-            <i className="fa-brands fa-instagram"></i>
-          </Link>
-          <Link className="iconactive" target="_blank" to="https://www.youtube.com/@lbrcleaning">
-            <i className="fa-brands fa-youtube"></i>
-          </Link>
+          <EditableList
+            cmsKey="footer.social_links"
+            type="array"
+            value={socialLinks}
+            itemWrapperTag="span"
+            fields={[
+              { key: "url", label: "Link URL" },
+              { key: "icon", label: "Icon class (e.g. fa-brands fa-instagram)" },
+            ]}
+          >
+            {(link, idx) => (
+              <a key={idx} className="iconactive" target="_blank" rel="noopener noreferrer" href={link.url}>
+                <i className={link.icon}></i>
+              </a>
+            )}
+          </EditableList>
         </div>
       </div>
 
@@ -114,47 +169,56 @@ const Footer = () => {
         <div className="main futup">
           <div className="logo">
             <img src={houseimage} alt="" />
-        
           </div>
-          <p>
-            At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.
-          </p>
+          <p><EditableText cmsKey="footer.about" type="text" value={footerAbout} /></p>
         </div>
 
         <ul className="explore futup">
           <h2>Explore Links</h2>
-          <li><Link to="/blog"><i className="fa-solid fa-blog"></i> Blog</Link></li>
-          <li><Link to="/about"><i className="fa-solid fa-address-card"></i> About Us</Link></li>
-          <li><Link to="/services"><i className="fa-brands fa-servicestack"></i> Services</Link></li>
-          <li><Link to="/contact"><i className="fa-solid fa-phone"></i> Contact</Link></li>
+          <EditableList
+            cmsKey="footer.explore_links"
+            type="array"
+            value={exploreLinks}
+            itemWrapperTag="li"
+            fields={[
+              { key: "label", label: "Label" },
+              { key: "to", label: "Link (e.g. /about)" },
+              { key: "icon", label: "Icon class (e.g. fa-solid fa-blog)" },
+            ]}
+          >
+            {(link, idx) => (
+              <Link key={idx} to={link.to}><i className={link.icon}></i> {link.label}</Link>
+            )}
+          </EditableList>
         </ul>
 
         <div className="footer_details futup">
-          <a 
-  href="tel:08068686953" rel="noopener" aria-label="Call 08068686953" 
->
-  <i className="fa-solid fa-phone"></i> 08068686953
-  </a>
+          
+          <a href={`tel:${SITE_CONFIG.phone.replace(/\s/g, "")}`}
+            rel="noopener"
+            aria-label={`Call ${SITE_CONFIG.phone}`}
+          >
+            <i className="fa-solid fa-phone"></i> {SITE_CONFIG.phone}
+          </a>
 
- <a 
-  href="tel:08035331656"  rel="noopener" aria-label="Call 08035331656"
->
-  <i className="fa-solid fa-phone"></i> 08035331656
+          
+          <a href=""={`https://wa.me/${SITE_CONFIG.WHATSAPP_NUMBER}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fa-brands fa-whatsapp"></i> WhatsApp
           </a>
-          <a href="whatsapp://send?phone=2348068686953">
-              <i className="fa-brands fa-whatsapp"></i> 2348068686953
+          <a href={`mailto:${SITE_CONFIG.email}`}>
+            <p><i className="fa-solid fa-envelope"></i> {SITE_CONFIG.email}</p>
           </a>
-          <a href="mailto:info@lbrcleaningservices">
-            <p><i className="fa-solid fa-envelope"></i> info@lbrcleaningservices</p>
+          
+          <a href=""={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.address)}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i className="fa-solid fa-location-dot"></i>
+            {SITE_CONFIG.address}
           </a>
-        <a
-        href="https://www.google.com/maps?q=Block+A6,+suite+39,+Sura+shopping+complex+Simpson+Street,+Lagos+Island"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <i className="fa-solid fa-location-dot"></i> 
-        Block A6, suite 39, Sura shopping complex Simpson Street, Lagos Island
-      </a>
         </div>
       </div>
 

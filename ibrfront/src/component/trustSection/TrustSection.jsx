@@ -1,17 +1,27 @@
 // filepath: ibrfront/src/component/trustSection/TrustSection.jsx
 import React from "react";
 import "./trustSection.css";
-
-const badges = [
-  { icon: "fa-solid fa-shield-halved", label: "Licensed & Insured" },
-  { icon: "fa-solid fa-leaf", label: "Eco Certified" },
-  { icon: "fa-solid fa-clock", label: "24/7 Support" },
-  { icon: "fa-solid fa-medal", label: "5-Star Rated" },
-  { icon: "fa-solid fa-hand-holding-heart", label: "Satisfaction Guarantee" },
-  { icon: "fa-solid fa-user-shield", label: "Background-Checked Staff" },
-];
+import { useCmsCategory } from "../../hooks/useCmsContent";
 
 const TrustSection = () => {
+  const { value: trustData, loading: trustLoading } = useCmsCategory("trust_section", {});
+
+  if (trustLoading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="loading-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    );
+  }
+
+  const badges = trustData?.badges || [];
+
+  if (!badges.length) {
+    return null;
+  }
+
   return (
     <section className="trust-section">
       <div className="trust-container">
