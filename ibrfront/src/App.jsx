@@ -7,6 +7,8 @@ import Footer from './component/footer/Footer';
 import { EditModeProvider } from "./context/EditModeContext";
 import AdminEditLayout from './component/adminEditLayout/AdminEditLayout';
 
+const AdminLogin = lazy(() => import('./pages/auth/AdminLogin'));
+const AdminCreateAdmin = lazy(() => import('./pages/auth/AdminCreateAdmin'));
 const Home = lazy(() => import('./pages/home/Home'));
 const Service = lazy(() => import('./pages/service/Service'));
 const ServiceDetails = lazy(() => import('./component/serviceDetails/serviceDetails'));
@@ -52,6 +54,8 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/service" element={<Service />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/portal/a9f2c1e8b4d67320" element={<AdminLogin />} />
+       <Route path="/admin/create-admin" element={<AdminCreateAdmin />} />
               <Route path="/about" element={<About />} />
               <Route path="/services/:serviceId" element={<ServiceDetails />} />
               <Route path="/contact" element={<Contact />} />

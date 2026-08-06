@@ -13,9 +13,7 @@ const CmsBatchEditor = () => {
   const [alertData, setAlertData] = useState({ message: "", type: "success" });
   const [expandedItem, setExpandedItem] = useState(null);
 
-  useEffect(() => {
-    fetchContent();
-  }, []);
+
 
   if (loading) {
     return <CmsSkeleton />;
@@ -37,7 +35,10 @@ const CmsBatchEditor = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    fetchContent();
+  }, []);
+  
   const showAlert = (message, type = "success") => {
     setAlertData({ message, type });
     setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);

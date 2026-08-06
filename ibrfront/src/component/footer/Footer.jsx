@@ -21,10 +21,6 @@ const Footer = () => {
   const observer = useRef(null);
 
   useEffect(() => {
-    // Don't query .futup while the loading spinner is still showing —
-    // the real footer content isn't in the DOM yet, so nothing gets
-    // observed and nothing ever gets the "active" class that makes it
-    // visible. Wait until footerLoading flips to false.
     if (footerLoading) return;
 
     observer.current = new IntersectionObserver(
@@ -65,7 +61,7 @@ const Footer = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(apiUrl('/api/subscribe'), {
+      const res = await fetch(apiUrl("/api/subscribe"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -87,7 +83,7 @@ const Footer = () => {
 
   if (footerLoading) {
     return (
-      <div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: "200px", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div className="loading-bars" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
@@ -95,19 +91,21 @@ const Footer = () => {
     );
   }
 
-  const footerAbout = footerContent?.about || "At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.";
+  const footerAbout =
+    footerContent?.about ||
+    "At LBR Cleaning, we offer professional, reliable, and affordable cleaning services tailored to meet your needs. From residential homes to commercial offices, our trained staff ensures every space shines with excellence. Your satisfaction is our top priority.";
   const subscribeHeading = footerContent?.subscribe_heading || "Stay in Touch";
   const subscribePlaceholder = footerContent?.subscribe_placeholder || "Enter Your Email";
   const exploreLinks = footerContent?.explore_links || [
     { label: "Blog", to: "/blog", icon: "fa-solid fa-blog" },
     { label: "About Us", to: "/about", icon: "fa-solid fa-address-card" },
     { label: "Services", to: "/services", icon: "fa-brands fa-servicestack" },
-    { label: "Contact", to: "/contact", icon: "fa-solid fa-phone" }
+    { label: "Contact", to: "/contact", icon: "fa-solid fa-phone" },
   ];
   const socialLinks = footerContent?.social_links || [
     { url: "https://www.facebook.com/lbrcleaning", icon: "fa-brands fa-facebook-f" },
     { url: "https://www.instagram.com/lbrcleaning", icon: "fa-brands fa-instagram" },
-    { url: "https://www.youtube.com/@lbrcleaning", icon: "fa-brands fa-youtube" }
+    { url: "https://www.youtube.com/@lbrcleaning", icon: "fa-brands fa-youtube" },
   ];
 
   return (
@@ -120,7 +118,9 @@ const Footer = () => {
       />
 
       <div className="subscribe container">
-        <h2><EditableText cmsKey="footer.subscribe_heading" type="text" value={subscribeHeading} /></h2>
+        <h2>
+          <EditableText cmsKey="footer.subscribe_heading" type="text" value={subscribeHeading} />
+        </h2>
 
         {isEditMode && (
           <div className="editable-inline-note">
@@ -170,7 +170,9 @@ const Footer = () => {
           <div className="logo">
             <img src={houseimage} alt="" />
           </div>
-          <p><EditableText cmsKey="footer.about" type="text" value={footerAbout} /></p>
+          <p>
+            <EditableText cmsKey="footer.about" type="text" value={footerAbout} />
+          </p>
         </div>
 
         <ul className="explore futup">
@@ -187,7 +189,9 @@ const Footer = () => {
             ]}
           >
             {(link, idx) => (
-              <Link key={idx} to={link.to}><i className={link.icon}></i> {link.label}</Link>
+              <Link key={idx} to={link.to}>
+                <i className={link.icon}></i> {link.label}
+              </Link>
             )}
           </EditableList>
         </ul>
@@ -201,18 +205,16 @@ const Footer = () => {
             <i className="fa-solid fa-phone"></i> {SITE_CONFIG.phone}
           </a>
 
-          
-          <a href=""={`https://wa.me/${SITE_CONFIG.WHATSAPP_NUMBER}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={`https://wa.me/${SITE_CONFIG.WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-whatsapp"></i> WhatsApp
           </a>
           <a href={`mailto:${SITE_CONFIG.email}`}>
-            <p><i className="fa-solid fa-envelope"></i> {SITE_CONFIG.email}</p>
+            <p>
+              <i className="fa-solid fa-envelope"></i> {SITE_CONFIG.email}
+            </p>
           </a>
-          
-          <a href=""={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.address)}`}
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.address)}`}
             target="_blank"
             rel="noreferrer"
           >

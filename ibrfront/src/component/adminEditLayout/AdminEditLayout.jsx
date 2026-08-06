@@ -21,6 +21,7 @@ const AdminEditLayout = () => {
         <i className="fa-solid fa-lock"></i>
         <h2>Admins only</h2>
         <p>Log in as an administrator to edit this website visually.</p>
+        
       </div>
     );
   }
