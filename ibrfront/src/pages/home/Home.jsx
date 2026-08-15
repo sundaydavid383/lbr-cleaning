@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import "./home.css"
 import { useCmsCategory } from "../../hooks/useCmsContent";
 import { HomeSkeleton } from "../../component/pageSkeleton/PageSkeleton";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
+import EditableList from "../../component/editable/EditableList";
 
 const Home = () => {
   const { value: heroContent, loading: heroLoading } = useCmsCategory("homepage", {});
@@ -17,22 +20,13 @@ const Home = () => {
   const { value: statsContent, loading: statsLoading } = useCmsCategory("homepage_stats", {});
   const { value: trustContent, loading: trustLoading } = useCmsCategory("trust_badges", {});
   const { value: ctaContent, loading: ctaLoading } = useCmsCategory("cta_banner", {});
+  const { isEditMode } = useEditMode();
 
   const isLoading = heroLoading || howLoading || guaranteeLoading || areasLoading || statsLoading || trustLoading || ctaLoading;
 
   if (isLoading) {
-    console.log(`[HOME] Loading... hero=${heroLoading} how=${howLoading} guarantee=${guaranteeLoading} areas=${areasLoading} stats=${statsLoading} trust=${trustLoading} cta=${ctaLoading}`);
     return <HomeSkeleton />;
   }
-
-  console.log(`[HOME] Data loaded:`);
-  console.log(`[HOME] heroContent:`, heroContent);
-  console.log(`[HOME] howItWorksContent:`, howItWorksContent);
-  console.log(`[HOME] guaranteeContent:`, guaranteeContent);
-  console.log(`[HOME] areasContent:`, areasContent);
-  console.log(`[HOME] statsContent:`, statsContent);
-  console.log(`[HOME] trustContent:`, trustContent);
-  console.log(`[HOME] ctaContent:`, ctaContent);
 
   if (!heroContent && !howItWorksContent && !guaranteeContent && !areasContent) {
     return (
@@ -64,9 +58,19 @@ const Home = () => {
         <section className="home-how-it-works">
           <div className="home-how-it-works-container">
             <div className="section-header">
-              <span className="section-tag">{howItWorksContent?.tag}</span>
-              <h2>{howItWorksContent?.title}</h2>
-              <p>{howItWorksContent?.subtitle}</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="how_it_works.tag" type="text" value={howItWorksContent?.tag} as="span" className="section-tag" />
+                  <EditableText cmsKey="how_it_works.title" type="text" value={howItWorksContent?.title} as="h2" />
+                  <EditableText cmsKey="how_it_works.subtitle" type="text" value={howItWorksContent?.subtitle} as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">{howItWorksContent?.tag}</span>
+                  <h2>{howItWorksContent?.title}</h2>
+                  <p>{howItWorksContent?.subtitle}</p>
+                </>
+              )}
             </div>
             <div className="how-it-works-grid">
               {howSteps.map((step, idx) => (
@@ -86,9 +90,19 @@ const Home = () => {
         <section className="home-areas">
           <div className="home-areas-container">
             <div className="section-header">
-              <span className="section-tag">{areasContent?.tag}</span>
-              <h2>{areasContent?.title}</h2>
-              <p>{areasContent?.subtitle}</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="coverage_areas.tag" type="text" value={areasContent?.tag} as="span" className="section-tag" />
+                  <EditableText cmsKey="coverage_areas.title" type="text" value={areasContent?.title} as="h2" />
+                  <EditableText cmsKey="coverage_areas.subtitle" type="text" value={areasContent?.subtitle} as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">{areasContent?.tag}</span>
+                  <h2>{areasContent?.title}</h2>
+                  <p>{areasContent?.subtitle}</p>
+                </>
+              )}
             </div>
             <div className="areas-grid">
               {areas.map((area) => (
@@ -99,7 +113,15 @@ const Home = () => {
               ))}
             </div>
             <p className="areas-note">
-              {areasContent?.note} <Link to="/contact">{areasContent?.note_link_text}</Link> — we're always expanding.
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="coverage_areas.note" type="text" value={areasContent?.note} as="span" /> <Link to="/contact">{areasContent?.note_link_text}</Link> — we're always expanding.
+                </>
+              ) : (
+                <>
+                  {areasContent?.note} <Link to="/contact">{areasContent?.note_link_text}</Link> — we're always expanding.
+                </>
+              )}
             </p>
           </div>
         </section>
@@ -109,15 +131,29 @@ const Home = () => {
         <section className="home-guarantee">
           <div className="home-guarantee-container">
             <div className="guarantee-content">
-              <span className="section-tag">{guaranteeContent?.tag}</span>
-              <h2>{guaranteeContent?.title}</h2>
-              <p>{guaranteeContent?.description}</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="guarantee.tag" type="text" value={guaranteeContent?.tag} as="span" className="section-tag" />
+                  <EditableText cmsKey="guarantee.title" type="text" value={guaranteeContent?.title} as="h2" />
+                  <EditableText cmsKey="guarantee.description" type="text" value={guaranteeContent?.description} as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">{guaranteeContent?.tag}</span>
+                  <h2>{guaranteeContent?.title}</h2>
+                  <p>{guaranteeContent?.description}</p>
+                </>
+              )}
               <ul className="guarantee-list">
                 {guaranteeItems.map((item, idx) => (
                   <li key={idx}><i className="fa-solid fa-check-circle"></i> {item}</li>
                 ))}
               </ul>
-              <Link to="/apply" className="guarantee-cta">{guaranteeContent?.cta_text} <i className="fa-solid fa-arrow-right"></i></Link>
+              {isEditMode ? (
+                <EditableText cmsKey="guarantee.cta_text" type="text" value={guaranteeContent?.cta_text} as={Link} to="/apply" className="guarantee-cta" />
+              ) : (
+                <Link to="/apply" className="guarantee-cta">{guaranteeContent?.cta_text} <i className="fa-solid fa-arrow-right"></i></Link>
+              )}
             </div>
             <div className="guarantee-visual">
               <div className="guarantee-badge">

@@ -21,24 +21,26 @@ const CTABanner = () => {
     return null;
   }
 
+  const data = ctaData.data || ctaData;
+
   return (
     <section className="cta-banner">
       <div className="cta-bg-pattern"></div>
       <div className="cta-container">
         <div className="cta-content">
-          {ctaData.tag && <span className="cta-tag">{ctaData.tag}</span>}
-          {ctaData.title && (
+          {data.tag && <span className="cta-tag">{data.tag}</span>}
+          {data.title && (
             <h2 className="cta-title">
-              {ctaData.title.split('<span class="highlight">')[0]}
-              {ctaData.title.includes('highlight') && <span className="highlight">{ctaData.title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
-              {ctaData.title.split('</span>')[1] || ''}
+              {data.title.split('<span class="highlight">')[0]}
+              {data.title.includes('highlight') && <span className="highlight">{data.title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
+              {data.title.split('</span>')[1] || ''}
             </h2>
           )}
-          {ctaData.subtitle && <p className="cta-subtitle">{ctaData.subtitle}</p>}
+          {data.subtitle && <p className="cta-subtitle">{data.subtitle}</p>}
 
-          {ctaData.features?.length > 0 && (
+          {data.features?.length > 0 && (
             <div className="cta-features">
-              {ctaData.features.map((feature, index) => (
+              {data.features.map((feature, index) => (
                 <div className="cta-feature" key={index}>
                   <i className="fa-solid fa-check-circle"></i>
                   <span>{feature}</span>
@@ -50,12 +52,12 @@ const CTABanner = () => {
           <div className="cta-buttons">
             <Link to="/contact" className="btn btn-primary">
               <p>
-                {ctaData.primary_button || "Book Now"} <i className="fa-solid fa-arrow-right-long"></i>
+                {data.primary_button || "Book Now"} <i className="fa-solid fa-arrow-right-long"></i>
               </p>
             </Link>
-            <a href={`tel:${ctaData.phone || "+234 801 234 5678"}`} className="btn btn-secondary">
+            <a href={`tel:${data.phone || "+234 801 234 5678"}`} className="btn btn-secondary">
               <p>
-                <i className="fa-solid fa-phone"></i> {ctaData.secondary_button || "Call Us"}
+                <i className="fa-solid fa-phone"></i> {data.secondary_button || "Call Us"}
               </p>
             </a>
           </div>

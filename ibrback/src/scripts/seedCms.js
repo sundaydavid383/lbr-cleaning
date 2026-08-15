@@ -22,7 +22,10 @@ const seedData = [
         "Explore our services and discover how we can transform your space into a spotless, healthy environment."
       ],
       talks: ["Call now", "We've got you"],
-      talksReport: "+234 801 234 5678"
+      talksReport: "+234 801 234 5678",
+      sectionimage: "/assets/cleaner1.png",
+      sectionimageStar: "/assets/star.png",
+      sectionimageSpark: "/assets/spark.png"
     },
     {
       questions: "Nigeria's Most Trusted Cleaners",
@@ -33,7 +36,10 @@ const seedData = [
         "We deliver excellent, innovative, and value-driven cleaning solutions to homes and businesses."
       ],
       talks: ["Book clean", "Clean now"],
-      talksReport: "+234 801 234 5678"
+      talksReport: "+234 801 234 5678",
+      sectionimage: "/assets/cleaner1.png",
+      sectionimageStar: "/assets/star.png",
+      sectionimageSpark: "/assets/spark.png"
     },
     {
       questions: "Our Commitment to Excellence",
@@ -44,7 +50,10 @@ const seedData = [
         "We ensure a clean and healthy environment through highly trained staff and exceptional customer service."
       ],
       talks: ["Learn more", "free estimate"],
-      talksReport: "+234 801 234 5678"
+      talksReport: "+234 801 234 5678",
+      sectionimage: "/assets/cleaner1.png",
+      sectionimageStar: "/assets/star.png",
+      sectionimageSpark: "/assets/spark.png"
     },
     {
       questions: "About Us",
@@ -55,9 +64,30 @@ const seedData = [
         "We uphold these principles daily to deliver reliable, meaningful, and quality-driven cleaning services."
       ],
       talks: ["Contact us", "Get a quote"],
-      talksReport: "+234 801 234 5678"
+      talksReport: "+234 801 234 5678",
+      sectionimage: "/assets/cleaner1.png",
+      sectionimageStar: "/assets/star.png",
+      sectionimageSpark: "/assets/spark.png"
     }
     ]
+  },
+  {
+    key: "home.background_image",
+    type: "text",
+    category: "homepage",
+    label: "Homepage Background Image",
+    description: "Background image URL for the homepage hero",
+    value: "/assets/cleaningbackground.jpg",
+    isPublic: true
+  },
+  {
+    key: "home.background_video",
+    type: "text",
+    category: "homepage",
+    label: "Homepage Background Video",
+    description: "Background video URL for the homepage hero (leave empty for image)",
+    value: "",
+    isPublic: true
   },
   {
     key: "home.features",
@@ -207,6 +237,141 @@ const seedData = [
     value: "Monday - Friday: 8:00 AM - 7:00 PM, Saturday: 9:00 AM - 5:00 PM, Sunday: 10:00 AM - 4:00 PM",
     isPublic: true
   },
+  {
+    key: "contact.address",
+    type: "text",
+    category: "contact",
+    label: "Office Address",
+    description: "Business address displayed on the contact page",
+    value: "Lagos, Nigeria",
+    isPublic: true
+  },
+  {
+    key: "contact.email",
+    type: "text",
+    category: "contact",
+    label: "Contact Email",
+    description: "Email address displayed on the contact page",
+    value: "hello@lbrcleaning.com",
+    isPublic: true
+  },
+  {
+    key: "contact.phone",
+    type: "text",
+    category: "contact",
+    label: "Contact Phone",
+    description: "Phone number displayed on the contact page",
+    value: "+234 801 234 5678",
+    isPublic: true
+  },
+  {
+    key: "contact.form_heading",
+    type: "text",
+    category: "contact",
+    label: "Form Heading",
+    description: "Heading for the contact form",
+    value: "Send Us a Message",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_name",
+    type: "text",
+    category: "contact",
+    label: "Form Name Placeholder",
+    description: "Placeholder text for the name input",
+    value: "Your Name",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_email",
+    type: "text",
+    category: "contact",
+    label: "Form Email Placeholder",
+    description: "Placeholder text for the email input",
+    value: "Your Email",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_whatsapp",
+    type: "text",
+    category: "contact",
+    label: "Form WhatsApp Placeholder",
+    description: "Placeholder text for the WhatsApp input",
+    value: "Your WhatsApp Number (e.g. +2348012345678)",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_subject",
+    type: "text",
+    category: "contact",
+    label: "Form Subject Placeholder",
+    description: "Placeholder text for the subject input",
+    value: "Subject",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_message",
+    type: "text",
+    category: "contact",
+    label: "Form Message Placeholder",
+    description: "Placeholder text for the message textarea",
+    value: "Your Message",
+    isPublic: true
+  },
+  {
+    key: "contact.form_button",
+    type: "text",
+    category: "contact",
+    label: "Form Button Text",
+    description: "Text for the contact form submit button",
+    value: "Send Message",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_heading",
+    type: "text",
+    category: "contact",
+    label: "Encouragement Heading",
+    description: "Heading for the encouragement section",
+    value: "Ready for a Cleaner Space?",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_text",
+    type: "text",
+    category: "contact",
+    label: "Encouragement Text",
+    description: "Text for the encouragement section",
+    value: "Our team is ready to help you with all your cleaning needs. Get in touch today!",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_cta",
+    type: "text",
+    category: "contact",
+    label: "Encouragement CTA Text",
+    description: "Call-to-action text for the encouragement section",
+    value: "Explore Our Services",
+    isPublic: true
+  },
+  {
+    key: "contact.hours_note",
+    type: "text",
+    category: "contact",
+    label: "Hours Note",
+    description: "Note about business hours on the contact page",
+    value: "We're closed on Sundays but available for emergency cleanings.",
+    isPublic: true
+  },
+  {
+    key: "contact.map_embed",
+    type: "text",
+    category: "contact",
+    label: "Map Embed URL",
+    description: "Google Maps embed URL for the contact page",
+    value: "",
+    isPublic: true
+  },
 
   // Contact Page
   {
@@ -315,23 +480,6 @@ const seedData = [
     ]
   },
 
-  // CTA Banner
-  {
-    key: "home.cta_banner",
-    type: "object",
-    category: "homepage",
-    label: "CTA Banner",
-    description: "Call-to-action banner on homepage",
-    value: {
-      tag: "Get Started Today",
-      title: "Ready for a Spotless Space?",
-      subtitle: "Book your cleaning appointment in under 60 seconds. Professional cleaners, eco-friendly products, and a satisfaction guarantee — every time.",
-      features: ["Free consultation & quote", "No hidden fees", "Satisfaction guaranteed"],
-      primary_button: "Book Now",
-      secondary_button: "Call Us"
-    }
-  },
-
   // About Page
   {
     key: "about_page.intro",
@@ -403,6 +551,29 @@ const seedData = [
       `Choose LBR Cleaning—where precision meets passion, and your peace of mind is our priority.`
     ],
     isPublic: true
+  },
+  {
+    key: "about_page.hero_slides",
+    type: "array",
+    category: "about_page",
+    label: "About Page Hero Slides",
+    description: "Hero slider content for the about page",
+    value: [
+      {
+        questions: "Who We Are",
+        header: "About",
+        headerspan: "LBR Cleaning",
+        ps: [
+          "LBR Cleaning Services is a registered Nigerian company offering quality cleaning solutions across Nigeria.",
+          "We create clean, safe spaces that add value to your business and home."
+        ],
+        talks: ["Our Services", "Contact Us"],
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
+      }
+    ]
   },
 
   // Service Page

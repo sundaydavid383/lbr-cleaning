@@ -13,10 +13,44 @@ const fieldNameFromKey = (key) => {
   return parts[parts.length - 1];
 };
 
+const readLocalStorage = () => {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    const now = Date.now();
+    const cleaned = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      if (v && typeof v === "object" && typeof v.ts === "number" && now - v.ts < CACHE_TTL) {
+        cleaned[k] = v.data;
+      }
+    }
+    return cleaned;
+  } catch {
+    return {};
+  }
+};
+
+const writeLocalStorage = (key, data) => {
+  try {
+    const existing = readLocalStorage();
+    existing[key] = { data, ts: Date.now() };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(existing));
+  } catch {
+    // ignore quota errors
+  }
+};
+
 // 3. Exported function to fetch a single content item by key
 export const getContent = async (key) => {
   if (contentCache.has(key)) {
     return contentCache.get(key);
+  }
+
+  const lsData = readLocalStorage();
+  if (lsData[key] !== undefined) {
+    contentCache.set(key, lsData[key]);
+    return lsData[key];
   }
 
   try {
@@ -24,13 +58,14 @@ export const getContent = async (key) => {
 
     if (ok && data?.success && data?.data) {
       contentCache.set(key, data.data.value);
+      writeLocalStorage(key, data.data.value);
       return data.data.value;
     }
 
-    return null;
+    return lsData[key] ?? null;
   } catch (err) {
     console.error(`[CMS-CLIENT] getContent: ${key} | error:`, err);
-    return null;
+    return lsData[key] ?? null;
   }
 };
 
@@ -48,6 +83,12 @@ export const getContentByCategory = async (category) => {
     return contentCache.get(cacheKey);
   }
 
+  const lsData = readLocalStorage();
+  if (lsData[cacheKey] !== undefined) {
+    contentCache.set(cacheKey, lsData[cacheKey]);
+    return lsData[cacheKey];
+  }
+
   try {
     const { ok, data } = await apiFetch(`/api/cms/content/category/${encodeURIComponent(category)}`);
 
@@ -59,13 +100,14 @@ export const getContentByCategory = async (category) => {
       });
 
       contentCache.set(cacheKey, result);
+      writeLocalStorage(cacheKey, result);
       return result;
     }
 
     return {};
   } catch (err) {
     console.error(`[CMS-CLIENT] getContentByCategory: ${category} | error:`, err);
-    return {};
+    return lsData[cacheKey] ?? {};
   }
 };
 

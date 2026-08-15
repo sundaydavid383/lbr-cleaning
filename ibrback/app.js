@@ -12,6 +12,7 @@ const subscribeRoutes = require("./src/routes/subscribe");
 const bookingRoutes = require("./src/routes/booking");
 const ordersRoutes = require("./src/routes/orders");
 const cmsRoutes = require("./src/routes/cms");
+const uploadsRoutes = require("./src/routes/uploads");
 
 const app = express();
 
@@ -20,12 +21,12 @@ app.use(
     origin: process.env.CORS_ORIGIN || "*",
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // Raw body parser for webhooks — needed for signature verification.
 // Only enable for the specific webhook path so normal JSON routes keep working.
 app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.get("/welcome", (req, res) => {
   res.status(200).json({ message: "Welcome to LBR Cleaning API", databaseProvider: provider });
@@ -40,6 +41,7 @@ app.use("/api", bookingRoutes);
 app.use("/appointments", bookingRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/cms", cmsRoutes);
+app.use("/api/uploads", uploadsRoutes);
 
 // Generic error handler — keeps a single place to log/format unexpected errors
 app.use((err, req, res, next) => {

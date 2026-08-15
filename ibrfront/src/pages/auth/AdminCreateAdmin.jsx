@@ -17,7 +17,7 @@ const AdminCreateAdmin = () => {
           <div className="auth-card">
             <div className="auth-header">
               <h1>Admins Only</h1>
-              <p>You need to be signed in as an administrator to create new admin accounts.</p>
+              <p>You need to be signed in as an administrator to create new admin accounts. If you do not have admin access, please sign in with your authorized admin account first.</p>
             </div>
           </div>
         </div>

@@ -94,14 +94,11 @@ const Portfolio = () => {
     <div className="portfolio">
       <div className="portfolio_heading">
         <div className="title">
-          <span className="priamry">our services</span>
-          <h2 className="bright">Professional Cleaning Services</h2>
+          <span className="priamry">our work</span>
+          <h2 className="bright">Portfolio</h2>
           <p className="tracker">
             Viewing service {activeIndex + 1} of {total}
           </p>
-        </div>
-        <div className="btn">
-          <p>View all works <i className="fa-solid fa-arrow-right-long"></i></p>
         </div>
       </div>
 

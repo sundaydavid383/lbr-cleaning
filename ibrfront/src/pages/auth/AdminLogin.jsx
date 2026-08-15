@@ -2,24 +2,37 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
+import CustomAlert from "../../component/customAlert/CustomAlert";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [locked, setLocked] = useState(false);
   const { adminLogin } = useAuth();
   const navigate = useNavigate();
 
 
 
+  const getFriendlyError = (message) => {
+    if (!message) {
+      return "We couldn't sign you in. Please verify your administrator email and password, then try again.";
+    }
+
+    if (/404|not found|service/i.test(message)) {
+      return "The admin sign-in service is temporarily unavailable. Please try again in a moment.";
+    }
+
+    return message;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (!email || !password) {
-      setError("Please enter your email and password");
+      setError({ message: "Please enter your administrator email and password.", type: "danger" });
       return;
     }
 
@@ -28,7 +41,7 @@ const AdminLogin = () => {
     setLoading(false);
 
     if (!result.success) {
-      setError(result.message);
+      setError({ message: getFriendlyError(result.message), type: "danger" });
       setLocked(!!result.inputDisable);
       return;
     }
@@ -36,7 +49,16 @@ const AdminLogin = () => {
     navigate("/admin/cms");
   };
 
+
+
   return (
+    <div>
+      {error && ( <CustomAlert
+              message={error?.message}
+              type={error?.type}
+              onClose={() => setError(null)}
+            />)}
+        
     <div className="auth-page">
       <div className="auth-background">
         <div className="auth-bg-shape shape-1"></div>
@@ -44,22 +66,17 @@ const AdminLogin = () => {
         <div className="auth-bg-shape shape-3"></div>
       </div>
 
-      <div className="auth-container" style={{ justifyContent: "center" }}>
+      <div className="auth-container auth-container--single" style={{ justifyContent: "center" }}>
         <div className="auth-card">
           <div className="auth-header">
             <div className="auth-badge-row">
               <span className="auth-badge">Admin Access</span>
             </div>
             <h1>Admin Sign In</h1>
-            <p>Restricted area. Sign in with your administrator credentials.</p>
+            <p>Only authorized staff can use this area. Sign in with your administrator email and password to manage the site.</p>
           </div>
 
-          {error && (
-            <div className="auth-error">
-              <i className="fa-solid fa-circle-exclamation"></i>
-              {error}
-            </div>
-          )}
+        
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className={`auth-form-group ${email ? "focused" : ""}`}>
@@ -94,6 +111,10 @@ const AdminLogin = () => {
               </div>
             </div>
 
+            <p style={{ marginTop: "0.75rem", fontSize: "0.95rem", color: "var(--text-secondary, #64748b)" }}>
+              If you are not an administrator, please use the regular customer login instead.
+            </p>
+
             <button type="submit" className="auth-submit-btn" disabled={loading || locked}>
               {loading ? (
                 <span className="btn-loading">
@@ -109,6 +130,7 @@ const AdminLogin = () => {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 };

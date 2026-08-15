@@ -10,7 +10,7 @@ const Workingprocess = () => {
 
       <div className="title">
         <span className="priamry">working process</span>
-        <h2 className="bright">Easy Steps to Works</h2>
+        <h2 className="bright">How It Works</h2>
       </div>
 
       <div className="workingProcessHolder">

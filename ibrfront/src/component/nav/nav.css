@@ -151,6 +151,34 @@
   transform: translateX(2px);
 }
 
+/* Guide Button */
+.nav-guide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  background: transparent;
+  color: var(--text-color-secondary);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.nav-guide-btn:hover {
+  background: rgba(22, 163, 74, 0.06);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.nav-guide-btn i {
+  font-size: 0.8rem;
+}
+
 /* Auth Buttons */
 .nav-auth-buttons {
   display: flex;

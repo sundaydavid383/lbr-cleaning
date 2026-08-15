@@ -6,7 +6,7 @@ import EditModeBar from "../editModeBar/EditModeBar";
 
 const AdminEditLayout = () => {
   const { isAuthenticated, user } = useAuth();
-  const { setIsEditMode } = useEditMode();
+  const { isEditMode, setIsEditMode } = useEditMode();
 
   useEffect(() => {
     if (isAuthenticated && user?.role === "admin") {
@@ -21,7 +21,6 @@ const AdminEditLayout = () => {
         <i className="fa-solid fa-lock"></i>
         <h2>Admins only</h2>
         <p>Log in as an administrator to edit this website visually.</p>
-        
       </div>
     );
   }

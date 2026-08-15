@@ -2,26 +2,26 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
 import "./cms.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { CmsSkeleton } from "../../../component/pageSkeleton/PageSkeleton";
 
 const CmsBatchEditor = () => {
+  const { token } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [alertData, setAlertData] = useState({ message: "", type: "success" });
   const [expandedItem, setExpandedItem] = useState(null);
 
-
-
-  if (loading) {
-    return <CmsSkeleton />;
-  }
+  const showAlert = (message, type = "success") => {
+    setAlertData({ message, type });
+    setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);
+  };
 
   const fetchContent = async () => {
     try {
-      const token = localStorage.getItem("lbr_auth_token");
       const res = await fetch(apiUrl('/api/cms/content'), {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -35,19 +35,14 @@ const CmsBatchEditor = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchContent();
   }, []);
-  
-  const showAlert = (message, type = "success") => {
-    setAlertData({ message, type });
-    setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);
-  };
 
   const handleSaveAll = async () => {
     setSaving(true);
     try {
-      const token = localStorage.getItem("lbr_auth_token");
       const res = await fetch(apiUrl('/api/cms/content/batch'), {
         method: "POST",
         headers: {
@@ -77,14 +72,7 @@ const CmsBatchEditor = () => {
   };
 
   if (loading) {
-    return (
-      <div className="cms-batch">
-        <div className="cms-loading">
-          <div className="spinner"></div>
-          <p>Loading content...</p>
-        </div>
-      </div>
-    );
+    return <CmsSkeleton />;
   }
 
   return (

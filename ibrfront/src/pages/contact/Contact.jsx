@@ -8,7 +8,9 @@ import TrustSection from "../../component/trustSection/TrustSection";
 import bgImage from "../../assets/cleaningbackground.jpg";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCmsContent } from "../../hooks/useCmsContent";
 import { ContactSkeleton } from "../../component/pageSkeleton/PageSkeleton";
+import { SITE_CONFIG } from "../../config/site";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +24,7 @@ const Contact = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("success");
   const { value: contactContent, loading: contactLoading } = useCmsCategory("contact", {});
+  const { value: siteSettings } = useCmsCategory("site_settings", {});
 
   if (contactLoading) {
     return <ContactSkeleton />;
@@ -34,6 +37,10 @@ const Contact = () => {
       </div>
     );
   }
+
+  const address = contactContent.address || siteSettings?.address || SITE_CONFIG.address;
+  const email = contactContent.email || siteSettings?.email || SITE_CONFIG.email;
+  const phone = contactContent.phone || siteSettings?.phone || SITE_CONFIG.phone;
 
   const validateInputs = () => {
     const { name, email, subject, message, whatsapp } = formData;
@@ -123,26 +130,26 @@ const Contact = () => {
 
       <section className="contact-info">
         <a
-          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactContent.address || "")}`}
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address || "")}`}
           className="info-card"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i className="fas fa-map-marker-alt"></i>
           <h3>Office Address</h3>
-          <p>{contactContent.address}</p>
+          <p>{address}</p>
         </a>
 
-        <a href={`mailto:${contactContent.email}`} className="info-card">
+        <a href={`mailto:${email}`} className="info-card">
           <i className="fas fa-envelope"></i>
           <h3>Email Us</h3>
-          <p>{contactContent.email}</p>
+          <p>{email}</p>
         </a>
 
-        <a href={`tel:${contactContent.phone}`} className="info-card">
+        <a href={`tel:${phone}`} className="info-card">
           <i className="fas fa-phone"></i>
           <h3>Call Us</h3>
-          <p>{contactContent.phone}</p>
+          <p>{phone}</p>
         </a>
       </section>
 

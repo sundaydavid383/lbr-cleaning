@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useUserGuide } from "../../context/UserGuideContext";
 import "./nav.css";
 
 const Nav = () => {
@@ -11,6 +12,7 @@ const Nav = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
+  const { restart } = useUserGuide();
   const userMenuRef = useRef(null);
   const mobileRef = useRef(null);
 
@@ -136,6 +138,16 @@ const Nav = () => {
             </div>
           )}
 
+          <button
+            className="nav-guide-btn"
+            onClick={restart}
+            title="Restart the website tour"
+            aria-label="Take a tour"
+          >
+            <i className="fa-solid fa-route"></i>
+            <span>Take Tour</span>
+          </button>
+
           <Link to="/apply" className="nav-cta">
             <span>Apply Now</span>
             <i className="fa-solid fa-arrow-right" />
@@ -190,6 +202,9 @@ const Nav = () => {
           {!isAuthenticated && (
             <>
               <div className="mobile-nav-divider" />
+              <button className="mobile-nav-link mobile-nav-auth" onClick={() => { restart(); setMobileOpen(false); }}>
+                <i className="fa-solid fa-route" /> Take a Tour
+              </button>
               <Link to="/login" className="mobile-nav-link mobile-nav-auth" onClick={() => setMobileOpen(false)}>
                 Sign In
               </Link>

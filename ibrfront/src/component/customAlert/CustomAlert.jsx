@@ -21,7 +21,7 @@ const CustomAlert = ({ message, type = "success", onClose, duration = 5000 }) =>
     <AnimatePresence>
       {message && (
         <motion.div
-          className={`custom-alert-holder custom-alert-${type}`}
+          className={`custom-alert-holder custom-alert custom-alert-${type}`}
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}

@@ -13,9 +13,9 @@
 }
 
 .portfolio {
-    margin-top: clamp(4rem, 8vw, 8rem);
+    margin-top:  0rem;
     background: var(--light-gray);
-    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    padding-block:1.8rem;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -51,16 +51,6 @@
     letter-spacing: 0.02em;
 }
 
-.portfolio_heading .btn {
-    flex-shrink: 0;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.portfolio_heading .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 26px rgba(36, 170, 36, 0.25);
-}
 
 /* ========================================
    Carousel shell
@@ -68,7 +58,7 @@
 .portfolio_holder {
     width: min(100%, 34rem);
     margin-inline: auto;
-    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    margin-top:0rem;
     position: relative;
     border-radius: 1.25rem;
     overflow: hidden;

@@ -262,19 +262,24 @@
     position: relative;
 }
 
-.footer .explore li a {
+.footer .explore a,
+.footer .explore a:link,
+.footer .explore a:visited {
     color: var(--footer-text-muted);
-    transition: color var(--footer-ease-fast), transform var(--footer-ease-fast);
+    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.7rem;
     padding: 0.3rem 0;
     font-size: 0.95rem;
     letter-spacing: 0.01em;
-    text-decoration: none;
+    transition:
+        color var(--footer-ease-fast),
+        transform var(--footer-ease-fast);
 }
 
-.footer .explore li a:hover {
+.footer .explore a:hover,
+.footer .explore a:focus {
     color: var(--footer-text);
     transform: translateX(4px);
 }

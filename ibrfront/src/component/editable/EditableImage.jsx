@@ -1,19 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useEditMode } from "../../context/EditModeContext";
+import { apiUrl } from "../../utils/api";
 import "./editable.css";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const EditableImage = ({ cmsKey, type = "image", value, alt = "", className = "" }) => {
   const { isEditMode, saveField, getOverride } = useEditMode();
   const displayValue = getOverride(cmsKey, value);
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState(displayValue);
+  const [draftUrl, setDraftUrl] = useState(displayValue);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const fileInputRef = useRef(null);
 
   if (!isEditMode) {
     return <img src={displayValue} alt={alt} className={className} />;
   }
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setError("");
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setError("Only JPG, PNG, WebP, and SVG images are allowed.");
+      return;
+    }
+
+    if (file.size > MAX_SIZE) {
+      setError("Image must be smaller than 5MB.");
+      return;
+    }
+
+    try {
+      setUploading(true);
+
+      const ext = file.name.split(".").pop() || "bin";
+      const objectKey = `website/${cmsKey.replace(/\./g, "/")}_${Date.now()}.${ext}`;
+
+      const presignRes = await fetch(apiUrl("/api/uploads/presign"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await import("../../context/AuthContext")).useAuth().token || ""}`,
+        },
+        body: JSON.stringify({ key: objectKey, contentType: file.type, size: file.size }),
+      });
+
+      const presignData = await presignRes.json();
+      if (!presignRes.ok || !presignData.success) {
+        throw new Error(presignData.message || "Failed to get upload URL");
+      }
+
+      const { uploadUrl, publicUrl } = presignData.data;
+
+      const uploadRes = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Upload to Cloudflare R2 failed");
+      }
+
+      await saveField(cmsKey, publicUrl, type);
+      setDraftUrl(publicUrl);
+      setOpen(false);
+    } catch (err) {
+      console.error("[EDIT-IMAGE] upload error:", err);
+      setError(err.message || "Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   const handleSave = async () => {
-    await saveField(cmsKey, draft, type);
+    await saveField(cmsKey, draftUrl, type);
     setOpen(false);
   };
 
@@ -24,24 +93,30 @@ const EditableImage = ({ cmsKey, type = "image", value, alt = "", className = ""
         alt={alt}
         className={`${className} editable-field editable-image`}
         onClick={() => {
-          setDraft(displayValue);
+          setDraftUrl(displayValue);
           setOpen(true);
+          setError("");
         }}
       />
       {open && (
         <div className="editable-popover">
-          <label>Image URL</label>
+          <label>Current Image</label>
+          {draftUrl && <img src={draftUrl} alt="Preview" className="editable-popover-preview" />}
+
+          <label>Replace Image</label>
           <input
-            type="text"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder="https://example.com/photo.jpg"
-            autoFocus
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/svg+xml"
+            onChange={handleFileChange}
+            disabled={uploading}
           />
-          {draft && <img src={draft} alt="Preview" className="editable-popover-preview" />}
+          {uploading && <p className="editable-uploading">Uploading…</p>}
+          {error && <p className="editable-error">{error}</p>}
+
           <div className="editable-popover-actions">
-            <button type="button" onClick={() => setOpen(false)}>Cancel</button>
-            <button type="button" className="primary" onClick={handleSave}>Save</button>
+            <button type="button" onClick={() => setOpen(false)} disabled={uploading}>Cancel</button>
+            <button type="button" className="primary" onClick={handleSave} disabled={uploading}>Save</button>
           </div>
         </div>
       )}

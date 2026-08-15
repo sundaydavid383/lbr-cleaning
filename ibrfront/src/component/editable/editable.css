@@ -102,6 +102,16 @@
   border-color: var(--primary-color, #16a34a);
 }
 
+.editable-uploading {
+  font-size: 0.82rem;
+  color: var(--text-color-muted, #6b7280);
+}
+
+.editable-error {
+  font-size: 0.82rem;
+  color: #dc2626;
+}
+
 /* List items */
 .editable-list-item-wrap {
   position: relative;

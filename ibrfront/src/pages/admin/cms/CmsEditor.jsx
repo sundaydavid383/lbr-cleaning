@@ -5,6 +5,7 @@ import { apiUrl } from "../../../utils/api";
 import "./cms.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { CmsSkeleton } from "../../../component/pageSkeleton/PageSkeleton";
+import { useAuth } from "../../../context/AuthContext";
 
 // ============================================================================
 // Plain-language help text shown under the Type field. Purely presentational.
@@ -287,6 +288,7 @@ const SmartValueField = ({ type, rawValue, onRawChange }) => {
 const CmsEditor = () => {
   const { key } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();  
   const [formData, setFormData] = useState({
     key: "",
     type: "text",
@@ -300,47 +302,46 @@ const CmsEditor = () => {
   const [saving, setSaving] = useState(false);
   const [alertData, setAlertData] = useState({ message: "", type: "success" });
   const [activeTab, setActiveTab] = useState("edit");
-   const fetchContent = async (contentKey) => {
-    try {
-      const token = localStorage.getItem("lbr_auth_token");
-      const res = await fetch(apiUrl(`/api/cms/content/${encodeURIComponent(contentKey)}`), {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        const item = data.data;
-        setFormData({
-          key: item.key || "",
-          type: item.type || "text",
-          value: typeof item.value === "object" ? JSON.stringify(item.value, null, 2) : String(item.value || ""),
-          label: item.label || "",
-          description: item.description || "",
-          category: item.category || "",
-          isPublic: item.isPublic !== undefined ? item.isPublic : true,
-        });
-      }
-    } catch (error) {
-      showAlert("Failed to load content", "danger");
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (key && key !== "new") {
-      fetchContent(key);
-    } else {
-      setLoading(false);
-    }
-  }, [key]);
-
-  if (loading) {
-    return <CmsSkeleton />;
-  }
-
   const showAlert = (message, type = "success") => {
     setAlertData({ message, type });
     setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);
   };
+
+   const fetchContent = async (contentKey) => {
+     try {
+       const res = await fetch(apiUrl(`/api/cms/content/${encodeURIComponent(contentKey)}`), {
+         headers: { Authorization: `Bearer ${token}` },
+       });
+       const data = await res.json();
+       if (res.ok && data.success) {
+         const item = data.data;
+         setFormData({
+           key: item.key || "",
+           type: item.type || "text",
+           value: typeof item.value === "object" ? JSON.stringify(item.value, null, 2) : String(item.value || ""),
+           label: item.label || "",
+           description: item.description || "",
+           category: item.category || "",
+           isPublic: item.isPublic !== undefined ? item.isPublic : true,
+         });
+       }
+     } catch (error) {
+       showAlert("Failed to load content", "danger");
+     } finally {
+       setLoading(false);
+     }
+   };
+   useEffect(() => {
+     if (key && key !== "new") {
+       fetchContent(key);
+     } else {
+       setLoading(false);
+     }
+   }, [key]);
+
+   if (loading) {
+     return <CmsSkeleton />;
+   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -365,8 +366,7 @@ const CmsEditor = () => {
 
     setSaving(true);
     try {
-      const token = localStorage.getItem("lbr_auth_token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/cms/content/${encodeURIComponent(formData.key)}`, {
+      const res = await fetch(`${apiUrl(`/api/cms/content/${encodeURIComponent(formData.key)}`)}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

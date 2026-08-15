@@ -3,7 +3,7 @@ import "./deal.css"
 import { Link } from 'react-router-dom'
 import { FaCheck } from 'react-icons/fa'
 
-const Deal = ({ deal_Intro, plans }) => {
+const Deal = ({ deal_Intro, plans, sectionTitle = "Our Pricing Plans" }) => {
   useEffect(() => {
     console.log(deal_Intro);
   }, [])
@@ -25,7 +25,7 @@ const Deal = ({ deal_Intro, plans }) => {
       <div className="main_deal">
         <div className="title">
           <span className="priamry">Pricing Plan</span>
-          <h2 className="bright">Easy Steps to Works</h2>
+          <h2 className="bright">{sectionTitle}</h2>
         </div>
 
         <div className="main_deal_holder container">

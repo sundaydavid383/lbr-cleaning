@@ -20,7 +20,10 @@ const defaultContent = [
           "Explore our services and discover how we can transform your space into a spotless, healthy environment."
         ],
         talks: ["Call now", "We've got you"],
-        talksReport: "+234 801 234 5678"
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
       },
       {
         questions: "Nigeria's Most Trusted Cleaners",
@@ -31,7 +34,10 @@ const defaultContent = [
           "We deliver excellent, innovative, and value-driven cleaning solutions to homes and businesses."
         ],
         talks: ["Book clean", "Clean now"],
-        talksReport: "+234 801 234 5678"
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
       },
       {
         questions: "Our Commitment to Excellence",
@@ -42,7 +48,10 @@ const defaultContent = [
           "We ensure a clean and healthy environment through highly trained staff and exceptional customer service."
         ],
         talks: ["Learn more", "free estimate"],
-        talksReport: "+234 801 234 5678"
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
       },
       {
         questions: "About Us",
@@ -53,9 +62,30 @@ const defaultContent = [
           "We uphold these principles daily to deliver reliable, meaningful, and quality-driven cleaning services."
         ],
         talks: ["Contact us", "Get a quote"],
-        talksReport: "+234 801 234 5678"
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
       }
     ]
+  },
+  {
+    key: "home.background_image",
+    type: "text",
+    category: "homepage",
+    label: "Homepage Background Image",
+    description: "Background image URL for the homepage hero",
+    value: "/assets/cleaningbackground.jpg",
+    isPublic: true
+  },
+  {
+    key: "home.background_video",
+    type: "text",
+    category: "homepage",
+    label: "Homepage Background Video",
+    description: "Background video URL for the homepage hero (leave empty for image)",
+    value: "",
+    isPublic: true
   },
   {
     key: "home.features",
@@ -161,21 +191,6 @@ const defaultContent = [
       { icon: "fa-solid fa-hand-holding-heart", label: "Satisfaction Guarantee" },
       { icon: "fa-solid fa-user-shield", label: "Background-Checked Staff" }
     ]
-  },
-  {
-    key: "home.cta_banner",
-    type: "object",
-    category: "homepage",
-    label: "CTA Banner",
-    description: "Call-to-action banner on homepage",
-    value: {
-      tag: "Get Started Today",
-      title: "Ready for a Spotless Space?",
-      subtitle: "Book your cleaning appointment in under 60 seconds. Professional cleaners, eco-friendly products, and a satisfaction guarantee — every time.",
-      features: ["Free consultation & quote", "No hidden fees", "Satisfaction guaranteed"],
-      primary_button: "Book Now",
-      secondary_button: "Call Us"
-    }
   },
   {
     key: "site.name",
@@ -312,6 +327,29 @@ const defaultContent = [
     isPublic: true
   },
   {
+    key: "about_page.hero_slides",
+    type: "array",
+    category: "about_page",
+    label: "About Page Hero Slides",
+    description: "Hero slider content for the about page",
+    value: [
+      {
+        questions: "Who We Are",
+        header: "About",
+        headerspan: "LBR Cleaning",
+        ps: [
+          "LBR Cleaning Services is a registered Nigerian company offering quality cleaning solutions across Nigeria.",
+          "We create clean, safe spaces that add value to your business and home."
+        ],
+        talks: ["Our Services", "Contact Us"],
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
+      }
+    ]
+  },
+  {
     key: "service_page.deal_heading",
     type: "text",
     category: "service_page",
@@ -433,6 +471,141 @@ const defaultContent = [
       { days: "Saturday", hours: "9:00 AM – 4:00 PM" },
       { days: "Sunday", hours: "Closed" }
     ]
+  },
+  {
+    key: "contact.address",
+    type: "text",
+    category: "contact",
+    label: "Office Address",
+    description: "Business address displayed on the contact page",
+    value: "Lagos, Nigeria",
+    isPublic: true
+  },
+  {
+    key: "contact.email",
+    type: "text",
+    category: "contact",
+    label: "Contact Email",
+    description: "Email address displayed on the contact page",
+    value: "hello@lbrcleaning.com",
+    isPublic: true
+  },
+  {
+    key: "contact.phone",
+    type: "text",
+    category: "contact",
+    label: "Contact Phone",
+    description: "Phone number displayed on the contact page",
+    value: "+234 801 234 5678",
+    isPublic: true
+  },
+  {
+    key: "contact.form_heading",
+    type: "text",
+    category: "contact",
+    label: "Form Heading",
+    description: "Heading for the contact form",
+    value: "Send Us a Message",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_name",
+    type: "text",
+    category: "contact",
+    label: "Form Name Placeholder",
+    description: "Placeholder text for the name input",
+    value: "Your Name",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_email",
+    type: "text",
+    category: "contact",
+    label: "Form Email Placeholder",
+    description: "Placeholder text for the email input",
+    value: "Your Email",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_whatsapp",
+    type: "text",
+    category: "contact",
+    label: "Form WhatsApp Placeholder",
+    description: "Placeholder text for the WhatsApp input",
+    value: "Your WhatsApp Number (e.g. +2348012345678)",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_subject",
+    type: "text",
+    category: "contact",
+    label: "Form Subject Placeholder",
+    description: "Placeholder text for the subject input",
+    value: "Subject",
+    isPublic: true
+  },
+  {
+    key: "contact.form_placeholder_message",
+    type: "text",
+    category: "contact",
+    label: "Form Message Placeholder",
+    description: "Placeholder text for the message textarea",
+    value: "Your Message",
+    isPublic: true
+  },
+  {
+    key: "contact.form_button",
+    type: "text",
+    category: "contact",
+    label: "Form Button Text",
+    description: "Text for the contact form submit button",
+    value: "Send Message",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_heading",
+    type: "text",
+    category: "contact",
+    label: "Encouragement Heading",
+    description: "Heading for the encouragement section",
+    value: "Ready for a Cleaner Space?",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_text",
+    type: "text",
+    category: "contact",
+    label: "Encouragement Text",
+    description: "Text for the encouragement section",
+    value: "Our team is ready to help you with all your cleaning needs. Get in touch today!",
+    isPublic: true
+  },
+  {
+    key: "contact.encouragement_cta",
+    type: "text",
+    category: "contact",
+    label: "Encouragement CTA Text",
+    description: "Call-to-action text for the encouragement section",
+    value: "Explore Our Services",
+    isPublic: true
+  },
+  {
+    key: "contact.hours_note",
+    type: "text",
+    category: "contact",
+    label: "Hours Note",
+    description: "Note about business hours on the contact page",
+    value: "We're closed on Sundays but available for emergency cleanings.",
+    isPublic: true
+  },
+  {
+    key: "contact.map_embed",
+    type: "text",
+    category: "contact",
+    label: "Map Embed URL",
+    description: "Google Maps embed URL for the contact page",
+    value: "",
+    isPublic: true
   },
   {
     key: "contact.faq",
@@ -639,7 +812,10 @@ const defaultContent = [
           "We deliver excellent, innovative, and value-driven cleaning solutions to homes and businesses."
         ],
         talks: ["Book clean", "Clean now"],
-        talksReport: "+234 801 234 5678"
+        talksReport: "+234 801 234 5678",
+        sectionimage: "/assets/cleaner1.png",
+        sectionimageStar: "/assets/star.png",
+        sectionimageSpark: "/assets/spark.png"
       }
     ]
   },
@@ -1274,6 +1450,207 @@ const defaultContent = [
         description: "Launching the digital platform to make booking, payments, and scheduling seamless for everyone."
       }
     ]
+  },
+  {
+    key: "about_timeline.milestones",
+    type: "array",
+    category: "about_timeline",
+    label: "About Timeline Milestones",
+    description: "Company timeline milestones",
+    value: [
+      {
+        year: "2018",
+        icon: "fa-solid fa-flag",
+        title: "Founded",
+        description: "LBR Cleaning was founded with a simple mission: to bring professional, reliable cleaning to Nigerian homes and offices."
+      },
+      {
+        year: "2020",
+        icon: "fa-solid fa-star",
+        title: "500+ Clients",
+        description: "Reached our first 500 satisfied clients across Lagos. Expanded our team to 25 trained professionals."
+      },
+      {
+        year: "2023",
+        icon: "fa-solid fa-users",
+        title: "Community Impact",
+        description: "Launched community cleaning initiatives and trained over 50 women in eco-friendly cleaning practices."
+      },
+      {
+        year: "2025",
+        icon: "fa-solid fa-building",
+        title: "Platform Launch",
+        description: "Launching the digital platform to make booking, payments, and scheduling seamless for everyone."
+      }
+    ]
+  },
+  {
+    key: "information.faqs",
+    type: "array",
+    category: "information_hub",
+    label: "Information Hub FAQs",
+    description: "FAQ items displayed on the information hub page",
+    value: [
+      { question: "How do I book a cleaning service?", answer: "Booking is simple! Click the 'Apply Now' button on our homepage, fill out the form with your details and service preference, and our team will contact you within 24 hours to confirm your appointment." },
+      { question: "What areas do you service?", answer: "We currently service Lagos State and surrounding areas in Nigeria. Contact us to confirm if we cover your specific location." },
+      { question: "Are your cleaning products safe?", answer: "Absolutely. We use eco-friendly, non-toxic, and biodegradable cleaning products that are safe for children, pets, and the environment." },
+      { question: "Do I need to be present during cleaning?", answer: "No, you don't need to be present. Many of our clients schedule cleaning while they're away at work. Just provide access and any special instructions." },
+      { question: "What payment methods do you accept?", answer: "We accept bank transfers, cash, and online payments. Payment details will be provided when we confirm your booking." },
+      { question: "Is there a satisfaction guarantee?", answer: "Yes! If you're not 100% satisfied with our service, we'll re-clean the area for free within 24 hours. Your satisfaction is our top priority." }
+    ],
+    isPublic: true
+  },
+  {
+    key: "information.services",
+    type: "array",
+    category: "information_hub",
+    label: "Information Hub Services",
+    description: "Service cards displayed on the information hub page",
+    value: [
+      {
+        id: 1,
+        title: "Home Cleaning",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-house-chimney",
+        description: "Professional residential cleaning for sparkling homes",
+        features: [
+          { icon: "fa-solid fa-broom", text: "Deep vacuuming and mopping" },
+          { icon: "fa-solid fa-spray-can", text: "Kitchen and bathroom sanitization" },
+          { icon: "fa-solid fa-window-maximize", text: "Interior window cleaning" }
+        ]
+      },
+      {
+        id: 2,
+        title: "Office Cleaning",
+        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-briefcase",
+        description: "Hygienic workspace solutions for modern offices",
+        features: [
+          { icon: "fa-solid fa-desktop", text: "Workstation sanitization" },
+          { icon: "fa-solid fa-toilet", text: "Restroom deep cleaning" },
+          { icon: "fa-solid fa-mug-hot", text: "Breakroom cleanup" }
+        ]
+      },
+      {
+        id: 3,
+        title: "Carpet Cleaning",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-rug",
+        description: "Deep carpet cleaning that removes stains and odors",
+        features: [
+          { icon: "fa-solid fa-pump-soap", text: "Deep shampoo treatment" },
+          { icon: "fa-solid fa-wind", text: "Fast-drying extraction" },
+          { icon: "fa-solid fa-leaf", text: "Eco-friendly solutions" }
+        ]
+      },
+      {
+        id: 4,
+        title: "Window Cleaning",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-window-maximize",
+        description: "Streak-free crystal clear windows",
+        features: [
+          { icon: "fa-solid fa-sun", text: "Interior and exterior cleaning" },
+          { icon: "fa-solid fa-ruler", text: "Frame and sill detailing" },
+          { icon: "fa-solid fa-shield-halved", text: "Safe access methods" }
+        ]
+      },
+      {
+        id: 5,
+        title: "Move In/Out Cleaning",
+        image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-truck-moving",
+        description: "Thorough cleaning for stress-free moves",
+        features: [
+          { icon: "fa-solid fa-boxes-stacked", text: "Complete property sweep" },
+          { icon: "fa-solid fa-oven", text: "Appliance interior cleaning" },
+          { icon: "fa-solid fa-spray-can-sparkles", text: "Deodorizing and sanitizing" }
+        ]
+      },
+      {
+        id: 6,
+        title: "Sanitization Service",
+        image: "https://images.unsplash.com/photo-1584463717955-2d3c3c3c3c3c?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-hand-sparkles",
+        description: "Hospital-grade disinfection for your space",
+        features: [
+          { icon: "fa-solid fa-virus-slash", text: "99.9% germ elimination" },
+          { icon: "fa-solid fa-spray-can", text: "Fogging and misting" },
+          { icon: "fa-solid fa-baby", text: "Child and pet safe" }
+        ]
+      },
+      {
+        id: 7,
+        title: "Post-Construction Cleaning",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop",
+        icon: "fa-solid fa-building",
+        description: "Remove construction dust and debris",
+        features: [
+          { icon: "fa-solid fa-dust", text: "Fine dust removal" },
+          { icon: "fa-solid fa-paint-roller", text: "Paint and cement cleanup" },
+          { icon: "fa-solid fa-gem", text: "Surface polishing" }
+        ]
+      }
+    ],
+    isPublic: true
+  },
+  {
+    key: "information.articles",
+    type: "array",
+    category: "information_hub",
+    label: "Information Hub Articles",
+    description: "Blog articles displayed on the information hub page",
+    value: [
+      {
+        id: 38,
+        title: "Engaging Clients with Quality Cleaning Services",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop",
+        date: "2025-12-05",
+        author: "Cleaning Experts Team",
+        quote: "Clean spaces create healthy lives.",
+        gist1: "Providing professional cleaning services is more than just tidying up—it's about creating a space where people feel comfortable, safe, and productive.",
+        gist2: "Effective cleaning involves understanding the unique needs of each client and space. By tailoring our approach to specific requirements, we ensure maximum cleanliness and hygiene.",
+        advice: [
+          "Always use the right cleaning tools and eco-friendly products",
+          "Understand the client's needs and tailor your approach",
+          "Focus on high-touch areas to maintain hygiene",
+          "Maintain consistency to build trust"
+        ]
+      },
+      {
+        id: 39,
+        title: "Showcasing the Benefits of Professional Cleaning",
+        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
+        date: "2025-12-05",
+        author: "Cleaning Experts Team",
+        quote: "A clean space is a productive space.",
+        gist1: "Professional cleaning is more than aesthetics—it contributes to health, comfort, and efficiency.",
+        gist2: "The goal of our cleaning services is to create spaces that are not only visually appealing but also safe and healthy.",
+        advice: [
+          "Prioritize deep cleaning for high-use areas",
+          "Use safe, effective cleaning solutions",
+          "Pay attention to visible and hidden areas",
+          "Communicate with clients to meet expectations"
+        ]
+      },
+      {
+        id: 40,
+        title: "Handling Challenging Cleaning Situations",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=400&fit=crop",
+        date: "2025-12-05",
+        author: "Cleaning Experts Team",
+        quote: "Attention to detail makes all the difference.",
+        gist1: "Some cleaning challenges require more than routine methods—they demand expertise and specialized equipment.",
+        gist2: "Managing complex cleaning tasks requires preparation, knowledge, and the right products.",
+        advice: [
+          "Identify areas needing special attention",
+          "Use specialized tools for difficult tasks",
+          "Plan your workflow for efficiency",
+          "Educate clients on maintenance tips"
+        ]
+      }
+    ],
+    isPublic: true
   }
 ];
 

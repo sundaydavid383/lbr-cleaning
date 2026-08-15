@@ -95,6 +95,12 @@
   max-width: 1200px;
 }
 
+.auth-container--single {
+  max-width: 520px;
+  grid-template-columns: 1fr;
+  margin: 0 auto;
+}
+
 @keyframes auth-card-in {
   from {
     opacity: 0;
@@ -809,6 +815,10 @@
     max-width: 650px;
   }
 
+  .auth-container--single {
+    max-width: 520px;
+  }
+
   .auth-info {
     display: none;
   }
@@ -837,6 +847,10 @@
 @media (max-width: 480px) {
   .auth-page {
     padding: 1rem;
+  }
+
+  .auth-container--single {
+    max-width: 100%;
   }
 
   .auth-card {

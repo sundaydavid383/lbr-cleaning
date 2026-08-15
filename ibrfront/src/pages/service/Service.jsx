@@ -7,25 +7,15 @@ import ServiceProcess from '../../component/serviceProcess/ServiceProcess'
 import ServiceComparison from '../../component/serviceComparison/ServiceComparison'
 import ServiceGuarantee from '../../component/serviceGuarantee/ServiceGuarantee'
 import imageBac from "../../assets/cleaningbackground.jpg"
-import star from  "../../assets/star.png"
-import spark from  "../../assets/spark.png"
-import heroimage1 from "../../assets/cleaner1.png"
-import heroimage2 from "../../assets/cleaner2.png"
-import heroimage3 from "../../assets/cleaner3.png"
-import heroimage4 from "../../assets/cleaner4.png"
-import service1 from "../../assets/cleaner19.jpeg"
-import service4 from "../../assets/cleaner25.jpg"
-import service2 from "../../assets/cleaner20.jpg"
-import service3 from "../../assets/cleaner21.jpg"
-import service5 from "../../assets/cleaner24.jpg"
-import service6 from "../../assets/cleaner22.jpg"
-import dealimage1 from "../../assets/cleaner2.png"
 import { SITE_CONFIG } from "../../config/site";
 import { useCmsCategory } from "../../hooks/useCmsContent";
 import { ServiceSkeleton } from "../../component/pageSkeleton/PageSkeleton";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
 
 const Services = () => {
   const { value: servicePageContent, loading: serviceLoading } = useCmsCategory("service_page", {});
+  const { isEditMode } = useEditMode();
 
   if (serviceLoading) {
     return <ServiceSkeleton />;
@@ -40,7 +30,7 @@ const Services = () => {
   }
 
   const deal_Intro = {
-    image: dealimage1,
+    image: servicePageContent.deal_image || "/assets/cleaner2.png",
     h2: servicePageContent.deal_heading,
     email: SITE_CONFIG.email,
     phone: SITE_CONFIG.phone,
@@ -60,7 +50,13 @@ const Services = () => {
         {services.length > 0 && <ServiceSection services={services}/>}
         <ServiceComparison />
         <ServiceGuarantee />
-        {plans.length > 0 && <Deal deal_Intro={deal_Intro} plans={plans}/>}
+        {plans.length > 0 && (
+          <Deal 
+            deal_Intro={deal_Intro} 
+            plans={plans}
+            sectionTitle={isEditMode ? <EditableText cmsKey="service_page.deal_heading" type="text" value={servicePageContent.deal_heading} as="span" /> : undefined}
+          />
+        )}
     </>
   );
 };

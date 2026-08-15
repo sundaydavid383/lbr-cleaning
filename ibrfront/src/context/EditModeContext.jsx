@@ -1,20 +1,22 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { apiUrl } from "../utils/api";
 import { invalidateCache } from "../services/contentService";
+import { useAuth } from "./AuthContext";
 
 const EditModeContext = createContext(null);
 
 export const EditModeProvider = ({ children }) => {
+  const { token, isAuthenticated, user } = useAuth();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [saveStatus, setSaveStatus] = useState("idle"); // idle | saving | saved | error
+  const [saveStatus, setSaveStatus] = useState("idle");
   const [overrides, setOverrides] = useState({});
+
+  const isAdmin = isAuthenticated && user?.role === "admin";
 
   const setOverride = useCallback((key, value) => {
     setOverrides((prev) => ({ ...prev, [key]: value }));
   }, []);
 
-  // Components read the just-saved value instantly via this, instead of
-  // waiting for a refetch — value is whatever the page originally passed in.
   const getOverride = useCallback(
     (key, fallback) =>
       Object.prototype.hasOwnProperty.call(overrides, key) ? overrides[key] : fallback,
@@ -22,14 +24,13 @@ export const EditModeProvider = ({ children }) => {
   );
 
   const saveField = useCallback(async (key, newValue, fallbackType) => {
+    if (!token) {
+      console.warn("[EDIT-MODE] No token available for saving");
+      return false;
+    }
+
     setSaveStatus("saving");
     try {
-      const token = localStorage.getItem("lbr_auth_token");
-
-      // Read the current record first so we never blank out its
-      // label/description/category/isPublic. The PUT endpoint expects the
-      // full record, not a partial patch — if we only sent `value`, the
-      // controller would overwrite label/description/category with null.
       const currentRes = await fetch(apiUrl(`/api/cms/content/${encodeURIComponent(key)}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -70,10 +71,10 @@ export const EditModeProvider = ({ children }) => {
       setTimeout(() => setSaveStatus("idle"), 2500);
       return false;
     }
-  }, [setOverride]);
+  }, [token, setOverride]);
 
   return (
-    <EditModeContext.Provider value={{ isEditMode, setIsEditMode, saveStatus, saveField, getOverride }}>
+    <EditModeContext.Provider value={{ isEditMode, setIsEditMode, saveStatus, saveField, getOverride, isAdmin }}>
       {children}
     </EditModeContext.Provider>
   );
@@ -90,6 +91,7 @@ export const useEditMode = () => {
       saveStatus: "idle",
       saveField: async () => false,
       getOverride: (_key, fallback) => fallback,
+      isAdmin: false,
     };
   }
   return ctx;

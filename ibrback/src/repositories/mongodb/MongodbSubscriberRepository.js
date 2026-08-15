@@ -29,14 +29,14 @@ class MongodbSubscriberRepository extends ISubscriberRepository {
   }
 
   async update(id, data) {
-    return Subscriber.findByIdAndUpdate(id, { ...data, updatedAt: new Date() }, { new: true }).lean();
+    return Subscriber.findByIdAndUpdate(id, { ...data, updatedAt: new Date() }, { returnDocument: "after" }).lean();
   }
 
   async unsubscribe(id) {
     return Subscriber.findByIdAndUpdate(
       id,
       { isActive: false, unsubscribedAt: new Date(), updatedAt: new Date() },
-      { new: true }
+      { returnDocument: "after" }
     ).lean();
   }
 
@@ -44,7 +44,7 @@ class MongodbSubscriberRepository extends ISubscriberRepository {
     return Subscriber.findOneAndUpdate(
       { email: email.toLowerCase() },
       { isActive: false, unsubscribedAt: new Date(), updatedAt: new Date() },
-      { new: true }
+      { returnDocument: "after" }
     ).lean();
   }
 

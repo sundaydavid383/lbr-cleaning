@@ -34,8 +34,8 @@ const Articles = ({ articles }) => {
   return (
     <div className="articles">
       <div className="title">
-        <span className="primary">Pricing Plan</span>
-        <h2 className="bright">Easy Steps to Works</h2>
+        <span className="primary">Resources</span>
+        <h2 className="bright">Latest Articles</h2>
       </div>
 
       <div className="articles_container container">

@@ -102,7 +102,7 @@ const renderPreviewValue = (item) => {
 };
 
 const CmsDashboard = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
   const [content, setContent] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -118,7 +118,6 @@ const CmsDashboard = () => {
 
   const fetchContent = async () => {
     try {
-      const token = localStorage.getItem("lbr_auth_token");
       const url = apiUrl('/api/cms/content');
       console.log(`[CMS-DASHBOARD] fetchContent | url=${url} | hasToken=${!!token}`);
       const res = await fetch(url, {
@@ -139,7 +138,6 @@ const CmsDashboard = () => {
 
   const fetchCategories = async () => {
     try {
-      const token = localStorage.getItem("lbr_auth_token");
       const url = apiUrl('/api/cms/categories');
       console.log(`[CMS-DASHBOARD] fetchCategories | url=${url} | hasToken=${!!token}`);
       const res = await fetch(url, {
@@ -171,8 +169,7 @@ const CmsDashboard = () => {
 
   const handleDelete = async (key) => {
     try {
-      const token = localStorage.getItem("lbr_auth_token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/cms/content/${encodeURIComponent(key)}`, {
+      const res = await fetch(`${apiUrl(`/api/cms/content/${encodeURIComponent(key)}`)}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -206,7 +203,7 @@ const CmsDashboard = () => {
           <i className="fa-solid fa-lock"></i>
           <h2>You need to log in first</h2>
           <p>Log in with an administrator account to manage this website's content.</p>
-          <Link to="/login" className="btn-primary">Log In</Link>
+          <Link to="/portal/a9f2c1e8b4d67320" className="btn-primary">Admin Sign In</Link>
         </div>
       </div>
     );
