@@ -2,10 +2,13 @@
 import React from "react";
 import "./featuredPost.css";
 import { Link } from "react-router-dom";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const FeaturedPost = ({ articles }) => {
   if (!articles || articles.length === 0) return null;
   const featured = articles[0];
+  const { isEditMode } = useEditMode();
 
   return (
     <section className="featured-post">
@@ -16,7 +19,11 @@ const FeaturedPost = ({ articles }) => {
         </div>
         <div className="featured-content">
           <div className="featured-meta">
-            <span className="featured-tag">Latest Article</span>
+            {isEditMode ? (
+              <EditableText cmsKey="featured_post.tag" type="text" value="Latest Article" as="span" className="featured-tag" />
+            ) : (
+              <span className="featured-tag">Latest Article</span>
+            )}
             <span className="featured-date">
               {featured.pubDate && new Date(featured.pubDate).toLocaleDateString("en-US", {
                 month: "long",

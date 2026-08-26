@@ -11,6 +11,9 @@ import { useCmsCategory } from "../../hooks/useCmsContent";
 import { useCmsContent } from "../../hooks/useCmsContent";
 import { ContactSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { SITE_CONFIG } from "../../config/site";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
+import EditableList from "../../component/editable/EditableList";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +28,7 @@ const Contact = () => {
   const [alertType, setAlertType] = useState("success");
   const { value: contactContent, loading: contactLoading } = useCmsCategory("contact", {});
   const { value: siteSettings } = useCmsCategory("site_settings", {});
+  const { isEditMode } = useEditMode();
 
   if (contactLoading) {
     return <ContactSkeleton />;
@@ -136,20 +140,47 @@ const Contact = () => {
           rel="noopener noreferrer"
         >
           <i className="fas fa-map-marker-alt"></i>
-          <h3>Office Address</h3>
-          <p>{address}</p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="contact.address_label" type="text" value="Office Address" as="h3" />
+              <EditableText cmsKey="contact.address" type="text" value={address} as="p" />
+            </>
+          ) : (
+            <>
+              <h3>Office Address</h3>
+              <p>{address}</p>
+            </>
+          )}
         </a>
 
         <a href={`mailto:${email}`} className="info-card">
           <i className="fas fa-envelope"></i>
-          <h3>Email Us</h3>
-          <p>{email}</p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="contact.email_label" type="text" value="Email Us" as="h3" />
+              <EditableText cmsKey="contact.email" type="text" value={email} as="p" />
+            </>
+          ) : (
+            <>
+              <h3>Email Us</h3>
+              <p>{email}</p>
+            </>
+          )}
         </a>
 
         <a href={`tel:${phone}`} className="info-card">
           <i className="fas fa-phone"></i>
-          <h3>Call Us</h3>
-          <p>{phone}</p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="contact.phone_label" type="text" value="Call Us" as="h3" />
+              <EditableText cmsKey="contact.phone" type="text" value={phone} as="p" />
+            </>
+          ) : (
+            <>
+              <h3>Call Us</h3>
+              <p>{phone}</p>
+            </>
+          )}
         </a>
       </section>
 
@@ -168,7 +199,11 @@ const Contact = () => {
       {businessHours.length > 0 && (
         <section className="business-hours">
           <div className="hours-wrapper">
-            <h2>Business Hours</h2>
+            {isEditMode ? (
+              <EditableText cmsKey="contact.hours_heading" type="text" value="Business Hours" as="h2" />
+            ) : (
+              <h2>Business Hours</h2>
+            )}
             <ul>
               {businessHours.map((item, idx) => (
                 <li key={idx}><strong>{item.days}:</strong> {item.hours}</li>
@@ -181,13 +216,28 @@ const Contact = () => {
 
       {faqs.length > 0 && (
         <section className="faq-section">
-          <h2>Frequently Asked Questions</h2>
-          {faqs.map((item, idx) => (
-            <div key={idx} className="faq-item">
-              <h4>{item.question}</h4>
-              <p>{item.answer}</p>
-            </div>
-          ))}
+          {isEditMode ? (
+            <EditableText cmsKey="contact.faq_heading" type="text" value="Frequently Asked Questions" as="h2" />
+          ) : (
+            <h2>Frequently Asked Questions</h2>
+          )}
+          <EditableList
+            cmsKey="contact.faq"
+            type="array"
+            value={faqs}
+            fields={[
+              { key: "question", label: "Question" },
+              { key: "answer", label: "Answer" },
+            ]}
+            itemWrapperTag="div"
+          >
+            {(item, idx) => (
+              <div key={idx} className="faq-item">
+                <h4>{item.question}</h4>
+                <p>{item.answer}</p>
+              </div>
+            )}
+          </EditableList>
         </section>
       )}
 
@@ -195,15 +245,29 @@ const Contact = () => {
 
       {contactContent.encouragement_heading && (
         <section className="encouragement-banner">
-          <h3>{contactContent.encouragement_heading}</h3>
-          <p>{contactContent.encouragement_text}</p>
-          <Link to="/service" className="explore-btn">{contactContent.encouragement_cta || "Explore Our Services"}</Link>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="contact.encouragement_heading" type="text" value={contactContent.encouragement_heading} as="h3" />
+              <EditableText cmsKey="contact.encouragement_text" type="text" value={contactContent.encouragement_text} as="p" />
+              <EditableText cmsKey="contact.encouragement_cta" type="text" value={contactContent.encouragement_cta || "Explore Our Services"} as={Link} to="/service" className="explore-btn" />
+            </>
+          ) : (
+            <>
+              <h3>{contactContent.encouragement_heading}</h3>
+              <p>{contactContent.encouragement_text}</p>
+              <Link to="/service" className="explore-btn">{contactContent.encouragement_cta || "Explore Our Services"}</Link>
+            </>
+          )}
         </section>
       )}
 
       <section className="contact-form-section">
         <div className="form-wrapper">
-          <h2>{contactContent.form_heading || "Send Us a Message"}</h2>
+          {isEditMode ? (
+            <EditableText cmsKey="contact.form_heading" type="text" value={contactContent.form_heading || "Send Us a Message"} as="h2" />
+          ) : (
+            <h2>{contactContent.form_heading || "Send Us a Message"}</h2>
+          )}
           <form className="contact-form" onSubmit={handleSubmit}>
             <input
               type="text"

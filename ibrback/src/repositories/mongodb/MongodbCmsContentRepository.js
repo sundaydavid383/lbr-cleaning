@@ -45,7 +45,7 @@ class MongodbCmsContentRepository extends ICmsContentRepository {
 
     const item = await CmsContent.findOneAndUpdate(
       { key },
-      { $set: { ...rest, updatedAt: new Date() } },
+      { $set: { key, ...rest, updatedAt: new Date() } },
       { returnDocument: "after", upsert: true }
     ).lean();
 
@@ -57,7 +57,7 @@ class MongodbCmsContentRepository extends ICmsContentRepository {
     console.log(`[CMS-REPO] updateByKey: ${key}`);
     const item = await CmsContent.findOneAndUpdate(
       { key },
-      { $set: { ...data, updatedAt: new Date() } },
+      { $set: { key, ...data, updatedAt: new Date() } },
       { returnDocument: "after" }
     ).lean();
     console.log(`[CMS-REPO] updateByKey ${key} | updated=${!!item}`);

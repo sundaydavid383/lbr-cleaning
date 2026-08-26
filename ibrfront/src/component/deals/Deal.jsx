@@ -2,16 +2,20 @@ import React, { useEffect } from 'react'
 import "./deal.css"
 import { Link } from 'react-router-dom'
 import { FaCheck } from 'react-icons/fa'
+import { useEditMode } from "../../context/EditModeContext"
+import EditableText from "../editable/EditableText"
 
 const Deal = ({ deal_Intro, plans, sectionTitle = "Our Pricing Plans" }) => {
-  useEffect(() => {
-    console.log(deal_Intro);
-  }, [])
+  const { isEditMode } = useEditMode()
 
   return (
     <div className='deal'>
       <div className="deal_Intro">
-        <h2>{deal_Intro.h2}</h2>
+        {isEditMode ? (
+          <EditableText cmsKey="service_page.deal_heading" type="text" value={deal_Intro?.h2} as="h2" />
+        ) : (
+          <h2>{deal_Intro.h2}</h2>
+        )}
         <img src={deal_Intro.image} alt="" />
         <a
           className="btn"
@@ -25,7 +29,11 @@ const Deal = ({ deal_Intro, plans, sectionTitle = "Our Pricing Plans" }) => {
       <div className="main_deal">
         <div className="title">
           <span className="priamry">Pricing Plan</span>
-          <h2 className="bright">{sectionTitle}</h2>
+          {isEditMode ? (
+            <EditableText cmsKey="service_page.deal_section_title" type="text" value={sectionTitle} as="h2" className="bright" />
+          ) : (
+            <h2 className="bright">{sectionTitle}</h2>
+          )}
         </div>
 
         <div className="main_deal_holder container">

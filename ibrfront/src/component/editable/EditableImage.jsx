@@ -38,16 +38,13 @@ const EditableImage = ({ cmsKey, type = "image", value, alt = "", className = ""
     try {
       setUploading(true);
 
-      const ext = file.name.split(".").pop() || "bin";
-      const objectKey = `website/${cmsKey.replace(/\./g, "/")}_${Date.now()}.${ext}`;
-
       const presignRes = await fetch(apiUrl("/api/uploads/presign"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${(await import("../../context/AuthContext")).useAuth().token || ""}`,
         },
-        body: JSON.stringify({ key: objectKey, contentType: file.type, size: file.size }),
+        body: JSON.stringify({ key: cmsKey, contentType: file.type, size: file.size }),
       });
 
       const presignData = await presignRes.json();
@@ -55,20 +52,30 @@ const EditableImage = ({ cmsKey, type = "image", value, alt = "", className = ""
         throw new Error(presignData.message || "Failed to get upload URL");
       }
 
-      const { uploadUrl, publicUrl } = presignData.data;
+      const { uploadEndpoint, token, expire, signature, publicKey, fileName } = presignData.data;
 
-      const uploadRes = await fetch(uploadUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", fileName);
+      formData.append("publicKey", publicKey);
+      formData.append("token", token);
+      formData.append("expire", expire);
+      formData.append("signature", signature);
+      formData.append("useUniqueFilename", "false");
+
+      const uploadRes = await fetch(uploadEndpoint, {
+        method: "POST",
+        body: formData,
       });
 
+      const uploadResult = await uploadRes.json();
       if (!uploadRes.ok) {
-        throw new Error("Upload to Cloudflare R2 failed");
+        throw new Error(uploadResult.message || "Upload to ImageKit failed");
       }
 
-      await saveField(cmsKey, publicUrl, type);
-      setDraftUrl(publicUrl);
+      const uploadedUrl = uploadResult.url || uploadResult.filePath;
+      await saveField(cmsKey, uploadedUrl, type);
+      setDraftUrl(uploadedUrl);
       setOpen(false);
     } catch (err) {
       console.error("[EDIT-IMAGE] upload error:", err);

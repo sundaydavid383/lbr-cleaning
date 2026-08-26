@@ -1,5 +1,5 @@
 // filepath: ibrfront/src/pages/admin/cms/CmsEditor.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { apiUrl } from "../../../utils/api";
 import "./cms.css";
@@ -307,7 +307,7 @@ const CmsEditor = () => {
     setTimeout(() => setAlertData({ message: "", type: "success" }), 5000);
   };
 
-   const fetchContent = async (contentKey) => {
+   const fetchContent = useCallback(async (contentKey) => {
      try {
        const res = await fetch(apiUrl(`/api/cms/content/${encodeURIComponent(contentKey)}`), {
          headers: { Authorization: `Bearer ${token}` },
@@ -330,14 +330,15 @@ const CmsEditor = () => {
      } finally {
        setLoading(false);
      }
-   };
+   }, [token, showAlert]);
+
    useEffect(() => {
      if (key && key !== "new") {
        fetchContent(key);
      } else {
        setLoading(false);
      }
-   }, [key]);
+   }, [key, fetchContent]);
 
    if (loading) {
      return <CmsSkeleton />;
@@ -392,20 +393,9 @@ const CmsEditor = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="cms-editor">
-        <div className="cms-loading">
-          <div className="spinner"></div>
-          <p>Loading content...</p>
-        </div>
-      </div>
-    );
-  }
-
   const isNewItem = !key || key === "new";
   const isStructuredType = formData.type === "array" || formData.type === "object" || formData.type === "json";
-  const structuredParse = isStructuredType ? safeParseJSON(formData.value) : null;
+  const structuredParse = useMemo(() => isStructuredType ? safeParseJSON(formData.value) : null, [isStructuredType, formData.value]);
 
   return (
     <div className="cms-editor">

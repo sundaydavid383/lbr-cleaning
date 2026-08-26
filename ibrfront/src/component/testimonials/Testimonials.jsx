@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaInstagram, FaFacebookF, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const Testimonial = () => {
   const { value: testimonialsData, loading: testimonialsLoading } = useCmsCategory("testimonials", []);
@@ -13,6 +15,7 @@ const Testimonial = () => {
   const isProgrammatic = useRef(false);
   const scrollEndTimer = useRef(null);
   const total = testimonialsData?.length || 0;
+  const { isEditMode } = useEditMode();
 
   const scrollToIndex = useCallback((index) => {
     const track = trackRef.current;
@@ -97,8 +100,17 @@ const Testimonial = () => {
     <div className="testimonailImage">
       <div className="Testimonial">
         <div className="title">
-          <span>our services</span>
-          <h2>What Our Clients Say</h2>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="testimonials.tag" type="text" value="our services" as="span" />
+              <EditableText cmsKey="testimonials.title" type="text" value="What Our Clients Say" as="h2" />
+            </>
+          ) : (
+            <>
+              <span>our services</span>
+              <h2>What Our Clients Say</h2>
+            </>
+          )}
         </div>
 
         <div className="testiment">

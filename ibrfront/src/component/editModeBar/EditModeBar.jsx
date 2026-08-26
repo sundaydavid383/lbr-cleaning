@@ -12,7 +12,7 @@ const EDITABLE_PAGES = [
 ];
 
 const EditModeBar = () => {
-  const { saveStatus } = useEditMode();
+  const { saveStatus, refreshAll } = useEditMode();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,6 +35,9 @@ const EditModeBar = () => {
           {saveStatus === "error" && <><i className="fa-solid fa-triangle-exclamation"></i> Couldn't save</>}
           {saveStatus === "idle" && <><i className="fa-regular fa-circle-check"></i> Up to date</>}
         </span>
+        <button type="button" className="edit-mode-refresh-btn" onClick={() => { refreshAll(); window.location.reload(); }}>
+          <i className="fa-solid fa-rotate-right"></i> Refresh
+        </button>
         <button type="button" className="edit-mode-exit-btn" onClick={() => navigate("/admin/cms")}>
           Exit Editor
         </button>

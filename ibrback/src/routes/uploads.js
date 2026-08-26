@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { generatePresignedUploadUrl, deleteObject, normalizeKey } = require("../services/r2Service");
+const { generateUploadAuth, getPublicUrl, getImageKitInstance } = require("../services/imagekitService");
 const { authenticate, requireAdmin } = require("../middleware/auth");
 
 const ALLOWED_TYPES = new Set([
@@ -28,30 +28,45 @@ router.post("/presign", authenticate, requireAdmin, async (req, res) => {
       return res.status(400).json({ success: false, message: "File size exceeds 5MB limit" });
     }
 
-    const normalizedKey = normalizeKey(key);
-    const result = await generatePresignedUploadUrl(normalizedKey, contentType);
+    const ext = contentType.split("/").pop();
+    const fileName = `${key.replace(/\./g, "/")}_${Date.now()}.${ext}`;
 
-    res.status(200).json({ success: true, data: result });
+    const auth = generateUploadAuth(fileName, contentType);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        ...auth,
+        uploadEndpoint: "https://upload.imagekit.io/api/v1/files/upload",
+      },
+    });
   } catch (error) {
-    console.error("[R2] presign error:", error);
+    console.error("[ImageKit] presign error:", error);
     res.status(500).json({ success: false, message: "Failed to generate upload URL" });
   }
 });
 
 router.delete("/object", authenticate, requireAdmin, async (req, res) => {
   try {
-    const { key } = req.body;
+    const { url } = req.body;
 
-    if (!key) {
-      return res.status(400).json({ success: false, message: "key is required" });
+    if (!url) {
+      return res.status(400).json({ success: false, message: "url is required" });
     }
 
-    const normalizedKey = normalizeKey(key);
-    await deleteObject(normalizedKey);
+    const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+    let fileId = url;
+
+    if (url.startsWith(urlEndpoint)) {
+      fileId = url.slice(urlEndpoint.length + 1);
+    }
+
+    const imagekit = getImageKitInstance();
+    await imagekit.deleteFile(fileId);
 
     res.status(200).json({ success: true, message: "Object deleted" });
   } catch (error) {
-    console.error("[R2] delete error:", error);
+    console.error("[ImageKit] delete error:", error);
     res.status(500).json({ success: false, message: "Failed to delete object" });
   }
 });

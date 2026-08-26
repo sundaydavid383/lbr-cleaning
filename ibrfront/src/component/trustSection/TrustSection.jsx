@@ -2,9 +2,12 @@
 import React from "react";
 import "./trustSection.css";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const TrustSection = () => {
   const { value: trustData, loading: trustLoading } = useCmsCategory("trust_section", {});
+  const { isEditMode } = useEditMode();
 
   if (trustLoading) {
     return (
@@ -26,10 +29,21 @@ const TrustSection = () => {
     <section className="trust-section">
       <div className="trust-container">
         <div className="trust-header">
-          <span className="section-tag">Trust & Safety</span>
-          <h2 className="section-title">
-            Cleaning You Can <span className="highlight">Trust</span>
-          </h2>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="trust_section.tag" type="text" value="Trust & Safety" as="span" className="section-tag" />
+              <h2 className="section-title">
+                Cleaning You Can <span className="highlight">Trust</span>
+              </h2>
+            </>
+          ) : (
+            <>
+              <span className="section-tag">Trust & Safety</span>
+              <h2 className="section-title">
+                Cleaning You Can <span className="highlight">Trust</span>
+              </h2>
+            </>
+          )}
         </div>
 
         <div className="badges-grid">
@@ -44,10 +58,14 @@ const TrustSection = () => {
         </div>
 
         <div className="trust-footer">
-          <p>
-            With over <strong>8+ years</strong> of experience and <strong>2,500+</strong> satisfied clients,
-            LBR Cleaning is the name Lagos homes and offices trust for spotless, reliable service.
-          </p>
+          {isEditMode ? (
+            <EditableText cmsKey="trust_section.footer_text" type="text" value="With over 8+ years of experience and 2,500+ satisfied clients, LBR Cleaning is the name Lagos homes and offices trust for spotless, reliable service." as="p" />
+          ) : (
+            <p>
+              With over <strong>8+ years</strong> of experience and <strong>2,500+</strong> satisfied clients,
+              LBR Cleaning is the name Lagos homes and offices trust for spotless, reliable service.
+            </p>
+          )}
         </div>
       </div>
     </section>

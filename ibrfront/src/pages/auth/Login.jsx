@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +13,7 @@ const Login = () => {
   const [focusedField, setFocusedField] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { isEditMode } = useEditMode();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,13 +51,25 @@ const Login = () => {
               <img src="/house-cleaning.png" alt="LBR Cleaning" />
             </Link>
             <div className="auth-badge-row">
-              <span className="auth-badge">Member Login</span>
+              {isEditMode ? (
+                <EditableText cmsKey="login.badge" type="text" value="Member Login" as="span" className="auth-badge" />
+              ) : (
+                <span className="auth-badge">Member Login</span>
+              )}
             </div>
-            <h1>Welcome Back</h1>
-            <p>
-              Sign in to manage your bookings, track cleaning schedules, and access exclusive member
-              offers.
-            </p>
+            {isEditMode ? (
+              <EditableText cmsKey="login.heading" type="text" value="Welcome Back" as="h1" />
+            ) : (
+              <h1>Welcome Back</h1>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="login.subtitle" type="text" value="Sign in to manage your bookings, track cleaning schedules, and access exclusive member offers." as="p" />
+            ) : (
+              <p>
+                Sign in to manage your bookings, track cleaning schedules, and access exclusive member
+                offers.
+              </p>
+            )}
           </div>
 
           {error && (
@@ -131,12 +146,24 @@ const Login = () => {
 
         <div className="auth-info">
           <div className="auth-info-inner">
-            <div className="auth-info-badge">Trusted by 2,500+ customers</div>
-            <h2>Your Cleaning Dashboard Awaits</h2>
-            <p>
-              Book, reschedule, and track your cleaning services — all from one place. Join thousands
-              of Lagos residents who trust LBR Cleaning.
-            </p>
+            {isEditMode ? (
+              <EditableText cmsKey="login.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
+            ) : (
+              <span className="auth-info-badge">Trusted by 2,500+ customers</span>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="login.info_heading" type="text" value="Your Cleaning Dashboard Awaits" as="h2" />
+            ) : (
+              <h2>Your Cleaning Dashboard Awaits</h2>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="login.info_text" type="text" value="Book, reschedule, and track your cleaning services — all from one place. Join thousands of Lagos residents who trust LBR Cleaning." as="p" />
+            ) : (
+              <p>
+                Book, reschedule, and track your cleaning services — all from one place. Join thousands
+                of Lagos residents who trust LBR Cleaning.
+              </p>
+            )}
 
             <div className="auth-stats">
               <div className="auth-stat">

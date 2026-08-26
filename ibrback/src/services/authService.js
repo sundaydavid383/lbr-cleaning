@@ -81,7 +81,7 @@ const login = async ({ email, password, requiredRole = null }) => {
       update.lockUntil = new Date(Date.now() + LOCK_DURATION_MS);
     }
 
-    await userRepository.update(user.id, update);
+    await userRepository.update(user._id, update);
 
     const err = new Error(
       failedLoginAttempts >= MAX_FAILED_ATTEMPTS
@@ -93,21 +93,21 @@ const login = async ({ email, password, requiredRole = null }) => {
     throw err;
   }
 
-  await userRepository.update(user.id, {
+  await userRepository.update(user._id, {
     failedLoginAttempts: 0,
     lockUntil: null,
     lastLoginAt: new Date(),
   });
 
   const token = jwt.sign(
-    { sub: String(user.id), email: user.email, role: user.role },
+    { sub: String(user._id), email: user.email, role: user.role },
     getJwtSecret(),
     { expiresIn: TOKEN_EXPIRY }
   );
 
   return {
     token,
-    user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, avatar: user.avatar },
+    user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role, avatar: user.avatar },
   };
 };
 

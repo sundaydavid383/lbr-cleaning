@@ -5,6 +5,8 @@
   border-radius: var(--radius-sm, 4px);
   cursor: text;
   transition: outline-color 0.15s ease, background 0.15s ease;
+  position: relative;
+  display: inline-block;
 }
 
 .editable-field:hover {
@@ -15,6 +17,121 @@
 .editable-field:focus {
   outline: 2px solid var(--primary-color, #16a34a);
   background: white;
+}
+
+.editable-field.editable-saving {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.editable-field.editable-error {
+  outline-color: #dc2626;
+  background: #fef2f2;
+}
+
+.editable-pencil {
+  display: inline-flex;
+  margin-left: 0.4rem;
+  color: var(--primary-color, #16a34a);
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  font-size: 0.75rem;
+}
+
+.editable-field:hover .editable-pencil {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Popover wrap for inline text editing */
+.editable-popover-wrap {
+  display: inline-block;
+  position: relative;
+}
+
+.editable-popover-input {
+  display: block;
+  width: 100%;
+  min-width: 220px;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--primary-color, #16a34a);
+  border-radius: var(--radius-md, 6px);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: white;
+  color: var(--text-color, #0d0d0b);
+  resize: vertical;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.08);
+}
+
+.editable-popover-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.editable-popover-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-md, 6px);
+  border: 1px solid var(--light-gray, #e5e7eb);
+  background: white;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.editable-popover-btn.primary {
+  background: var(--primary-color, #16a34a);
+  color: white;
+  border-color: var(--primary-color, #16a34a);
+}
+
+.editable-popover-btn.primary:hover:not(:disabled) {
+  background: var(--primary-color-dark, #15803d);
+}
+
+.editable-popover-btn.cancel:hover:not(:disabled) {
+  background: var(--light-gray, #e5e7eb);
+}
+
+.editable-popover-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Hero H1 line boxes in edit mode */
+.hero-lines-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hero-line-box {
+  display: inline-block;
+  padding: 0.35rem 0.6rem;
+  border: 2px dashed transparent;
+  border-radius: var(--radius-sm, 4px);
+  background: transparent;
+  transition: all 0.15s ease;
+}
+
+.hero-line-box:hover {
+  border-color: rgba(22, 163, 74, 0.4);
+  background: rgba(22, 163, 74, 0.05);
+}
+
+.hero-line-box:focus {
+  outline: none;
+  border-color: var(--primary-color, #16a34a);
+  background: white;
+}
+
+.hero-line-box + .hero-line-box {
+  margin-top: 0.25rem;
 }
 
 /* Images */
@@ -231,6 +348,63 @@
   font-weight: 700;
   font-size: 0.82rem;
   cursor: pointer;
+}
+
+.edit-mode-refresh-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full, 999px);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.edit-mode-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: white;
+}
+
+/* Toast */
+.edit-mode-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--secondary-color, #14532d);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: toastIn 0.3s ease;
+}
+
+.edit-mode-toast.saving {
+  background: var(--secondary-color, #14532d);
+}
+
+.edit-mode-toast.saved {
+  background: var(--primary-color, #16a34a);
+}
+
+.edit-mode-toast.error {
+  background: #b91c1c;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 /* Inline note used for things like an input's placeholder text,

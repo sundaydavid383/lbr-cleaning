@@ -7,7 +7,7 @@ const { authenticate } = require("../middleware/auth");
  * body: { name, phone, address, city, propertyType, referralSource, avatar }
  */
 exports.updateProfile = async (req, res) => {
-  const userId = Number(req.user.sub);
+  const userId = req.user.sub;
   const { name, phone, address, city, propertyType, referralSource, avatar } = req.body;
 
   try {

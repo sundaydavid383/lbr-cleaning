@@ -11,7 +11,6 @@ import { SITE_CONFIG } from "../../config/site";
 import { useCmsCategory } from "../../hooks/useCmsContent";
 import { ServiceSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { useEditMode } from "../../context/EditModeContext";
-import EditableText from "../../component/editable/EditableText";
 
 const Services = () => {
   const { value: servicePageContent, loading: serviceLoading } = useCmsCategory("service_page", {});
@@ -54,7 +53,6 @@ const Services = () => {
           <Deal 
             deal_Intro={deal_Intro} 
             plans={plans}
-            sectionTitle={isEditMode ? <EditableText cmsKey="service_page.deal_heading" type="text" value={servicePageContent.deal_heading} as="span" /> : undefined}
           />
         )}
     </>

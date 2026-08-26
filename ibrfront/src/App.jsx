@@ -11,6 +11,8 @@ import AdminProtectedRoute from './component/admin/AdminProtectedRoute';
 import { UserGuideProvider, useUserGuide } from './context/UserGuideContext';
 import UserGuideOverlay from './component/userGuide/UserGuideOverlay';
 import GlobalEditToggle from './component/globalEditToggle/GlobalEditToggle';
+import { ToastProvider } from './component/toast/ToastProvider';
+import { ErrorBoundary } from './component/errorBoundary/ErrorBoundary';
 
 const AdminLogin = lazy(() => import('./pages/auth/AdminLogin'));
 const AdminCreateAdmin = lazy(() => import('./pages/auth/AdminCreateAdmin'));
@@ -53,53 +55,58 @@ const App = () => {
       <EditModeProvider>
         <BrowserRouter>
           <UserGuideProvider>
-            <ScrollToTop />
-            <Nav />
-            <Suspense fallback={<RouteSkeleton />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/service" element={<Service />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/portal/a9f2c1e8b4d67320" element={<Navigate to="/admin/login" replace />} />
-                <Route path="/admin/create-admin" element={<AdminCreateAdmin />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services/:serviceId" element={<ServiceDetails />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/apply" element={<Apply />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/information" element={<InformationHub />} />
-                <Route path="/dashboard/*" element={<Dashboard />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/notify" element={<NotifySubscribers />} />
-                <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
-                  <Route path="message" element={<AdminMessagePage />} />
-                  <Route path="cms" element={<CmsDashboard />} />
-                  <Route path="cms/batch" element={<CmsBatchEditor />} />
-                  <Route path="cms/:key" element={<CmsEditor />} />
+            <ToastProvider>
+              <ErrorBoundary>
+                <ScrollToTop />
+                <Nav />
+                <Suspense fallback={<RouteSkeleton />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/service" element={<Service />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/portal/a9f2c1e8b4d67320" element={<Navigate to="/admin/login" replace />} />
+                    <Route path="/admin/create-admin" element={<AdminCreateAdmin />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/services/:serviceId" element={<ServiceDetails />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/apply" element={<Apply />} />
+                    <Route path="/payment" element={<Payment />} />
+                    <Route path="/information" element={<InformationHub />} />
+                    <Route path="/dashboard/*" element={<Dashboard />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/notify" element={<NotifySubscribers />} />
+                    <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
+                      <Route path="message" element={<AdminMessagePage />} />
+                      <Route path="cms" element={<CmsDashboard />} />
+                      <Route path="cms/batch" element={<CmsBatchEditor />} />
+                      <Route path="cms/:key" element={<CmsEditor />} />
 
-                  {/* Visual, in-place editor — same live pages, edit mode on */}
-                  <Route path="edit" element={<AdminEditLayout />}>
-                    <Route index element={<Navigate to="/admin/edit/about" replace />} />
-                    <Route path="home" element={<Home />} />
-                    <Route path="about" element={<About />} />
-                    <Route path="services" element={<Service />} />
-                    <Route path="services/:serviceId" element={<ServiceDetails />} />
-                    <Route path="blog" element={<Blog />} />
-                    <Route path="contact" element={<Contact />} />
-                  </Route>
+                      {/* Visual, in-place editor — same live pages, edit mode on */}
+                      <Route path="edit" element={<AdminEditLayout />}>
+                        <Route index element={<Navigate to="/admin/edit/about" replace />} />
+                        <Route path="home" element={<Home />} />
+                        <Route path="about" element={<About />} />
+                        <Route path="services" element={<Service />} />
+                        <Route path="services/:serviceId" element={<ServiceDetails />} />
+                        <Route path="blog" element={<Blog />} />
+                        <Route path="contact" element={<Contact />} />
+                      </Route>
 
-                  <Route path="create-admin" element={<AdminCreateAdmin />} />
-                </Route>
+                      <Route path="create-admin" element={<AdminCreateAdmin />} />
+                    </Route>
 
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-            <Footer />
-            <UserGuideOverlay />
-            <GlobalEditToggle />
-          </BrowserRouter>
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </Suspense>
+                <Footer />
+                <UserGuideOverlay />
+                <GlobalEditToggle />
+              </ErrorBoundary>
+            </ToastProvider>
+          </UserGuideProvider>
+        </BrowserRouter>
       </EditModeProvider>
     </AuthProvider>
   );

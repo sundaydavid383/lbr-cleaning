@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
 
 const LAGOS_AREAS = [
   "Victoria Island",
@@ -60,6 +62,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const { signup } = useAuth();
   const fileInputRef = useRef(null);
+  const { isEditMode } = useEditMode();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -168,14 +171,31 @@ const Signup = () => {
               <img src="/house-cleaning.png" alt="LBR Cleaning" />
             </Link>
             <div className="auth-badge-row">
-              <span className="auth-badge">New Account</span>
-              <span className="auth-badge-count">Step 1 of 1</span>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="signup.badge" type="text" value="New Account" as="span" className="auth-badge" />
+                  <EditableText cmsKey="signup.badge_count" type="text" value="Step 1 of 1" as="span" className="auth-badge-count" />
+                </>
+              ) : (
+                <>
+                  <span className="auth-badge">New Account</span>
+                  <span className="auth-badge-count">Step 1 of 1</span>
+                </>
+              )}
             </div>
-            <h1>Create Your Account</h1>
-            <p>
-              Join <strong>2,500+</strong> happy customers across Lagos. Tell us a bit about yourself so we
-              can personalize your cleaning experience.
-            </p>
+            {isEditMode ? (
+              <EditableText cmsKey="signup.heading" type="text" value="Create Your Account" as="h1" />
+            ) : (
+              <h1>Create Your Account</h1>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="signup.subtitle" type="text" value="Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience." as="p" />
+            ) : (
+              <p>
+                Join <strong>2,500+</strong> happy customers across Lagos. Tell us a bit about yourself so we
+                can personalize your cleaning experience.
+              </p>
+            )}
           </div>
 
           {error && (
@@ -187,8 +207,17 @@ const Signup = () => {
 
           <form onSubmit={handleSubmit} className="auth-form auth-form--grid">
             <div className="auth-section-title">
-              <i className="fa-solid fa-camera"></i>
-              <span>Profile Picture</span>
+              {isEditMode ? (
+                <>
+                  <i className="fa-solid fa-camera"></i>
+                  <EditableText cmsKey="signup.avatar_section" type="text" value="Profile Picture" as="span" />
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-camera"></i>
+                  <span>Profile Picture</span>
+                </>
+              )}
             </div>
 
             <div className="auth-avatar-upload">
@@ -206,8 +235,17 @@ const Signup = () => {
                 </div>
               </div>
               <div className="auth-avatar-info">
-                <p className="auth-avatar-label">Add a profile picture</p>
-                <p className="auth-avatar-hint">JPG, PNG or GIF. Max 5MB.</p>
+                {isEditMode ? (
+                  <>
+                    <EditableText cmsKey="signup.avatar_label" type="text" value="Add a profile picture" as="p" className="auth-avatar-label" />
+                    <EditableText cmsKey="signup.avatar_hint" type="text" value="JPG, PNG or GIF. Max 5MB." as="p" className="auth-avatar-hint" />
+                  </>
+                ) : (
+                  <>
+                    <p className="auth-avatar-label">Add a profile picture</p>
+                    <p className="auth-avatar-hint">JPG, PNG or GIF. Max 5MB.</p>
+                  </>
+                )}
               </div>
               <input
                 ref={fileInputRef}
@@ -219,8 +257,17 @@ const Signup = () => {
             </div>
 
             <div className="auth-section-title">
-              <i className="fa-solid fa-user"></i>
-              <span>Personal Information</span>
+              {isEditMode ? (
+                <>
+                  <i className="fa-solid fa-user"></i>
+                  <EditableText cmsKey="signup.personal_section" type="text" value="Personal Information" as="span" />
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-user"></i>
+                  <span>Personal Information</span>
+                </>
+              )}
             </div>
 
             <div className={inputClass("name")}>
@@ -275,8 +322,17 @@ const Signup = () => {
             </div>
 
             <div className="auth-section-title">
-              <i className="fa-solid fa-location-dot"></i>
-              <span>Location Details</span>
+              {isEditMode ? (
+                <>
+                  <i className="fa-solid fa-location-dot"></i>
+                  <EditableText cmsKey="signup.location_section" type="text" value="Location Details" as="span" />
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-location-dot"></i>
+                  <span>Location Details</span>
+                </>
+              )}
             </div>
 
             <div className={inputClass("city")}>
@@ -336,8 +392,17 @@ const Signup = () => {
             </div>
 
             <div className="auth-section-title">
-              <i className="fa-solid fa-broom"></i>
-              <span>Service Preferences</span>
+              {isEditMode ? (
+                <>
+                  <i className="fa-solid fa-broom"></i>
+                  <EditableText cmsKey="signup.service_section" type="text" value="Service Preferences" as="span" />
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-broom"></i>
+                  <span>Service Preferences</span>
+                </>
+              )}
             </div>
 
             <div className={inputClass("preferredService")}>
@@ -379,8 +444,17 @@ const Signup = () => {
             </div>
 
             <div className="auth-section-title">
-              <i className="fa-solid fa-lock"></i>
-              <span>Security</span>
+              {isEditMode ? (
+                <>
+                  <i className="fa-solid fa-lock"></i>
+                  <EditableText cmsKey="signup.security_section" type="text" value="Security" as="span" />
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-lock"></i>
+                  <span>Security</span>
+                </>
+              )}
             </div>
 
             <div className={inputClass("password")}>
@@ -445,21 +519,37 @@ const Signup = () => {
           </form>
 
           <div className="auth-footer">
-            <p>
-              Already have an account? <Link to="/login" className="auth-link">Sign In</Link>
-            </p>
+            {isEditMode ? (
+              <EditableText cmsKey="signup.footer" type="text" value="Already have an account? Sign In" as="p" />
+            ) : (
+              <p>
+                Already have an account? <Link to="/login" className="auth-link">Sign In</Link>
+              </p>
+            )}
           </div>
         </div>
 
         <div className="auth-info">
           <div className="auth-info-inner">
-            <div className="auth-info-badge">Trusted by 2,500+ customers</div>
-            <h2>Your Spotless Space Is Just a Few Clicks Away</h2>
-            <p>
-              LBR Cleaning is Lagos&apos; most trusted professional cleaning company. From Victoria Island
-              to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or
-              business.
-            </p>
+            {isEditMode ? (
+              <EditableText cmsKey="signup.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
+            ) : (
+              <span className="auth-info-badge">Trusted by 2,500+ customers</span>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="signup.info_heading" type="text" value="Your Spotless Space Is Just a Few Clicks Away" as="h2" />
+            ) : (
+              <h2>Your Spotless Space Is Just a Few Clicks Away</h2>
+            )}
+            {isEditMode ? (
+              <EditableText cmsKey="signup.info_text" type="text" value="LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business." as="p" />
+            ) : (
+              <p>
+                LBR Cleaning is Lagos&apos; most trusted professional cleaning company. From Victoria Island
+                to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or
+                business.
+              </p>
+            )}
 
             <div className="auth-stats">
               <div className="auth-stat">

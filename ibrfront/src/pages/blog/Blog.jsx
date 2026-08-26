@@ -1,4 +1,3 @@
-// NewsBlog.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import Loading from "../../component/loading/Loading";
 import BlogModal from "../../component/blogModal/BlogModal";
@@ -8,6 +7,9 @@ import NewsletterSignup from "../../component/newsletterSignup/NewsletterSignup"
 import "./blog.css";
 import { useCmsCategory } from "../../hooks/useCmsContent";
 import { BlogSkeleton } from "../../component/pageSkeleton/PageSkeleton";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
+import EditableList from "../../component/editable/EditableList";
 
 const NewsBlog = () => {
   const { value: blogContent, loading: blogLoading } = useCmsCategory("blog", {});
@@ -19,6 +21,7 @@ const NewsBlog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
+  const { isEditMode } = useEditMode();
 
   const blogsPerPage = 6;
 
@@ -123,16 +126,26 @@ const NewsBlog = () => {
 
   return (<>
     <section className="blog-container">
-      <h2 className="blog-title">LBR Cleaning Insights</h2>
+      {isEditMode ? (
+        <EditableText cmsKey="blog.title" type="text" value="LBR Cleaning Insights" as="h2" className="blog-title" />
+      ) : (
+        <h2 className="blog-title">LBR Cleaning Insights</h2>
+      )}
 
-      <div className="blog-toggle">
-        <button
-          className={useManual ? "toggle-btn active" : "toggle-btn"}
-          onClick={handleToggleSource}
-        >
-          {useManual ? "Showing Live News" : "Showing CMS Blogs"} — Click to Switch
-        </button>
-      </div>
+      {!isEditMode && (
+        <div className="blog-toggle">
+          <button
+            className={useManual ? "toggle-btn active" : "toggle-btn"}
+            onClick={handleToggleSource}
+          >
+            {isEditMode ? (
+              <EditableText cmsKey="blog.toggle_text" type="text" value={useManual ? "Showing Live News" : "Showing CMS Blogs"} as="span" />
+            ) : (
+              `${useManual ? "Showing Live News" : "Showing CMS Blogs"} — Click to Switch`
+            )}
+          </button>
+        </div>
+      )}
 
       {!loading && !useManual && cmsArticles.length > 0 && (
         <>
@@ -151,7 +164,11 @@ const NewsBlog = () => {
         <>
           {!useManual && cmsArticles.length === 0 && (
             <div style={{ textAlign: 'center', padding: '2rem' }}>
-              <p>No CMS articles found. Add blog articles in the CMS admin panel.</p>
+              {isEditMode ? (
+                <EditableText cmsKey="blog.empty_state" type="text" value="No CMS articles found. Add blog articles in the CMS admin panel." as="p" />
+              ) : (
+                <p>No CMS articles found. Add blog articles in the CMS admin panel.</p>
+              )}
             </div>
           )}
 

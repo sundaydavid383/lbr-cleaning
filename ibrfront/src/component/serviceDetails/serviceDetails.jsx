@@ -4,6 +4,8 @@ import { useParams, Link } from "react-router-dom";
 import "./serviceDetails.css";
 import TestimonialCarousel from "../testimonial/TestimonialCarousel";
 import { useCmsContent } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 import {
   FaClock,
   FaMoneyBillWave,
@@ -730,6 +732,7 @@ const ServiceDetails = ({}) => {
   const faqs = cmsServiceDetails?.faqs ?? service?.faqs;
   const testimonials = cmsServiceDetails?.testimonials ?? service?.testimonials;
   const sectionsRef = useRevealOnScroll();
+  const { isEditMode } = useEditMode();
 
   if (!service) {
     return (
@@ -757,10 +760,21 @@ const ServiceDetails = ({}) => {
         }}
       >
         <div className="banner-content">
-          <div className="banner-badge">{service.heroBadge}</div>
-          <h1>{service.title}</h1>
-          <p className="tagline">{service.tagline}</p>
-          <p className="banner-description">{description}</p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey={`service_details.${service.id}.badge`} type="text" value={service.heroBadge} as="span" className="banner-badge" />
+              <EditableText cmsKey={`service_details.${service.id}.title`} type="text" value={service.title} as="h1" />
+              <EditableText cmsKey={`service_details.${service.id}.tagline`} type="text" value={service.tagline} as="p" className="tagline" />
+              <EditableText cmsKey={`service_details.${service.id}.description`} type="text" value={description} as="p" className="banner-description" />
+            </>
+          ) : (
+            <>
+              <div className="banner-badge">{service.heroBadge}</div>
+              <h1>{service.title}</h1>
+              <p className="tagline">{service.tagline}</p>
+              <p className="banner-description">{description}</p>
+            </>
+          )}
 
           <div className="quick-info">
             <span>
@@ -819,9 +833,19 @@ const ServiceDetails = ({}) => {
           {/* WHAT'S INCLUDED */}
           <section className="detail-content reveal" ref={(el) => (sectionsRef.current[0] = el)}>
             <div className="section-header">
-              <span className="section-tag">Service Details</span>
-              <h2>What's Included</h2>
-              <p>Every {service.title} service comes with this complete checklist</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.included.tag" type="text" value="Service Details" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.included.title" type="text" value="What's Included" as="h2" />
+                  <EditableText cmsKey="service_details.included.subtitle" type="text" value={`Every ${service.title} service comes with this complete checklist`} as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">Service Details</span>
+                  <h2>What's Included</h2>
+                  <p>Every {service.title} service comes with this complete checklist</p>
+                </>
+              )}
             </div>
             <div className="inclusion-grid">
               {service.details.map((point, index) => (
@@ -838,9 +862,19 @@ const ServiceDetails = ({}) => {
           {/* GALLERY */}
           <section className="gallery-section reveal" ref={(el) => (sectionsRef.current[1] = el)}>
             <div className="section-header">
-              <span className="section-tag">Gallery</span>
-              <h2>Our Work in Action</h2>
-              <p>See the quality and attention to detail we bring to every job</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.gallery.tag" type="text" value="Gallery" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.gallery.title" type="text" value="Our Work in Action" as="h2" />
+                  <EditableText cmsKey="service_details.gallery.subtitle" type="text" value="See the quality and attention to detail we bring to every job" as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">Gallery</span>
+                  <h2>Our Work in Action</h2>
+                  <p>See the quality and attention to detail we bring to every job</p>
+                </>
+              )}
             </div>
             <div className="gallery-grid">
               {serviceGalleries[service.id]?.map((img, idx) => (
@@ -857,9 +891,19 @@ const ServiceDetails = ({}) => {
           {/* WHY CHOOSE US */}
           <section className="why-section reveal" ref={(el) => (sectionsRef.current[2] = el)}>
             <div className="section-header">
-              <span className="section-tag">Why Us</span>
-              <h2>Why Choose Our {service.title}?</h2>
-              <p>The difference is in the details</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.why_us.tag" type="text" value="Why Us" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.why_us.title" type="text" value={`Why Choose Our ${service.title}?`} as="h2" />
+                  <EditableText cmsKey="service_details.why_us.subtitle" type="text" value="The difference is in the details" as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">Why Us</span>
+                  <h2>Why Choose Our {service.title}?</h2>
+                  <p>The difference is in the details</p>
+                </>
+              )}
             </div>
             <div className="benefits-grid">
               {service.benefits?.map((item, idx) => (
@@ -876,9 +920,19 @@ const ServiceDetails = ({}) => {
           {/* HOW TO PREPARE */}
           <section className="prep-section reveal" ref={(el) => (sectionsRef.current[3] = el)}>
             <div className="section-header">
-              <span className="section-tag">Preparation</span>
-              <h2>How to Prepare</h2>
-              <p>A few simple steps to get the best results</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.preparation.tag" type="text" value="Preparation" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.preparation.title" type="text" value="How to Prepare" as="h2" />
+                  <EditableText cmsKey="service_details.preparation.subtitle" type="text" value="A few simple steps to get the best results" as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">Preparation</span>
+                  <h2>How to Prepare</h2>
+                  <p>A few simple steps to get the best results</p>
+                </>
+              )}
             </div>
             <div className="prep-steps">
               {service.preparation?.map((item, idx) => (
@@ -893,9 +947,19 @@ const ServiceDetails = ({}) => {
           {/* TESTIMONIALS */}
           <section className="testimonial-section reveal" ref={(el) => (sectionsRef.current[4] = el)}>
             <div className="section-header">
-              <span className="section-tag">Testimonials</span>
-              <h2>What Our Clients Say</h2>
-              <p>Real feedback from real customers</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.testimonials.tag" type="text" value="Testimonials" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.testimonials.title" type="text" value="What Our Clients Say" as="h2" />
+                  <EditableText cmsKey="service_details.testimonials.subtitle" type="text" value="Real feedback from real customers" as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">Testimonials</span>
+                  <h2>What Our Clients Say</h2>
+                  <p>Real feedback from real customers</p>
+                </>
+              )}
             </div>
             <TestimonialCarousel testimonials={testimonials} />
           </section>
@@ -903,9 +967,19 @@ const ServiceDetails = ({}) => {
           {/* FAQ */}
           <section className="faq-section reveal" ref={(el) => (sectionsRef.current[5] = el)}>
             <div className="section-header">
-              <span className="section-tag">FAQ</span>
-              <h2>Frequently Asked Questions</h2>
-              <p>Everything you need to know before booking</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="service_details.faq.tag" type="text" value="FAQ" as="span" className="section-tag" />
+                  <EditableText cmsKey="service_details.faq.title" type="text" value="Frequently Asked Questions" as="h2" />
+                  <EditableText cmsKey="service_details.faq.subtitle" type="text" value="Everything you need to know before booking" as="p" />
+                </>
+              ) : (
+                <>
+                  <span className="section-tag">FAQ</span>
+                  <h2>Frequently Asked Questions</h2>
+                  <p>Everything you need to know before booking</p>
+                </>
+              )}
             </div>
             <div className="faq-list">
               {faqs?.map((faq, idx) => (

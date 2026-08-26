@@ -3,15 +3,16 @@ import "./hero.css";
 import Feature from "../feature/Feature";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
+import { useCmsContent } from "../../hooks/useCmsContent";
 import fallbackImage from "../../assets/about-intro.jpg";
 
 const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
-  console.log(`[HERO] Render | section.length=${section?.length || 0} | features.length=${features?.length || 0}`);
-  if (section?.length > 0) {
-    console.log(`[HERO] first slide:`, section[0]);
-  }
-
   const { isAuthenticated } = useAuth();
+  const { isEditMode } = useEditMode();
+  const { value: heading1, loading: h1Loading } = useCmsContent("home.hero_heading_1", "");
+  const { value: heading2, loading: h2Loading } = useCmsContent("home.hero_heading_2", "");
   const [printedTalk, setPrintedTalk] = useState(0);
   const [printedSection, setPrintedSection] = useState(0);
 
@@ -99,6 +100,9 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
   const page = section[printedSection];
   if (!page) return null;
 
+  const line1 = heading1 || page?.header || "";
+  const line2 = heading2 || page?.headerspan || "";
+
   return (
     <div
       className="hero"
@@ -150,16 +154,55 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
       {/* Main content */}
       <div className="container columnreverseonmobile">
         <div className="text">
-          <div className="question">{page.questions}</div>
-          <h1>
-            {page.header}
-            <span>{page.headerspan}</span>
-          </h1>
-          <div className="ps">
-            {page.ps.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+          {isEditMode ? (
+            <>
+              <div className="question">{page.questions}</div>
+              <h1 className="hero-lines-wrap">
+                <EditableText
+                  cmsKey="home.hero_heading_1"
+                  type="text"
+                  value={line1}
+                  as="span"
+                  className="hero-line-box"
+                />
+                <EditableText
+                  cmsKey="home.hero_heading_2"
+                  type="text"
+                  value={line2}
+                  as="span"
+                  className="hero-line-box"
+                />
+              </h1>
+              <div className="ps">
+                {page.ps.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+              {isEditMode && (
+                <a
+                  href="/admin/cms/home.hero_slides"
+                  className="edit-hero-cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fa-solid fa-pen-to-square"></i> Edit full hero slides
+                </a>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="question">{page.questions}</div>
+              <h1>
+                {page.header}
+                <span>{page.headerspan}</span>
+              </h1>
+              <div className="ps">
+                {page.ps.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            </>
+          )}
           {!isAuthenticated && (
             <Link to="/apply" className="btn">
               <p>
@@ -170,23 +213,47 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
         </div>
 
         <div className="image">
-          <img className="person" src={page.sectionimage} alt="Cleaning professional" />
-          <img className="stars" src={page.sectionimageStar} alt="" aria-hidden="true" />
-          <img className="spark" src={page.sectionimageSpark} alt="" aria-hidden="true" />
-          <div className="speech">
-            <div className="circle">
-              <p>{page.talks?.[printedTalk] || ""}</p>
-              <h3>
-                <i className="fa-solid fa-phone-volume"></i>
-                {page.talksReport}
-              </h3>
-            </div>
-            <div className="cone">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+          {isEditMode ? (
+            <>
+              <img className="person" src={page.sectionimage} alt="Cleaning professional" />
+              <img className="stars" src={page.sectionimageStar} alt="" aria-hidden="true" />
+              <img className="spark" src={page.sectionimageSpark} alt="" aria-hidden="true" />
+              <div className="speech">
+                <div className="circle">
+                  <p>{page.talks?.[printedTalk] || ""}</p>
+                  <h3>
+                    <i className="fa-solid fa-phone-volume"></i>
+                    {page.talksReport}
+                  </h3>
+                </div>
+                <div className="cone">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <img className="person" src={page.sectionimage} alt="Cleaning professional" />
+              <img className="stars" src={page.sectionimageStar} alt="" aria-hidden="true" />
+              <img className="spark" src={page.sectionimageSpark} alt="" aria-hidden="true" />
+              <div className="speech">
+                <div className="circle">
+                  <p>{page.talks?.[printedTalk] || ""}</p>
+                  <h3>
+                    <i className="fa-solid fa-phone-volume"></i>
+                    {page.talksReport}
+                  </h3>
+                </div>
+                <div className="cone">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

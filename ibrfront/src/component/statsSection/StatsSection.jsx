@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "./statsSection.css";
 import RecentActivity from "../recentActivity/RecentActivity";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const AnimatedCounter = ({ end, duration, suffix, started }) => {
   const [value, setValue] = useState(0);
@@ -27,6 +29,7 @@ const StatsSection = () => {
   const { value: statsData, loading: statsLoading } = useCmsCategory("homepage_stats", {});
   const [started, setStarted] = useState(false);
   const sectionRef = useRef(null);
+  const { isEditMode } = useEditMode();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,14 +66,26 @@ const StatsSection = () => {
     <section className="stats-section" ref={sectionRef}>
       <div className="stats-wrapper">
         <div className="stats-header">
-          <span className="section-tag">By the Numbers</span>
-          <h2 className="stats-title">
-            Trusted by <span className="highlight">Thousands</span> Across Nigeria
-          </h2>
-          <p className="stats-subtitle">
-            Our track record speaks for itself. Here's what we've built through
-            consistent, quality service.
-          </p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="homepage_stats.tag" type="text" value="By the Numbers" as="span" className="section-tag" />
+              <h2 className="stats-title">
+                Trusted by <span className="highlight">Thousands</span> Across Nigeria
+              </h2>
+              <EditableText cmsKey="homepage_stats.subtitle" type="text" value="Our track record speaks for itself. Here's what we've built through consistent, quality service." as="p" className="stats-subtitle" />
+            </>
+          ) : (
+            <>
+              <span className="section-tag">By the Numbers</span>
+              <h2 className="stats-title">
+                Trusted by <span className="highlight">Thousands</span> Across Nigeria
+              </h2>
+              <p className="stats-subtitle">
+                Our track record speaks for itself. Here's what we've built through
+                consistent, quality service.
+              </p>
+            </>
+          )}
         </div>
 
         <div className="stats-container">

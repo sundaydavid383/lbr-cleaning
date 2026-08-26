@@ -28,6 +28,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, token]);
 
+  useEffect(() => {
+    scheduleExpiryLogout(token);
+  }, [token]);
+
   // Decode a base64 JWT payload without adding a dependency. Returns null on failure.
   const parseJwtPayload = (jwt) => {
     try {

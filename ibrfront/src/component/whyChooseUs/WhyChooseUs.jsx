@@ -2,9 +2,12 @@
 import React from "react";
 import "./whyChooseUs.css";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const WhyChooseUs = () => {
   const { value: featuresData, loading: featuresLoading } = useCmsCategory("why_choose_us", {});
+  const { isEditMode } = useEditMode();
 
   if (featuresLoading) {
     return (
@@ -26,14 +29,26 @@ const WhyChooseUs = () => {
     <section className="why-choose-us">
       <div className="why-choose-us-container">
         <div className="why-choose-us-header">
-          <span className="section-tag">Why LBR Cleaning</span>
-          <h2 className="section-title">
-            The <span className="highlight">Smarter</span> Way to Clean
-          </h2>
-          <p className="section-subtitle">
-            We combine professional expertise with eco-conscious products to deliver
-            results that exceed expectations every single time.
-          </p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="why_choose_us.tag" type="text" value="Why LBR Cleaning" as="span" className="section-tag" />
+              <h2 className="section-title">
+                The <span className="highlight">Smarter</span> Way to Clean
+              </h2>
+              <EditableText cmsKey="why_choose_us.subtitle" type="text" value="We combine professional expertise with eco-conscious products to deliver results that exceed expectations every single time." as="p" className="section-subtitle" />
+            </>
+          ) : (
+            <>
+              <span className="section-tag">Why LBR Cleaning</span>
+              <h2 className="section-title">
+                The <span className="highlight">Smarter</span> Way to Clean
+              </h2>
+              <p className="section-subtitle">
+                We combine professional expertise with eco-conscious products to deliver
+                results that exceed expectations every single time.
+              </p>
+            </>
+          )}
         </div>
 
         <div className="features-grid">

@@ -88,6 +88,24 @@ const defaultContent = [
     isPublic: true
   },
   {
+    key: "home.hero_heading_1",
+    type: "text",
+    category: "homepage",
+    label: "Hero Heading Line 1",
+    description: "First line of the hero heading (e.g. 'We Clean and')",
+    value: "We Clean and",
+    isPublic: true
+  },
+  {
+    key: "home.hero_heading_2",
+    type: "text",
+    category: "homepage",
+    label: "Hero Heading Line 2",
+    description: "Second line of the hero heading (e.g. 'prioritize your satisfaction')",
+    value: "prioritize your satisfaction",
+    isPublic: true
+  },
+  {
     key: "home.features",
     type: "array",
     category: "homepage",
@@ -130,6 +148,33 @@ const defaultContent = [
     }
   },
   {
+    key: "how_it_works.tag",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Tag",
+    description: "Tag text for the how it works section",
+    value: "Simple Process",
+    isPublic: true
+  },
+  {
+    key: "how_it_works.title",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Title",
+    description: "Title for the how it works section",
+    value: "How It Works",
+    isPublic: true
+  },
+  {
+    key: "how_it_works.subtitle",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Subtitle",
+    description: "Subtitle for the how it works section",
+    value: "Booking a cleaning service with LBR is fast, simple, and stress-free.",
+    isPublic: true
+  },
+  {
     key: "home.coverage_areas",
     type: "object",
     category: "coverage_areas",
@@ -143,6 +188,33 @@ const defaultContent = [
       note_link_text: "Contact us",
       list: ["Lagos", "Abuja", "Port Harcourt", "Ibadan", "Kaduna", "Enugu", "Calabar", "Benin City", "Kano", "Warri"]
     }
+  },
+  {
+    key: "coverage_areas.tag",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Tag",
+    description: "Tag text for the coverage areas section",
+    value: "Service Coverage",
+    isPublic: true
+  },
+  {
+    key: "coverage_areas.title",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Title",
+    description: "Title for the coverage areas section",
+    value: "Areas We Serve",
+    isPublic: true
+  },
+  {
+    key: "coverage_areas.subtitle",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Subtitle",
+    description: "Subtitle for the coverage areas section",
+    value: "We provide professional cleaning services across Nigeria.",
+    isPublic: true
   },
   {
     key: "home.guarantee",
@@ -163,6 +235,42 @@ const defaultContent = [
       ],
       cta_text: "Book with Confidence"
     }
+  },
+  {
+    key: "guarantee.tag",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Tag",
+    description: "Tag text for the guarantee section",
+    value: "Our Promise",
+    isPublic: true
+  },
+  {
+    key: "guarantee.title",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Title",
+    description: "Title for the guarantee section",
+    value: "100% Satisfaction Guaranteed",
+    isPublic: true
+  },
+  {
+    key: "guarantee.description",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Description",
+    description: "Description for the guarantee section",
+    value: "If you're not completely satisfied with our cleaning service, we'll re-clean the affected areas for free within 24 hours — no questions asked.",
+    isPublic: true
+  },
+  {
+    key: "guarantee.cta_text",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee CTA Text",
+    description: "Call-to-action text for the guarantee section",
+    value: "Book with Confidence",
+    isPublic: true
   },
   {
     key: "homepage_stats.stats",
@@ -296,6 +404,33 @@ const defaultContent = [
     ]
   },
   {
+    key: "about_page.intro.heading",
+    type: "text",
+    category: "about_page",
+    label: "About Page Intro Heading",
+    description: "Heading for the intro section on the about page",
+    value: "Who We Are",
+    isPublic: true
+  },
+  {
+    key: "about_page.team_heading",
+    type: "text",
+    category: "about_page",
+    label: "Team Heading",
+    description: "Heading for the team section on the about page",
+    value: "Meet Our Dedicated Team",
+    isPublic: true
+  },
+  {
+    key: "about_page.values_heading",
+    type: "text",
+    category: "about_page",
+    label: "Values Heading",
+    description: "Heading for the values section on the about page",
+    value: "Our Core Values",
+    isPublic: true
+  },
+  {
     key: "about_page.video_url",
     type: "text",
     category: "about_page",
@@ -356,6 +491,33 @@ const defaultContent = [
     label: "Deal Section Heading",
     description: "Heading for the pricing/deal section on the service page",
     value: "Professional Cleaning, Transparent Pricing",
+    isPublic: true
+  },
+  {
+    key: "service_page.section_tag",
+    type: "text",
+    category: "service_page",
+    label: "Service Page Section Tag",
+    description: "Tag text for the service page section",
+    value: "What We Offer",
+    isPublic: true
+  },
+  {
+    key: "service_page.section_title",
+    type: "text",
+    category: "service_page",
+    label: "Service Page Section Title",
+    description: "Title for the service page section",
+    value: "Our Services",
+    isPublic: true
+  },
+  {
+    key: "service_page.section_subtitle",
+    type: "text",
+    category: "service_page",
+    label: "Service Page Section Subtitle",
+    description: "Subtitle for the service page section",
+    value: "Discover our professional cleaning solutions for every need.",
     isPublic: true
   },
   {
@@ -497,6 +659,24 @@ const defaultContent = [
     label: "Contact Phone",
     description: "Phone number displayed on the contact page",
     value: "+234 801 234 5678",
+    isPublic: true
+  },
+  {
+    key: "contact.hours_heading",
+    type: "text",
+    category: "contact",
+    label: "Business Hours Heading",
+    description: "Heading for the business hours section on the contact page",
+    value: "Business Hours",
+    isPublic: true
+  },
+  {
+    key: "contact.faq_heading",
+    type: "text",
+    category: "contact",
+    label: "FAQ Heading",
+    description: "Heading for the FAQ section on the contact page",
+    value: "Frequently Asked Questions",
     isPublic: true
   },
   {
@@ -677,6 +857,15 @@ const defaultContent = [
         facebookLink: "https://www.facebook.com/"
       }
     ]
+  },
+  {
+    key: "blog.title",
+    type: "text",
+    category: "blog",
+    label: "Blog Page Title",
+    description: "Title displayed on the blog page",
+    value: "LBR Cleaning Insights",
+    isPublic: true
   },
   {
     key: "blog.articles",
@@ -897,6 +1086,69 @@ const defaultContent = [
         ]
       }
     ],
+    isPublic: true
+  },
+  {
+    key: "apply.badge",
+    type: "text",
+    category: "apply",
+    label: "Apply Badge",
+    description: "Badge text for the apply section",
+    value: "Book Now",
+    isPublic: true
+  },
+  {
+    key: "apply.heading_highlight",
+    type: "text",
+    category: "apply",
+    label: "Apply Heading Highlight",
+    description: "Highlight text for the apply heading",
+    value: "Cleaning",
+    isPublic: true
+  },
+  {
+    key: "apply.subtitle",
+    type: "text",
+    category: "apply",
+    label: "Apply Subtitle",
+    description: "Subtitle for the apply section",
+    value: "Fill out the form below and our team will get back to you within 24 hours to confirm your appointment.",
+    isPublic: true
+  },
+  {
+    key: "apply.form_heading",
+    type: "text",
+    category: "apply",
+    label: "Apply Form Heading",
+    description: "Heading for the apply form",
+    value: "Tell Us About Your Needs",
+    isPublic: true
+  },
+  {
+    key: "apply.form_subheading",
+    type: "text",
+    category: "apply",
+    label: "Apply Form Subheading",
+    description: "Subheading for the apply form",
+    value: "We'll match you with the perfect cleaning solution",
+    isPublic: true
+  },
+  {
+    key: "apply.success_heading",
+    type: "text",
+    category: "apply",
+    label: "Apply Success Heading",
+    description: "Heading shown after successful form submission",
+    value: "Booking Received!",
+    isPublic: true
+  },
+  {
+    key: "apply.success_text",
+    type: "text",
+    category: "apply",
+    label: "Apply Success Text",
+    description: "Text shown after successful form submission",
+    value: "Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment.",
     isPublic: true
   },
   {
@@ -1394,7 +1646,7 @@ const defaultContent = [
     description: "Call-to-action banner",
     value: {
       tag: "Get Started Today",
-      title: "Ready for a <span class='highlight'>Spotless</span> Space?",
+      title: "Ready for a Spotless Space?",
       subtitle: "Book your cleaning appointment in under 60 seconds. Our team is standing by to bring freshness back to your home or office.",
       features: ["Free consultation & quote", "No hidden fees", "Satisfaction guaranteed"],
       primary_button: "Book Now",
@@ -1409,7 +1661,7 @@ const defaultContent = [
     label: "Newsletter Signup",
     description: "Newsletter signup section content",
     value: {
-      title: "Stay in the <span class='highlight'>Loop</span>",
+      title: "Stay in the Loop",
       subtitle: "Get weekly cleaning tips, exclusive offers, and helpful guides delivered straight to your inbox. No spam — just useful stuff.",
       placeholder: "Enter your email address",
       button_text: "Subscribe",
@@ -1419,6 +1671,87 @@ const defaultContent = [
     }
   },
   {
+    key: "information.how_it_works.tag",
+    type: "text",
+    category: "information",
+    label: "How It Works Tag",
+    description: "Small tag above How It Works heading",
+    value: "Simple Process",
+    isPublic: true
+  },
+  {
+    key: "information.how_it_works.title",
+    type: "text",
+    category: "information",
+    label: "How It Works Title",
+    description: "Main heading for How It Works section",
+    value: "How It Works",
+    isPublic: true
+  },
+  {
+    key: "information.how_it_works.subtitle",
+    type: "text",
+    category: "information",
+    label: "How It Works Subtitle",
+    description: "Subtitle for How It Works section",
+    value: "Booking a cleaning service with LBR is fast, simple, and stress-free",
+    isPublic: true
+  },
+  {
+    key: "information.portfolio.tag",
+    type: "text",
+    category: "information",
+    label: "Portfolio Tag",
+    description: "Small tag above Portfolio heading",
+    value: "Our Work",
+    isPublic: true
+  },
+  {
+    key: "information.portfolio.title",
+    type: "text",
+    category: "information",
+    label: "Portfolio Title",
+    description: "Main heading for Portfolio section",
+    value: "Portfolio",
+    isPublic: true
+  },
+  {
+    key: "information.portfolio.subtitle",
+    type: "text",
+    category: "information",
+    label: "Portfolio Subtitle",
+    description: "Subtitle for Portfolio section",
+    value: "A glimpse into our completed projects",
+    isPublic: true
+  },
+  {
+    key: "portfolio.tag",
+    type: "text",
+    category: "portfolio",
+    label: "Portfolio Tag",
+    description: "Small tag in portfolio heading",
+    value: "our work",
+    isPublic: true
+  },
+  {
+    key: "portfolio.title",
+    type: "text",
+    category: "portfolio",
+    label: "Portfolio Title",
+    description: "Main heading for portfolio component",
+    value: "Portfolio",
+    isPublic: true
+  },
+  {
+    key: "portfolio.subtitle",
+    type: "text",
+    category: "portfolio",
+    label: "Portfolio Subtitle",
+    description: "Subtitle for portfolio component",
+    value: "A glimpse into our completed projects",
+    isPublic: true
+  },
+  {
     key: "about_timeline.milestones",
     type: "array",
     category: "about_timeline",
@@ -1483,6 +1816,501 @@ const defaultContent = [
         description: "Launching the digital platform to make booking, payments, and scheduling seamless for everyone."
       }
     ]
+  },
+  {
+    key: "about_timeline.tag",
+    type: "text",
+    category: "about_timeline",
+    label: "About Timeline Tag",
+    description: "Small tag above timeline heading",
+    value: "Our Journey",
+    isPublic: true
+  },
+  {
+    key: "about_timeline.title",
+    type: "text",
+    category: "about_timeline",
+    label: "About Timeline Title",
+    description: "Main heading for timeline section",
+    value: "From Local Trust to Digital Innovation",
+    isPublic: true
+  },
+  {
+    key: "about_timeline.subtitle",
+    type: "text",
+    category: "about_timeline",
+    label: "About Timeline Subtitle",
+    description: "Subtitle for timeline section",
+    value: "Every milestone reflects our commitment to quality, community, and growth.",
+    isPublic: true
+  },
+  {
+    key: "working_process.tag",
+    type: "text",
+    category: "working_process",
+    label: "Working Process Tag",
+    description: "Small tag above working process heading",
+    value: "working process",
+    isPublic: true
+  },
+  {
+    key: "working_process.title",
+    type: "text",
+    category: "working_process",
+    label: "Working Process Title",
+    description: "Main heading for working process section",
+    value: "How It Works",
+    isPublic: true
+  },
+  {
+    key: "working_process.subtitle",
+    type: "text",
+    category: "working_process",
+    label: "Working Process Subtitle",
+    description: "Subtitle for working process section",
+    value: "Competently repurpose go forward benefits without goal-oriented ROI conveniently target e-business opportunities whereas",
+    isPublic: true
+  },
+  {
+    key: "working_process.step1_title",
+    type: "text",
+    category: "working_process",
+    label: "Step 1 Title",
+    description: "Title for first step",
+    value: "Find Us Online",
+    isPublic: true
+  },
+  {
+    key: "working_process.step1_desc",
+    type: "text",
+    category: "working_process",
+    label: "Step 1 Description",
+    description: "Description for first step",
+    value: "Visit our website to explore our professional cleaning services and learn how we can keep your space spotless.",
+    isPublic: true
+  },
+  {
+    key: "working_process.step2_title",
+    type: "text",
+    category: "working_process",
+    label: "Step 2 Title",
+    description: "Title for second step",
+    value: "Book an Appointment",
+    isPublic: true
+  },
+  {
+    key: "working_process.step2_desc",
+    type: "text",
+    category: "working_process",
+    label: "Step 2 Description",
+    description: "Description for second step",
+    value: "Schedule a convenient cleaning session with our team at the time that works best for you.",
+    isPublic: true
+  },
+  {
+    key: "working_process.step3_title",
+    type: "text",
+    category: "working_process",
+    label: "Step 3 Title",
+    description: "Title for third step",
+    value: "We Will Reach Out to You",
+    isPublic: true
+  },
+  {
+    key: "working_process.step3_desc",
+    type: "text",
+    category: "working_process",
+    label: "Step 3 Description",
+    description: "Description for third step",
+    value: "Our team will contact you instantly to confirm your appointment and finalize all details.",
+    isPublic: true
+  },
+  {
+    key: "why_choose_us.tag",
+    type: "text",
+    category: "why_choose_us",
+    label: "Why Choose Us Tag",
+    description: "Small tag above why choose us heading",
+    value: "Why LBR Cleaning",
+    isPublic: true
+  },
+  {
+    key: "why_choose_us.subtitle",
+    type: "text",
+    category: "why_choose_us",
+    label: "Why Choose Us Subtitle",
+    description: "Subtitle for why choose us section",
+    value: "We combine professional expertise with eco-conscious products to deliver results that exceed expectations every single time.",
+    isPublic: true
+  },
+  {
+    key: "service_guarantee.tag",
+    type: "text",
+    category: "service_guarantee",
+    label: "Service Guarantee Tag",
+    description: "Small tag above guarantee heading",
+    value: "Our Promise",
+    isPublic: true
+  },
+  {
+    key: "trust_section.tag",
+    type: "text",
+    category: "trust_section",
+    label: "Trust Section Tag",
+    description: "Small tag above trust heading",
+    value: "Trust & Safety",
+    isPublic: true
+  },
+  {
+    key: "trust_section.footer_text",
+    type: "text",
+    category: "trust_section",
+    label: "Trust Section Footer Text",
+    description: "Footer text for trust section",
+    value: "With over 8+ years of experience and 2,500+ satisfied clients, LBR Cleaning is the name Lagos homes and offices trust for spotless, reliable service.",
+    isPublic: true
+  },
+  {
+    key: "homepage_stats.tag",
+    type: "text",
+    category: "homepage_stats",
+    label: "Stats Section Tag",
+    description: "Small tag above stats heading",
+    value: "By the Numbers",
+    isPublic: true
+  },
+  {
+    key: "homepage_stats.subtitle",
+    type: "text",
+    category: "homepage_stats",
+    label: "Stats Section Subtitle",
+    description: "Subtitle for stats section",
+    value: "Our track record speaks for itself. Here's what we've built through consistent, quality service.",
+    isPublic: true
+  },
+  {
+    key: "newsletter.title",
+    type: "text",
+    category: "newsletter",
+    label: "Newsletter Title",
+    description: "Heading for newsletter section",
+    value: "Stay in the Loop",
+    isPublic: true
+  },
+  {
+    key: "newsletter.subtitle",
+    type: "text",
+    category: "newsletter",
+    label: "Newsletter Subtitle",
+    description: "Subtitle for newsletter section",
+    value: "Get weekly cleaning tips, exclusive offers, and helpful guides delivered straight to your inbox. No spam — just useful stuff.",
+    isPublic: true
+  },
+  {
+    key: "testimonials.tag",
+    type: "text",
+    category: "testimonials",
+    label: "Testimonials Tag",
+    description: "Small tag above testimonials heading",
+    value: "our services",
+    isPublic: true
+  },
+  {
+    key: "testimonials.title",
+    type: "text",
+    category: "testimonials",
+    label: "Testimonials Title",
+    description: "Main heading for testimonials section",
+    value: "What Our Clients Say",
+    isPublic: true
+  },
+  {
+    key: "about.badge",
+    type: "text",
+    category: "about",
+    label: "About Badge",
+    description: "Small badge above about heading",
+    value: "ABOUT US",
+    isPublic: true
+  },
+  {
+    key: "about.heading",
+    type: "text",
+    category: "about",
+    label: "About Heading",
+    description: "Main heading for about section",
+    value: "Making Your House Clean For Looks As a New",
+    isPublic: true
+  },
+  {
+    key: "about.description",
+    type: "rich_text",
+    category: "about",
+    label: "About Description",
+    description: "Full description for about section",
+    value: "LBR Cleaning Services is a cleaning service company registered in Nigeria. We provide excellent cleaning services.\n\nThe services rendered includes: Janitorial/Office Cleaning, Housekeeping/Guest House Managements, Post Construction Cleaning, Floor Maintenance and Restoration Services, Residential Cleaning, Place of worship cleaning, Fumigation & Pest Control and disinfection.\n\nWe build value for your business and making it easy for our clients to enjoy life by providing and enabling environment for business to strife and to also show your home as a direct representation of your life.\n\nWe combine today's technology with our innovative experience to address all your cleaning requirements. With our proven and well trained professionals, We tackle dirts, dust and grime to keep your Operations smooth and leave your home shining and sparkling.",
+    isPublic: true
+  },
+  {
+    key: "emergency_banner.tag",
+    type: "text",
+    category: "emergency_banner",
+    label: "Emergency Banner Tag",
+    description: "Urgent label in emergency banner",
+    value: "Emergency Cleaning Available",
+    isPublic: true
+  },
+  {
+    key: "emergency_banner.subtitle",
+    type: "text",
+    category: "emergency_banner",
+    label: "Emergency Banner Subtitle",
+    description: "Detail text in emergency banner",
+    value: "Need emergency cleaning? We're available 7 days a week",
+    isPublic: true
+  },
+  {
+    key: "emergency_banner.phone",
+    type: "text",
+    category: "emergency_banner",
+    label: "Emergency Banner Phone",
+    description: "Phone number in emergency banner",
+    value: "+234 813 456 7890",
+    isPublic: true
+  },
+  {
+    key: "emergency_banner.button",
+    type: "text",
+    category: "emergency_banner",
+    label: "Emergency Banner Button",
+    description: "Button text in emergency banner",
+    value: "Call Now",
+    isPublic: true
+  },
+  {
+    key: "blog_modal.cta_heading",
+    type: "text",
+    category: "blog_modal",
+    label: "Blog Modal CTA Heading",
+    description: "Heading in blog modal CTA banner",
+    value: "Ready for a spotless space?",
+    isPublic: true
+  },
+  {
+    key: "blog_modal.cta_text",
+    type: "text",
+    category: "blog_modal",
+    label: "Blog Modal CTA Text",
+    description: "Text in blog modal CTA banner",
+    value: "Book your cleaning service today and experience the LBR difference.",
+    isPublic: true
+  },
+  {
+    key: "blog_modal.cta_button",
+    type: "text",
+    category: "blog_modal",
+    label: "Blog Modal CTA Button",
+    description: "Button text in blog modal CTA banner",
+    value: "Book a Cleaning",
+    isPublic: true
+  },
+  {
+    key: "featured_post.tag",
+    type: "text",
+    category: "featured_post",
+    label: "Featured Post Tag",
+    description: "Tag above featured post",
+    value: "Latest Article",
+    isPublic: true
+  },
+  {
+    key: "cta_banner.tag",
+    type: "text",
+    category: "cta_banner",
+    label: "CTA Banner Tag",
+    description: "Small tag in CTA banner",
+    value: "Get Started Today",
+    isPublic: true
+  },
+  {
+    key: "cta_banner.title",
+    type: "text",
+    category: "cta_banner",
+    label: "CTA Banner Title",
+    description: "Main heading for CTA banner",
+    value: "Ready for a Spotless Space?",
+    isPublic: true
+  },
+  {
+    key: "cta_banner.subtitle",
+    type: "text",
+    category: "cta_banner",
+    label: "CTA Banner Subtitle",
+    description: "Subtitle for CTA banner",
+    value: "Book your cleaning appointment in under 60 seconds. Our team is standing by to bring freshness back to your home or office.",
+    isPublic: true
+  },
+  {
+    key: "service_details.included.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Included Tag",
+    description: "Tag for What's Included section",
+    value: "Service Details",
+    isPublic: true
+  },
+  {
+    key: "service_details.included.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Included Title",
+    description: "Title for What's Included section",
+    value: "What's Included",
+    isPublic: true
+  },
+  {
+    key: "service_details.included.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Included Subtitle",
+    description: "Subtitle for What's Included section",
+    value: "Every cleaning service comes with this complete checklist",
+    isPublic: true
+  },
+  {
+    key: "service_details.gallery.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Gallery Tag",
+    description: "Tag for Gallery section",
+    value: "Gallery",
+    isPublic: true
+  },
+  {
+    key: "service_details.gallery.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Gallery Title",
+    description: "Title for Gallery section",
+    value: "Our Work in Action",
+    isPublic: true
+  },
+  {
+    key: "service_details.gallery.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Gallery Subtitle",
+    description: "Subtitle for Gallery section",
+    value: "See the quality and attention to detail we bring to every job",
+    isPublic: true
+  },
+  {
+    key: "service_details.why_us.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Why Us Tag",
+    description: "Tag for Why Us section",
+    value: "Why Us",
+    isPublic: true
+  },
+  {
+    key: "service_details.why_us.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Why Us Title",
+    description: "Title for Why Us section",
+    value: "Why Choose Our Cleaning Service?",
+    isPublic: true
+  },
+  {
+    key: "service_details.why_us.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Why Us Subtitle",
+    description: "Subtitle for Why Us section",
+    value: "The difference is in the details",
+    isPublic: true
+  },
+  {
+    key: "service_details.preparation.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Preparation Tag",
+    description: "Tag for Preparation section",
+    value: "Preparation",
+    isPublic: true
+  },
+  {
+    key: "service_details.preparation.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Preparation Title",
+    description: "Title for Preparation section",
+    value: "How to Prepare",
+    isPublic: true
+  },
+  {
+    key: "service_details.preparation.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Preparation Subtitle",
+    description: "Subtitle for Preparation section",
+    value: "A few simple steps to get the best results",
+    isPublic: true
+  },
+  {
+    key: "service_details.testimonials.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Testimonials Tag",
+    description: "Tag for Testimonials section",
+    value: "Testimonials",
+    isPublic: true
+  },
+  {
+    key: "service_details.testimonials.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Testimonials Title",
+    description: "Title for Testimonials section",
+    value: "What Our Clients Say",
+    isPublic: true
+  },
+  {
+    key: "service_details.testimonials.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details Testimonials Subtitle",
+    description: "Subtitle for Testimonials section",
+    value: "Real feedback from real customers",
+    isPublic: true
+  },
+  {
+    key: "service_details.faq.tag",
+    type: "text",
+    category: "service_details",
+    label: "Service Details FAQ Tag",
+    description: "Tag for FAQ section",
+    value: "FAQ",
+    isPublic: true
+  },
+  {
+    key: "service_details.faq.title",
+    type: "text",
+    category: "service_details",
+    label: "Service Details FAQ Title",
+    description: "Title for FAQ section",
+    value: "Frequently Asked Questions",
+    isPublic: true
+  },
+  {
+    key: "service_details.faq.subtitle",
+    type: "text",
+    category: "service_details",
+    label: "Service Details FAQ Subtitle",
+    description: "Subtitle for FAQ section",
+    value: "Everything you need to know before booking",
+    isPublic: true
   },
   {
     key: "information.faqs",
@@ -1650,6 +2478,411 @@ const defaultContent = [
         ]
       }
     ],
+    isPublic: true
+  },
+  {
+    key: "login.badge",
+    type: "text",
+    category: "login",
+    label: "Login Badge",
+    description: "Badge text on login page",
+    value: "Member Login",
+    isPublic: true
+  },
+  {
+    key: "login.heading",
+    type: "text",
+    category: "login",
+    label: "Login Heading",
+    description: "Main heading on login page",
+    value: "Welcome Back",
+    isPublic: true
+  },
+  {
+    key: "login.subtitle",
+    type: "text",
+    category: "login",
+    label: "Login Subtitle",
+    description: "Subtitle on login page",
+    value: "Sign in to manage your bookings, track cleaning schedules, and access exclusive member offers.",
+    isPublic: true
+  },
+  {
+    key: "login.info_badge",
+    type: "text",
+    category: "login",
+    label: "Login Info Badge",
+    description: "Badge in login info panel",
+    value: "Trusted by 2,500+ customers",
+    isPublic: true
+  },
+  {
+    key: "login.info_heading",
+    type: "text",
+    category: "login",
+    label: "Login Info Heading",
+    description: "Heading in login info panel",
+    value: "Your Cleaning Dashboard Awaits",
+    isPublic: true
+  },
+  {
+    key: "login.info_text",
+    type: "text",
+    category: "login",
+    label: "Login Info Text",
+    description: "Text in login info panel",
+    value: "Book, reschedule, and track your cleaning services — all from one place. Join thousands of Lagos residents who trust LBR Cleaning.",
+    isPublic: true
+  },
+  {
+    key: "signup.badge",
+    type: "text",
+    category: "signup",
+    label: "Signup Badge",
+    description: "Badge text on signup page",
+    value: "New Account",
+    isPublic: true
+  },
+  {
+    key: "signup.badge_count",
+    type: "text",
+    category: "signup",
+    label: "Signup Badge Count",
+    description: "Step badge on signup page",
+    value: "Step 1 of 1",
+    isPublic: true
+  },
+  {
+    key: "signup.heading",
+    type: "text",
+    category: "signup",
+    label: "Signup Heading",
+    description: "Main heading on signup page",
+    value: "Create Your Account",
+    isPublic: true
+  },
+  {
+    key: "signup.subtitle",
+    type: "text",
+    category: "signup",
+    label: "Signup Subtitle",
+    description: "Subtitle on signup page",
+    value: "Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience.",
+    isPublic: true
+  },
+  {
+    key: "signup.avatar_section",
+    type: "text",
+    category: "signup",
+    label: "Signup Avatar Section",
+    description: "Avatar section title",
+    value: "Profile Picture",
+    isPublic: true
+  },
+  {
+    key: "signup.avatar_label",
+    type: "text",
+    category: "signup",
+    label: "Signup Avatar Label",
+    description: "Avatar upload label",
+    value: "Add a profile picture",
+    isPublic: true
+  },
+  {
+    key: "signup.avatar_hint",
+    type: "text",
+    category: "signup",
+    label: "Signup Avatar Hint",
+    description: "Avatar upload hint",
+    value: "JPG, PNG or GIF. Max 5MB.",
+    isPublic: true
+  },
+  {
+    key: "signup.personal_section",
+    type: "text",
+    category: "signup",
+    label: "Signup Personal Section",
+    description: "Personal information section title",
+    value: "Personal Information",
+    isPublic: true
+  },
+  {
+    key: "signup.location_section",
+    type: "text",
+    category: "signup",
+    label: "Signup Location Section",
+    description: "Location details section title",
+    value: "Location Details",
+    isPublic: true
+  },
+  {
+    key: "signup.service_section",
+    type: "text",
+    category: "signup",
+    label: "Signup Service Section",
+    description: "Service preferences section title",
+    value: "Service Preferences",
+    isPublic: true
+  },
+  {
+    key: "signup.security_section",
+    type: "text",
+    category: "signup",
+    label: "Signup Security Section",
+    description: "Security section title",
+    value: "Security",
+    isPublic: true
+  },
+  {
+    key: "signup.footer",
+    type: "text",
+    category: "signup",
+    label: "Signup Footer",
+    description: "Footer text on signup page",
+    value: "Already have an account? Sign In",
+    isPublic: true
+  },
+  {
+    key: "signup.info_badge",
+    type: "text",
+    category: "signup",
+    label: "Signup Info Badge",
+    description: "Badge in signup info panel",
+    value: "Trusted by 2,500+ customers",
+    isPublic: true
+  },
+  {
+    key: "signup.info_heading",
+    type: "text",
+    category: "signup",
+    label: "Signup Info Heading",
+    description: "Heading in signup info panel",
+    value: "Your Spotless Space Is Just a Few Clicks Away",
+    isPublic: true
+  },
+  {
+    key: "signup.info_text",
+    type: "text",
+    category: "signup",
+    label: "Signup Info Text",
+    description: "Text in signup info panel",
+    value: "LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business.",
+    isPublic: true
+  },
+  {
+    key: "apply.price_label",
+    type: "text",
+    category: "apply",
+    label: "Apply Price Label",
+    description: "Label for price preview",
+    value: "Estimated starting price",
+    isPublic: true
+  },
+  {
+    key: "apply.price_note",
+    type: "text",
+    category: "apply",
+    label: "Apply Price Note",
+    description: "Note under price preview",
+    value: "Final price may vary based on space size and requirements",
+    isPublic: true
+  },
+  {
+    key: "apply.payment_heading",
+    type: "text",
+    category: "apply",
+    label: "Apply Payment Heading",
+    description: "Payment preference heading",
+    value: "Payment Preference",
+    isPublic: true
+  },
+  {
+    key: "apply.pay_after_title",
+    type: "text",
+    category: "apply",
+    label: "Apply Pay After Title",
+    description: "Pay after service option title",
+    value: "Pay After Service",
+    isPublic: true
+  },
+  {
+    key: "apply.pay_after_desc",
+    type: "text",
+    category: "apply",
+    label: "Apply Pay After Description",
+    description: "Pay after service option description",
+    value: "Pay once the job is done to your satisfaction",
+    isPublic: true
+  },
+  {
+    key: "apply.pay_before_title",
+    type: "text",
+    category: "apply",
+    label: "Apply Pay Before Title",
+    description: "Pay before service option title",
+    value: "Pay Now to Secure Booking",
+    isPublic: true
+  },
+  {
+    key: "apply.pay_before_desc",
+    type: "text",
+    category: "apply",
+    label: "Apply Pay Before Description",
+    description: "Pay before service option description",
+    value: "Secure your slot instantly with instant payment",
+    isPublic: true
+  },
+  {
+    key: "apply.message_heading",
+    type: "text",
+    category: "apply",
+    label: "Apply Message Heading",
+    description: "Message textarea heading",
+    value: "Tell Us More",
+    isPublic: true
+  },
+  {
+    key: "apply.form_note",
+    type: "text",
+    category: "apply",
+    label: "Apply Form Note",
+    description: "Note below submit button",
+    value: "By submitting, you agree to our terms. We'll never share your information.",
+    isPublic: true
+  },
+  {
+    key: "about.award_number",
+    type: "text",
+    category: "about",
+    label: "About Award Number",
+    description: "Award number in about component",
+    value: "12 +",
+    isPublic: true
+  },
+  {
+    key: "about.award_label",
+    type: "text",
+    category: "about",
+    label: "About Award Label",
+    description: "Award label in about component",
+    value: "Years Experience",
+    isPublic: true
+  },
+  {
+    key: "about.feature_1",
+    type: "text",
+    category: "about",
+    label: "About Feature 1",
+    description: "First feature in about component",
+    value: "Clean Your Home or Office",
+    isPublic: true
+  },
+  {
+    key: "about.feature_2",
+    type: "text",
+    category: "about",
+    label: "About Feature 2",
+    description: "Second feature in about component",
+    value: "24/7 Emmergency Quality Services",
+    isPublic: true
+  },
+  {
+    key: "about.feature_3",
+    type: "text",
+    category: "about",
+    label: "About Feature 3",
+    description: "Third feature in about component",
+    value: "Online Booking System available",
+    isPublic: true
+  },
+  {
+    key: "about.cta_text",
+    type: "text",
+    category: "about",
+    label: "About CTA Text",
+    description: "CTA button text in about component",
+    value: "about us",
+    isPublic: true
+  },
+  {
+    key: "information.about.tag",
+    type: "text",
+    category: "information",
+    label: "Information About Tag",
+    description: "Tag for About section in information hub",
+    value: "About Us",
+    isPublic: true
+  },
+  {
+    key: "information.about.title",
+    type: "text",
+    category: "information",
+    label: "Information About Title",
+    description: "Title for About section in information hub",
+    value: "About LBR Cleaning",
+    isPublic: true
+  },
+  {
+    key: "information.about.subtitle",
+    type: "text",
+    category: "information",
+    label: "Information About Subtitle",
+    description: "Subtitle for About section in information hub",
+    value: "Professional cleaning services you can trust",
+    isPublic: true
+  },
+  {
+    key: "information.pricing.tag",
+    type: "text",
+    category: "information",
+    label: "Information Pricing Tag",
+    description: "Tag for Pricing section in information hub",
+    value: "Our Plans",
+    isPublic: true
+  },
+  {
+    key: "information.pricing.title",
+    type: "text",
+    category: "information",
+    label: "Information Pricing Title",
+    description: "Title for Pricing section in information hub",
+    value: "Simple, Transparent Pricing",
+    isPublic: true
+  },
+  {
+    key: "information.pricing.subtitle",
+    type: "text",
+    category: "information",
+    label: "Information Pricing Subtitle",
+    description: "Subtitle for Pricing section in information hub",
+    value: "Choose the plan that fits your needs",
+    isPublic: true
+  },
+  {
+    key: "blog.toggle_text",
+    type: "text",
+    category: "blog",
+    label: "Blog Toggle Text",
+    description: "Text on blog source toggle button",
+    value: "Showing CMS Blogs",
+    isPublic: true
+  },
+  {
+    key: "blog.empty_state",
+    type: "text",
+    category: "blog",
+    label: "Blog Empty State",
+    description: "Text shown when no blog articles are found",
+    value: "No CMS articles found. Add blog articles in the CMS admin panel.",
+    isPublic: true
+  },
+  {
+    key: "home.no_content",
+    type: "text",
+    category: "homepage",
+    label: "Home No Content Message",
+    description: "Message shown when homepage has no CMS content",
+    value: "No content available. Please configure the CMS.",
     isPublic: true
   }
 ];

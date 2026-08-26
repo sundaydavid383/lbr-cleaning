@@ -36,6 +36,7 @@ export const EditModeProvider = ({ children }) => {
       });
       const currentJson = await currentRes.json();
       const current = currentRes.ok && currentJson.success ? currentJson.data : null;
+      console.log(`[EDIT-MODE] GET current for ${key}`, { found: !!current, type: current?.type });
 
       const res = await fetch(apiUrl(`/api/cms/content/${encodeURIComponent(key)}`), {
         method: "PUT",
@@ -54,6 +55,8 @@ export const EditModeProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log(`[EDIT-MODE] PUT ${key}`, { status: res.status, ok: res.ok, success: data.success, message: data.message });
+
       if (res.ok && data.success) {
         setOverride(key, newValue);
         invalidateCache();
@@ -73,8 +76,13 @@ export const EditModeProvider = ({ children }) => {
     }
   }, [token, setOverride]);
 
+  const refreshAll = useCallback(() => {
+    invalidateCache();
+    setOverrides({});
+  }, []);
+
   return (
-    <EditModeContext.Provider value={{ isEditMode, setIsEditMode, saveStatus, saveField, getOverride, isAdmin }}>
+    <EditModeContext.Provider value={{ isEditMode, setIsEditMode, saveStatus, saveField, getOverride, refreshAll, isAdmin }}>
       {children}
     </EditModeContext.Provider>
   );
@@ -91,6 +99,7 @@ export const useEditMode = () => {
       saveStatus: "idle",
       saveField: async () => false,
       getOverride: (_key, fallback) => fallback,
+      refreshAll: () => {},
       isAdmin: false,
     };
   }

@@ -16,7 +16,8 @@
   justify-content: center;
   background: var(--background-color);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 2rem;
 }
 
@@ -125,7 +126,7 @@
 .auth-card--wide {
   padding: 2.5rem;
   overflow-y: auto;
-  max-height: 90vh;
+  max-height: calc(100vh - 4rem);
 }
 
 .auth-logo {
@@ -336,6 +337,7 @@
 
 .auth-form-group {
   position: relative;
+  min-width: 0;
 }
 
 .auth-form-group label {
@@ -819,10 +821,6 @@
     max-width: 520px;
   }
 
-  .auth-info {
-    display: none;
-  }
-
   .auth-card {
     padding: 2.5rem;
   }
@@ -842,10 +840,28 @@
   .auth-submit-btn {
     grid-column: 1;
   }
+
+  .auth-page {
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .auth-info {
+    padding: 2.5rem 2rem;
+  }
+
+  .auth-stats {
+    gap: 1.25rem;
+  }
+
+  .auth-feature {
+    padding: 0.9rem 1rem;
+  }
 }
 
 @media (max-width: 480px) {
   .auth-page {
+    align-items: flex-start;
     padding: 1rem;
   }
 
@@ -879,6 +895,19 @@
 
   .auth-stat-number {
     font-size: 1.4rem;
+  }
+
+  .auth-info {
+    padding: 2rem 1.25rem;
+  }
+
+  .auth-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .auth-feature {
+    padding: 0.85rem 1rem;
   }
 }
 

@@ -90,6 +90,24 @@ const seedData = [
     isPublic: true
   },
   {
+    key: "home.hero_heading_1",
+    type: "text",
+    category: "homepage",
+    label: "Hero Heading Line 1",
+    description: "First line of the hero heading (e.g. 'We Clean and')",
+    value: "We Clean and",
+    isPublic: true
+  },
+  {
+    key: "home.hero_heading_2",
+    type: "text",
+    category: "homepage",
+    label: "Hero Heading Line 2",
+    description: "Second line of the hero heading (e.g. 'prioritize your satisfaction')",
+    value: "prioritize your satisfaction",
+    isPublic: true
+  },
+  {
     key: "home.features",
     type: "array",
     category: "homepage",
@@ -171,6 +189,102 @@ const seedData = [
       ],
       cta_text: "Book with Confidence"
     }
+  },
+
+  // How It Works - flat editable fields
+  {
+    key: "how_it_works.tag",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Tag",
+    description: "Small tag above the How It Works heading",
+    value: "Simple Process",
+    isPublic: true
+  },
+  {
+    key: "how_it_works.title",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Title",
+    description: "Main heading for the How It Works section",
+    value: "How It Works",
+    isPublic: true
+  },
+  {
+    key: "how_it_works.subtitle",
+    type: "text",
+    category: "how_it_works",
+    label: "How It Works Subtitle",
+    description: "Subtitle text below the How It Works heading",
+    value: "Booking a cleaning service with LBR is fast, simple, and stress-free.",
+    isPublic: true
+  },
+
+  // Coverage Areas - flat editable fields
+  {
+    key: "coverage_areas.tag",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Tag",
+    description: "Small tag above the Coverage Areas heading",
+    value: "Service Coverage",
+    isPublic: true
+  },
+  {
+    key: "coverage_areas.title",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Title",
+    description: "Main heading for the Coverage Areas section",
+    value: "Areas We Serve",
+    isPublic: true
+  },
+  {
+    key: "coverage_areas.subtitle",
+    type: "text",
+    category: "coverage_areas",
+    label: "Coverage Areas Subtitle",
+    description: "Subtitle text below the Coverage Areas heading",
+    value: "We provide professional cleaning services across Nigeria.",
+    isPublic: true
+  },
+
+  // Guarantee - flat editable fields
+  {
+    key: "guarantee.tag",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Tag",
+    description: "Small tag above the Guarantee heading",
+    value: "Our Promise",
+    isPublic: true
+  },
+  {
+    key: "guarantee.title",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Title",
+    description: "Main heading for the Guarantee section",
+    value: "100% Satisfaction Guaranteed",
+    isPublic: true
+  },
+  {
+    key: "guarantee.description",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee Description",
+    description: "Description text for the Guarantee section",
+    value: "If you're not completely satisfied with our cleaning service, we'll re-clean the affected areas for free within 24 hours — no questions asked.",
+    isPublic: true
+  },
+  {
+    key: "guarantee.cta_text",
+    type: "text",
+    category: "guarantee",
+    label: "Guarantee CTA Text",
+    description: "Call-to-action button text in the Guarantee section",
+    value: "Book with Confidence",
+    isPublic: true
   },
 
   // Site Settings
@@ -262,6 +376,24 @@ const seedData = [
     label: "Contact Phone",
     description: "Phone number displayed on the contact page",
     value: "+234 801 234 5678",
+    isPublic: true
+  },
+  {
+    key: "contact.hours_heading",
+    type: "text",
+    category: "contact",
+    label: "Business Hours Heading",
+    description: "Heading for the business hours section",
+    value: "Business Hours",
+    isPublic: true
+  },
+  {
+    key: "contact.faq_heading",
+    type: "text",
+    category: "contact",
+    label: "FAQ Heading",
+    description: "Heading for the FAQ section",
+    value: "Frequently Asked Questions",
     isPublic: true
   },
   {
@@ -522,6 +654,33 @@ const seedData = [
     ]
   },
   {
+    key: "about_page.intro.heading",
+    type: "text",
+    category: "about_page",
+    label: "Intro Heading",
+    description: "Heading for the intro section on the about page",
+    value: "Who We Are",
+    isPublic: true
+  },
+  {
+    key: "about_page.team_heading",
+    type: "text",
+    category: "about_page",
+    label: "Team Heading",
+    description: "Heading above the team members section",
+    value: "Meet Our Dedicated Team",
+    isPublic: true
+  },
+  {
+    key: "about_page.values_heading",
+    type: "text",
+    category: "about_page",
+    label: "Values Heading",
+    description: "Heading above the core values section",
+    value: "Our Core Values",
+    isPublic: true
+  },
+  {
     key: "about_page.video_url",
     type: "text",
     category: "about_page",
@@ -587,6 +746,33 @@ const seedData = [
     isPublic: true
   },
   {
+    key: "service_page.section_tag",
+    type: "text",
+    category: "service_page",
+    label: "Services Section Tag",
+    description: "Small tag above the services section heading",
+    value: "What We Offer",
+    isPublic: true
+  },
+  {
+    key: "service_page.section_title",
+    type: "text",
+    category: "service_page",
+    label: "Services Section Title",
+    description: "Main heading for the services section",
+    value: "Our Services",
+    isPublic: true
+  },
+  {
+    key: "service_page.section_subtitle",
+    type: "text",
+    category: "service_page",
+    label: "Services Section Subtitle",
+    description: "Subtitle text below the services heading",
+    value: "Discover our professional cleaning solutions for every need.",
+    isPublic: true
+  },
+  {
     key: "service_page.plans",
     type: "array",
     category: "service_page",
@@ -645,7 +831,81 @@ const seedData = [
     isPublic: true
   },
 
-  // Blog Articles
+  // Apply / Booking Page
+  {
+    key: "apply.badge",
+    type: "text",
+    category: "apply",
+    label: "Apply Badge",
+    description: "Small badge above the apply page heading",
+    value: "Book Now",
+    isPublic: true
+  },
+  {
+    key: "apply.heading_highlight",
+    type: "text",
+    category: "apply",
+    label: "Apply Heading Highlight",
+    description: "Highlighted word in the apply page heading",
+    value: "Cleaning",
+    isPublic: true
+  },
+  {
+    key: "apply.subtitle",
+    type: "text",
+    category: "apply",
+    label: "Apply Subtitle",
+    description: "Subtitle text below the apply page heading",
+    value: "Fill out the form below and our team will get back to you within 24 hours to confirm your appointment.",
+    isPublic: true
+  },
+  {
+    key: "apply.form_heading",
+    type: "text",
+    category: "apply",
+    label: "Apply Form Heading",
+    description: "Heading for the booking form",
+    value: "Tell Us About Your Needs",
+    isPublic: true
+  },
+  {
+    key: "apply.form_subheading",
+    type: "text",
+    category: "apply",
+    label: "Apply Form Subheading",
+    description: "Subtitle for the booking form",
+    value: "We'll match you with the perfect cleaning solution",
+    isPublic: true
+  },
+  {
+    key: "apply.success_heading",
+    type: "text",
+    category: "apply",
+    label: "Success Heading",
+    description: "Heading shown after successful booking",
+    value: "Booking Received!",
+    isPublic: true
+  },
+  {
+    key: "apply.success_text",
+    type: "text",
+    category: "apply",
+    label: "Success Text",
+    description: "Text shown after successful booking",
+    value: "Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment.",
+    isPublic: true
+  },
+
+  // Blog
+  {
+    key: "blog.title",
+    type: "text",
+    category: "blog",
+    label: "Blog Page Title",
+    description: "Main heading for the blog page",
+    value: "LBR Cleaning Insights",
+    isPublic: true
+  },
   {
     key: "blog.articles",
     type: "array",

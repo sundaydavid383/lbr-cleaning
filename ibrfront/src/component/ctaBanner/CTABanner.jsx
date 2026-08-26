@@ -3,9 +3,12 @@ import React from "react";
 import "./ctaBanner.css";
 import { Link } from "react-router-dom";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const CTABanner = () => {
   const { value: ctaData, loading: ctaLoading } = useCmsCategory("cta_banner", {});
+  const { isEditMode } = useEditMode();
 
   if (ctaLoading) {
     return (
@@ -28,15 +31,23 @@ const CTABanner = () => {
       <div className="cta-bg-pattern"></div>
       <div className="cta-container">
         <div className="cta-content">
-          {data.tag && <span className="cta-tag">{data.tag}</span>}
-          {data.title && (
-            <h2 className="cta-title">
-              {data.title.split('<span class="highlight">')[0]}
-              {data.title.includes('highlight') && <span className="highlight">{data.title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
-              {data.title.split('</span>')[1] || ''}
-            </h2>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="cta_banner.tag" type="text" value={data.tag} as="span" className="cta-tag" />
+              <h2 className="cta-title">
+                <EditableText cmsKey="cta_banner.title" type="text" value={data.title} as="span" />
+              </h2>
+              <EditableText cmsKey="cta_banner.subtitle" type="text" value={data.subtitle} as="p" className="cta-subtitle" />
+            </>
+          ) : (
+            <>
+              {data.tag && <span className="cta-tag">{data.tag}</span>}
+              {data.title && (
+                <h2 className="cta-title">{data.title}</h2>
+              )}
+              {data.subtitle && <p className="cta-subtitle">{data.subtitle}</p>}
+            </>
           )}
-          {data.subtitle && <p className="cta-subtitle">{data.subtitle}</p>}
 
           {data.features?.length > 0 && (
             <div className="cta-features">

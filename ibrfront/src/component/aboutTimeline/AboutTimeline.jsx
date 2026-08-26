@@ -2,9 +2,12 @@
 import React from "react";
 import "./aboutTimeline.css";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const AboutTimeline = () => {
   const { value: timelineData, loading: timelineLoading } = useCmsCategory("about_timeline", {});
+  const { isEditMode } = useEditMode();
 
   if (timelineLoading) {
     return (
@@ -26,13 +29,26 @@ const AboutTimeline = () => {
     <section className="about-timeline">
       <div className="about-timeline-container">
         <div className="about-timeline-header">
-          <span className="section-tag">Our Journey</span>
-          <h2 className="section-title">
-            From Local Trust to <span className="highlight">Digital Innovation</span>
-          </h2>
-          <p className="section-subtitle">
-            Every milestone reflects our commitment to quality, community, and growth.
-          </p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="about_timeline.tag" type="text" value="Our Journey" as="span" className="section-tag" />
+              <h2 className="section-title">
+                <EditableText cmsKey="about_timeline.title" type="text" value="From Local Trust to Digital Innovation" as="span" />
+                <span className="highlight">Digital Innovation</span>
+              </h2>
+              <EditableText cmsKey="about_timeline.subtitle" type="text" value="Every milestone reflects our commitment to quality, community, and growth." as="p" className="section-subtitle" />
+            </>
+          ) : (
+            <>
+              <span className="section-tag">Our Journey</span>
+              <h2 className="section-title">
+                From Local Trust to <span className="highlight">Digital Innovation</span>
+              </h2>
+              <p className="section-subtitle">
+                Every milestone reflects our commitment to quality, community, and growth.
+              </p>
+            </>
+          )}
         </div>
 
         <div className="timeline-track">

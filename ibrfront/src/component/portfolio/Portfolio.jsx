@@ -9,6 +9,8 @@ import img5 from "../../assets/cleaner15.jpg";
 import img6 from "../../assets/cleaner16.jpg";
 import img7 from "../../assets/cleaner17.jpg";
 import img8 from "../../assets/cleaner18.jpg";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
 
 const cardsData = [
   { name: "John Doe", img: img1, location: "New York, USA", desc: "Residential Cleaning Specialist" },
@@ -21,12 +23,15 @@ const cardsData = [
   { name: "Mr Love", img: img8, location: "Newcastle, UK", desc: "Window and Glass Cleaning" },
 ];
 
+const total = cardsData.length;
+
 const Portfolio = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const total = cardsData.length;
   const [direction, setDirection] = useState(0);
   const wrapperRef = useRef(null);
   const wheelCooldown = useRef(false);
+  const wheelTimer = useRef(null);
+  const { isEditMode } = useEditMode();
 
   const moveLeft = useCallback(() => {
     setActiveIndex((prev) => {
@@ -46,10 +51,9 @@ const Portfolio = () => {
       }
       return prev;
     });
-  }, [total]);
+  }, []);
 
-  // Swipe / drag handling (covers touch on mobile + mouse-drag on desktop)
-  const handleDragEnd = (event, info) => {
+  const handleDragEnd = useCallback((event, info) => {
     const swipeThreshold = 60;
     const velocityThreshold = 400;
 
@@ -58,15 +62,13 @@ const Portfolio = () => {
     } else if (info.offset.x > swipeThreshold || info.velocity.x > velocityThreshold) {
       moveLeft();
     }
-  };
+  }, [moveLeft, moveRight]);
 
-  // Trackpad / mouse-wheel horizontal scroll support (desktop)
   useEffect(() => {
     const node = wrapperRef.current;
     if (!node) return;
 
     const handleWheel = (e) => {
-      // Only react to meaningfully horizontal intent
       if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
       if (Math.abs(e.deltaX) < 15) return;
 
@@ -81,25 +83,37 @@ const Portfolio = () => {
         moveLeft();
       }
 
-      setTimeout(() => {
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+      wheelTimer.current = setTimeout(() => {
         wheelCooldown.current = false;
       }, 500);
     };
 
     node.addEventListener('wheel', handleWheel, { passive: false });
-    return () => node.removeEventListener('wheel', handleWheel);
+    return () => {
+      node.removeEventListener('wheel', handleWheel);
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+    };
   }, [moveLeft, moveRight]);
 
   return (
     <div className="portfolio">
       <div className="portfolio_heading">
-        <div className="title">
-          <span className="priamry">our work</span>
-          <h2 className="bright">Portfolio</h2>
-          <p className="tracker">
-            Viewing service {activeIndex + 1} of {total}
-          </p>
-        </div>
+        {isEditMode ? (
+          <div className="title">
+            <EditableText cmsKey="portfolio.tag" type="text" value="our work" as="span" className="priamry" />
+            <EditableText cmsKey="portfolio.title" type="text" value="Portfolio" as="h2" className="bright" />
+            <EditableText cmsKey="portfolio.subtitle" type="text" value={`Viewing service ${activeIndex + 1} of ${total}`} as="p" className="tracker" />
+          </div>
+        ) : (
+          <div className="title">
+            <span className="priamry">our work</span>
+            <h2 className="bright">Portfolio</h2>
+            <p className="tracker">
+              Viewing service {activeIndex + 1} of {total}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="portfolio_holder">

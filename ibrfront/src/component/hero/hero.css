@@ -181,6 +181,53 @@
     display: block;
 }
 
+.hero-lines-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.hero-line-box {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    border: 2px dashed transparent;
+    border-radius: var(--radius-sm, 4px);
+    transition: all 0.15s ease;
+}
+
+.hero-line-box:hover {
+    border-color: rgba(22, 163, 74, 0.5);
+    background: rgba(22, 163, 74, 0.08);
+}
+
+.hero-line-box:focus {
+    outline: none;
+    border-color: var(--primary-color, #16a34a);
+    background: rgba(22, 163, 74, 0.1);
+}
+
+.edit-hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(22, 163, 74, 0.15);
+    color: var(--tetiary-color);
+    border: 1px dashed rgba(22, 163, 74, 0.5);
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.edit-hero-cta:hover {
+    background: rgba(22, 163, 74, 0.25);
+    border-color: var(--primary-color, #16a34a);
+    color: var(--primary-color, #16a34a);
+}
+
 .hero .ps {
     display: flex;
     flex-direction: column;

@@ -1,20 +1,38 @@
 import React from "react";
 import "./serviceSection.css";
 import { Link } from "react-router-dom";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
 
 const ServiceSection = ({ services }) => {
+  const { isEditMode } = useEditMode();
+
   return (
     <section className="service-section">
       <div className="service-header">
         <div className="first_te">
-          <h2>What We Offer</h2>
-          <h1>
-  {"Our Services".split("").map((char, i) => (
-    <span key={i} style={{ "--i": i }}>{char === " " ? "\u00A0" : char}</span>
-  ))}
-</h1>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="service_page.section_tag" type="text" value="What We Offer" as="h2" />
+              <EditableText cmsKey="service_page.section_title" type="text" value="Our Services" as="h1" />
+            </>
+          ) : (
+            <>
+              <h2>What We Offer</h2>
+              <h1>
+                {"Our Services".split("").map((char, i) => (
+                  <span key={i} style={{ "--i": i }}>{char === " " ? "\u00A0" : char}</span>
+                ))}
+              </h1>
+            </>
+          )}
         </div>
-        <p>Discover our professional cleaning solutions for every need.</p>
+        {isEditMode ? (
+          <EditableText cmsKey="service_page.section_subtitle" type="text" value="Discover our professional cleaning solutions for every need." as="p" />
+        ) : (
+          <p>Discover our professional cleaning solutions for every need.</p>
+        )}
       </div>
 
       <div className="service-cards">

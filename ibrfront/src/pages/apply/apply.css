@@ -600,6 +600,10 @@
     max-width: 280px;
     justify-content: center;
   }
+
+  .payment-options {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -744,10 +748,4 @@
   font-size: 0.85rem;
   color: var(--text-color-muted);
   line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-  .payment-options {
-    grid-template-columns: 1fr;
-  }
 }

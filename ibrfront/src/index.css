@@ -20,6 +20,7 @@
 
 html {
     scroll-behavior: smooth;
+    font-size: 90%;
 }
 
 .container {
@@ -296,12 +297,6 @@ body {
     padding-top: 4.5rem;
 }
 
-@media (max-width: 768px) {
-    body {
-        padding-top: 4rem;
-    }
-}
-
 /* ========================================
    Responsive Breakpoints
    ======================================== */
@@ -318,6 +313,7 @@ body {
     
     body {
         overflow-x: hidden;
+        padding-top: 4rem;
     }
     
     .container {

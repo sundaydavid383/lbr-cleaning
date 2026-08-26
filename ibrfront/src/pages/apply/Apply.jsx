@@ -1,4 +1,3 @@
-// filepath: ibrfront/src/pages/apply/Apply.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./apply.css";
@@ -6,6 +5,8 @@ import validator from "validator";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
 import { useAuth } from "../../context/AuthContext";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../../component/editable/EditableText";
 
 const services = [
   { value: "residential", label: "Residential Cleaning", icon: "fa-solid fa-house", price: 15000 },
@@ -28,6 +29,7 @@ const formatNGN = (amount) =>
 const Apply = () => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { isEditMode } = useEditMode();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -131,7 +133,7 @@ const Apply = () => {
         }
 
         setSubmitted(true);
-        setFormData({ name: "", email: "", phone: "", service: "residential", message: "", paymentOption: "PAY_AFTER" });
+        setFormData({ name: "", email: "", phone: "", service: "residential", message: "", paymentOption: "PAY_FTER" });
       } else {
         showAlert(data.message || data.data || "Something went wrong. Please try again.", "danger");
       }
@@ -149,8 +151,17 @@ const Apply = () => {
           <div className="success-icon">
             <i className="fa-solid fa-check"></i>
           </div>
-          <h1>Booking Received!</h1>
-          <p>Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment.</p>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="apply.success_heading" type="text" value="Booking Received!" as="h1" />
+              <EditableText cmsKey="apply.success_text" type="text" value="Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment." as="p" />
+            </>
+          ) : (
+            <>
+              <h1>Booking Received!</h1>
+              <p>Thank you for choosing LBR Cleaning. We've received your booking request and will contact you within 24 hours to confirm your appointment.</p>
+            </>
+          )}
           <div className="success-actions">
             <Link to="/" className="btn-primary">Back to Home</Link>
             <Link to="/service" className="btn-secondary">Browse More Services</Link>
@@ -174,23 +185,39 @@ const Apply = () => {
       <section className="apply-hero">
         <div className="apply-hero-bg"></div>
         <div className="apply-hero-content">
-          <span className="apply-badge">Book Now</span>
-          <h1>Book Your <span className="highlight">Cleaning</span> Service</h1>
-          <p>Fill out the form below and our team will get back to you within 24 hours to confirm your appointment.</p>
-          <div className="apply-hero-features">
-            <div className="apply-hero-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>Free Consultation</span>
+          {isEditMode ? (
+            <>
+              <EditableText cmsKey="apply.badge" type="text" value="Book Now" as="span" className="apply-badge" />
+              <h1>
+                Book Your <span className="highlight">
+                  <EditableText cmsKey="apply.heading_highlight" type="text" value="Cleaning" as="span" />
+                </span> Service
+              </h1>
+              <EditableText cmsKey="apply.subtitle" type="text" value="Fill out the form below and our team will get back to you within 24 hours to confirm your appointment." as="p" />
+            </>
+          ) : (
+            <>
+              <span className="apply-badge">Book Now</span>
+              <h1>Book Your <span className="highlight">Cleaning</span> Service</h1>
+              <p>Fill out the form below and our team will get back to you within 24 hours to confirm your appointment.</p>
+            </>
+          )}
+          {!isEditMode && (
+            <div className="apply-hero-features">
+              <div className="apply-hero-feature">
+                <i className="fa-solid fa-check-circle"></i>
+                <span>Free Consultation</span>
+              </div>
+              <div className="apply-hero-feature">
+                <i className="fa-solid fa-check-circle"></i>
+                <span>No Hidden Fees</span>
+              </div>
+              <div className="apply-hero-feature">
+                <i className="fa-solid fa-check-circle"></i>
+                <span>Satisfaction Guaranteed</span>
+              </div>
             </div>
-            <div className="apply-hero-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>No Hidden Fees</span>
-            </div>
-            <div className="apply-hero-feature">
-              <i className="fa-solid fa-check-circle"></i>
-              <span>Satisfaction Guaranteed</span>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -199,8 +226,17 @@ const Apply = () => {
         <div className="apply-form-container">
           <div className="apply-form-card">
             <div className="form-header">
-              <h2>Tell Us About Your Needs</h2>
-              <p>We'll match you with the perfect cleaning solution</p>
+              {isEditMode ? (
+                <>
+                  <EditableText cmsKey="apply.form_heading" type="text" value="Tell Us About Your Needs" as="h2" />
+                  <EditableText cmsKey="apply.form_subheading" type="text" value="We'll match you with the perfect cleaning solution" as="p" />
+                </>
+              ) : (
+                <>
+                  <h2>Tell Us About Your Needs</h2>
+                  <p>We'll match you with the perfect cleaning solution</p>
+                </>
+              )}
               {isAuthenticated && (
                 <p className="form-prefilled-note">
                   <i className="fa-solid fa-circle-check"></i>
@@ -310,15 +346,31 @@ const Apply = () => {
               {/* Service Price Preview */}
               {selectedService && (
                 <div className="service-price-preview">
-                  <div className="service-price-label">Estimated starting price</div>
-                  <div className="service-price-amount">{formatNGN(selectedService.price)}</div>
-                  <div className="service-price-note">Final price may vary based on space size and requirements</div>
+                  {isEditMode ? (
+                    <>
+                      <EditableText cmsKey="apply.price_label" type="text" value="Estimated starting price" as="span" className="service-price-label" />
+                      <div className="service-price-amount">{formatNGN(selectedService.price)}</div>
+                      <EditableText cmsKey="apply.price_note" type="text" value="Final price may vary based on space size and requirements" as="span" className="service-price-note" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="service-price-label">Estimated starting price</div>
+                      <div className="service-price-amount">{formatNGN(selectedService.price)}</div>
+                      <div className="service-price-note">Final price may vary based on space size and requirements</div>
+                    </>
+                  )}
                 </div>
               )}
 
               {/* Payment Option */}
-              <div className="form-group full-width">
-                <label>Payment Preference</label>
+               <div className="form-group full-width">
+                 {isEditMode ? (
+                   <>
+                     <EditableText cmsKey="apply.payment_heading" type="text" value="Payment Preference" as="label" />
+                   </>
+                 ) : (
+                   <label>Payment Preference</label>
+                 )}
                 <div className="payment-options">
                   <label className={`payment-option ${formData.paymentOption === "PAY_AFTER" ? "selected" : ""}`}>
                     <input
@@ -329,11 +381,20 @@ const Apply = () => {
                       onChange={handleChange}
                     />
                     <div className="payment-option-content">
-                      <div className="payment-option-title">
-                        <i className="fa-solid fa-calendar-check"></i>
-                        Pay After Service
-                      </div>
-                      <div className="payment-option-desc">Pay once the job is done to your satisfaction</div>
+                      {isEditMode ? (
+                        <>
+                          <EditableText cmsKey="apply.pay_after_title" type="text" value="Pay After Service" as="span" className="payment-option-title" />
+                          <EditableText cmsKey="apply.pay_after_desc" type="text" value="Pay once the job is done to your satisfaction" as="span" className="payment-option-desc" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="payment-option-title">
+                            <i className="fa-solid fa-calendar-check"></i>
+                            Pay After Service
+                          </div>
+                          <div className="payment-option-desc">Pay once the job is done to your satisfaction</div>
+                        </>
+                      )}
                     </div>
                   </label>
                   <label className={`payment-option ${formData.paymentOption === "PAY_BEFORE" ? "selected" : ""}`}>
@@ -345,18 +406,32 @@ const Apply = () => {
                       onChange={handleChange}
                     />
                     <div className="payment-option-content">
-                      <div className="payment-option-title">
-                        <i className="fa-solid fa-lock"></i>
-                        Pay Now to Secure Booking
-                      </div>
-                      <div className="payment-option-desc">Secure your slot instantly with instant payment</div>
+                      {isEditMode ? (
+                        <>
+                          <EditableText cmsKey="apply.pay_before_title" type="text" value="Pay Now to Secure Booking" as="span" className="payment-option-title" />
+                          <EditableText cmsKey="apply.pay_before_desc" type="text" value="Secure your slot instantly with instant payment" as="span" className="payment-option-desc" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="payment-option-title">
+                            <i className="fa-solid fa-lock"></i>
+                            Pay Now to Secure Booking
+                          </div>
+                          <div className="payment-option-desc">Secure your slot instantly with instant payment</div>
+                        </>
+                      )}
                     </div>
                   </label>
                 </div>
               </div>
+              )}
 
               <div className={`form-group full-width ${focusedField === 'message' || formData.message ? 'focused' : ''}`}>
-                <label htmlFor="message">Tell Us More <span className="optional">(optional)</span></label>
+                {isEditMode ? (
+                  <EditableText cmsKey="apply.message_heading" type="text" value="Tell Us More" as="label" />
+                ) : (
+                  <label htmlFor="message">Tell Us More <span className="optional">(optional)</span></label>
+                )}
                 <div className="input-wrapper textarea-wrapper">
                   <textarea
                     id="message"
@@ -371,22 +446,26 @@ const Apply = () => {
                 </div>
               </div>
 
-              <button type="submit" className="apply-submit-btn" disabled={loading}>
-                {loading ? (
-                  <span className="btn-loading">
-                    <span className="spinner"></span>
-                    Processing...
-                  </span>
-                ) : (
-                  <span>
-                    {formData.paymentOption === "PAY_BEFORE" ? "Proceed to Payment" : "Submit Booking"} <i className="fa-solid fa-arrow-right"></i>
-                  </span>
-                )}
-              </button>
+               <button type="submit" className="apply-submit-btn" disabled={loading}>
+                 {loading ? (
+                   <span className="btn-loading">
+                     <span className="spinner"></span>
+                     Processing...
+                   </span>
+                 ) : (
+                   <span>
+                     {formData.paymentOption === "PAY_BEFORE" ? "Proceed to Payment" : "Submit Booking"} <i className="fa-solid fa-arrow-right"></i>
+                   </span>
+                 )}
+               </button>
 
-              <p className="form-note">
-                By submitting, you agree to our terms. We'll never share your information.
-              </p>
+               {isEditMode ? (
+                 <EditableText cmsKey="apply.form_note" type="text" value="By submitting, you agree to our terms. We'll never share your information." as="p" className="form-note" />
+               ) : (
+                 <p className="form-note">
+                   By submitting, you agree to our terms. We'll never share your information.
+                 </p>
+               )}
             </form>
           </div>
         </div>

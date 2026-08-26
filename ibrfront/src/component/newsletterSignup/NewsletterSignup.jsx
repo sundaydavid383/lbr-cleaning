@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import "./newsletterSignup.css";
 import { Link } from "react-router-dom";
 import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const NewsletterSignup = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
   const { value: newsletterData, loading: newsletterLoading } = useCmsCategory("newsletter", {});
+  const { isEditMode } = useEditMode();
 
   if (newsletterLoading) {
     return (
@@ -42,12 +45,16 @@ const NewsletterSignup = () => {
           <div className="newsletter-icon">
             <i className="fa-solid fa-envelope-open-text"></i>
           </div>
-          <h2 className="newsletter-title">
-            {title.split('<span class="highlight">')[0]}
-            {title.includes('highlight') && <span className="highlight">{title.split('<span class="highlight">')[1]?.replace('</span>', '')}</span>}
-            {title.split('</span>')[1] || ''}
-          </h2>
-          <p className="newsletter-subtitle">{subtitle}</p>
+          {isEditMode ? (
+            <EditableText cmsKey="newsletter.title" type="text" value={title} as="h2" className="newsletter-title" />
+          ) : (
+            <h2 className="newsletter-title">{title}</h2>
+          )}
+          {isEditMode ? (
+            <EditableText cmsKey="newsletter.subtitle" type="text" value={subtitle} as="p" className="newsletter-subtitle" />
+          ) : (
+            <p className="newsletter-subtitle">{subtitle}</p>
+          )}
 
           <form className="newsletter-form" onSubmit={handleSubmit}>
             <input

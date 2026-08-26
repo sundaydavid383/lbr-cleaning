@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./blogModal.css";
 import { useAuth } from "../../context/AuthContext";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
 
 const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
   const [readProgress, setReadProgress] = useState(0);
@@ -11,6 +13,7 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
   const contentRef = useRef(null);
   const modalRef = useRef(null);
   const { isAuthenticated } = useAuth();
+  const { isEditMode } = useEditMode();
 
   if (!article) return null;
 
@@ -238,11 +241,21 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
                 )}
 
                 <div className="modal-cta-banner">
-                  <h3>Ready for a spotless space?</h3>
-                  <p>Book your cleaning service today and experience the LBR difference.</p>
-                  <a href="/apply" className="modal-cta-btn" onClick={onClose}>
-                    Book a Cleaning <i className="fa-solid fa-arrow-right" />
-                  </a>
+                  {isEditMode ? (
+                    <>
+                      <EditableText cmsKey="blog_modal.cta_heading" type="text" value="Ready for a spotless space?" as="h3" />
+                      <EditableText cmsKey="blog_modal.cta_text" type="text" value="Book your cleaning service today and experience the LBR difference." as="p" />
+                      <EditableText cmsKey="blog_modal.cta_button" type="text" value="Book a Cleaning" as="span" className="modal-cta-btn" />
+                    </>
+                  ) : (
+                    <>
+                      <h3>Ready for a spotless space?</h3>
+                      <p>Book your cleaning service today and experience the LBR difference.</p>
+                      <a href="/apply" className="modal-cta-btn" onClick={onClose}>
+                        Book a Cleaning <i className="fa-solid fa-arrow-right" />
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

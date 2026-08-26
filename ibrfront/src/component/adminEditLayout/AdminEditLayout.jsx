@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import EditModeBar from "../editModeBar/EditModeBar";
+import EditModeToast from "../editModeBar/EditModeToast";
 
 const AdminEditLayout = () => {
   const { isAuthenticated, user } = useAuth();
-  const { isEditMode, setIsEditMode } = useEditMode();
+  const { isEditMode, setIsEditMode, saveStatus, refreshAll } = useEditMode();
+  const reloadTimerRef = useRef(null);
 
   useEffect(() => {
     if (isAuthenticated && user?.role === "admin") {
@@ -14,6 +16,23 @@ const AdminEditLayout = () => {
     }
     return () => setIsEditMode(false);
   }, [isAuthenticated, user, setIsEditMode]);
+
+  useEffect(() => {
+    if (saveStatus === "saved") {
+      if (reloadTimerRef.current) {
+        clearTimeout(reloadTimerRef.current);
+      }
+      reloadTimerRef.current = setTimeout(() => {
+        refreshAll();
+        window.location.reload();
+      }, 1200);
+    }
+    return () => {
+      if (reloadTimerRef.current) {
+        clearTimeout(reloadTimerRef.current);
+      }
+    };
+  }, [saveStatus, refreshAll]);
 
   if (!isAuthenticated || user?.role !== "admin") {
     return (
@@ -28,6 +47,7 @@ const AdminEditLayout = () => {
   return (
     <>
       <EditModeBar />
+      <EditModeToast />
       <Outlet />
     </>
   );
