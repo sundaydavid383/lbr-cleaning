@@ -16,61 +16,106 @@ const UserGuideOverlay = () => {
     restart,
   } = useUserGuide();
   const [targetRect, setTargetRect] = useState(null);
-  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
+  const [tooltipPos, setTooltipPos] = useState(null);
+  const [targetExists, setTargetExists] = useState(false);
   const tooltipRef = useRef(null);
+  const scrollEndTimerRef = useRef(null);
+
+  const clearScrollTracking = useCallback(() => {
+    if (scrollEndTimerRef.current) {
+      clearTimeout(scrollEndTimerRef.current);
+      scrollEndTimerRef.current = null;
+    }
+  }, []);
 
   const updatePosition = useCallback(() => {
-    if (!currentStep?.target) return;
-    const el = document.querySelector(currentStep.target);
-    if (!el) {
+    clearScrollTracking();
+
+    if (!currentStep?.target) {
       setTargetRect(null);
+      setTargetExists(false);
+      setTooltipPos(null);
       return;
     }
 
-    const rect = el.getBoundingClientRect();
-    setTargetRect(rect);
+    const el = document.querySelector(currentStep.target);
 
-    const pad = 16;
-    const tooltipWidth = 340;
-    const estimatedTooltipHeight = tooltipRef.current?.offsetHeight || 220;
+    if (!el) {
+      setTargetRect(null);
+      setTargetExists(false);
+      setTooltipPos({
+        top: window.innerHeight / 2 - 120,
+        left: window.innerWidth / 2 - 170,
+      });
+      return;
+    }
+
+    setTargetExists(true);
 
     el.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    requestAnimationFrame(() => {
-      const updatedRect = el.getBoundingClientRect();
-      setTargetRect(updatedRect);
+    const waitForScroll = () => {
+      const rect = el.getBoundingClientRect();
+      setTargetRect(rect);
 
-      const spaceBelow = window.innerHeight - updatedRect.bottom - pad;
-      const spaceAbove = updatedRect.top - pad;
+      const pad = 16;
+      const tooltipWidth = 340;
+      const estimatedTooltipHeight = tooltipRef.current?.offsetHeight || 220;
+
+      const spaceBelow = window.innerHeight - rect.bottom - pad;
+      const spaceAbove = rect.top - pad;
 
       let top;
       if (spaceBelow >= estimatedTooltipHeight || spaceAbove < spaceBelow) {
-        top = updatedRect.bottom + pad;
+        top = rect.bottom + pad;
       } else {
-        top = updatedRect.top - estimatedTooltipHeight - pad;
+        top = rect.top - estimatedTooltipHeight - pad;
       }
 
       top = Math.max(pad, Math.min(top, window.innerHeight - estimatedTooltipHeight - pad));
 
-      let left = updatedRect.left + updatedRect.width / 2;
+      let left = rect.left + rect.width / 2;
       left = Math.max(pad, Math.min(left - tooltipWidth / 2, window.innerWidth - tooltipWidth - pad));
 
       setTooltipPos({ top, left });
-    });
-  }, [currentStep]);
+      clearScrollTracking();
+    };
+
+    if ("onscrollend" in window) {
+      const onScrollEnd = () => {
+        window.removeEventListener("scrollend", onScrollEnd);
+        waitForScroll();
+      };
+      window.addEventListener("scrollend", onScrollEnd);
+      scrollEndTimerRef.current = setTimeout(() => {
+        window.removeEventListener("scrollend", onScrollEnd);
+        waitForScroll();
+      }, 800);
+    } else {
+      scrollEndTimerRef.current = setTimeout(waitForScroll, 400);
+    }
+  }, [currentStep, clearScrollTracking]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) {
+      clearScrollTracking();
+      return;
+    }
+
     updatePosition();
+
     const onResize = () => updatePosition();
     const onScroll = () => updatePosition();
+
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
+      clearScrollTracking();
     };
-  }, [active, updatePosition, stepIndex]);
+  }, [active, updatePosition, stepIndex, clearScrollTracking]);
 
   useEffect(() => {
     if (!active) return;
@@ -83,14 +128,26 @@ const UserGuideOverlay = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [active, next, prev, skip]);
 
+  useEffect(() => {
+    if (!active) {
+      setTargetRect(null);
+      setTooltipPos(null);
+      setTargetExists(false);
+    }
+  }, [active]);
+
   if (!active || !currentStep) return null;
+
+  const tooltipStyle = tooltipPos
+    ? { top: tooltipPos.top, left: tooltipPos.left }
+    : { top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
 
   return (
     <div className="ug-overlay" aria-live="polite">
       <div className="ug-backdrop" onClick={skip} />
-      {targetRect && (
+      {targetExists && targetRect && (
         <div
-          className="ug-highlight"
+          className={`ug-highlight${targetExists ? " ug-highlight--active" : ""}`}
           style={{
             top: targetRect.top - 4,
             left: targetRect.left - 4,
@@ -102,7 +159,7 @@ const UserGuideOverlay = () => {
       <div
         ref={tooltipRef}
         className="ug-tooltip"
-        style={{ top: tooltipPos.top, left: tooltipPos.left }}
+        style={tooltipStyle}
       >
         <div className="ug-tooltip-header">
           <div className="ug-icon">

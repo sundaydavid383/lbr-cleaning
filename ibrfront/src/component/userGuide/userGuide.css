@@ -21,10 +21,26 @@
 .ug-highlight {
   position: absolute;
   border-radius: 12px;
-  box-shadow: 0 0 0 9999px rgba(13, 13, 11, 0.55), 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35);
+  box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35);
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 10000;
+  opacity: 0;
+}
+
+.ug-highlight--active {
+  opacity: 1;
+  animation: ugPulse 2s ease-in-out infinite;
+}
+
+.ug-highlight--active::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 16px;
+  border: 2px solid var(--primary-color, #16a34a);
+  opacity: 0.5;
+  animation: ugPulseRing 2s ease-in-out infinite;
 }
 
 .ug-tooltip {
@@ -150,6 +166,26 @@
 @keyframes ugSlideUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ugPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 40px rgba(22, 163, 74, 0.55);
+  }
+}
+
+@keyframes ugPulseRing {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
 }
 
 @media (max-width: 480px) {
