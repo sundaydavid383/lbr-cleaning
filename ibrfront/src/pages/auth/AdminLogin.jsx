@@ -2,37 +2,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
-import CustomAlert from "../../component/customAlert/CustomAlert";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [locked, setLocked] = useState(false);
   const { adminLogin } = useAuth();
   const navigate = useNavigate();
 
-
-
-  const getFriendlyError = (message) => {
-    if (!message) {
-      return "We couldn't sign you in. Please verify your administrator email and password, then try again.";
-    }
-
-    if (/404|not found|service/i.test(message)) {
-      return "The admin sign-in service is temporarily unavailable. Please try again in a moment.";
-    }
-
-    return message;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (!email || !password) {
-      setError({ message: "Please enter your administrator email and password.", type: "danger" });
       return;
     }
 
@@ -41,7 +23,6 @@ const AdminLogin = () => {
     setLoading(false);
 
     if (!result.success) {
-      setError({ message: getFriendlyError(result.message), type: "danger" });
       setLocked(!!result.inputDisable);
       return;
     }
@@ -49,16 +30,7 @@ const AdminLogin = () => {
     navigate("/admin/cms");
   };
 
-
-
   return (
-    <div>
-      {error && ( <CustomAlert
-              message={error?.message}
-              type={error?.type}
-              onClose={() => setError(null)}
-            />)}
-        
     <div className="auth-page">
       <div className="auth-background">
         <div className="auth-bg-shape shape-1"></div>
@@ -130,7 +102,6 @@ const AdminLogin = () => {
           </form>
         </div>
       </div>
-    </div>
     </div>
   );
 };

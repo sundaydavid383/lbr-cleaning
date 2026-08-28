@@ -51,7 +51,7 @@ const initializePayment = async ({ email, amount, currency = "NGN", customerName
         customerName,
         phone,
       },
-      callback_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.VITE_API_URL || "http://localhost:5100"}/api/payment/verify`,
+      callback_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.BACKEND_URL || process.env.RENDER_URL || "http://localhost:5100"}/api/payment/verify`,
     };
 
     const res = await fetch(`${PAYSTACK_BASE_URL}/transaction/initialize`, {
@@ -83,7 +83,7 @@ const initializePayment = async ({ email, amount, currency = "NGN", customerName
       tx_ref: reference,
       amount: Number(amount).toFixed(2),
       currency,
-      redirect_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.VITE_API_URL || "http://localhost:5100"}/api/payment/verify`,
+      redirect_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.BACKEND_URL || process.env.RENDER_URL || "http://localhost:5100"}/api/payment/verify`,
       customer: {
         email,
         name: customerName,

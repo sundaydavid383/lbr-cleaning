@@ -51,12 +51,12 @@ const RouteSkeleton = () => (
 
 const App = () => {
   return (
-    <AuthProvider>
-      <EditModeProvider>
-        <BrowserRouter>
-          <UserGuideProvider>
-            <ToastProvider>
-              <ErrorBoundary>
+    <ErrorBoundary>
+      <AuthProvider>
+        <EditModeProvider>
+          <BrowserRouter>
+            <UserGuideProvider>
+              <ToastProvider>
                 <ScrollToTop />
                 <Nav />
                 <Suspense fallback={<RouteSkeleton />}>
@@ -103,12 +103,12 @@ const App = () => {
                 <Footer />
                 <UserGuideOverlay />
                 <GlobalEditToggle />
-              </ErrorBoundary>
-            </ToastProvider>
-          </UserGuideProvider>
-        </BrowserRouter>
-      </EditModeProvider>
-    </AuthProvider>
+              </ToastProvider>
+            </UserGuideProvider>
+          </BrowserRouter>
+        </EditModeProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 };
 

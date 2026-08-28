@@ -8,7 +8,6 @@ import { useCmsCategory } from "../../hooks/useCmsContent";
 import { AboutSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
-import EditableList from "../../component/editable/EditableList";
 
 const About = () => {
   const { value: aboutContent, loading: aboutLoading } = useCmsCategory("about_page", {});
@@ -19,6 +18,8 @@ const About = () => {
   const videoRef = useRef();
 
   useEffect(() => {
+    if (aboutLoading) return;
+
     const sections = [introRef, teamRef, valuesRef, videoRef];
 
     const observer = new IntersectionObserver(
@@ -26,6 +27,7 @@ const About = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("animate-in");
+            observer.unobserve(entry.target);
           }
         });
       },
@@ -33,15 +35,23 @@ const About = () => {
     );
 
     sections.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
+      if (ref.current) {
+        observer.observe(ref.current);
+        const rect = ref.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          ref.current.classList.add("animate-in");
+          observer.unobserve(ref.current);
+        }
+      }
     });
 
     return () => {
       sections.forEach((ref) => {
         if (ref.current) observer.unobserve(ref.current);
       });
+      observer.disconnect();
     };
-  }, []);
+  }, [aboutLoading]);
 
   const aboutHeroSection = aboutContent.hero_slides || [];
   const teamMembers = aboutContent.team || [];
@@ -73,15 +83,15 @@ const About = () => {
               {isEditMode ? (
                 <>
                   <EditableText cmsKey="about_page.intro.heading" type="text" value={introText.heading} as="h2" />
-                  <EditableList
-                    cmsKey="about_page.intro.paragraphs"
-                    type="array"
-                    value={introText.paragraphs || []}
-                    fields={[{ key: "", label: "Paragraph" }]}
-                    itemWrapperTag="p"
-                  >
-                    {(para, idx) => <span key={idx}>{para}</span>}
-                  </EditableList>
+                  {(introText.paragraphs || []).map((para, idx) => (
+                    <EditableText
+                      key={idx}
+                      cmsKey={`about_page.intro.paragraphs.${idx}`}
+                      type="text"
+                      value={para}
+                      as="p"
+                    />
+                  ))}
                 </>
               ) : (
                 <>
@@ -133,15 +143,15 @@ const About = () => {
             {isEditMode ? (
               <>
                 <EditableText cmsKey="about_page.video_heading" type="text" value={aboutContent.video_heading} as="h2" />
-                <EditableList
-                  cmsKey="about_page.video_paragraphs"
-                  type="array"
-                  value={aboutContent.video_paragraphs || []}
-                  fields={[{ key: "", label: "Paragraph (HTML allowed)" }]}
-                  itemWrapperTag="p"
-                >
-                  {(para, idx) => <span key={idx} dangerouslySetInnerHTML={{ __html: para }} />}
-                </EditableList>
+                {(aboutContent.video_paragraphs || []).map((para, idx) => (
+                  <EditableText
+                    key={idx}
+                    cmsKey={`about_page.video_paragraphs.${idx}`}
+                    type="text"
+                    value={para}
+                    as="p"
+                  />
+                ))}
               </>
             ) : (
               <>
