@@ -17,7 +17,7 @@ const NotifySubscribers = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}api/notify-subscribers`, { message });
+      const res = await axios.post(apiUrl("/api/notify-subscribers"), { message });
 
       setAlert({
         message: res.data.message || "Message sent successfully",

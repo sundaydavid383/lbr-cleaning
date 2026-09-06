@@ -7,6 +7,7 @@ import Loading from "../../component/loading/Loading";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
+import { apiUrl } from "../../utils/apiUrl";
 
 const services = [
   { value: "residential", label: "Residential Cleaning", icon: "fa-solid fa-house", price: 15000 },
@@ -106,7 +107,7 @@ const Apply = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}api/book`, {
+      const response = await fetch(apiUrl("/api/book"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -133,7 +134,7 @@ const Apply = () => {
         }
 
         setSubmitted(true);
-        setFormData({ name: "", email: "", phone: "", service: "residential", message: "", paymentOption: "PAY_FTER" });
+        setFormData({ name: "", email: "", phone: "", service: "residential", message: "", paymentOption: "PAY_AFTER" });
       } else {
         showAlert(data.message || data.data || "Something went wrong. Please try again.", "danger");
       }
@@ -424,7 +425,6 @@ const Apply = () => {
                   </label>
                 </div>
               </div>
-              )}
 
               <div className={`form-group full-width ${focusedField === 'message' || formData.message ? 'focused' : ''}`}>
                 {isEditMode ? (

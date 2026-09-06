@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./overview.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { useAuth } from "../../../context/AuthContext";
+import { apiUrl } from "../../../utils/apiUrl";
 
 const Overview = () => {
   const { user, isAuthenticated } = useAuth();
@@ -26,7 +27,7 @@ const Overview = () => {
       }
 
       try {
-        const ordersRes = await fetch(`${import.meta.env.VITE_API_URL}api/orders?email=${encodeURIComponent(user.email)}`);
+        const ordersRes = await fetch(apiUrl(`/api/orders?email=${encodeURIComponent(user.email)}`));
         const ordersData = await ordersRes.json();
 
         if (ordersRes.ok && ordersData.success) {

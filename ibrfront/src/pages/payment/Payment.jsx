@@ -5,6 +5,7 @@ import "./payment.css";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
 import { useAuth } from "../../context/AuthContext";
+import { apiUrl } from "../../utils/apiUrl";
 
 const Payment = () => {
   const [searchParams] = useSearchParams();
@@ -34,7 +35,7 @@ const Payment = () => {
   const verifyPayment = async (ref) => {
     try {
       setVerifying(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}api/payment/verify?reference=${encodeURIComponent(ref)}&orderId=${encodeURIComponent(orderId)}`, {
+      const response = await fetch(apiUrl(`/api/payment/verify?reference=${encodeURIComponent(ref)}&orderId=${encodeURIComponent(orderId)}`), {
         method: "GET",
       });
 
@@ -65,7 +66,7 @@ const Payment = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}api/payment/initialize`, {
+      const response = await fetch(apiUrl("/api/payment/initialize"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

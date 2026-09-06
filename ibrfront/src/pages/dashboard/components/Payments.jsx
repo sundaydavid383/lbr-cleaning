@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./payments.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { useAuth } from "../../../context/AuthContext";
+import { apiUrl } from "../../../utils/apiUrl";
 
 const formatNGN = (amount) =>
   new Intl.NumberFormat("en-NG", {
@@ -27,7 +28,7 @@ const Payments = () => {
       }
 
       try {
-        const ordersRes = await fetch(`${import.meta.env.VITE_API_URL}api/orders?email=${encodeURIComponent(user.email)}`);
+        const ordersRes = await fetch(apiUrl(`/api/orders?email=${encodeURIComponent(user.email)}`));
         const ordersData = await ordersRes.json();
 
         if (ordersRes.ok && ordersData.success) {
@@ -37,7 +38,7 @@ const Payments = () => {
           const paymentPromises = userOrders
             .filter((o) => o.id)
             .map((o) =>
-              fetch(`${import.meta.env.VITE_API_URL}api/payment/order/${o.id}`).then((r) => r.json())
+              fetch(apiUrl(`/api/payment/order/${o.id}`)).then((r) => r.json())
             );
 
           const paymentResults = await Promise.all(paymentPromises);
@@ -65,7 +66,7 @@ const Payments = () => {
 
   const handleDownloadReceipt = async (paymentId) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/payment/${paymentId}/receipt`);
+      const res = await fetch(apiUrl(`/api/payment/${paymentId}/receipt`));
       if (!res.ok) throw new Error("Failed to fetch receipt");
       const html = await res.text();
       const newWindow = window.open("", "_blank");

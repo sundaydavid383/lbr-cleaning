@@ -14,6 +14,7 @@ import { SITE_CONFIG } from "../../config/site";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
 import EditableList from "../../component/editable/EditableList";
+import { apiUrl } from "../../utils/apiUrl";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -94,7 +95,7 @@ const Contact = () => {
 
     try {
       setLoading(true);
-      await axios.post(`${import.meta.env.VITE_API_URL}api/contact`, formData);
+      await axios.post(apiUrl("/api/contact"), formData);
       setAlertMessage("Your message has been sent!");
       setAlertType("success");
       setFormData({
