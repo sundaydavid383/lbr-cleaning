@@ -43,10 +43,7 @@ const UserGuideOverlay = () => {
     if (!el) {
       setTargetRect(null);
       setTargetExists(false);
-      setTooltipPos({
-        top: window.innerHeight / 2 - 120,
-        left: window.innerWidth / 2 - 170,
-      });
+      setTooltipPos(null);
       return;
     }
 
@@ -136,7 +133,7 @@ const UserGuideOverlay = () => {
     }
   }, [active]);
 
-  if (!active || !currentStep) return null;
+  if (!active || !currentStep || !targetExists) return null;
 
   const tooltipStyle = tooltipPos
     ? { top: tooltipPos.top, left: tooltipPos.left }

@@ -58,14 +58,29 @@ export function UserGuideProvider({ children }) {
       setActive(false);
       return;
     }
+
     const completed = localStorage.getItem(STORAGE_KEY);
     if (completed === "true" || dismissed) {
       setActive(false);
       return;
     }
-    const timer = setTimeout(() => setActive(true), 1200);
-    return () => clearTimeout(timer);
-  }, [location.pathname, currentSteps.length, dismissed, resetSignal]);
+
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      if (cancelled) return;
+      const targetExists = currentStep?.target ? !!document.querySelector(currentStep.target) : false;
+      if (!targetExists) {
+        setActive(false);
+        return;
+      }
+      setActive(true);
+    }, 1500);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [location.pathname, currentSteps.length, dismissed, resetSignal, currentStep?.target]);
 
   const next = useCallback(() => {
     if (isLast) {

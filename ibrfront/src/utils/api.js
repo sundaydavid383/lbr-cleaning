@@ -29,6 +29,8 @@ export const apiFetch = async (path, { method = "GET", body, token, timeoutMs = 
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
+      const errorMessage = data?.message || data?.error || JSON.stringify(data).slice(0, 500) || "Request failed";
+      console.error(`[API-FETCH] ${method} ${url} failed | status=${res.status} | response=${errorMessage}`);
       const friendly = transformApiError({ status: res.status, data });
       showError(friendly);
     }
@@ -36,7 +38,7 @@ export const apiFetch = async (path, { method = "GET", body, token, timeoutMs = 
     return { ok: res.ok, status: res.status, data };
   } catch (err) {
     if (err.name === "AbortError") {
-      console.error(`[API] ${method} ${url} | TIMED OUT after ${timeoutMs}ms`);
+      console.error(`[API-FETCH] ${method} ${url} | TIMEOUT after ${timeoutMs}ms`);
       const friendly = transformApiError({ status: 0, message: "timeout" });
       showError(friendly);
       return {
@@ -46,7 +48,7 @@ export const apiFetch = async (path, { method = "GET", body, token, timeoutMs = 
       };
     }
 
-    console.error(`[API] ${method} ${url} | network error:`, err);
+    console.error(`[API-FETCH] ${method} ${url} | NETWORK ERROR:`, err);
     const friendly = transformApiError({ status: 0, message: err.message });
     showError(friendly);
     return {
