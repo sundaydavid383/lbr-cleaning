@@ -17,6 +17,7 @@ const uploadsRoutes = require("./src/routes/uploads");
 const app = express();
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "*").split(",").map(origin => origin.trim()).filter(Boolean);
+console.log("Allowed origins:", allowedOrigins);
 app.use(
   cors({
     origin: function (origin, callback) {
