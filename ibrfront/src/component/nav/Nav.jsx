@@ -178,7 +178,14 @@ const Nav = () => {
               {link.label}
             </Link>
           ))}
-          {isAuthenticated && (
+          <div className="mobile-nav-divider" />
+          <Link to="/apply" className="mobile-nav-link mobile-nav-cta" onClick={() => setMobileOpen(false)}>
+            <i className="fa-solid fa-arrow-right" /> Apply Now
+          </Link>
+          <button className="mobile-nav-link mobile-nav-auth" onClick={() => { restart(); setMobileOpen(false); }}>
+            <i className="fa-solid fa-route" /> Take a Tour
+          </button>
+          {isAuthenticated ? (
             <>
               <div className="mobile-nav-divider" />
               <Link to="/dashboard" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
@@ -198,13 +205,9 @@ const Nav = () => {
                 <i className="fa-solid fa-arrow-right-from-bracket" /> Sign Out
               </button>
             </>
-          )}
-          {!isAuthenticated && (
+          ) : (
             <>
               <div className="mobile-nav-divider" />
-              <button className="mobile-nav-link mobile-nav-auth" onClick={() => { restart(); setMobileOpen(false); }}>
-                <i className="fa-solid fa-route" /> Take a Tour
-              </button>
               <Link to="/login" className="mobile-nav-link mobile-nav-auth" onClick={() => setMobileOpen(false)}>
                 Sign In
               </Link>
