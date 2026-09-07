@@ -2916,6 +2916,42 @@ async function ensureCmsPopulated() {
     }
 
     console.log(`[AUTO-SEED] Done. Created ${created} missing key(s), ${skipped} already existed.`);
+    // If homepage stats exist but show all zeros, try to populate them from live DB counts
+    try {
+      const statsKey = "homepage_stats.stats";
+      const statsItem = await cmsContentRepository.findByKey(statsKey);
+
+      if (statsItem && Array.isArray(statsItem.value)) {
+        const allZero = statsItem.value.every((s) => Number(s.value) === 0);
+        if (allZero) {
+          console.log("[AUTO-SEED] Detected zeroed homepage stats, populating from live DB counts...");
+
+          const orderCount = typeof repositories.orderRepository.count === "function"
+            ? await repositories.orderRepository.count()
+            : 0;
+          const userCount = typeof repositories.userRepository.count === "function"
+            ? await repositories.userRepository.count()
+            : 0;
+          const subscriberCount = typeof repositories.subscriberRepository.count === "function"
+            ? await repositories.subscriberRepository.count()
+            : 0;
+
+          const newStats = statsItem.value.map((s) => {
+            const label = (s.label || "").toString().toLowerCase();
+            if (label.includes("years")) return { ...s, value: s.value || 8 };
+            if (label.includes("happy") || label.includes("clients")) return { ...s, value: subscriberCount || orderCount || s.value || 0 };
+            if (label.includes("cleaning") || label.includes("projects")) return { ...s, value: orderCount || s.value || 0 };
+            if (label.includes("team")) return { ...s, value: userCount || s.value || 0 };
+            return s;
+          });
+
+          await cmsContentRepository.updateByKey(statsKey, { value: newStats, updatedBy: "auto-seed" });
+          console.log("[AUTO-SEED] homepage_stats.stats updated with live counts");
+        }
+      }
+    } catch (err) {
+      console.error("[AUTO-SEED] Failed to populate homepage stats from DB:", err);
+    }
   } catch (error) {
     console.error("[AUTO-SEED] Failed:", error);
   }
