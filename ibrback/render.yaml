@@ -1,0 +1,34 @@
+# Render.com deployment spec for the Express backend
+# Docs: https://render.com/docs/reference/render-yaml
+
+databases:
+  - name: lbr-cleaning-db
+    databaseName: ibr_cleaning
+    plan: free
+    ipAllowList: []
+
+envs:
+  - key: DATABASE_PROVIDER
+    value: mongodb
+  - key: PORT
+    value: "5100"
+  - key: CORS_ORIGIN
+    value: https://lbrcleaning.vercel.app,https://lbrcleaning.com,http://localhost:5173
+
+services:
+  - type: web
+    name: lbr-cleaning-api
+    env: node
+    region: us-east
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /welcome
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_PROVIDER
+        value: mongodb
+      - key: PORT
+        value: "5100"
+      - key: CORS_ORIGIN
+        value: https://lbrcleaning.vercel.app,https://lbrcleaning.com,http://localhost:5173
