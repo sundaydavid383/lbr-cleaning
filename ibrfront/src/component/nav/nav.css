@@ -542,22 +542,45 @@
 }
 
 /* ========================================
-   Responsive — Large Desktop
+   Responsive — Large Desktop (>= 1600px)
    ======================================== */
 @media (min-width: 1600px) {
   .nav-inner {
     max-width: 1440px;
-    padding: 0 clamp(1.5rem, 4vw, 3.5rem);
+    padding: 0 clamp(2rem, 4vw, 3.5rem);
   }
 
   .nav-link {
-    padding: 0.5rem 1.1rem;
-    font-size: 0.95rem;
+    padding: 0.55rem 1.2rem;
+    font-size: 0.98rem;
+  }
+
+  .nav-logo img {
+    width: 15rem;
+    height: 2.35rem;
   }
 }
 
 /* ========================================
-   Responsive — Desktop to Tablet (1024px - 1600px)
+   Responsive — Desktop (1200px - 1600px)
+   ======================================== */
+@media (max-width: 1400px) {
+  .nav-links {
+    gap: 0.2rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.9rem;
+  }
+
+  .nav-actions {
+    gap: 0.85rem;
+  }
+}
+
+/* ========================================
+   Responsive — Desktop to Tablet (1024px - 1200px)
    ======================================== */
 @media (max-width: 1200px) {
   .nav-links {
@@ -565,7 +588,7 @@
   }
 
   .nav-link {
-    padding: 0.45rem 0.65rem;
+    padding: 0.45rem 0.7rem;
     font-size: 0.85rem;
   }
 
@@ -592,6 +615,10 @@
     aspect-ratio: 1;
     border-radius: 50%;
   }
+
+  .nav-actions {
+    gap: 0.5rem;
+  }
 }
 
 /* ========================================
@@ -603,8 +630,8 @@
   }
 
   .nav-link {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.82rem;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.85rem;
   }
 
   .nav-user-name {
@@ -634,15 +661,20 @@
   .nav-actions {
     gap: 0.4rem;
   }
+
+  .nav-inner {
+    padding: 0 clamp(1rem, 3vw, 1.75rem);
+  }
 }
 
 /* ========================================
-   Responsive — Mobile (<= 768px)
+   Responsive — Mobile Landscape (600px - 768px)
    ======================================== */
 @media (max-width: 768px) {
   .nav-links,
   .nav-auth-buttons,
-  .nav-cta {
+  .nav-cta,
+  .nav-guide-btn {
     display: none;
   }
 
@@ -669,10 +701,6 @@
     display: none;
   }
 
-  .nav-guide-btn {
-    display: none;
-  }
-
   .nav-user-dropdown {
     right: -0.5rem;
     width: calc(100vw - 2rem);
@@ -690,11 +718,11 @@
 }
 
 /* ========================================
-   Responsive — Small Mobile (<= 480px)
+   Responsive — Small Mobile (480px - 600px)
    ======================================== */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .nav-inner {
-    padding: 0 clamp(0.75rem, 4vw, 1rem);
+    padding: 0 clamp(0.85rem, 4vw, 1.25rem);
     height: 3.75rem;
   }
 
@@ -704,12 +732,12 @@
   }
 
   .mobile-toggle {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.3rem;
+    height: 2.3rem;
   }
 
   .mobile-toggle span {
-    width: 1.2rem;
+    width: 1.25rem;
   }
 
   .mobile-menu {
@@ -718,27 +746,67 @@
   }
 
   .mobile-nav-link {
-    padding: 0.8rem 0.85rem;
-    font-size: 1rem;
+    padding: 0.85rem 0.9rem;
+    font-size: 1.02rem;
   }
 }
 
 /* ========================================
-   Responsive — Very Small Mobile (<= 360px)
+   Responsive — Very Small Mobile (<= 480px)
    ======================================== */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
+  .nav-inner {
+    padding: 0 clamp(0.75rem, 4vw, 1rem);
+    height: 3.6rem;
+  }
+
   .nav-logo img {
-    width: 8.5rem;
-    height: 1.4rem;
+    width: 9rem;
+    height: 1.45rem;
   }
 
   .mobile-toggle {
-    width: 2rem;
-    height: 2rem;
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  .mobile-toggle span {
+    width: 1.15rem;
   }
 
   .mobile-menu {
-    width: min(95vw, 18rem);
+    width: min(92vw, 19rem);
+    padding: 4.8rem 1.1rem 1.25rem;
+  }
+
+  .mobile-nav-link {
+    padding: 0.75rem 0.8rem;
+    font-size: 0.98rem;
+  }
+}
+
+/* ========================================
+   Responsive — Extra Small Mobile (<= 360px)
+   ======================================== */
+@media (max-width: 360px) {
+  .nav-logo img {
+    width: 7.5rem;
+    height: 1.25rem;
+  }
+
+  .mobile-toggle {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .mobile-menu {
+    width: min(95vw, 17rem);
+    padding: 4.5rem 1rem 1rem;
+  }
+
+  .mobile-nav-link {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.95rem;
   }
 }
 
