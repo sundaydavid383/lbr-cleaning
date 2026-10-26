@@ -14,10 +14,7 @@ const generateUploadAuth = (fileName, fileType) => {
   const token = Date.now().toString(36) + Math.random().toString(36).slice(2);
   const expire = Math.floor(Date.now() / 1000) + 300;
 
-  const signature = imagekit.getAuthenticationSignature({
-    token,
-    expire,
-  });
+  const signature = imagekit.getAuthenticationParameters(token, expire).signature;
 
   return {
     token,

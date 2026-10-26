@@ -110,6 +110,25 @@ const Signup = () => {
     fileInputRef.current?.click();
   };
 
+  const safeSignupError = (msg) => {
+    const m = (msg || "").trim();
+    if (!m) return "We couldn't create your account. Please try again.";
+    // Only surface messages we know are safe, user-friendly and free of
+    // backend internals. Anything else is replaced with a generic message so
+    // no server/DB details ever leak to the client.
+    const safe = new Set([
+      "All fields are required",
+      "Password must be at least 6 characters",
+      "A user with that email already exists",
+      "Failed to create account",
+      "Signup failed",
+      "Please fill in all required fields",
+      "Passwords do not match",
+    ]);
+    if (safe.has(m)) return m;
+    return "We couldn't create your account. Please try again.";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -132,25 +151,30 @@ const Signup = () => {
     }
 
     setLoading(true);
-    const result = await signup({
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      password: formData.password,
-      address: formData.address,
-      city: formData.city,
-      propertyType: formData.propertyType,
-      referralSource: formData.referralSource,
-      avatar: avatarPreview,
-    });
-    setLoading(false);
+    try {
+      const result = await signup({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        address: formData.address,
+        city: formData.city,
+        propertyType: formData.propertyType,
+        referralSource: formData.referralSource,
+        avatar: avatarPreview,
+      });
 
-    if (!result.success) {
-      setError(result.message);
-      return;
+      if (!result || !result.success) {
+        setError(safeSignupError(result?.message));
+        return;
+      }
+
+      navigate("/");
+    } catch (err) {
+      setError("We couldn't create your account. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    navigate("/");
   };
 
   const inputClass = (field) =>

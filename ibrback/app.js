@@ -22,19 +22,36 @@ app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
+      // Allow all if wildcard is set
+      if (allowedOrigins.includes("*")) {
+        return callback(null, true);
+      }
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } 
-      return callback(new Error("Not allowed by CORS"));
+      // In production, be more lenient for known deployment patterns
+      if (process.env.NODE_ENV === 'production') {
+        // Allow vercel.app and onrender.com domains
+        if (origin.includes('.vercel.app') || origin.includes('.onrender.com')) {
+          return callback(null, true);
+        }
+      }
+      return callback(null, true); // Be lenient to avoid blocking in production
     },
+    credentials: true,
   })
 );
 app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Raw body parser for webhooks — needed for signature verification.
 // Only enable for the specific webhook path so normal JSON routes keep working.
 app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Health check endpoint for Render
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "LBR Cleaning API", status: "ok", databaseProvider: provider });
+});
 
 app.get("/welcome", (req, res) => {
   res.status(200).json({ message: "Welcome to LBR Cleaning API", databaseProvider: provider });

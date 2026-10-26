@@ -45,7 +45,7 @@ const Login = () => {
       </div>
 
       <div className="auth-container">
-        <div className="auth-card">
+        <div className="auth-card auth-form-topspacing">
           <div className="auth-header">
             <Link to="/" className="auth-logo">
               <img src="/house-cleaning.png" alt="LBR Cleaning" />
@@ -72,12 +72,12 @@ const Login = () => {
             )}
           </div>
 
-          {error && (
+          {/* {error && (
             <div className="auth-error">
               <i className="fa-solid fa-circle-exclamation"></i>
               {error}
             </div>
-          )}
+          )} */}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className={`auth-form-group ${focusedField === "email" || email ? "focused" : ""}`}>
@@ -114,14 +114,14 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="auth-form-options">
+            {/* <div className="auth-form-options">
               <label className="auth-checkbox">
                 <input type="checkbox" />
                 <span className="checkmark"></span>
                 Remember me
               </label>
               <Link to="#" className="auth-forgot">Forgot password?</Link>
-            </div>
+            </div> */}
 
             <button type="submit" className="auth-submit-btn" disabled={loading}>
               {loading ? (

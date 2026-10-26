@@ -10,7 +10,7 @@
 }
 
 .auth-page {
-  min-height: 100vh;
+  min-height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,6 +19,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 2rem;
+  padding-top: 0rem;
 }
 
 /* ========================================
@@ -82,7 +83,7 @@
   gap: 0;
   max-width: 1100px;
   width: 100%;
-  min-height: 600px;
+  min-height: 390px;
   background: white;
   border-radius: var(--radius-2xl);
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
@@ -121,12 +122,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  max-height: calc(100vh - 6rem);
 }
 
 .auth-card--wide {
   padding: 2.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 4rem);
 }
 
 .auth-logo {
@@ -320,6 +321,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem 1.25rem;
+  position: relative;
+  top: 27rem;
+}
+.auth-form-topspacing{
+  overflow-y: auto;
+  padding-top: 10rem;
 }
 
 .auth-form--grid .auth-form-group.full-width {
@@ -630,7 +637,8 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow-y: scroll;
+  max-height: 32.5rem;
 }
 
 .auth-info::before {
@@ -648,6 +656,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  margin-top: 29rem;
 }
 
 .auth-info-badge {
@@ -843,7 +852,7 @@
 
   .auth-page {
     align-items: flex-start;
-    padding-top: 2rem;
+    padding-top: 0.1rem;
   }
 
   .auth-info {

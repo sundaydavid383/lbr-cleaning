@@ -2,9 +2,17 @@
 export const apiUrl = (path) => {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
 
+  // In Vite dev mode, route API requests through the dev-server proxy as
+  // same-origin relative URLs. This sidesteps CORS entirely, so it works no
+  // matter which host/IP:port the dev UI is opened on (localhost, 127.0.0.1,
+  // or a LAN "Network" URL).
+  if (import.meta.env.DEV) {
+    return cleanPath;
+  }
+
   // 1. Explicit VITE_API_URL from env (works in dev & build)
   const viteApiUrl = import.meta.env.VITE_API_URL;
-  if (viteApiUrl) {
+  if (viteApiUrl && viteApiUrl.trim() !== "") {
     const base = viteApiUrl.replace(/\/$/, "");
     return `${base}${cleanPath}`;
   }
@@ -18,21 +26,20 @@ export const apiUrl = (path) => {
       return `https://ibrback.onrender.com${cleanPath}`;
     }
 
-    // If running on Render's frontend (unlikely but handle it)
+    // If running on Render
     if (host.includes("onrender.com")) {
-      // Assume same domain serves both, or use a known backend URL
-      return `${window.location.origin}${cleanPath}`;
+      return `https://ibrback.onrender.com${cleanPath}`;
     }
 
-    // Local dev: same host works because Vite proxies, or use localhost:5100
+    // Local dev
     if (host.includes("localhost") || host.includes("127.0.0.1")) {
       return `http://localhost:5100${cleanPath}`;
     }
 
-    // Default: assume same origin
-    return `${window.location.origin}${cleanPath}`;
+    // Default to Render backend
+    return `https://ibrback.onrender.com${cleanPath}`;
   }
 
   // 3. SSR/build-time default
-  return `http://localhost:5100${cleanPath}`;
+  return `https://ibrback.onrender.com${cleanPath}`;
 };
