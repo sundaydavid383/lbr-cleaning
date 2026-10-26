@@ -346,7 +346,7 @@ const Apply = () => {
 
               {/* Service Price Preview */}
               {selectedService && (
-                <div className="service-price-preview">
+                <div className="service-price-preview" style={{ display: "none" }}>
                   {isEditMode ? (
                     <>
                       <EditableText cmsKey="apply.price_label" type="text" value="Estimated starting price" as="span" className="service-price-label" />
