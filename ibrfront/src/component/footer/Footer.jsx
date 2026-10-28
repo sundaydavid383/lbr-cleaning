@@ -8,12 +8,14 @@ import Loading from "../../component/loading/Loading";
 import { SITE_CONFIG } from "../../config/site";
 import { useCmsCategory } from "../../hooks/useCmsContent";
 import { useEditMode } from "../../context/EditModeContext";
+import { useAuth } from "../../context/AuthContext";
 import EditableText from "../editable/EditableText";
 import EditableList from "../editable/EditableList";
 
 const Footer = () => {
   const { value: footerContent, loading: footerLoading } = useCmsCategory("footer", {});
   const { isEditMode } = useEditMode();
+  const { user, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [loading, setLoading] = useState(false);
@@ -129,21 +131,27 @@ const Footer = () => {
           </div>
         )}
 
-        <form onSubmit={onSubmit}>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="text"
-            name="email"
-            placeholder={subscribePlaceholder}
-            disabled={isEditMode}
-          />
-          <button type="submit" className="btn" disabled={isEditMode}>
-            <p>
-              Subscribe <i className="fa-solid fa-arrow-right-long"></i>
-            </p>
-          </button>
-        </form>
+        {isAuthenticated && user?.email ? (
+          <p style={{ color: "#fff", marginTop: "10px", opacity: 0.9 }}>
+            Newsletter updates will be sent to <strong>{user.email}</strong>
+          </p>
+        ) : (
+          <form onSubmit={onSubmit}>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              name="email"
+              placeholder={subscribePlaceholder}
+              disabled={isEditMode}
+            />
+            <button type="submit" className="btn" disabled={isEditMode}>
+              <p>
+                Subscribe <i className="fa-solid fa-arrow-right-long"></i>
+              </p>
+            </button>
+          </form>
+        )}
 
         <div className="socials">
           <EditableList
