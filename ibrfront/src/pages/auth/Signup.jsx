@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
+import { apiUrl } from "../../utils/api";
 import EditableText from "../../component/editable/EditableText";
 
 // ───────────────────────────────────────────────
@@ -11,13 +12,6 @@ const GEOAPIFY_API_KEY = "b251c888b5e749e19c7296822cb1cdac";
 // ───────────────────────────────────────────────
 
 const REFERRAL_SOURCES = [
-  "Google Search",
-  "Social Media",
-  "Friend / Family",
-  "Flyer / Banner",
-  "Existing Customer",
-  "Other",
-];
   "Google Search",
   "Social Media",
   "Friend / Family",
@@ -286,6 +280,25 @@ const Signup = () => {
 
     setLoading(true);
     try {
+      let avatarUrl = avatarPreview;
+      
+      // If avatar is a base64 data URL, upload to ImageKit first
+      if (avatarPreview && avatarPreview.startsWith("data:image")) {
+        try {
+          const uploadRes = await fetch(apiUrl("/api/uploads/avatar"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ avatar: avatarPreview, fileName: `avatar_${Date.now()}.jpg` }),
+          });
+          const uploadData = await uploadRes.json();
+          if (uploadData.success && uploadData.data?.url) {
+            avatarUrl = uploadData.data.url;
+          }
+        } catch (err) {
+          console.error("Avatar upload failed:", err);
+        }
+      }
+      
       const result = await signup({
         name: formData.name,
         email: formData.email,
@@ -294,7 +307,7 @@ const Signup = () => {
         address: formData.address,
         city: formData.city,
         referralSource: formData.referralSource,
-        avatar: avatarPreview,
+        avatar: avatarUrl,
       });
 
       if (!result || !result.success) {
