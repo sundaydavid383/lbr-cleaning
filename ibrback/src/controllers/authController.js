@@ -4,11 +4,11 @@ const { authenticate } = require("../middleware/auth");
 /**
  * Update current user's profile.
  * Requires Bearer token.
- * body: { name, phone, address, city, propertyType, referralSource, avatar }
+ * body: { name, phone, address, city, referralSource, avatar }
  */
 exports.updateProfile = async (req, res) => {
   const userId = req.user.sub;
-  const { name, phone, address, city, propertyType, referralSource, avatar } = req.body;
+  const { name, phone, address, city, referralSource, avatar } = req.body;
 
   try {
     const updated = await authService.updateUser(userId, {
@@ -16,7 +16,6 @@ exports.updateProfile = async (req, res) => {
       phone: phone !== undefined ? phone : undefined,
       address: address !== undefined ? address : undefined,
       city: city !== undefined ? city : undefined,
-      propertyType: propertyType !== undefined ? propertyType : undefined,
       referralSource: referralSource !== undefined ? referralSource : undefined,
       avatar: avatar !== undefined ? avatar : undefined,
     });
@@ -94,10 +93,10 @@ exports.adminLogin = async (req, res) => {
 
 /**
  * Regular user signup — POST /api/auth/signup
- * body: { name, email, phone, password, address, city, propertyType, referralSource, avatar }
+ * body: { name, email, phone, password, address, city, referralSource, avatar }
  */
 exports.signup = async (req, res) => {
-  const { name, email, phone, password, address, city, propertyType, referralSource, avatar } = req.body;
+  const { name, email, phone, password, address, city, referralSource, avatar } = req.body;
 
   if (!name || !email || !phone || !password) {
     return res.status(400).json({ success: false, message: "All fields are required" });
@@ -108,7 +107,7 @@ exports.signup = async (req, res) => {
   }
 
   try {
-    const user = await authService.createUser({ name, email, phone, password, role: "user", address, city, propertyType, referralSource, avatar });
+    const user = await authService.createUser({ name, email, phone, password, role: "user", address, city, referralSource, avatar });
     // Log the new user straight in, same as the old fake frontend flow did
     const { token, user: loggedInUser } = await authService.login({ email, password });
     return res.status(201).json({ success: true, token, user: loggedInUser });

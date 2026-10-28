@@ -425,24 +425,47 @@ body {
 .mt-4 { margin-top: 2rem; }
 
 /* ========================================
-   Smooth Scrollbar
+   Premium Scrollbar
    ======================================== */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--light-gray);
+    background: var(--lighter-gray);
+    border-left: 1px solid var(--light-gray);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+    background: var(--gradient-primary);
     border-radius: var(--radius-full);
+    /* Border matches the track, so the thumb looks like it's floating */
+    border: 2px solid var(--lighter-gray);
+    background-clip: padding-box;
+    transition: background var(--transition-normal);
 }
 
 ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--primary-color-light) 0%, var(--primary-color) 100%);
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
     background: var(--primary-color-dark);
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--lighter-gray);
+}
+
+/* Firefox fallback (only runs in browsers without ::-webkit-scrollbar) */
+@supports not selector(::-webkit-scrollbar) {
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--lighter-gray);
+    }
 }
 
 /* ========================================

@@ -83,7 +83,7 @@ const AdminLogin = () => {
               </div>
             </div>
 
-            <p style={{ marginTop: "0.75rem", fontSize: "0.95rem", color: "var(--text-secondary, #64748b)" }}>
+            <p className="auth-note">
               If you are not an administrator, please use the regular customer login instead.
             </p>
 

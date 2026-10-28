@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema(
     lastLoginAt: { type: Date, default: null },
     address: { type: String, trim: true, default: null },
     city: { type: String, trim: true, default: null },
-    propertyType: { type: String, trim: true, default: null },
     referralSource: { type: String, trim: true, default: null },
     avatar: { type: String, trim: true, default: null },
   },

@@ -104,10 +104,10 @@ export const AuthProvider = ({ children }) => {
     return { success: true };
   };
 
-  const signup = async ({ name, email, phone, password, address, city, propertyType, referralSource, avatar }) => {
+  const signup = async ({ name, email, phone, password, address, city, referralSource, avatar }) => {
     const { ok, data } = await apiFetch("/api/auth/signup", {
       method: "POST",
-      body: { name, email, phone, password, address, city, propertyType, referralSource, avatar },
+      body: { name, email, phone, password, address, city, referralSource, avatar },
     });
 
     if (!ok || !data.success) {

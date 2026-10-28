@@ -1,53 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
 
-const LAGOS_AREAS = [
-  "Victoria Island",
-  "Lekki",
-  "Ikoyi",
-  "Banana Island",
-  "Ikeja",
-  "Surulere",
-  "Yaba",
-  "Apapa",
-  "Lagos Island",
-  "Maryland",
-  "Ajah",
-  "Sangotedo",
-  "Adeniyi Jones",
-  "Allen Avenue",
-  "Opebi",
-  "Gbagada",
-  "Ikorodu",
-  "Eko Atlantic",
-  "Other",
-];
-
-const PROPERTY_TYPES = [
-  "Apartment",
-  "Duplex",
-  "Bungalow",
-  "Terrace",
-  "Office Space",
-  "Commercial Property",
-  "Short Let",
-  "Other",
-];
-
-const SERVICES = [
-  "Home Cleaning",
-  "Office Cleaning",
-  "Carpet Cleaning",
-  "Window Cleaning",
-  "Move In/Out",
-  "Deep Cleaning",
-  "Sanitization",
-  "Post-Construction",
-];
+// ───────────────────────────────────────────────
+// Put your Geoapify API key here later
+const GEOAPIFY_API_KEY = "b251c888b5e749e19c7296822cb1cdac";
+// ───────────────────────────────────────────────
 
 const REFERRAL_SOURCES = [
   "Google Search",
@@ -57,6 +18,80 @@ const REFERRAL_SOURCES = [
   "Existing Customer",
   "Other",
 ];
+  "Google Search",
+  "Social Media",
+  "Friend / Family",
+  "Flyer / Banner",
+  "Existing Customer",
+  "Other",
+];
+
+const LAGOS_AREAS = [
+  "Victoria Island",
+  "Lekki Phase 1",
+  "Lekki Phase 2",
+  "Ikoyi",
+  "Banana Island",
+  "Eko Atlantic",
+  "Oniru",
+  "Osborne",
+  "Parkview",
+  "Ajah",
+  "Sangotedo",
+  "Abraham Adesanya",
+  "Chevron",
+  "VGC",
+  "Ibeju-Lekki",
+  "Ikeja",
+  "Ikeja GRA",
+  "Allen Avenue",
+  "Opebi",
+  "Adeniyi Jones",
+  "Maryland",
+  "Anthony Village",
+  "Gbagada",
+  "Magodo",
+  "Omole",
+  "Ogudu",
+  "Ojodu",
+  "Berger",
+  "Yaba",
+  "Surulere",
+  "Apapa",
+  "Festac",
+  "Amuwo-Odofin",
+  "Satellite Town",
+  "Ikorodu",
+  "Ikorodu Road",
+  "Mile 12",
+  "Ketu",
+  "Alapere",
+  "Oshodi",
+  "Isolo",
+  "Mushin",
+  "Shomolu",
+  "Bariga",
+  "Palmgrove",
+  "Ebute Metta",
+  "Agege",
+  "Abule Egba",
+  "Iyana Ipaja",
+  "Egbeda",
+  "Idimu",
+  "Ikotun",
+  "Alimosho",
+  "Other",
+];
+
+// Simple debounce helper
+function useDebounce(value, delay = 400) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -70,20 +105,122 @@ const Signup = () => {
     phone: "",
     address: "",
     city: "",
-    propertyType: "",
-    preferredService: "",
     referralSource: "",
     password: "",
     confirmPassword: "",
   });
+
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [focusedField, setFocusedField] = useState(null);
 
+  // Autocomplete state
+  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [showAddressDropdown, setShowAddressDropdown] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(false);
+
+  const debouncedCity = useDebounce(formData.city, 400);
+  const debouncedAddress = useDebounce(formData.address, 400);
+
+  // Fetch suggestions from Geoapify
+  const fetchSuggestions = useCallback(async (text, type) => {
+    if (!text || text.trim().length < 2 || GEOAPIFY_API_KEY === "YOUR_GEOAPIFY_API_KEY_HERE") {
+      if (type === "city") setCitySuggestions([]);
+      else setAddressSuggestions([]);
+      return;
+    }
+
+    const isCity = type === "city";
+    if (isCity) setCityLoading(true);
+    else setAddressLoading(true);
+
+    try {
+      // For city/area we bias toward locality/suburb/neighbourhood
+      // For full address we allow more detailed results
+      const typeFilter = isCity
+        ? "&type=city&type=suburb&type=neighbourhood&type=locality"
+        : "";
+
+      const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+        text
+      )}&filter=countrycode:ng&limit=8${typeFilter}&apiKey=${GEOAPIFY_API_KEY}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const results = (data.features || []).map((f) => {
+        const p = f.properties;
+        return {
+          id: f.properties.place_id || Math.random().toString(36),
+          // Nice display text
+          label: p.formatted || p.name || p.address_line1,
+          // What we actually store
+          city: p.city || p.suburb || p.neighbourhood || p.county || p.name || "",
+          address: p.formatted || p.address_line1 || "",
+          raw: p,
+        };
+      });
+
+      if (isCity) {
+        setCitySuggestions(results);
+        setShowCityDropdown(true);
+      } else {
+        setAddressSuggestions(results);
+        setShowAddressDropdown(true);
+      }
+    } catch (err) {
+      console.error("Geoapify error:", err);
+      if (isCity) setCitySuggestions([]);
+      else setAddressSuggestions([]);
+    } finally {
+      if (isCity) setCityLoading(false);
+      else setAddressLoading(false);
+    }
+  }, []);
+
+  // Trigger searches
+  useEffect(() => {
+    if (debouncedCity) fetchSuggestions(debouncedCity, "city");
+    else {
+      setCitySuggestions([]);
+      setShowCityDropdown(false);
+    }
+  }, [debouncedCity, fetchSuggestions]);
+
+  useEffect(() => {
+    if (debouncedAddress) fetchSuggestions(debouncedAddress, "address");
+    else {
+      setAddressSuggestions([]);
+      setShowAddressDropdown(false);
+    }
+  }, [debouncedAddress, fetchSuggestions]);
+
   const update = (field) => (e) =>
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const handleCitySelect = (item) => {
+    setFormData((prev) => ({
+      ...prev,
+      city: item.city || item.label,
+    }));
+    setShowCityDropdown(false);
+    setCitySuggestions([]);
+  };
+
+  const handleAddressSelect = (item) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: item.address || item.label,
+      // Optionally also fill city if empty
+      city: prev.city || item.city || "",
+    }));
+    setShowAddressDropdown(false);
+    setAddressSuggestions([]);
+  };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files?.[0];
@@ -113,9 +250,6 @@ const Signup = () => {
   const safeSignupError = (msg) => {
     const m = (msg || "").trim();
     if (!m) return "We couldn't create your account. Please try again.";
-    // Only surface messages we know are safe, user-friendly and free of
-    // backend internals. Anything else is replaced with a generic message so
-    // no server/DB details ever leak to the client.
     const safe = new Set([
       "All fields are required",
       "Password must be at least 6 characters",
@@ -159,7 +293,6 @@ const Signup = () => {
         password: formData.password,
         address: formData.address,
         city: formData.city,
-        propertyType: formData.propertyType,
         referralSource: formData.referralSource,
         avatar: avatarPreview,
       });
@@ -213,7 +346,12 @@ const Signup = () => {
               <h1>Create Your Account</h1>
             )}
             {isEditMode ? (
-              <EditableText cmsKey="signup.subtitle" type="text" value="Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience." as="p" />
+              <EditableText
+                cmsKey="signup.subtitle"
+                type="text"
+                value="Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience."
+                as="p"
+              />
             ) : (
               <p>
                 Join <strong>2,500+</strong> happy customers across Lagos. Tell us a bit about yourself so we
@@ -230,6 +368,7 @@ const Signup = () => {
           )}
 
           <form onSubmit={handleSubmit} className="auth-form auth-form--grid">
+            {/* ===== Profile Picture ===== */}
             <div className="auth-section-title">
               {isEditMode ? (
                 <>
@@ -280,6 +419,7 @@ const Signup = () => {
               />
             </div>
 
+            {/* ===== Personal Information ===== */}
             <div className="auth-section-title">
               {isEditMode ? (
                 <>
@@ -345,6 +485,7 @@ const Signup = () => {
               </div>
             </div>
 
+            {/* ===== Location Details ===== */}
             <div className="auth-section-title">
               {isEditMode ? (
                 <>
@@ -359,27 +500,65 @@ const Signup = () => {
               )}
             </div>
 
-            <div className={inputClass("city")}>
+            {/* CITY / AREA - Searchable dropdown (local list) */}
+            <div className={inputClass("city")} style={{ position: "relative" }}>
               <label htmlFor="city">City / Area *</label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-map-pin"></i>
-                <select
+                <input
+                  type="text"
                   id="city"
                   value={formData.city}
-                  onChange={update("city")}
-                  onFocus={() => setFocusedField("city")}
-                  onBlur={() => setFocusedField(null)}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, city: e.target.value }));
+                    setShowCityDropdown(true);
+                  }}
+                  onFocus={() => {
+                    setFocusedField("city");
+                    setShowCityDropdown(true);
+                  }}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setFocusedField(null);
+                      setShowCityDropdown(false);
+                    }, 200);
+                  }}
+                  placeholder="Type or select area (e.g. Lekki, Ikeja...)"
+                  autoComplete="off"
                   required
-                >
-                  <option value="">Select your area</option>
-                  {LAGOS_AREAS.map((area) => (
-                    <option key={area} value={area}>{area}</option>
-                  ))}
-                </select>
+                />
               </div>
+
+              {showCityDropdown && (
+                <ul className="geoapify-dropdown">
+                  {LAGOS_AREAS
+                    .filter((area) =>
+                      area.toLowerCase().includes(formData.city.toLowerCase())
+                    )
+                    .map((area) => (
+                      <li
+                        key={area}
+                        onMouseDown={() => {
+                          setFormData((prev) => ({ ...prev, city: area }));
+                          setShowCityDropdown(false);
+                        }}
+                      >
+                        {area}
+                      </li>
+                    ))}
+                  {LAGOS_AREAS.filter((area) =>
+                    area.toLowerCase().includes(formData.city.toLowerCase())
+                  ).length === 0 && (
+                    <li style={{ color: "#94a3b8", cursor: "default" }}>
+                      No matching area
+                    </li>
+                  )}
+                </ul>
+              )}
             </div>
 
-            <div className={inputClass("address")}>
+            {/* FULL ADDRESS - Autocomplete */}
+            <div className={inputClass("address")} style={{ position: "relative" }}>
               <label htmlFor="address">Full Address *</label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-house"></i>
@@ -388,64 +567,49 @@ const Signup = () => {
                   id="address"
                   value={formData.address}
                   onChange={update("address")}
-                  onFocus={() => setFocusedField("address")}
-                  onBlur={() => setFocusedField(null)}
+                  onFocus={() => {
+                    setFocusedField("address");
+                    if (addressSuggestions.length) setShowAddressDropdown(true);
+                  }}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setFocusedField(null);
+                      setShowAddressDropdown(false);
+                    }, 200);
+                  }}
                   placeholder="e.g. 15 Admiralty Way, Lekki Phase 1"
+                  autoComplete="off"
                   required
                 />
+                {addressLoading && (
+                  <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)" }}>
+                    <i className="fa-solid fa-spinner fa-spin"></i>
+                  </span>
+                )}
               </div>
-            </div>
 
-            <div className={inputClass("propertyType")}>
-              <label htmlFor="propertyType">Property Type</label>
-              <div className="auth-input-wrapper">
-                <i className="fa-solid fa-building"></i>
-                <select
-                  id="propertyType"
-                  value={formData.propertyType}
-                  onChange={update("propertyType")}
-                  onFocus={() => setFocusedField("propertyType")}
-                  onBlur={() => setFocusedField(null)}
+              {showAddressDropdown && addressSuggestions.length > 0 && (
+                <ul
+                  className="geoapify-dropdown"
                 >
-                  <option value="">Select property type</option>
-                  {PROPERTY_TYPES.map((type) => (
-                    <option key={type} value={type}>{type}</option>
+                  {addressSuggestions.map((item) => (
+                    <li
+                      key={item.id}
+                      onMouseDown={() => handleAddressSelect(item)}
+                      style={{
+                        padding: "10px 14px",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #f1f5f9",
+                        fontSize: 14,
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    >
+                      {item.label}
+                    </li>
                   ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="auth-section-title">
-              {isEditMode ? (
-                <>
-                  <i className="fa-solid fa-broom"></i>
-                  <EditableText cmsKey="signup.service_section" type="text" value="Service Preferences" as="span" />
-                </>
-              ) : (
-                <>
-                  <i className="fa-solid fa-broom"></i>
-                  <span>Service Preferences</span>
-                </>
+                </ul>
               )}
-            </div>
-
-            <div className={inputClass("preferredService")}>
-              <label htmlFor="preferredService">Preferred Service</label>
-              <div className="auth-input-wrapper">
-                <i className="fa-solid fa-sparkles"></i>
-                <select
-                  id="preferredService"
-                  value={formData.preferredService}
-                  onChange={update("preferredService")}
-                  onFocus={() => setFocusedField("preferredService")}
-                  onBlur={() => setFocusedField(null)}
-                >
-                  <option value="">Select a service</option>
-                  {SERVICES.map((service) => (
-                    <option key={service} value={service}>{service}</option>
-                  ))}
-                </select>
-              </div>
             </div>
 
             <div className={inputClass("referralSource")}>
@@ -461,12 +625,15 @@ const Signup = () => {
                 >
                   <option value="">Select an option</option>
                   {REFERRAL_SOURCES.map((source) => (
-                    <option key={source} value={source}>{source}</option>
+                    <option key={source} value={source}>
+                      {source}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
 
+            {/* ===== Security ===== */}
             <div className="auth-section-title">
               {isEditMode ? (
                 <>
@@ -520,14 +687,6 @@ const Signup = () => {
               </div>
             </div>
 
-            <div className="auth-form-consent">
-              <label className="auth-checkbox">
-                <input type="checkbox" required />
-                <span className="checkmark"></span>
-                I agree to LBR Cleaning&apos;s Terms of Service and Privacy Policy
-              </label>
-            </div>
-
             <button type="submit" className="auth-submit-btn" disabled={loading}>
               {loading ? (
                 <span className="btn-loading">
@@ -553,7 +712,9 @@ const Signup = () => {
           </div>
         </div>
 
+        {/* Right side info panel stays the same */}
         <div className="auth-info">
+          {/* ... keep your existing auth-info content exactly as it was ... */}
           <div className="auth-info-inner">
             {isEditMode ? (
               <EditableText cmsKey="signup.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
@@ -566,7 +727,12 @@ const Signup = () => {
               <h2>Your Spotless Space Is Just a Few Clicks Away</h2>
             )}
             {isEditMode ? (
-              <EditableText cmsKey="signup.info_text" type="text" value="LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business." as="p" />
+              <EditableText
+                cmsKey="signup.info_text"
+                type="text"
+                value="LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business."
+                as="p"
+              />
             ) : (
               <p>
                 LBR Cleaning is Lagos&apos; most trusted professional cleaning company. From Victoria Island

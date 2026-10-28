@@ -20,14 +20,14 @@ const getJwtSecret = () => {
  * Create a new user (used by the seed script, and later by any
  * admin-only "create user" endpoint).
  */
-const createUser = async ({ name, email, phone, password, role = "user", address, city, propertyType, referralSource, avatar }) => {
+const createUser = async ({ name, email, phone, password, role = "user", address, city, referralSource, avatar }) => {
   const existing = await userRepository.findByEmail(email);
   if (existing) {
     throw new Error("A user with that email already exists");
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
-  return userRepository.create({ name, email, phone, passwordHash, role, address, city, propertyType, referralSource, avatar });
+  return userRepository.create({ name, email, phone, passwordHash, role, address, city, referralSource, avatar });
 };
 
 const updateUser = async (userId, data) => {
