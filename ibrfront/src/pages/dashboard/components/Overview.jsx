@@ -145,8 +145,8 @@ const Overview = () => {
           <div className="dashboard-card-change positive">Lifetime</div>
         </div>
         <div className="dashboard-stat-card">
-          <div className="dashboard-stat-icon gold">
-            <i className="fa-solid fa-sparkles" />
+          <div className="dashboard-stat-icon green">
+            <i className="fa-solid fa-circle-check" />
           </div>
           <div className="dashboard-stat-value">{stats.servicesCompleted}</div>
           <div className="dashboard-stat-label">Services Completed</div>
