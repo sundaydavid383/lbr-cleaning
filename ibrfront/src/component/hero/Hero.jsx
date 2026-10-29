@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
+import EditableImage from "../editable/EditableImage";
 import { useCmsContent } from "../../hooks/useCmsContent";
 import fallbackImage from "../../assets/about-intro.jpg";
 
@@ -215,7 +216,12 @@ const Hero = ({ section, features, backgroundImage, backgroundVideo }) => {
         <div className="image">
           {isEditMode ? (
             <>
-              <img className="person" src={page.sectionimage} alt="Cleaning professional" />
+              <EditableImage
+                cmsKey={`home.hero_slide_${printedSection}_sectionimage`}
+                value={page.sectionimage}
+                alt="Cleaning professional"
+                className="person"
+              />
               <img className="stars" src={page.sectionimageStar} alt="" aria-hidden="true" />
               <img className="spark" src={page.sectionimageSpark} alt="" aria-hidden="true" />
               <div className="speech">
