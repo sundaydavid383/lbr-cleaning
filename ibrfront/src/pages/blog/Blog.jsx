@@ -5,14 +5,46 @@ import FeaturedPost from "../../component/featuredPost/FeaturedPost";
 import CategoryFilter from "../../component/categoryFilter/CategoryFilter";
 import NewsletterSignup from "../../component/newsletterSignup/NewsletterSignup";
 import "./blog.css";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
+import EditSection from "../../component/editable/EditSection";
+
+export const BLOG_POST_FIELDS = [
+  { key: "title", type: "text", label: "Title" },
+  { key: "image_url", type: "image", label: "Cover picture" },
+  {
+    key: "summary",
+    type: "textarea",
+    rows: 14,
+    label: "Article text",
+    help: "Leave an empty line between paragraphs. A short line ending with a colon (:) becomes a sub-heading.",
+  },
+  { key: "author", type: "text", label: "Author" },
+  { key: "pubDate", type: "text", label: "Date (YYYY-MM-DD)", placeholder: "2026-01-31" },
+  { key: "readTime", type: "text", label: "Reading time (e.g. 5 min read)" },
+  { key: "tags", type: "list", label: "Topics / tags", itemLabel: "tag", help: "Used for the topic filter buttons." },
+  { key: "source_id", hidden: true },
+];
+
+export const newBlogPost = () => ({
+  title: "New article",
+  image_url: "",
+  summary: "",
+  author: "LBR Editorial",
+  pubDate: new Date().toISOString().slice(0, 10),
+  readTime: "3 min read",
+  tags: [],
+  source_id: "LBR",
+});
 import { BlogSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
 import EditableList from "../../component/editable/EditableList";
 
 const NewsBlog = () => {
-  const { value: blogContent, loading: blogLoading } = useCmsCategory("blog", {});
+  const blogLoading = !useCmsReady();
+  const storedArticles = useCms("blog.articles", []);
+  const blogTitle = useCms("blog.title", "LBR Cleaning Insights");
+  const showLiveNews = useCms("blog.show_live_news", true);
   const [articles, setArticles] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,11 +53,22 @@ const NewsBlog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
-  const { isEditMode } = useEditMode();
+  const { isEditMode, openPanel } = useEditMode();
 
   const blogsPerPage = 6;
 
-  const cmsArticles = blogContent?.articles || [];
+  const cmsArticles = Array.isArray(storedArticles) ? storedArticles : [];
+
+  const managePosts = (index = null) =>
+    openPanel({
+      cmsKey: "blog.articles",
+      root: cmsArticles,
+      value: cmsArticles,
+      title: "Blog posts",
+      help: "Add, edit, delete or reorder articles. The first article is shown as the big 'Featured' post.",
+      field: { type: "items", itemLabel: "article", fields: BLOG_POST_FIELDS, newItem: newBlogPost, initialOpen: index, label: "" },
+      openedAt: Date.now(),
+    });
 
   const displayArticles = useManual ? articles : cmsArticles;
 
@@ -116,40 +159,40 @@ const NewsBlog = () => {
     return <BlogSkeleton />;
   }
 
-  if (!blogContent && !useManual) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>No blog content available. Please configure the CMS or enable live news.</p>
-      </div>
-    );
-  }
-
   return (<>
     <section className="blog-container">
-      {isEditMode ? (
-        <EditableText cmsKey="blog.title" type="text" value="LBR Cleaning Insights" as="h2" className="blog-title" />
-      ) : (
-        <h2 className="blog-title">LBR Cleaning Insights</h2>
+      <EditableText cmsKey="blog.title" value={blogTitle} as="h2" className="blog-title" label="Page heading" />
+
+      {isEditMode && (
+        <div className="cms-section-bar">
+          <button type="button" className="cms-section-btn primary" onClick={() => managePosts(null)}>
+            <i className="fa-solid fa-newspaper"></i> Manage blog posts ({cmsArticles.length})
+          </button>
+          <EditSection
+            inline
+            cmsKey="blog.show_live_news"
+            root={true}
+            label={`"Live news" button: ${showLiveNews === false ? "hidden" : "shown"}`}
+            icon="fa-rss"
+            field={{ type: "boolean", label: "Show the button that switches to live cleaning news from the internet", onText: "Shown", offText: "Hidden" }}
+          />
+        </div>
       )}
 
-      {!isEditMode && (
+      {!isEditMode && showLiveNews !== false && (
         <div className="blog-toggle">
           <button
             className={useManual ? "toggle-btn active" : "toggle-btn"}
             onClick={handleToggleSource}
           >
-            {isEditMode ? (
-              <EditableText cmsKey="blog.toggle_text" type="text" value={useManual ? "Showing Live News" : "Showing CMS Blogs"} as="span" />
-            ) : (
-              `${useManual ? "Showing Live News" : "Showing CMS Blogs"} — Click to Switch`
-            )}
+            {`${useManual ? "Showing Live News" : "Showing Our Articles"} — Click to Switch`}
           </button>
         </div>
       )}
 
       {!loading && !useManual && cmsArticles.length > 0 && (
         <>
-          <FeaturedPost articles={cmsArticles.slice(0, 1)} />
+          <FeaturedPost articles={cmsArticles.slice(0, 1)} onEdit={isEditMode ? () => managePosts(0) : undefined} />
           <CategoryFilter
             categories={allCategories}
             activeCategory={activeCategory}
@@ -164,17 +207,23 @@ const NewsBlog = () => {
         <>
           {!useManual && cmsArticles.length === 0 && (
             <div style={{ textAlign: 'center', padding: '2rem' }}>
-              {isEditMode ? (
-                <EditableText cmsKey="blog.empty_state" type="text" value="No CMS articles found. Add blog articles in the CMS admin panel." as="p" />
-              ) : (
-                <p>No CMS articles found. Add blog articles in the CMS admin panel.</p>
-              )}
+              <EditableText cmsKey="blog.empty_state" value="No articles yet — check back soon." as="p" label="Message when there are no articles" />
             </div>
           )}
 
           <div className="blog-grid">
             {currentBlogs.map((a, idx) => (
-              <article key={idx} className="blog-card" onClick={() => openModal(a)}>
+              <article
+                key={idx}
+                className={`blog-card ${isEditMode && !useManual ? "editable-list-item-wrap" : ""}`}
+                onClick={() => (isEditMode && !useManual ? managePosts(cmsArticles.indexOf(a)) : openModal(a))}
+                title={isEditMode && !useManual ? "Click to edit this article" : undefined}
+              >
+                {isEditMode && !useManual && (
+                  <span className="editable-list-controls" aria-hidden="true">
+                    <i className="fa-solid fa-pen"></i> Edit
+                  </span>
+                )}
                 {a.image_url && (
                   <img
                     src={a.image_url}
@@ -208,7 +257,7 @@ const NewsBlog = () => {
                   )}
 
                   <small className="blog-meta-bottom">
-                    Source: {a.source_id || "unknown"} | {new Date(a.pubDate).toLocaleDateString()}
+                    {useManual ? `Source: ${a.source_id || "unknown"} | ` : ""}{a.pubDate ? new Date(a.pubDate).toLocaleDateString() : ""}
                   </small>
                 </div>
               </article>

@@ -5,6 +5,7 @@ import "./overview.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { useAuth } from "../../../context/AuthContext";
 import { apiUrl } from "../../../utils/apiUrl";
+import Txt from "../../../component/editable/Txt";
 
 const Overview = () => {
   const { user, isAuthenticated } = useAuth();
@@ -109,7 +110,7 @@ const Overview = () => {
       <div className="overview">
         <div className="dashboard-card" style={{ textAlign: "center", padding: "3rem" }}>
           <div className="spinner" style={{ margin: "0 auto 1rem" }}></div>
-          <p style={{ color: "var(--text-color-muted)" }}>Loading your dashboard...</p>
+          <p style={{ color: "var(--text-color-muted)" }}><Txt k="dashboard.overview.loading_your_dashboard" d={"Loading your dashboard..."} /></p>
         </div>
       </div>
     );
@@ -120,8 +121,8 @@ const Overview = () => {
       <div className="overview">
         <div className="dashboard-card" style={{ textAlign: "center", padding: "3rem" }}>
           <i className="fa-solid fa-lock" style={{ fontSize: "2rem", color: "var(--text-color-muted)", marginBottom: "1rem" }}></i>
-          <p style={{ color: "var(--text-color-muted)", marginBottom: "1.5rem" }}>Please log in to view your dashboard.</p>
-          <Link to="/login" className="dashboard-btn dashboard-btn-primary">Log In</Link>
+          <p style={{ color: "var(--text-color-muted)", marginBottom: "1.5rem" }}><Txt k="dashboard.overview.please_log_in_to_view_your_dashboard" d={"Please log in to view your dashboard."} /></p>
+          <Link to="/login" className="dashboard-btn dashboard-btn-primary"><Txt k="dashboard.overview.log_in" d={"Log In"} /></Link>
         </div>
       </div>
     );
@@ -141,39 +142,39 @@ const Overview = () => {
             <i className="fa-solid fa-calendar-check" />
           </div>
           <div className="dashboard-stat-value">{stats.totalBookings}</div>
-          <div className="dashboard-stat-label">Total Bookings</div>
-          <div className="dashboard-card-change positive">Lifetime</div>
+          <div className="dashboard-stat-label"><Txt k="dashboard.overview.total_bookings" d={"Total Bookings"} /></div>
+          <div className="dashboard-card-change positive"><Txt k="dashboard.overview.lifetime" d={"Lifetime"} /></div>
         </div>
         <div className="dashboard-stat-card">
           <div className="dashboard-stat-icon green">
             <i className="fa-solid fa-circle-check" />
           </div>
           <div className="dashboard-stat-value">{stats.servicesCompleted}</div>
-          <div className="dashboard-stat-label">Services Completed</div>
-          <div className="dashboard-card-change positive">Great track record</div>
+          <div className="dashboard-stat-label"><Txt k="dashboard.overview.services_completed" d={"Services Completed"} /></div>
+          <div className="dashboard-card-change positive"><Txt k="dashboard.overview.great_track_record" d={"Great track record"} /></div>
         </div>
         <div className="dashboard-stat-card">
           <div className="dashboard-stat-icon blue">
             <i className="fa-solid fa-naira-sign" />
           </div>
           <div className="dashboard-stat-value">{formatNGN(stats.totalSpent)}</div>
-          <div className="dashboard-stat-label">Total Spent</div>
-          <div className="dashboard-card-change neutral">Loyal customer</div>
+          <div className="dashboard-stat-label"><Txt k="dashboard.overview.total_spent" d={"Total Spent"} /></div>
+          <div className="dashboard-card-change neutral"><Txt k="dashboard.overview.loyal_customer" d={"Loyal customer"} /></div>
         </div>
         <div className="dashboard-stat-card">
           <div className="dashboard-stat-icon purple">
             <i className="fa-solid fa-star" />
           </div>
           <div className="dashboard-stat-value">{stats.loyaltyPoints.toLocaleString()}</div>
-          <div className="dashboard-stat-label">Loyalty Points</div>
-          <div className="dashboard-card-change neutral">Earned from spending</div>
+          <div className="dashboard-stat-label"><Txt k="dashboard.overview.loyalty_points" d={"Loyalty Points"} /></div>
+          <div className="dashboard-card-change neutral"><Txt k="dashboard.overview.earned_from_spending" d={"Earned from spending"} /></div>
         </div>
       </div>
 
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <h3 className="dashboard-section-title">
-            <i className="fa-solid fa-calendar" /> Upcoming Bookings
+            <i className="fa-solid fa-calendar" /> <Txt k="dashboard.overview.upcoming_title" d="Upcoming Bookings" label="Section title" />
           </h3>
           {upcomingBookings.length > 0 ? (
             <div className="overview-bookings">
@@ -195,16 +196,16 @@ const Overview = () => {
           ) : (
             <div className="dashboard-empty">
               <i className="fa-regular fa-calendar-xmark" />
-              <h3>No upcoming bookings</h3>
-              <p>You don't have any upcoming cleaning appointments.</p>
-              <Link to="/apply" className="dashboard-btn dashboard-btn-primary">Book a Cleaning</Link>
+              <h3><Txt k="dashboard.overview.no_upcoming_bookings" d={"No upcoming bookings"} /></h3>
+              <p><Txt k="dashboard.overview.you_don_t_have_any_upcoming_cleaning_app" d={"You don't have any upcoming cleaning appointments."} /></p>
+              <Link to="/apply" className="dashboard-btn dashboard-btn-primary"><Txt k="dashboard.overview.book_a_cleaning" d={"Book a Cleaning"} /></Link>
             </div>
           )}
         </div>
 
         <div className="dashboard-card">
           <h3 className="dashboard-section-title">
-            <i className="fa-solid fa-clock-rotate-left" /> Recent Activity
+            <i className="fa-solid fa-clock-rotate-left" /> <Txt k="dashboard.overview.activity_title" d="Recent Activity" label="Section title" />
           </h3>
           <div className="overview-activity">
             {recentActivity.length > 0 ? (
@@ -222,7 +223,7 @@ const Overview = () => {
               ))
             ) : (
               <div className="dashboard-empty" style={{ padding: "1.5rem" }}>
-                <p style={{ color: "var(--text-color-muted)" }}>No activity yet. Book a service to get started!</p>
+                <p style={{ color: "var(--text-color-muted)" }}><Txt k="dashboard.overview.no_activity_yet_book_a_service_to_get_st" d={"No activity yet. Book a service to get started!"} /></p>
               </div>
             )}
           </div>
@@ -231,28 +232,28 @@ const Overview = () => {
 
       <div className="dashboard-card" style={{ marginTop: "1.5rem" }}>
         <h3 className="dashboard-section-title">
-          <i className="fa-solid fa-bolt" /> Quick Actions
+          <i className="fa-solid fa-bolt" /> <Txt k="dashboard.overview.actions_title" d="Quick Actions" label="Section title" />
         </h3>
         <div className="overview-quick-actions">
           <Link to="/apply" className="overview-quick-action">
             <i className="fa-solid fa-plus-circle" />
-            <span>Book New Cleaning</span>
+            <span><Txt k="dashboard.overview.book_new_cleaning" d={"Book New Cleaning"} /></span>
           </Link>
           <Link to="/dashboard/bookings" className="overview-quick-action">
             <i className="fa-solid fa-calendar-check" />
-            <span>View Bookings</span>
+            <span><Txt k="dashboard.overview.view_bookings" d={"View Bookings"} /></span>
           </Link>
           <Link to="/dashboard/favorites" className="overview-quick-action">
             <i className="fa-solid fa-heart" />
-            <span>Favorite Services</span>
+            <span><Txt k="dashboard.overview.favorite_services" d={"Favorite Services"} /></span>
           </Link>
           <Link to="/dashboard/rewards" className="overview-quick-action">
             <i className="fa-solid fa-trophy" />
-            <span>Redeem Rewards</span>
+            <span><Txt k="dashboard.overview.redeem_rewards" d={"Redeem Rewards"} /></span>
           </Link>
           <Link to="/dashboard/support" className="overview-quick-action">
             <i className="fa-solid fa-headset" />
-            <span>Get Support</span>
+            <span><Txt k="dashboard.overview.get_support" d={"Get Support"} /></span>
           </Link>
         </div>
       </div>

@@ -1,6 +1,7 @@
 // filepath: ibrfront/src/pages/dashboard/components/Rewards.jsx
 import React from "react";
 import "./rewards.css";
+import Txt from "../../../component/editable/Txt";
 
 const Rewards = () => {
   const rewards = [
@@ -19,10 +20,10 @@ const Rewards = () => {
       <div className="rewards-progress-card dashboard-card">
         <div className="rewards-progress-header">
           <div>
-            <h3 className="dashboard-section-title" style={{ margin: 0 }}>Loyalty Points</h3>
+            <h3 className="dashboard-section-title" style={{ margin: 0 }}><Txt k="dashboard.rewards.loyalty_points" d={"Loyalty Points"} /></h3>
             <p className="rewards-progress-points">{userPoints.toLocaleString()} points</p>
           </div>
-          <div className="rewards-tier-badge">Gold Member</div>
+          <div className="rewards-tier-badge"><Txt k="dashboard.rewards.gold_member" d={"Gold Member"} /></div>
         </div>
         <div className="rewards-progress-bar">
           <div className="rewards-progress-fill" style={{ width: `${progress}%` }} />

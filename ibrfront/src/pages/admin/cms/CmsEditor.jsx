@@ -340,6 +340,10 @@ const CmsEditor = () => {
      }
    }, [key, fetchContent]);
 
+  const isNewItem = !key || key === "new";
+  const isStructuredType = formData.type === "array" || formData.type === "object" || formData.type === "json";
+  const structuredParse = useMemo(() => isStructuredType ? safeParseJSON(formData.value) : null, [isStructuredType, formData.value]);
+
    if (loading) {
      return <CmsSkeleton />;
    }
@@ -393,9 +397,6 @@ const CmsEditor = () => {
     }
   };
 
-  const isNewItem = !key || key === "new";
-  const isStructuredType = formData.type === "array" || formData.type === "object" || formData.type === "json";
-  const structuredParse = useMemo(() => isStructuredType ? safeParseJSON(formData.value) : null, [isStructuredType, formData.value]);
 
   return (
     <div className="cms-editor">

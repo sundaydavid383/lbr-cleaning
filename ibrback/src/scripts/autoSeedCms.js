@@ -812,49 +812,37 @@ const defaultContent = [
         name: "Funke Adeyemi",
         image: "/assets/user1.jpg",
         ratings: 5,
-        testimony: "LBR Cleaning transformed my 3-bedroom apartment in Lekki. The team arrived on time, worked thoroughly, and left every corner spotless.",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "LBR Cleaning transformed my 3-bedroom apartment in Lekki. The team arrived on time, worked thoroughly, and left every corner spotless."
       },
       {
         name: "Chidi Okafor",
         image: "/assets/user2.jpg",
         ratings: 5,
-        testimony: "We hired LBR for our office in Victoria Island and the difference was immediate. Our workspace is cleaner, fresher, and our staff morale has improved.",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "We hired LBR for our office in Victoria Island and the difference was immediate. Our workspace is cleaner, fresher, and our staff morale has improved."
       },
       {
         name: "Aisha Bello",
         image: "/assets/user3.jpg",
         ratings: 5,
-        testimony: "After my move to Ikoyi, I needed a deep clean before moving in. LBR did an incredible job — the bathrooms were immaculate, the windows streak-free.",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "After my move to Ikoyi, I needed a deep clean before moving in. LBR did an incredible job — the bathrooms were immaculate, the windows streak-free."
       },
       {
         name: "Tunde Bakare",
         image: "/assets/user4.jpg",
         ratings: 4,
-        testimony: "I've tried several cleaning services in Lagos, but LBR stands out. Their sanitization service gave me peace of mind, especially with kids around.",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "I've tried several cleaning services in Lagos, but LBR stands out. Their sanitization service gave me peace of mind, especially with kids around."
       },
       {
         name: "Ngozi Eze",
         image: "/assets/user5.jpg",
         ratings: 5,
-        testimony: "LBR's carpet cleaning brought my living room carpets back to life. They removed stains I thought were permanent. Worth every naira!",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "LBR's carpet cleaning brought my living room carpets back to life. They removed stains I thought were permanent. Worth every naira!"
       },
       {
         name: "Oluwaseun Adeyinka",
         image: "/assets/user6.jpg",
         ratings: 5,
-        testimony: "As a property manager in Surulere, I need reliable cleaners for my apartments. LBR has been consistent for over a year now. They're my go-to cleaning partners.",
-        instagramLink: "https://www.instagram.com/",
-        facebookLink: "https://www.facebook.com/"
+        testimony: "As a property manager in Surulere, I need reliable cleaners for my apartments. LBR has been consistent for over a year now. They're my go-to cleaning partners."
       }
     ]
   },
@@ -2916,6 +2904,33 @@ async function ensureCmsPopulated() {
     }
 
     console.log(`[AUTO-SEED] Done. Created ${created} missing key(s), ${skipped} already existed.`);
+
+    // One-time migration: slide pictures used to be saved under separate
+    // keys (home.hero_slide_<n>_sectionimage). The visual editor now edits
+    // them inside home.hero_slides, so copy any uploaded picture across and
+    // remove the old key.
+    try {
+      const slidesItem = await cmsContentRepository.findByKey("home.hero_slides");
+      if (slidesItem && Array.isArray(slidesItem.value)) {
+        const slides = [...slidesItem.value];
+        const migrated = [];
+        for (let i = 0; i < slides.length; i++) {
+          const oldKey = `home.hero_slide_${i}_sectionimage`;
+          const old = await cmsContentRepository.findByKey(oldKey);
+          if (old && typeof old.value === "string" && old.value) {
+            slides[i] = { ...slides[i], sectionimage: old.value };
+            migrated.push(oldKey);
+          }
+        }
+        if (migrated.length) {
+          await cmsContentRepository.updateByKey("home.hero_slides", { value: slides, updatedBy: "migration" });
+          await cmsContentRepository.deleteMany(migrated);
+          console.log(`[AUTO-SEED] Migrated ${migrated.length} hero slide picture(s) into home.hero_slides`);
+        }
+      }
+    } catch (err) {
+      console.error("[AUTO-SEED] Hero slide picture migration failed:", err);
+    }
     // If homepage stats exist but show all zeros, try to populate them from live DB counts
     try {
       const statsKey = "homepage_stats.stats";

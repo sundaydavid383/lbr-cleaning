@@ -6,55 +6,62 @@ import ServiceSection from '../../component/serviceSection/ServiceSection'
 import ServiceProcess from '../../component/serviceProcess/ServiceProcess'
 import ServiceComparison from '../../component/serviceComparison/ServiceComparison'
 import ServiceGuarantee from '../../component/serviceGuarantee/ServiceGuarantee'
-import imageBac from "../../assets/cleaningbackground.jpg"
-import { SITE_CONFIG } from "../../config/site";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 import { ServiceSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { useEditMode } from "../../context/EditModeContext";
 
 const Services = () => {
-  const { value: servicePageContent, loading: serviceLoading } = useCmsCategory("service_page", {});
+  const ready = useCmsReady();
   const { isEditMode } = useEditMode();
+  const site = useSiteSettings();
+  const slides = useCms("service_page.hero_slides", []);
+  const features = useCms("service_page.features", []);
+  const background = useCms("service_page.background_image", "/assets/cleaningbackground.jpg");
+  const services = useCms("service_page.services", []);
+  const plans = useCms("service_page.plans", []);
+  const dealHeading = useCms("service_page.deal_heading", "Professional Cleaning, Transparent Pricing");
+  const dealImage = useCms("service_page.deal_image", "/assets/cleaner2.png");
 
-  if (serviceLoading) {
+  if (!ready) {
     return <ServiceSkeleton />;
   }
 
-  if (!servicePageContent) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>No service content available. Please configure the CMS.</p>
-      </div>
-    );
-  }
-
   const deal_Intro = {
-    image: servicePageContent.deal_image || "/assets/cleaner2.png",
-    h2: servicePageContent.deal_heading,
-    email: SITE_CONFIG.email,
-    phone: SITE_CONFIG.phone,
+    image: dealImage,
+    h2: dealHeading,
+    email: site.email,
+    phone: site.phone,
   };
-
-  const plans = servicePageContent.plans || [];
-  const features = servicePageContent.features || [];
-  const section = servicePageContent.hero_slides || [];
-  const services = servicePageContent.services || [];
 
   return (
     <>
-        {section.length > 0 && (
-          <Hero section={section} features={features} backgroundImage={imageBac}  backgroundVideo={null}/>
-        )}
-        <ServiceProcess />
-        {services.length > 0 && <ServiceSection services={services}/>}
-        <ServiceComparison />
-        <ServiceGuarantee />
-        {plans.length > 0 && (
-          <Deal 
-            deal_Intro={deal_Intro} 
-            plans={plans}
-          />
-        )}
+      <Hero
+        section={Array.isArray(slides) ? slides : []}
+        features={Array.isArray(features) ? features : []}
+        backgroundImage={background}
+        backgroundVideo={null}
+        slidesKey="service_page.hero_slides"
+        featuresKey="service_page.features"
+        backgroundKey="service_page.background_image"
+      />
+      <ServiceProcess />
+      {(services.length > 0 || isEditMode) && <ServiceSection services={Array.isArray(services) ? services : []} />}
+      <ServiceComparison />
+      <ServiceGuarantee />
+      {(plans.length > 0 || isEditMode) && (
+        <Deal
+          deal_Intro={deal_Intro}
+          plans={Array.isArray(plans) ? plans : []}
+          keys={{
+            heading: "service_page.deal_heading",
+            image: "service_page.deal_image",
+            sectionTag: "service_page.deal_tag",
+            sectionTitle: "service_page.deal_section_title",
+            plans: "service_page.plans",
+          }}
+        />
+      )}
     </>
   );
 };

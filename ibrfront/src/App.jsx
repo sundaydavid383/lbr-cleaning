@@ -11,6 +11,8 @@ import AdminProtectedRoute from './component/admin/AdminProtectedRoute';
 import { UserGuideProvider, useUserGuide } from './context/UserGuideContext';
 import UserGuideOverlay from './component/userGuide/UserGuideOverlay';
 import GlobalEditToggle from './component/globalEditToggle/GlobalEditToggle';
+import EditPanel from './component/editable/EditPanel';
+import EditModeToast from './component/editModeBar/EditModeToast';
 import { ToastProvider } from './component/toast/ToastProvider';
 import { ErrorBoundary } from './component/errorBoundary/ErrorBoundary';
 
@@ -19,7 +21,8 @@ const AdminCreateAdmin = lazy(() => import('./pages/auth/AdminCreateAdmin'));
 const Home = lazy(() => import('./pages/home/Home'));
 const Service = lazy(() => import('./pages/service/Service'));
 const ServiceDetails = lazy(() => import('./component/serviceDetails/serviceDetails'));
-const Contact = lazy(() => import('./component/contact/Contact'));
+const Contact = lazy(() => import('./pages/contact/Contact'));
+const ServicesShowcase = lazy(() => import('./component/contact/Contact'));
 const Blog = lazy(() => import('./pages/blog/Blog'));
 const About = lazy(() => import('./pages/about/About'));
 const NotifySubscribers = lazy(() => import('./pages/notifySubscribers/NotifySubscribers'));
@@ -70,6 +73,7 @@ const App = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/services/:serviceId" element={<ServiceDetails />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/our-services" element={<ServicesShowcase />} />
                     <Route path="/apply" element={<Apply />} />
                     <Route path="/payment" element={<Payment />} />
                     <Route path="/information" element={<InformationHub />} />
@@ -103,6 +107,8 @@ const App = () => {
                 <Footer />
                 <UserGuideOverlay />
                 <GlobalEditToggle />
+                <EditPanel />
+                <EditModeToast />
               </ToastProvider>
             </UserGuideProvider>
           </BrowserRouter>

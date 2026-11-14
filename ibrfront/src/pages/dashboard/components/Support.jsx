@@ -1,6 +1,7 @@
 // filepath: ibrfront/src/pages/dashboard/components/Support.jsx
 import React, { useState } from "react";
 import "./support.css";
+import Txt from "../../../component/editable/Txt";
 
 const Support = () => {
   const [activeFaq, setActiveFaq] = useState(null);
@@ -53,7 +54,7 @@ const Support = () => {
           </h3>
           <form onSubmit={handleSubmit} className="support-form">
             <div className="dashboard-form-group">
-              <label className="dashboard-form-label">Subject</label>
+              <label className="dashboard-form-label"><Txt k="dashboard.support.subject" d={"Subject"} /></label>
               <input
                 type="text"
                 className="dashboard-form-input"
@@ -64,7 +65,7 @@ const Support = () => {
               />
             </div>
             <div className="dashboard-form-group">
-              <label className="dashboard-form-label">Message</label>
+              <label className="dashboard-form-label"><Txt k="dashboard.support.message" d={"Message"} /></label>
               <textarea
                 className="dashboard-form-input"
                 rows="5"

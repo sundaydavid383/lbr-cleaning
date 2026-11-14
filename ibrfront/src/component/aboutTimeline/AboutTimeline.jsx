@@ -1,27 +1,19 @@
 // filepath: ibrfront/src/component/aboutTimeline/AboutTimeline.jsx
 import React from "react";
 import "./aboutTimeline.css";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
+import { highlight, HIGHLIGHT_HELP } from "../../utils/highlight";
 
 const AboutTimeline = () => {
-  const { value: timelineData, loading: timelineLoading } = useCmsCategory("about_timeline", {});
+  const ready = useCmsReady();
+  const stored = useCms("about_timeline.milestones", []);
   const { isEditMode } = useEditMode();
+  const milestones = Array.isArray(stored) ? stored : [];
 
-  if (timelineLoading) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="loading-bars" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-    );
-  }
-
-  const milestones = timelineData?.milestones || [];
-
-  if (!milestones.length) {
+  if (!ready || (!milestones.length && !isEditMode)) {
     return null;
   }
 
@@ -29,41 +21,39 @@ const AboutTimeline = () => {
     <section className="about-timeline">
       <div className="about-timeline-container">
         <div className="about-timeline-header">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="about_timeline.tag" type="text" value="Our Journey" as="span" className="section-tag" />
-              <h2 className="section-title">
-                <EditableText cmsKey="about_timeline.title" type="text" value="From Local Trust to Digital Innovation" as="span" />
-                <span className="highlight">Digital Innovation</span>
-              </h2>
-              <EditableText cmsKey="about_timeline.subtitle" type="text" value="Every milestone reflects our commitment to quality, community, and growth." as="p" className="section-subtitle" />
-            </>
-          ) : (
-            <>
-              <span className="section-tag">Our Journey</span>
-              <h2 className="section-title">
-                From Local Trust to <span className="highlight">Digital Innovation</span>
-              </h2>
-              <p className="section-subtitle">
-                Every milestone reflects our commitment to quality, community, and growth.
-              </p>
-            </>
-          )}
+          <EditableText cmsKey="about_timeline.tag" value="Our Journey" as="span" className="section-tag" label="Small tag" />
+          <EditableText cmsKey="about_timeline.title" value="From Local Trust to *Digital Innovation*" as="h2" className="section-title" label="Heading" help={HIGHLIGHT_HELP}>
+            {(v) => highlight(v)}
+          </EditableText>
+          <EditableText cmsKey="about_timeline.subtitle" value="Every milestone reflects our commitment to quality, community, and growth." as="p" className="section-subtitle" label="Intro text" />
         </div>
 
         <div className="timeline-track">
-          {milestones.map((milestone, index) => (
-            <div className="timeline-item" key={index}>
-              <div className="timeline-marker">
-                <div className="timeline-icon"><i className={milestone.icon}></i></div>
-                <div className="timeline-year">{milestone.year}</div>
+          <EditableList
+            cmsKey="about_timeline.milestones"
+            value={milestones}
+            itemLabel="milestone"
+            label="Milestones"
+            fields={[
+              { key: "year", type: "text", label: "Year" },
+              { key: "icon", type: "icon", label: "Icon" },
+              { key: "title", type: "text", label: "Title" },
+              { key: "description", type: "textarea", label: "Description" },
+            ]}
+          >
+            {(milestone, index) => (
+              <div className="timeline-item" key={index}>
+                <div className="timeline-marker">
+                  <div className="timeline-icon"><i className={milestone.icon}></i></div>
+                  <div className="timeline-year">{milestone.year}</div>
+                </div>
+                <div className="timeline-card">
+                  <h3 className="timeline-title">{milestone.title}</h3>
+                  <p className="timeline-description">{milestone.description}</p>
+                </div>
               </div>
-              <div className="timeline-card">
-                <h3 className="timeline-title">{milestone.title}</h3>
-                <p className="timeline-description">{milestone.description}</p>
-              </div>
-            </div>
-          ))}
+            )}
+          </EditableList>
         </div>
       </div>
     </section>

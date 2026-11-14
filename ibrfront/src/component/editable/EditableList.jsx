@@ -1,82 +1,105 @@
-import React, { useState } from "react";
+import React from "react";
 import { useEditMode } from "../../context/EditModeContext";
+import { useCms } from "../../hooks/useCmsContent";
+import { getIn } from "../../services/cmsStore";
+import { inferField } from "./fields";
 import "./editable.css";
+
+// A list of things (services, testimonials, FAQs, team members…) that an
+// admin can add to, remove from, reorder and edit.
+//
+//   <EditableList cmsKey="testimonials.list" value={fallbackList}
+//                 itemLabel="testimonial"
+//                 fields={[{ key: "name", label: "Name" }, { key: "photo", type: "image" }]}>
+//     {(item, i) => <Card key={i} {...item} />}
+//   </EditableList>
+//
+// `fields` is optional — it's worked out from the data if left out.
+// Supports `path` + `root` for lists stored inside a bigger item.
+const plural = (w) => (/(s|x|ch|sh)$/i.test(w) ? `${w}es` : `${w}s`);
 
 const EditableList = ({
   cmsKey,
-  type = "array",
+  path,
+  root,
   value,
   fields,
+  field: givenField,
+  itemLabel = "item",
+  label,
+  help,
+  type, // kept for backwards compatibility
   itemWrapperTag: Wrapper = "div",
-  children, // render prop: (item, index) => JSX
+  wrapperClassName = "",
+  addButtonPosition = "after",
+  children,
 }) => {
-  const { isEditMode, saveField, getOverride } = useEditMode();
-  const items = getOverride(cmsKey, value) || [];
-  const [openIndex, setOpenIndex] = useState(null);
-  const [draft, setDraft] = useState(null);
+  const { isEditMode, openPanel } = useEditMode();
+  const rootValue = useCms(cmsKey, root);
+  const stored = path ? getIn(rootValue, path) : rootValue;
+  const items = Array.isArray(stored) ? stored : Array.isArray(value) ? value : [];
 
   if (!isEditMode) {
     return <>{items.map((item, i) => children(item, i))}</>;
   }
 
-  const openEditor = (idx) => {
-    setDraft({ ...items[idx] });
-    setOpenIndex(idx);
+  const buildField = (initialOpen = null) => {
+    const sampleIsString = items.length > 0 && typeof items[0] !== "object";
+    if (givenField) return { ...givenField, initialOpen };
+    if (sampleIsString || (fields && fields.length === 0)) {
+      return { type: "list", itemLabel, itemField: inferField(items[0] ?? "", itemLabel), label: "" };
+    }
+    const inferred = inferField(items.length ? items : [{}], "");
+    const finalFields = fields
+      ? fields.map((f) => {
+          const sample = items.find((it) => it?.[f.key] !== undefined)?.[f.key];
+          return f.type ? f : { ...inferField(sample ?? "", f.key), ...f };
+        })
+      : inferred.fields || [];
+    return { type: "items", fields: finalFields, itemLabel, initialOpen, label: "" };
   };
 
-  const saveItem = () => {
-    const next = items.map((it, i) => (i === openIndex ? draft : it));
-    saveField(cmsKey, next, type);
-    setOpenIndex(null);
+  const open = (index = null) => (e) => {
+    // Links marked data-cms-nav still navigate while editing (e.g. "View Details").
+    if (e?.target?.closest?.("[data-cms-nav]")) return;
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    openPanel({
+      cmsKey,
+      path,
+      root,
+      value: items,
+      title: label || plural(`${itemLabel.charAt(0).toUpperCase()}${itemLabel.slice(1)}`),
+      help: help || `Add, remove, reorder or change each ${itemLabel}. Use the arrows to change the order.`,
+      field: buildField(index),
+      openedAt: Date.now(),
+    });
   };
 
-  const removeItem = (idx) => {
-    const next = items.filter((_, i) => i !== idx);
-    saveField(cmsKey, next, type);
-  };
-
-  const addItem = () => {
-    const template = Object.fromEntries(fields.map((f) => [f.key, ""]));
-    saveField(cmsKey, [...items, template], type);
-  };
+  const manageBtn = (
+    <button type="button" className="editable-list-manage" onClick={open(null)}>
+      <i className="fa-solid fa-list-check"></i> Manage {plural(itemLabel)} ({items.length})
+      <span className="editable-list-manage-add">
+        <i className="fa-solid fa-plus"></i> Add / remove
+      </span>
+    </button>
+  );
 
   return (
     <>
+      {addButtonPosition === "before" && manageBtn}
       {items.map((item, idx) => (
-        <Wrapper className="editable-list-item-wrap" key={idx}>
+        <Wrapper className={`editable-list-item-wrap ${wrapperClassName}`} key={idx} onClickCapture={open(idx)} title={`Click to edit this ${itemLabel}`}>
           {children(item, idx)}
-          <span className="editable-list-controls">
-            <button type="button" className="editable-list-edit-btn" onClick={() => openEditor(idx)} title="Edit">
-              <i className="fa-solid fa-pen"></i>
-            </button>
-            <button type="button" className="editable-list-remove-btn" onClick={() => removeItem(idx)} title="Remove">
-              ×
-            </button>
+          <span className="editable-list-controls" aria-hidden="true">
+            <i className="fa-solid fa-pen"></i> Edit
           </span>
-
-          {openIndex === idx && draft && (
-            <div className="editable-popover">
-              {fields.map((f) => (
-                <div key={f.key} className="editable-popover-field">
-                  <label>{f.label}</label>
-                  <input
-                    type="text"
-                    value={draft[f.key] ?? ""}
-                    onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })}
-                  />
-                </div>
-              ))}
-              <div className="editable-popover-actions">
-                <button type="button" onClick={() => setOpenIndex(null)}>Cancel</button>
-                <button type="button" className="primary" onClick={saveItem}>Save</button>
-              </div>
-            </div>
-          )}
         </Wrapper>
       ))}
-      <button type="button" className="editable-add-btn" onClick={addItem}>
-        <i className="fa-solid fa-plus"></i> Add item
-      </button>
+      {items.length === 0 && (
+        <div className="editable-list-empty">No {plural(itemLabel)} yet.</div>
+      )}
+      {addButtonPosition !== "before" && manageBtn}
     </>
   );
 };

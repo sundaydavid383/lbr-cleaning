@@ -1,27 +1,40 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./about.css";
-import image1 from "../../assets/about-intro.jpg";
-import bgImage from "../../assets/cleaningbackground.jpg";
 import Hero from "../../component/hero/Hero";
 import AboutTimeline from "../../component/aboutTimeline/AboutTimeline";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
 import { AboutSkeleton } from "../../component/pageSkeleton/PageSkeleton";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
+import EditableImage from "../../component/editable/EditableImage";
+import EditableList from "../../component/editable/EditableList";
+import EditSection from "../../component/editable/EditSection";
+import { RichText, RICH_HELP, toEmbedUrl } from "../../utils/highlight";
+
+const INTRO_KEY = "about_page.intro";
 
 const About = () => {
-  const { value: aboutContent, loading: aboutLoading } = useCmsCategory("about_page", {});
+  const ready = useCmsReady();
   const { isEditMode } = useEditMode();
   const introRef = useRef();
   const teamRef = useRef();
   const valuesRef = useRef();
   const videoRef = useRef();
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+
+  const slides = useCms("about_page.hero_slides", []);
+  const background = useCms("about_page.background_image", "/assets/cleaningbackground.jpg");
+  const intro = useCms(INTRO_KEY, {}) || {};
+  const introImage = useCms("about_page.intro_image", "/assets/about-intro.jpg");
+  const team = useCms("about_page.team", []);
+  const values = useCms("about_page.values", []);
+  const videoUrl = useCms("about_page.video_url", "");
+  const videoParagraphs = useCms("about_page.video_paragraphs", []);
 
   useEffect(() => {
-    if (aboutLoading) return;
+    if (!ready) return;
 
     const sections = [introRef, teamRef, valuesRef, videoRef];
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -45,141 +58,156 @@ const About = () => {
       }
     });
 
-    return () => {
-      sections.forEach((ref) => {
-        if (ref.current) observer.unobserve(ref.current);
-      });
-      observer.disconnect();
-    };
-  }, [aboutLoading]);
+    return () => observer.disconnect();
+  }, [ready]);
 
-  const aboutHeroSection = aboutContent.hero_slides || [];
-  const teamMembers = aboutContent.team || [];
-  const coreValues = aboutContent.values || [];
-  const introText = aboutContent.intro || {};
-
-  if (aboutLoading) {
+  if (!ready) {
     return <AboutSkeleton />;
   }
 
-  if (!aboutContent) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>No content available. Please configure the CMS.</p>
-      </div>
-    );
-  }
+  const teamMembers = Array.isArray(team) ? team : [];
+  const coreValues = Array.isArray(values) ? values : [];
+  const introParas = Array.isArray(intro.paragraphs) ? intro.paragraphs : [];
+  const videoParas = Array.isArray(videoParagraphs) ? videoParagraphs : [];
+  const embed = toEmbedUrl(videoUrl);
 
   return (
     <main className="about-page">
-      {aboutHeroSection.length > 0 && (
-        <Hero section={aboutHeroSection} features={[]} backgroundImage={bgImage} />
-      )}
+      <Hero
+        section={Array.isArray(slides) ? slides : []}
+        features={[]}
+        backgroundImage={background}
+        slidesKey="about_page.hero_slides"
+        backgroundKey="about_page.background_image"
+      />
 
-      {introText && (
-        <section className="intro-section observe" ref={introRef}>
-          <div className="intro-wrapper">
-            <div className="intro-content">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="about_page.intro.heading" type="text" value={introText.heading} as="h2" />
-                  {(introText.paragraphs || []).map((para, idx) => (
-                    <EditableText
-                      key={idx}
-                      cmsKey={`about_page.intro.paragraphs.${idx}`}
-                      type="text"
-                      value={para}
-                      as="p"
-                    />
-                  ))}
-                </>
-              ) : (
-                <>
-                  <h2>{introText.heading}</h2>
-                  {introText.paragraphs?.map((para, idx) => (
-                    <p key={idx}>{para}</p>
-                  ))}
-                </>
-              )}
-            </div>
-            <div className="intro-image">
-              <img src={image1} alt="About LBR Cleaning" />
-            </div>
+      <section className="intro-section observe" ref={introRef}>
+        <div className="intro-wrapper">
+          <div className="intro-content">
+            <EditableText cmsKey={INTRO_KEY} root={intro} path="heading" value={intro.heading} as="h2" label="Heading" />
+            <EditableList
+              cmsKey={INTRO_KEY}
+              root={intro}
+              path="paragraphs"
+              value={introParas}
+              itemLabel="paragraph"
+              label="Paragraphs"
+              help={RICH_HELP}
+              field={{ type: "list", itemLabel: "paragraph", itemField: { type: "textarea" }, label: "" }}
+            >
+              {(para, idx) => <RichText key={idx} text={para} as="p" />}
+            </EditableList>
           </div>
-        </section>
-      )}
+          <div className="intro-image">
+            <EditableImage cmsKey="about_page.intro_image" value={introImage} alt="About us" label="Intro picture" />
+          </div>
+        </div>
+      </section>
 
-      {teamMembers.length > 0 && (
+      {(teamMembers.length > 0 || isEditMode) && (
         <section className="team-section observe" ref={teamRef}>
-          {isEditMode ? (
-            <EditableText cmsKey="about_page.team_heading" type="text" value="Meet Our Dedicated Team" as="h2" />
-          ) : (
-            <h2>Meet Our Dedicated Team</h2>
-          )}
+          <EditableText cmsKey="about_page.team_heading" value="Meet Our Dedicated Team" as="h2" label="Team heading" />
           <div className="team-grid">
-            {teamMembers.map((member, idx) => (
-              <div key={idx} className="team-card">
-                <img src={member.image} alt={member.name} />
-                <h3>{member.name}</h3>
-                <p>{member.role}</p>
-              </div>
-            ))}
+            <EditableList
+              cmsKey="about_page.team"
+              value={teamMembers}
+              itemLabel="team member"
+              label="Team members"
+              fields={[
+                { key: "name", type: "text", label: "Name" },
+                { key: "role", type: "text", label: "Job title" },
+                { key: "image", type: "image", label: "Photo" },
+              ]}
+            >
+              {(member, idx) => (
+                <div key={idx} className="team-card">
+                  {member.image && <img src={member.image} alt={member.name} />}
+                  <h3>{member.name}</h3>
+                  <p>{member.role}</p>
+                </div>
+              )}
+            </EditableList>
           </div>
         </section>
       )}
 
       <section className="video-info-section observe" ref={videoRef}>
         <div className="video-info-wrapper">
-          <div className="video-container">
-            <iframe
-              src={aboutContent.video_url}
-              title="LBR Cleaning Intro"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            ></iframe>
-          </div>
-          <div className="info-text">
-            {isEditMode ? (
+          <div className="video-container" style={{ position: "relative" }}>
+            <EditSection
+              cmsKey="about_page.video_url"
+              root=""
+              label="video"
+              icon="fa-video"
+              help="Paste a YouTube or Vimeo link — a normal link from your browser's address bar works."
+              field={{ type: "url", label: "Video link", placeholder: "https://www.youtube.com/watch?v=…" }}
+            />
+            {embed ? (
               <>
-                <EditableText cmsKey="about_page.video_heading" type="text" value={aboutContent.video_heading} as="h2" />
-                {(aboutContent.video_paragraphs || []).map((para, idx) => (
-                  <EditableText
-                    key={idx}
-                    cmsKey={`about_page.video_paragraphs.${idx}`}
-                    type="text"
-                    value={para}
-                    as="p"
-                  />
-                ))}
+                {isVideoLoading && (
+                  <div className="video-loader-overlay">
+                    <div className="spinner"></div>
+                    <p>Loading video...</p>
+                  </div>
+                )}
+                <iframe
+                  src={embed}
+                  title="Company video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                  onLoad={() => setIsVideoLoading(false)}
+                  style={{
+                    opacity: isVideoLoading ? 0 : 1,
+                    transition: "opacity 0.3s ease-in-out",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                ></iframe>
               </>
             ) : (
-              <>
-                <h2>{aboutContent.video_heading}</h2>
-                {aboutContent.video_paragraphs?.map((para, idx) => (
-                  <p key={idx} dangerouslySetInnerHTML={{ __html: para }} />
-                ))}
-              </>
+              isEditMode && <p style={{ padding: "2rem", textAlign: "center" }}>No video yet.</p>
             )}
+          </div>
+          <div className="info-text">
+            <EditableText cmsKey="about_page.video_heading" value="Why Choose LBR Cleaning?" as="h2" label="Heading" />
+            <EditableList
+              cmsKey="about_page.video_paragraphs"
+              value={videoParas}
+              itemLabel="paragraph"
+              label="Paragraphs"
+              help={RICH_HELP}
+              field={{ type: "list", itemLabel: "paragraph", itemField: { type: "textarea" }, label: "" }}
+            >
+              {(para, idx) => <RichText key={idx} text={para} as="p" />}
+            </EditableList>
           </div>
         </div>
       </section>
 
-      {coreValues.length > 0 && (
+      {(coreValues.length > 0 || isEditMode) && (
         <section className="core-values-section observe" ref={valuesRef}>
-          {isEditMode ? (
-            <EditableText cmsKey="about_page.values_heading" type="text" value="Our Core Values" as="h2" />
-          ) : (
-            <h2>Our Core Values</h2>
-          )}
+          <EditableText cmsKey="about_page.values_heading" value="Our Core Values" as="h2" label="Values heading" />
           <div className="values-grid">
-            {coreValues.map((value, idx) => (
-              <div key={idx} className="value-card">
-                <i className={value.icon}></i>
-                <h3>{value.title}</h3>
-                <p>{value.description}</p>
-              </div>
-            ))}
+            <EditableList
+              cmsKey="about_page.values"
+              value={coreValues}
+              itemLabel="value"
+              label="Core values"
+              fields={[
+                { key: "icon", type: "icon", label: "Icon" },
+                { key: "title", type: "text", label: "Title" },
+                { key: "description", type: "textarea", label: "Description" },
+              ]}
+            >
+              {(value, idx) => (
+                <div key={idx} className="value-card">
+                  <i className={value.icon}></i>
+                  <h3>{value.title}</h3>
+                  <p>{value.description}</p>
+                </div>
+              )}
+            </EditableList>
           </div>
         </section>
       )}

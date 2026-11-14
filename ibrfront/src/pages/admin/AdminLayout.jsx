@@ -23,7 +23,7 @@ const AdminLayout = () => {
         <nav className="admin-nav">
           <Link to="/admin/cms" className={`admin-nav-link ${location.pathname.startsWith("/admin/cms") ? "active" : ""}`}>Content Library</Link>
           <Link to="/admin/cms/batch" className={`admin-nav-link ${location.pathname === "/admin/cms/batch" ? "active" : ""}`}>Batch Editor</Link>
-          <Link to="/admin/edit/home" className={`admin-nav-link ${location.pathname.startsWith("/admin/edit") ? "active" : ""}`}>Visual Editor</Link>
+          <Link to="/admin/edit/home" className="admin-nav-link admin-nav-primary">✏️ Edit Website</Link>
           <Link to="/admin/message" className={`admin-nav-link ${location.pathname === "/admin/message" ? "active" : ""}`}>Messages</Link>
           <Link to="/admin/create-admin" className="admin-nav-link">Create Admin</Link>
         </nav>

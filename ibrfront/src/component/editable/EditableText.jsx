@@ -1,97 +1,78 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useEditMode } from "../../context/EditModeContext";
+import { useCms } from "../../hooks/useCmsContent";
+import { getIn } from "../../services/cmsStore";
 import "./editable.css";
 
-const EditableText = ({ cmsKey, type = "text", as: Tag = "span", value, className = "" }) => {
-  const { isEditMode, saveField, getOverride } = useEditMode();
-  const displayValue = getOverride(cmsKey, value);
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(displayValue);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const textareaRef = useRef(null);
+// Text that an admin can click to change.
+//
+//   <EditableText cmsKey="about.heading" value="About us" as="h2" />
+//   <EditableText cmsKey="about_page.intro" path="paragraphs.0" root={intro} value={intro.paragraphs[0]} as="p" />
+//
+// - cmsKey: content item. path: optional field inside it (with `root` as
+//   the whole item's default value, used if it isn't saved yet).
+// - value: what to show when nothing is saved yet.
+// - multiline: use a big text box (auto-detected for long text).
+// - label/help: shown in the edit panel.
+const EditableText = ({
+  cmsKey,
+  path,
+  root,
+  value,
+  type, // kept for backwards compatibility
+  as: Tag = "span",
+  className = "",
+  multiline,
+  label,
+  help,
+  placeholder = "Click to add text",
+  children,
+  ...rest
+}) => {
+  const { isEditMode, openPanel } = useEditMode();
+  const rootValue = useCms(cmsKey, root);
+  const stored = path ? getIn(rootValue, path) : rootValue;
+  const display = stored !== undefined && stored !== null && typeof stored !== "object" ? stored : value;
 
   if (!isEditMode) {
-    return <Tag className={className}>{displayValue}</Tag>;
-  }
-
-  const open = () => {
-    setDraft(displayValue);
-    setEditing(true);
-    setError("");
-    setTimeout(() => textareaRef.current?.focus(), 50);
-  };
-
-  const cancel = () => {
-    setEditing(false);
-    setError("");
-  };
-
-  const save = async () => {
-    const clean = draft.trim();
-    if (clean === displayValue) {
-      cancel();
-      return;
-    }
-
-    setSaving(true);
-    setError("");
-    try {
-      const saved = await saveField(cmsKey, clean, type);
-      console.log(`[EDIT-MODE] EditableText save result for ${cmsKey}:`, saved, { newValue: clean, oldValue: displayValue });
-      if (saved) {
-        setEditing(false);
-        setTimeout(() => window.location.reload(), 1000);
-      } else {
-        setError("Could not save. Check the browser console for details, then click Refresh.");
-      }
-    } catch (err) {
-      console.error("[EDIT-MODE] EditableText save error:", err);
-      setError("Save failed. Check the browser console for details.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (editing) {
+    if (children) return <Tag className={className} {...rest}>{children(display)}</Tag>;
     return (
-      <span className={`editable-popover-wrap ${className}`}>
-        <textarea
-          ref={textareaRef}
-          className="editable-popover-input"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              save();
-            }
-            if (e.key === "Escape") {
-              cancel();
-            }
-          }}
-          rows={3}
-        />
-        {error && <span className="editable-error">{error}</span>}
-        <div className="editable-popover-actions">
-          <button type="button" className="editable-popover-btn cancel" onClick={cancel} disabled={saving}>
-            Cancel
-          </button>
-          <button type="button" className="editable-popover-btn primary" onClick={save} disabled={saving}>
-            {saving ? "Saving..." : "Save"}
-          </button>
-        </div>
-      </span>
+      <Tag className={className} {...rest}>
+        {display}
+      </Tag>
     );
   }
 
+  const isLong = multiline ?? (type === "rich_text" || String(display ?? "").length > 70);
+
+  const open = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openPanel({
+      cmsKey,
+      path,
+      root,
+      value: display ?? "",
+      title: label,
+      help,
+      field: { type: isLong ? "textarea" : "text", label: label || "Text" },
+      openedAt: Date.now(),
+    });
+  };
+
+  const empty = display === undefined || display === null || String(display).trim() === "";
+
   return (
     <Tag
-      className={`editable-field ${className}`}
-      onClick={open}
+      className={`${className} editable-field ${empty ? "editable-empty" : ""}`.trim()}
+      onClickCapture={open}
       title="Click to edit"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => (e.key === "Enter" ? open(e) : undefined)}
+      {...rest}
     >
-      {displayValue}
+      {empty ? <span className="editable-placeholder">{placeholder}</span> : children ? children(display) : display}
       <span className="editable-pencil" aria-hidden="true">
         <i className="fa-solid fa-pen"></i>
       </span>

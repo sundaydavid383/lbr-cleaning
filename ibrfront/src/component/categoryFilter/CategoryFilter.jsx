@@ -1,8 +1,12 @@
 // filepath: ibrfront/src/component/categoryFilter/CategoryFilter.jsx
 import React, { useState, useRef, useEffect } from "react";
 import "./categoryFilter.css";
+import Txt from "../editable/Txt";
+import { useCms } from "../../hooks/useCmsContent";
 
 const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
+  const allLabel = useCms("blog.filter_all", "All");
+  const label = (cat) => (cat === "All" ? allLabel : cat);
   const [expanded, setExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -39,7 +43,7 @@ const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
               className={`category-btn ${activeCategory === cat ? "active" : ""}`}
               onClick={() => onSelect(cat)}
             >
-              {cat}
+              {label(cat)}
             </button>
           ))}
 
@@ -51,7 +55,7 @@ const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
                 aria-expanded={dropdownOpen}
                 aria-haspopup="true"
               >
-                More <i className={`fa-solid fa-chevron-down category-chevron ${dropdownOpen ? "open" : ""}`} />
+                <Txt k="blog.filter_more" d="More" label="'More' button" /> <i className={`fa-solid fa-chevron-down category-chevron ${dropdownOpen ? "open" : ""}`} />
               </button>
 
               {dropdownOpen && (
@@ -65,7 +69,7 @@ const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
                         setDropdownOpen(false);
                       }}
                     >
-                      {cat}
+                      {label(cat)}
                     </button>
                   ))}
                 </div>
@@ -78,7 +82,7 @@ const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
               className="category-btn category-expand-btn"
               onClick={() => setExpanded(true)}
             >
-              View All <i className="fa-solid fa-chevron-down" />
+              <Txt k="blog.filter_view_all" d="View All" label="'View All' button" /> <i className="fa-solid fa-chevron-down" />
             </button>
           )}
 
@@ -101,7 +105,7 @@ const CategoryFilter = ({ categories = [], activeCategory, onSelect }) => {
               className={`category-btn ${activeCategory === cat ? "active" : ""}`}
               onClick={() => onSelect(cat)}
             >
-              {cat}
+              {label(cat)}
             </button>
           ))}
         </div>

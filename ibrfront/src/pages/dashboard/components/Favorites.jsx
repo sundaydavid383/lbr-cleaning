@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./favorites.css";
+import Txt from "../../../component/editable/Txt";
 
 const Favorites = () => {
   const favorites = [
@@ -40,9 +41,9 @@ const Favorites = () => {
         <div className="dashboard-card">
           <div className="dashboard-empty">
             <i className="fa-regular fa-heart" />
-            <h3>No favorites yet</h3>
-            <p>Save your favorite services for quick rebooking.</p>
-            <Link to="/service" className="dashboard-btn dashboard-btn-primary">Browse Services</Link>
+            <h3><Txt k="dashboard.favorites.no_favorites_yet" d={"No favorites yet"} /></h3>
+            <p><Txt k="dashboard.favorites.save_your_favorite_services_for_quick_re" d={"Save your favorite services for quick rebooking."} /></p>
+            <Link to="/service" className="dashboard-btn dashboard-btn-primary"><Txt k="dashboard.favorites.browse_services" d={"Browse Services"} /></Link>
           </div>
         </div>
       )}

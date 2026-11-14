@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import "./dashboardHeader.css";
+import Txt from "../../../component/editable/Txt";
 
 const DashboardHeader = ({ onToggleSidebar }) => {
   const location = useLocation();
@@ -34,8 +35,8 @@ const DashboardHeader = ({ onToggleSidebar }) => {
           <i className="fa-solid fa-bars" />
         </button>
         <div>
-          <h1>{getPageTitle()}</h1>
-          <p>Welcome back, {user?.name?.split(" ")[0] || "there"}</p>
+          <h1><Txt k={`dashboard.title.${getPageTitle().toLowerCase().replace(/\s+/g, "_")}`} d={getPageTitle()} label="Page title" /></h1>
+          <p><Txt k="dashboard.welcome" d="Welcome back," label="Welcome text" /> {user?.name?.split(" ")[0] || "there"}</p>
         </div>
       </div>
       <div className="dashboard-header-actions">
@@ -47,7 +48,7 @@ const DashboardHeader = ({ onToggleSidebar }) => {
           {notifOpen && (
             <div className="dashboard-notif-dropdown">
               <div className="dashboard-notif-header">
-                <h4>Notifications</h4>
+                <h4><Txt k="dashboard.dashboardheader.notifications" d={"Notifications"} /></h4>
                 <span className="dashboard-notif-count">{notifications.filter(n => n.unread).length} new</span>
               </div>
               {notifications.map((notif) => (
@@ -60,7 +61,7 @@ const DashboardHeader = ({ onToggleSidebar }) => {
           )}
         </div>
         <Link to="/apply" className="dashboard-btn dashboard-btn-primary dashboard-btn-sm">
-          <i className="fa-solid fa-plus" /> New Booking
+          <i className="fa-solid fa-plus" /> <Txt k="dashboard.new_booking" d="New Booking" label="New booking button" />
         </Link>
       </div>
     </header>

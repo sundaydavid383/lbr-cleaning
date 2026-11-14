@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useUserGuide } from "../../context/UserGuideContext";
 import "./userGuide.css";
+import { useEditMode } from "../../context/EditModeContext";
 
 const UserGuideOverlay = () => {
   const {
@@ -15,6 +16,7 @@ const UserGuideOverlay = () => {
     skip,
     restart,
   } = useUserGuide();
+  const { isEditMode } = useEditMode();
   const [targetRect, setTargetRect] = useState(null);
   const [tooltipPos, setTooltipPos] = useState(null);
   const [targetExists, setTargetExists] = useState(false);
@@ -133,7 +135,8 @@ const UserGuideOverlay = () => {
     }
   }, [active]);
 
-  if (!active || !currentStep || !targetExists) return null;
+  // The tour would cover the page while an admin is editing.
+  if (isEditMode || !active || !currentStep || !targetExists) return null;
 
   const tooltipStyle = tooltipPos
     ? { top: tooltipPos.top, left: tooltipPos.left }

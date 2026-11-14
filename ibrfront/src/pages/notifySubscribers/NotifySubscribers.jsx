@@ -3,6 +3,7 @@ import axios from "axios";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
 import "./notifySubscribers.css";
+import { apiUrl } from "../../utils/apiUrl";
 
 const NotifySubscribers = () => {
   const [message, setMessage] = useState("");

@@ -1,6 +1,7 @@
 import React from "react";
 import "./notFoundPage.css";
 import { Link } from "react-router-dom";
+import Txt from "../../component/editable/Txt";
 
 const NotFoundPage = () => {
   const popularLinks = [
@@ -21,26 +22,23 @@ const NotFoundPage = () => {
           </div>
         </div>
 
-        <h1>Page Not Found</h1>
-        <p className="notfound-message">
-          The page you're looking for doesn't exist or may have been moved.
-          Let's get you back to a clean, working page.
-        </p>
+        <h1><Txt k="notfound.page_not_found" d={"Page Not Found"} /></h1>
+        <Txt k="notfound.message" d="The page you're looking for doesn't exist or may have been moved. Let's get you back to a clean, working page." as="p" className="notfound-message" label="Message" />
 
         <div className="notfound-suggestions">
-          <h3>You might be looking for:</h3>
+          <h3><Txt k="notfound.you_might_be_looking_for" d={"You might be looking for:"} /></h3>
           <div className="suggestion-links">
             {popularLinks.map((link) => (
               <Link key={link.to} to={link.to} className="suggestion-link">
                 <i className="fa-solid fa-arrow-right"></i>
-                {link.label}
+                <Txt k={`notfound.link_${link.to.replace(/\W/g, "") || "home"}`} d={link.label} label="Link text" />
               </Link>
             ))}
           </div>
         </div>
 
         <Link to="/" className="back-home-btn">
-          <i className="fa-solid fa-house"></i> Go Back Home
+          <i className="fa-solid fa-house"></i> <Txt k="notfound.button" d="Go Back Home" label="Button" />
         </Link>
       </div>
     </div>

@@ -5,6 +5,22 @@ import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import { apiUrl } from "../../utils/api";
 import EditableText from "../../component/editable/EditableText";
+import Txt from "../../component/editable/Txt";
+import AuthInfoExtras from "./AuthInfoExtras";
+import { useCms } from "../../hooks/useCmsContent";
+import EditZone from "../../component/editable/EditZone";
+import EditSection from "../../component/editable/EditSection";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
+
+const SIGNUP_HINTS = {
+  name: "e.g. Chidinma Okafor",
+  email: "you@example.com",
+  phone: "+234 801 234 5678",
+  city: "Type or select area (e.g. Lekki, Ikeja...)",
+  address: "e.g. 15 Admiralty Way, Lekki Phase 1",
+  password: "Min. 6 characters",
+  confirmPassword: "Re-enter your password",
+};
 
 // ───────────────────────────────────────────────
 // Put your Geoapify API key here later
@@ -88,6 +104,8 @@ function useDebounce(value, delay = 400) {
 }
 
 const Signup = () => {
+  const site = useSiteSettings();
+  const hints = { ...SIGNUP_HINTS, ...(useCms("signup.placeholders", {}) || {}) };
   const navigate = useNavigate();
   const { signup } = useAuth();
   const fileInputRef = useRef(null);
@@ -112,6 +130,8 @@ const Signup = () => {
 
   // Autocomplete state
   const [citySuggestions, setCitySuggestions] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [cityLoading, setCityLoading] = useState(false);
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [showAddressDropdown, setShowAddressDropdown] = useState(false);
@@ -338,39 +358,23 @@ const Signup = () => {
         <div className="auth-card auth-card--wide">
           <div className="auth-header">
             <Link to="/" className="auth-logo">
-              <img src="/house-cleaning.png" alt="LBR Cleaning" />
+<EditZone as="span" site badge="Logo">
+                <img src={site.logo} alt={site.name} />
+              </EditZone>
             </Link>
             <div className="auth-badge-row">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="signup.badge" type="text" value="New Account" as="span" className="auth-badge" />
-                  <EditableText cmsKey="signup.badge_count" type="text" value="Step 1 of 1" as="span" className="auth-badge-count" />
-                </>
-              ) : (
-                <>
-                  <span className="auth-badge">New Account</span>
-                  <span className="auth-badge-count">Step 1 of 1</span>
-                </>
-              )}
+              <>
+                <EditableText cmsKey="signup.badge" type="text" value="New Account" as="span" className="auth-badge" />
+                <EditableText cmsKey="signup.badge_count" type="text" value="Step 1 of 1" as="span" className="auth-badge-count" />
+              </>
             </div>
-            {isEditMode ? (
-              <EditableText cmsKey="signup.heading" type="text" value="Create Your Account" as="h1" />
-            ) : (
-              <h1>Create Your Account</h1>
-            )}
-            {isEditMode ? (
-              <EditableText
-                cmsKey="signup.subtitle"
-                type="text"
-                value="Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience."
-                as="p"
-              />
-            ) : (
-              <p>
-                Join <strong>2,500+</strong> happy customers across Lagos. Tell us a bit about yourself so we
-                can personalize your cleaning experience.
-              </p>
-            )}
+            <EditableText cmsKey="signup.heading" type="text" value="Create Your Account" as="h1" />
+            <EditableText
+              cmsKey="signup.subtitle"
+              type="text"
+              value="Join 2,500+ happy customers across Lagos. Tell us a bit about yourself so we can personalize your cleaning experience."
+              as="p"
+            />
           </div>
 
           {error && (
@@ -380,20 +384,21 @@ const Signup = () => {
             </div>
           )}
 
+          <EditSection
+            cmsKey="signup.placeholders"
+            root={SIGNUP_HINTS}
+            label="box hints"
+            icon="fa-keyboard"
+            help="The grey hint text shown inside each empty box."
+            fields={Object.keys(SIGNUP_HINTS).map((key) => ({ key, type: "text", label: `${key.replace(/([A-Z])/g, " $1")} box` }))}
+          />
           <form onSubmit={handleSubmit} className="auth-form auth-form--grid">
             {/* ===== Profile Picture ===== */}
             <div className="auth-section-title">
-              {isEditMode ? (
-                <>
-                  <i className="fa-solid fa-camera"></i>
-                  <EditableText cmsKey="signup.avatar_section" type="text" value="Profile Picture" as="span" />
-                </>
-              ) : (
-                <>
-                  <i className="fa-solid fa-camera"></i>
-                  <span>Profile Picture</span>
-                </>
-              )}
+              <>
+                <i className="fa-solid fa-camera"></i>
+                <EditableText cmsKey="signup.avatar_section" type="text" value="Profile Picture" as="span" />
+              </>
             </div>
 
             <div className="auth-avatar-upload">
@@ -403,7 +408,7 @@ const Signup = () => {
                 ) : (
                   <div className="auth-avatar-placeholder">
                     <i className="fa-solid fa-camera"></i>
-                    <span>Upload Photo</span>
+                    <Txt k="signup.upload_photo" d="Upload Photo" label="Upload button" />
                   </div>
                 )}
                 <div className="auth-avatar-overlay">
@@ -411,17 +416,10 @@ const Signup = () => {
                 </div>
               </div>
               <div className="auth-avatar-info">
-                {isEditMode ? (
-                  <>
-                    <EditableText cmsKey="signup.avatar_label" type="text" value="Add a profile picture" as="p" className="auth-avatar-label" />
-                    <EditableText cmsKey="signup.avatar_hint" type="text" value="JPG, PNG or GIF. Max 5MB." as="p" className="auth-avatar-hint" />
-                  </>
-                ) : (
-                  <>
-                    <p className="auth-avatar-label">Add a profile picture</p>
-                    <p className="auth-avatar-hint">JPG, PNG or GIF. Max 5MB.</p>
-                  </>
-                )}
+                <>
+                  <EditableText cmsKey="signup.avatar_label" type="text" value="Add a profile picture" as="p" className="auth-avatar-label" />
+                  <EditableText cmsKey="signup.avatar_hint" type="text" value="JPG, PNG or GIF. Max 5MB." as="p" className="auth-avatar-hint" />
+                </>
               </div>
               <input
                 ref={fileInputRef}
@@ -434,21 +432,14 @@ const Signup = () => {
 
             {/* ===== Personal Information ===== */}
             <div className="auth-section-title">
-              {isEditMode ? (
-                <>
-                  <i className="fa-solid fa-user"></i>
-                  <EditableText cmsKey="signup.personal_section" type="text" value="Personal Information" as="span" />
-                </>
-              ) : (
-                <>
-                  <i className="fa-solid fa-user"></i>
-                  <span>Personal Information</span>
-                </>
-              )}
+              <>
+                <i className="fa-solid fa-user"></i>
+                <EditableText cmsKey="signup.personal_section" type="text" value="Personal Information" as="span" />
+              </>
             </div>
 
             <div className={inputClass("name")}>
-              <label htmlFor="name">Full Name *</label>
+              <label htmlFor="name"><Txt k="signup.label_name" d="Full Name *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-user"></i>
                 <input
@@ -458,14 +449,14 @@ const Signup = () => {
                   onChange={update("name")}
                   onFocus={() => setFocusedField("name")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="e.g. Chidinma Okafor"
+                  placeholder={hints.name}
                   required
                 />
               </div>
             </div>
 
             <div className={inputClass("email")}>
-              <label htmlFor="email">Email Address *</label>
+              <label htmlFor="email"><Txt k="signup.label_email" d="Email Address *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-envelope"></i>
                 <input
@@ -475,14 +466,14 @@ const Signup = () => {
                   onChange={update("email")}
                   onFocus={() => setFocusedField("email")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="you@example.com"
+                  placeholder={hints.email}
                   required
                 />
               </div>
             </div>
 
             <div className={inputClass("phone")}>
-              <label htmlFor="phone">Phone Number *</label>
+              <label htmlFor="phone"><Txt k="signup.label_phone" d="Phone Number *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-phone"></i>
                 <input
@@ -492,7 +483,7 @@ const Signup = () => {
                   onChange={update("phone")}
                   onFocus={() => setFocusedField("phone")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="+234 801 234 5678"
+                  placeholder={hints.phone}
                   required
                 />
               </div>
@@ -500,22 +491,15 @@ const Signup = () => {
 
             {/* ===== Location Details ===== */}
             <div className="auth-section-title">
-              {isEditMode ? (
-                <>
-                  <i className="fa-solid fa-location-dot"></i>
-                  <EditableText cmsKey="signup.location_section" type="text" value="Location Details" as="span" />
-                </>
-              ) : (
-                <>
-                  <i className="fa-solid fa-location-dot"></i>
-                  <span>Location Details</span>
-                </>
-              )}
+              <>
+                <i className="fa-solid fa-location-dot"></i>
+                <EditableText cmsKey="signup.location_section" type="text" value="Location Details" as="span" />
+              </>
             </div>
 
             {/* CITY / AREA - Searchable dropdown (local list) */}
             <div className={inputClass("city")} style={{ position: "relative" }}>
-              <label htmlFor="city">City / Area *</label>
+              <label htmlFor="city"><Txt k="signup.label_city" d="City / Area *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-map-pin"></i>
                 <input
@@ -536,7 +520,7 @@ const Signup = () => {
                       setShowCityDropdown(false);
                     }, 200);
                   }}
-                  placeholder="Type or select area (e.g. Lekki, Ikeja...)"
+                  placeholder={hints.city}
                   autoComplete="off"
                   required
                 />
@@ -572,7 +556,7 @@ const Signup = () => {
 
             {/* FULL ADDRESS - Autocomplete */}
             <div className={inputClass("address")} style={{ position: "relative" }}>
-              <label htmlFor="address">Full Address *</label>
+              <label htmlFor="address"><Txt k="signup.label_address" d="Full Address *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-house"></i>
                 <input
@@ -590,7 +574,7 @@ const Signup = () => {
                       setShowAddressDropdown(false);
                     }, 200);
                   }}
-                  placeholder="e.g. 15 Admiralty Way, Lekki Phase 1"
+                  placeholder={hints.address}
                   autoComplete="off"
                   required
                 />
@@ -626,7 +610,7 @@ const Signup = () => {
             </div>
 
             <div className={inputClass("referralSource")}>
-              <label htmlFor="referralSource">How Did You Hear About Us?</label>
+              <label htmlFor="referralSource"><Txt k="signup.label_referralSource" d="How Did You Hear About Us?" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-share-nodes"></i>
                 <select
@@ -648,21 +632,14 @@ const Signup = () => {
 
             {/* ===== Security ===== */}
             <div className="auth-section-title">
-              {isEditMode ? (
-                <>
-                  <i className="fa-solid fa-lock"></i>
-                  <EditableText cmsKey="signup.security_section" type="text" value="Security" as="span" />
-                </>
-              ) : (
-                <>
-                  <i className="fa-solid fa-lock"></i>
-                  <span>Security</span>
-                </>
-              )}
+              <>
+                <i className="fa-solid fa-lock"></i>
+                <EditableText cmsKey="signup.security_section" type="text" value="Security" as="span" />
+              </>
             </div>
 
             <div className={inputClass("password")}>
-              <label htmlFor="password">Password *</label>
+              <label htmlFor="password"><Txt k="signup.label_password" d="Password *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-key"></i>
                 <input
@@ -672,7 +649,7 @@ const Signup = () => {
                   onChange={update("password")}
                   onFocus={() => setFocusedField("password")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Min. 6 characters"
+                  placeholder={hints.password}
                   required
                 />
               </div>
@@ -684,7 +661,7 @@ const Signup = () => {
             </div>
 
             <div className={inputClass("confirmPassword")}>
-              <label htmlFor="confirmPassword">Confirm Password *</label>
+              <label htmlFor="confirmPassword"><Txt k="signup.label_confirmPassword" d="Confirm Password *" label="Box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-shield-halved"></i>
                 <input
@@ -694,7 +671,7 @@ const Signup = () => {
                   onChange={update("confirmPassword")}
                   onFocus={() => setFocusedField("confirmPassword")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Re-enter your password"
+                  placeholder={hints.confirmPassword}
                   required
                 />
               </div>
@@ -708,20 +685,19 @@ const Signup = () => {
                 </span>
               ) : (
                 <span>
-                  Create Account <i className="fa-solid fa-arrow-right"></i>
+                  <Txt k="signup.button" d="Create Account" label="Sign up button" /> <i className="fa-solid fa-arrow-right"></i>
                 </span>
               )}
             </button>
           </form>
 
           <div className="auth-footer">
-            {isEditMode ? (
-              <EditableText cmsKey="signup.footer" type="text" value="Already have an account? Sign In" as="p" />
-            ) : (
-              <p>
-                Already have an account? <Link to="/login" className="auth-link">Sign In</Link>
-              </p>
-            )}
+            <p>
+              <EditableText cmsKey="signup.footer_text" value="Already have an account?" label="Footer text" />{" "}
+              <Link to="/login" className="auth-link">
+                <EditableText cmsKey="signup.footer_link" value="Sign In" label="Footer link text" />
+              </Link>
+            </p>
           </div>
         </div>
 
@@ -729,99 +705,26 @@ const Signup = () => {
         <div className="auth-info">
           {/* ... keep your existing auth-info content exactly as it was ... */}
           <div className="auth-info-inner">
-            {isEditMode ? (
-              <EditableText cmsKey="signup.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
-            ) : (
-              <span className="auth-info-badge">Trusted by 2,500+ customers</span>
-            )}
-            {isEditMode ? (
-              <EditableText cmsKey="signup.info_heading" type="text" value="Your Spotless Space Is Just a Few Clicks Away" as="h2" />
-            ) : (
-              <h2>Your Spotless Space Is Just a Few Clicks Away</h2>
-            )}
-            {isEditMode ? (
-              <EditableText
-                cmsKey="signup.info_text"
-                type="text"
-                value="LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business."
-                as="p"
-              />
-            ) : (
-              <p>
-                LBR Cleaning is Lagos&apos; most trusted professional cleaning company. From Victoria Island
-                to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or
-                business.
-              </p>
-            )}
+            <EditableText cmsKey="signup.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
+            <EditableText cmsKey="signup.info_heading" type="text" value="Your Spotless Space Is Just a Few Clicks Away" as="h2" />
+            <EditableText
+              cmsKey="signup.info_text"
+              type="text"
+              value="LBR Cleaning is Lagos' most trusted professional cleaning company. From Victoria Island to Lekki, we deliver premium, eco-friendly cleaning services tailored to your home or business."
+              as="p"
+            />
 
-            <div className="auth-stats">
-              <div className="auth-stat">
-                <span className="auth-stat-number">8+</span>
-                <span className="auth-stat-label">Years Experience</span>
-              </div>
-              <div className="auth-stat">
-                <span className="auth-stat-number">15K+</span>
-                <span className="auth-stat-label">Projects Done</span>
-              </div>
-              <div className="auth-stat">
-                <span className="auth-stat-number">4.9</span>
-                <span className="auth-stat-label">Client Rating</span>
-              </div>
-            </div>
-
-            <div className="auth-features">
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-bolt"></i>
-                </div>
-                <div>
-                  <strong>Book in 60 Seconds</strong>
-                  <p>Streamlined scheduling that fits your busy lifestyle</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-leaf"></i>
-                </div>
-                <div>
-                  <strong>Eco-Friendly Products</strong>
-                  <p>Non-toxic, family-safe cleaning solutions</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-shield-halved"></i>
-                </div>
-                <div>
-                  <strong>100% Satisfaction</strong>
-                  <p>Not happy? We re-clean for free within 24 hours</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-clock"></i>
-                </div>
-                <div>
-                  <strong>Flexible Scheduling</strong>
-                  <p>Weekly, bi-weekly, or one-time cleans</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="auth-testimonial">
-              <div className="auth-testimonial-stars">
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-              </div>
-              <p className="auth-testimonial-text">
-                &ldquo;LBR Cleaning transformed my apartment in Lekki. The team was punctual,
-                professional, and the results were outstanding.&rdquo;
-              </p>
-              <p className="auth-testimonial-author">— Funke Adeyemi, Victoria Island</p>
-            </div>
+            <AuthInfoExtras
+              prefix="signup"
+              defaultFeatures={[
+                { icon: "fa-solid fa-bolt", title: "Book in 60 Seconds", text: "Streamlined scheduling that fits your busy lifestyle" },
+                { icon: "fa-solid fa-leaf", title: "Eco-Friendly Products", text: "Non-toxic, family-safe cleaning solutions" },
+                { icon: "fa-solid fa-shield-halved", title: "100% Satisfaction", text: "Not happy? We re-clean for free within 24 hours" },
+                { icon: "fa-solid fa-clock", title: "Flexible Scheduling", text: "Weekly, bi-weekly, or one-time cleans" },
+              ]}
+              defaultQuote="LBR Cleaning transformed my apartment in Lekki. The team was punctual, professional, and the results were outstanding."
+              defaultAuthor="Funke Adeyemi, Victoria Island"
+            />
           </div>
         </div>
       </div>

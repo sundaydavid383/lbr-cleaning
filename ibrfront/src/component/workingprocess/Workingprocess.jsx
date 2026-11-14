@@ -5,6 +5,7 @@ import img2 from "../../assets/cleaner6.png"
 import { FaGlobeAmericas, FaSpa, FaCalendarCheck } from 'react-icons/fa'
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
+import EditableImage from "../editable/EditableImage";
 
 const Workingprocess = () => {
   const { isEditMode } = useEditMode();
@@ -13,26 +14,13 @@ const Workingprocess = () => {
     <div className='workingprocess'>
 
       <div className="title">
-        {isEditMode ? (
-          <>
-            <EditableText cmsKey="working_process.tag" type="text" value="working process" as="span" className="priamry" />
-            <EditableText cmsKey="working_process.title" type="text" value="How It Works" as="h2" className="bright" />
-          </>
-        ) : (
-          <>
-            <span className="priamry">working process</span>
-            <h2 className="bright">How It Works</h2>
-          </>
-        )}
+        <>
+          <EditableText cmsKey="working_process.tag" type="text" value="working process" as="span" className="priamry" />
+          <EditableText cmsKey="working_process.title" type="text" value="How It Works" as="h2" className="bright" />
+        </>
       </div>
 
-      {isEditMode ? (
-        <EditableText cmsKey="working_process.subtitle" type="text" value="Competently repurpose go forward benefits without goal-oriented ROI conveniently target e-business opportunities whereas" as="h2" className="semititle" />
-      ) : (
-        <h2 className="semititle">
-          Competently repurpose go forward benefits without goal-oriented ROI conveniently target e-business opportunities whereas
-        </h2>
-      )}
+      <EditableText cmsKey="working_process.subtitle" type="text" value="Competently repurpose go forward benefits without goal-oriented ROI conveniently target e-business opportunities whereas" as="h2" className="semititle" />
 
       <div className="workingProcess_container container">
 
@@ -43,19 +31,9 @@ const Workingprocess = () => {
             <span>1</span>
             <small className='number'></small>
           </p>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step1_title" type="text" value="Find Us Online" as="h2" />
-          ) : (
-            <h2>Find Us Online</h2>
-          )}
+          <EditableText cmsKey="working_process.step1_title" type="text" value="Find Us Online" as="h2" />
           <div className="header_line"></div>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step1_desc" type="text" value="Visit our website to explore our professional cleaning services and learn how we can keep your space spotless." as="p" />
-          ) : (
-            <p>
-              Visit our website to explore our professional cleaning services and learn how we can keep your space spotless.
-            </p>
-          )}
+          <EditableText cmsKey="working_process.step1_desc" type="text" value="Visit our website to explore our professional cleaning services and learn how we can keep your space spotless." as="p" />
         </div>
 
         {/* Step 2 – Book an Appointment */}
@@ -65,19 +43,9 @@ const Workingprocess = () => {
             <span>2</span>
             <small className='number'></small>
           </p>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step2_title" type="text" value="Book an Appointment" as="h2" />
-          ) : (
-            <h2>Book an Appointment</h2>
-          )}
+          <EditableText cmsKey="working_process.step2_title" type="text" value="Book an Appointment" as="h2" />
           <div className="header_line"></div>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step2_desc" type="text" value="Schedule a convenient cleaning session with our team at the time that works best for you." as="p" />
-          ) : (
-            <p>
-              Schedule a convenient cleaning session with our team at the time that works best for you.
-            </p>
-          )}
+          <EditableText cmsKey="working_process.step2_desc" type="text" value="Schedule a convenient cleaning session with our team at the time that works best for you." as="p" />
         </div>
 
         {/* Step 3 – We Will Reach Out to You */}
@@ -87,25 +55,15 @@ const Workingprocess = () => {
             <span>3</span>
             <small className='number'></small>
           </p>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step3_title" type="text" value="We Will Reach Out to You" as="h2" />
-          ) : (
-            <h2>We Will Reach Out to You</h2>
-          )}
+          <EditableText cmsKey="working_process.step3_title" type="text" value="We Will Reach Out to You" as="h2" />
           <div className="header_line"></div>
-          {isEditMode ? (
-            <EditableText cmsKey="working_process.step3_desc" type="text" value="Our team will contact you instantly to confirm your appointment and finalize all details." as="p" />
-          ) : (
-            <p>
-              Our team will contact you instantly to confirm your appointment and finalize all details.
-            </p>
-          )}
+          <EditableText cmsKey="working_process.step3_desc" type="text" value="Our team will contact you instantly to confirm your appointment and finalize all details." as="p" />
         </div>
 
       </div>
 
-      <img className='right' src={img1} alt="" />
-      <img className='left' src={img2} alt="" />
+      <EditableImage cmsKey="working_process.image_right" value={img1} className="right" alt="" label="Right picture" />
+      <EditableImage cmsKey="working_process.image_left" value={img2} className="left" alt="" label="Left picture" />
     </div>
   )
 }

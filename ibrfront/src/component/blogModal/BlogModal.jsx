@@ -15,8 +15,6 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
   const { isAuthenticated } = useAuth();
   const { isEditMode } = useEditMode();
 
-  if (!article) return null;
-
   const {
     title,
     summary,
@@ -29,7 +27,7 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
     tags,
     source_id,
     content,
-  } = article;
+  } = article || {};
 
   const paragraphs = (summary || description || content || "")
     .split(/\n\n+/)
@@ -94,6 +92,8 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
       day: "numeric",
     });
   };
+
+  if (!article) return null;
 
   return (
     <AnimatePresence>
@@ -241,21 +241,11 @@ const BlogModal = ({ article, onClose, relatedArticles = [] }) => {
                 )}
 
                 <div className="modal-cta-banner">
-                  {isEditMode ? (
-                    <>
-                      <EditableText cmsKey="blog_modal.cta_heading" type="text" value="Ready for a spotless space?" as="h3" />
-                      <EditableText cmsKey="blog_modal.cta_text" type="text" value="Book your cleaning service today and experience the LBR difference." as="p" />
-                      <EditableText cmsKey="blog_modal.cta_button" type="text" value="Book a Cleaning" as="span" className="modal-cta-btn" />
-                    </>
-                  ) : (
-                    <>
-                      <h3>Ready for a spotless space?</h3>
-                      <p>Book your cleaning service today and experience the LBR difference.</p>
-                      <a href="/apply" className="modal-cta-btn" onClick={onClose}>
-                        Book a Cleaning <i className="fa-solid fa-arrow-right" />
-                      </a>
-                    </>
-                  )}
+                  <EditableText cmsKey="blog_modal.cta_heading" value="Ready for a spotless space?" as="h3" label="Article footer heading" />
+                  <EditableText cmsKey="blog_modal.cta_text" value="Book your cleaning service today and experience the LBR difference." as="p" label="Article footer text" />
+                  <a href="/apply" className="modal-cta-btn" onClick={isEditMode ? undefined : onClose}>
+                    <EditableText cmsKey="blog_modal.cta_button" value="Book a Cleaning" label="Article footer button" /> <i className="fa-solid fa-arrow-right" />
+                  </a>
                 </div>
               </div>
             </div>

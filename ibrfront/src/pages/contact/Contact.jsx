@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./contact.css";
 import axios from "axios";
 import Loading from "../../component/loading/Loading";
 import Hero from "../../component/hero/Hero";
 import TrustSection from "../../component/trustSection/TrustSection";
-import bgImage from "../../assets/cleaningbackground.jpg";
 import CustomAlert from "../../component/customAlert/CustomAlert";
-import { useCmsCategory } from "../../hooks/useCmsContent";
-import { useCmsContent } from "../../hooks/useCmsContent";
+import { useCmsCategory, useCms, useCmsReady } from "../../hooks/useCmsContent";
 import { ContactSkeleton } from "../../component/pageSkeleton/PageSkeleton";
-import { SITE_CONFIG } from "../../config/site";
 import { useEditMode } from "../../context/EditModeContext";
+import { useSiteSettings, openSiteSettings } from "../../hooks/useSiteSettings";
 import EditableText from "../../component/editable/EditableText";
 import EditableList from "../../component/editable/EditableList";
+import EditSection from "../../component/editable/EditSection";
 import { apiUrl } from "../../utils/apiUrl";
+
+// Accepts Google Maps "embed" HTML, an embed link, or a plain address.
+const toMapEmbed = (value) => {
+  if (!value || typeof value !== "string" || !value.trim()) return "";
+  const v = value.trim();
+  const src = v.match(/src=["']([^"']+)["']/i);
+  if (src) return src[1];
+  if (/^https:\/\/(www\.)?google\.[a-z.]+\/maps\/embed/i.test(v)) return v;
+  return `https://www.google.com/maps?q=${encodeURIComponent(v)}&output=embed`;
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -27,25 +36,16 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("success");
-  const { value: contactContent, loading: contactLoading } = useCmsCategory("contact", {});
-  const { value: siteSettings } = useCmsCategory("site_settings", {});
-  const { isEditMode } = useEditMode();
+  const contactLoading = !useCmsReady();
+  const contactContent = useCmsCategory("contact", {}).value || {};
+  const { isEditMode, openPanel } = useEditMode();
+  const site = useSiteSettings();
+  const { address, email, phone } = site;
+  const messages = useCms("contact.messages", {}) || {};
 
   if (contactLoading) {
     return <ContactSkeleton />;
   }
-
-  if (!contactContent) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>No content available. Please configure the CMS.</p>
-      </div>
-    );
-  }
-
-  const address = contactContent.address || siteSettings?.address || SITE_CONFIG.address;
-  const email = contactContent.email || siteSettings?.email || SITE_CONFIG.email;
-  const phone = contactContent.phone || siteSettings?.phone || SITE_CONFIG.phone;
 
   const validateInputs = () => {
     const { name, email, subject, message, whatsapp } = formData;
@@ -85,6 +85,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isEditMode) return;
 
     const error = validateInputs();
     if (error) {
@@ -96,7 +97,7 @@ const Contact = () => {
     try {
       setLoading(true);
       await axios.post(apiUrl("/api/contact"), formData);
-      setAlertMessage("Your message has been sent!");
+      setAlertMessage(messages.sent || "Your message has been sent!");
       setAlertType("success");
       setFormData({
         name: "",
@@ -107,7 +108,7 @@ const Contact = () => {
       });
     } catch (err) {
       console.error(err);
-      setAlertMessage("Failed to send message. Please try again later.");
+      setAlertMessage(messages.failed || "Failed to send message. Please try again later.");
       setAlertType("danger");
     }
     finally {
@@ -115,10 +116,21 @@ const Contact = () => {
     }
   };
 
-  const contactHeroSection = contactContent.hero || [];
-  const contactPageFeatures = contactContent.features || [];
-  const businessHours = contactContent.business_hours || [];
-  const faqs = contactContent.faq || [];
+
+  const contactHeroSection = Array.isArray(contactContent.hero) ? contactContent.hero : [];
+  const contactPageFeatures = Array.isArray(contactContent.features) ? contactContent.features : [];
+  const businessHours = Array.isArray(contactContent.business_hours) ? contactContent.business_hours : [];
+  const faqs = Array.isArray(contactContent.faq) ? contactContent.faq : [];
+  const mapSrc = toMapEmbed(contactContent.map_embed);
+
+  const T = (key, value, Tag, props = {}) => <EditableText cmsKey={key} value={value} as={Tag} {...props} />;
+
+  const businessInfoCard = (e) => {
+    if (!isEditMode) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openSiteSettings(openPanel);
+  };
 
   return (
     <main className="contact-page">
@@ -128,109 +140,114 @@ const Contact = () => {
         type={alertType}
         onClose={() => setAlertMessage("")}
       />
-      
-      {contactHeroSection.length > 0 && (
-        <Hero section={contactHeroSection} features={contactPageFeatures} backgroundImage={bgImage} />
-      )}
+
+      <Hero
+        section={contactHeroSection}
+        features={contactPageFeatures}
+        backgroundImage={contactContent.background_image || "/assets/cleaningbackground.jpg"}
+        slidesKey="contact.hero"
+        featuresKey="contact.features"
+        backgroundKey="contact.background_image"
+      />
 
       <section className="contact-info">
         <a
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address || "")}`}
-          className="info-card"
+          className={`info-card ${isEditMode ? "editable-field" : ""}`}
           target="_blank"
           rel="noopener noreferrer"
+          onClickCapture={businessInfoCard}
         >
           <i className="fas fa-map-marker-alt"></i>
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="contact.address_label" type="text" value="Office Address" as="h3" />
-              <EditableText cmsKey="contact.address" type="text" value={address} as="p" />
-            </>
-          ) : (
-            <>
-              <h3>Office Address</h3>
-              <p>{address}</p>
-            </>
-          )}
+          <h3>{contactContent.address_label || "Office Address"}</h3>
+          <p>{address}</p>
         </a>
 
-        <a href={`mailto:${email}`} className="info-card">
+        <a href={`mailto:${email}`} className={`info-card ${isEditMode ? "editable-field" : ""}`} onClickCapture={businessInfoCard}>
           <i className="fas fa-envelope"></i>
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="contact.email_label" type="text" value="Email Us" as="h3" />
-              <EditableText cmsKey="contact.email" type="text" value={email} as="p" />
-            </>
-          ) : (
-            <>
-              <h3>Email Us</h3>
-              <p>{email}</p>
-            </>
-          )}
+          <h3>{contactContent.email_label || "Email Us"}</h3>
+          <p>{email}</p>
         </a>
 
-        <a href={`tel:${phone}`} className="info-card">
+        <a href={site.phoneHref} className={`info-card ${isEditMode ? "editable-field" : ""}`} onClickCapture={businessInfoCard}>
           <i className="fas fa-phone"></i>
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="contact.phone_label" type="text" value="Call Us" as="h3" />
-              <EditableText cmsKey="contact.phone" type="text" value={phone} as="p" />
-            </>
-          ) : (
-            <>
-              <h3>Call Us</h3>
-              <p>{phone}</p>
-            </>
-          )}
+          <h3>{contactContent.phone_label || "Call Us"}</h3>
+          <p>{phone}</p>
         </a>
       </section>
+      {isEditMode && (
+        <EditSection
+          label="Contact cards"
+          icon="fa-address-card"
+          items={[
+            { cmsKey: "contact.address_label", root: "Office Address", label: "Address title", field: { type: "text", label: "Title on the address card" } },
+            { cmsKey: "contact.email_label", root: "Email Us", label: "Email title", field: { type: "text", label: "Title on the email card" } },
+            { cmsKey: "contact.phone_label", root: "Call Us", label: "Phone title", field: { type: "text", label: "Title on the phone card" } },
+            {
+              cmsKey: "contact.map_embed",
+              root: "",
+              label: mapSrc ? "Map" : "Add a map",
+              help: "In Google Maps, find your business, click Share → Embed a map → Copy HTML, and paste it here. You can also just type your address.",
+              field: { type: "textarea", label: "Google Maps embed code or address (leave empty for no map)" },
+            },
+          ]}
+        />
+      )}
 
-      {contactContent.map_embed && (
+      {mapSrc && (
         <section className="contact-map">
           <iframe
-            src={contactContent.map_embed}
+            src={mapSrc}
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
-            title="LBR Cleaning Location"
+            title="Our location"
           ></iframe>
         </section>
       )}
 
-      {businessHours.length > 0 && (
+      {(businessHours.length > 0 || isEditMode) && (
         <section className="business-hours">
           <div className="hours-wrapper">
-            {isEditMode ? (
-              <EditableText cmsKey="contact.hours_heading" type="text" value="Business Hours" as="h2" />
-            ) : (
-              <h2>Business Hours</h2>
-            )}
+            {T("contact.hours_heading", "Business Hours", "h2", { label: "Heading" })}
             <ul>
-              {businessHours.map((item, idx) => (
-                <li key={idx}><strong>{item.days}:</strong> {item.hours}</li>
-              ))}
+              <EditableList
+                cmsKey="contact.business_hours"
+                value={businessHours}
+                itemLabel="opening time"
+                label="Opening hours"
+                itemWrapperTag="li"
+                fields={[
+                  { key: "days", type: "text", label: "Days (e.g. Monday – Friday)" },
+                  { key: "hours", type: "text", label: "Hours (e.g. 8:00 AM – 6:00 PM, or Closed)" },
+                ]}
+              >
+                {(item, idx) =>
+                  isEditMode ? (
+                    <React.Fragment key={idx}><strong>{item.days}:</strong> {item.hours}</React.Fragment>
+                  ) : (
+                    <li key={idx}><strong>{item.days}:</strong> {item.hours}</li>
+                  )
+                }
+              </EditableList>
             </ul>
-            {contactContent.hours_note && <p>{contactContent.hours_note}</p>}
+            {(contactContent.hours_note || isEditMode) && T("contact.hours_note", contactContent.hours_note, "p", { label: "Note under the hours" })}
           </div>
         </section>
       )}
 
-      {faqs.length > 0 && (
+      {(faqs.length > 0 || isEditMode) && (
         <section className="faq-section">
-          {isEditMode ? (
-            <EditableText cmsKey="contact.faq_heading" type="text" value="Frequently Asked Questions" as="h2" />
-          ) : (
-            <h2>Frequently Asked Questions</h2>
-          )}
+          {T("contact.faq_heading", "Frequently Asked Questions", "h2", { label: "Heading" })}
           <EditableList
             cmsKey="contact.faq"
-            type="array"
             value={faqs}
+            itemLabel="question"
+            label="Questions & answers"
             fields={[
-              { key: "question", label: "Question" },
-              { key: "answer", label: "Answer" },
+              { key: "question", type: "text", label: "Question" },
+              { key: "answer", type: "textarea", label: "Answer" },
             ]}
-            itemWrapperTag="div"
           >
             {(item, idx) => (
               <div key={idx} className="faq-item">
@@ -244,31 +261,45 @@ const Contact = () => {
 
       <TrustSection />
 
-      {contactContent.encouragement_heading && (
+      {(contactContent.encouragement_heading || isEditMode) && (
         <section className="encouragement-banner">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="contact.encouragement_heading" type="text" value={contactContent.encouragement_heading} as="h3" />
-              <EditableText cmsKey="contact.encouragement_text" type="text" value={contactContent.encouragement_text} as="p" />
-              <EditableText cmsKey="contact.encouragement_cta" type="text" value={contactContent.encouragement_cta || "Explore Our Services"} as={Link} to="/service" className="explore-btn" />
-            </>
-          ) : (
-            <>
-              <h3>{contactContent.encouragement_heading}</h3>
-              <p>{contactContent.encouragement_text}</p>
-              <Link to="/service" className="explore-btn">{contactContent.encouragement_cta || "Explore Our Services"}</Link>
-            </>
-          )}
+          {T("contact.encouragement_heading", contactContent.encouragement_heading, "h3", { label: "Heading" })}
+          {T("contact.encouragement_text", contactContent.encouragement_text, "p", { label: "Text" })}
+          <Link to="/service" className="explore-btn">
+            {T("contact.encouragement_cta", contactContent.encouragement_cta || "Explore Our Services", "span", { label: "Button text" })}
+          </Link>
         </section>
       )}
 
       <section className="contact-form-section">
         <div className="form-wrapper">
-          {isEditMode ? (
-            <EditableText cmsKey="contact.form_heading" type="text" value={contactContent.form_heading || "Send Us a Message"} as="h2" />
-          ) : (
-            <h2>{contactContent.form_heading || "Send Us a Message"}</h2>
-          )}
+          {T("contact.form_heading", contactContent.form_heading || "Send Us a Message", "h2", { label: "Form heading" })}
+          <EditSection
+            label="form wording"
+            icon="fa-keyboard"
+            items={[
+              {
+                cmsKey: "contact.form_placeholder_name",
+                root: "Your Name",
+                label: "Box hints",
+                help: "The grey hint text shown inside each empty box.",
+                field: { type: "text", label: "Name box" },
+              },
+              { cmsKey: "contact.form_placeholder_email", root: "Your Email", label: "Email box", field: { type: "text", label: "Email box hint" } },
+              { cmsKey: "contact.form_placeholder_whatsapp", root: "Your WhatsApp Number", label: "WhatsApp box", field: { type: "text", label: "WhatsApp box hint" } },
+              { cmsKey: "contact.form_placeholder_subject", root: "Subject", label: "Subject box", field: { type: "text", label: "Subject box hint" } },
+              { cmsKey: "contact.form_placeholder_message", root: "Your Message", label: "Message box", field: { type: "text", label: "Message box hint" } },
+              {
+                cmsKey: "contact.messages",
+                root: { sent: "Your message has been sent!", failed: "Failed to send message. Please try again later." },
+                label: "Messages after sending",
+                fields: [
+                  { key: "sent", type: "text", label: "When the message was sent" },
+                  { key: "failed", type: "text", label: "When sending failed" },
+                ],
+              },
+            ]}
+          />
           <form className="contact-form" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -311,7 +342,7 @@ const Contact = () => {
               required
             ></textarea>
             <button type="submit" className="submit-btn">
-              {contactContent.form_button || "Send Message"}
+              {T("contact.form_button", contactContent.form_button || "Send Message", "span", { label: "Send button text" })}
             </button>
           </form>
         </div>

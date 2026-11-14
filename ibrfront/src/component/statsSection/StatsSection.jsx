@@ -2,7 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./statsSection.css";
 import RecentActivity from "../recentActivity/RecentActivity";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
+import EditableList from "../editable/EditableList";
+import { highlight, HIGHLIGHT_HELP } from "../../utils/highlight";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
 
@@ -26,7 +28,9 @@ const AnimatedCounter = ({ end, duration, suffix, started }) => {
 };
 
 const StatsSection = () => {
-  const { value: statsData, loading: statsLoading } = useCmsCategory("homepage_stats", {});
+  const ready = useCmsReady();
+  const stats = useCms("homepage_stats.stats", []);
+  const statsLoading = !ready;
   const [started, setStarted] = useState(false);
   const sectionRef = useRef(null);
   const { isEditMode } = useEditMode();
@@ -44,7 +48,7 @@ const StatsSection = () => {
 
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [statsLoading]);
 
   if (statsLoading) {
     return (
@@ -56,9 +60,7 @@ const StatsSection = () => {
     );
   }
 
-  const stats = statsData?.stats || [];
-
-  if (!stats.length) {
+  if (!stats.length && !isEditMode) {
     return null;
   }
 
@@ -66,47 +68,43 @@ const StatsSection = () => {
     <section className="stats-section" ref={sectionRef}>
       <div className="stats-wrapper">
         <div className="stats-header">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="homepage_stats.tag" type="text" value="By the Numbers" as="span" className="section-tag" />
-              <h2 className="stats-title">
-                Trusted by <span className="highlight">Thousands</span> Across Nigeria
-              </h2>
-              <EditableText cmsKey="homepage_stats.subtitle" type="text" value="Our track record speaks for itself. Here's what we've built through consistent, quality service." as="p" className="stats-subtitle" />
-            </>
-          ) : (
-            <>
-              <span className="section-tag">By the Numbers</span>
-              <h2 className="stats-title">
-                Trusted by <span className="highlight">Thousands</span> Across Nigeria
-              </h2>
-              <p className="stats-subtitle">
-                Our track record speaks for itself. Here's what we've built through
-                consistent, quality service.
-              </p>
-            </>
-          )}
+          <EditableText cmsKey="homepage_stats.tag" value="By the Numbers" as="span" className="section-tag" label="Small tag" />
+          <EditableText cmsKey="homepage_stats.title" value="Trusted by *Thousands* Across Nigeria" as="h2" className="stats-title" label="Heading" help={HIGHLIGHT_HELP}>
+            {(v) => highlight(v)}
+          </EditableText>
+          <EditableText cmsKey="homepage_stats.subtitle" value="Our track record speaks for itself. Here's what we've built through consistent, quality service." as="p" className="stats-subtitle" label="Intro text" />
         </div>
 
         <div className="stats-container">
-          {stats.map((stat, index) => (
-            <div className="stat-card" key={index} style={{ animationDelay: `${index * 0.12}s` }}>
-              <div className="stat-icon">
-                <i className={stat.icon}></i>
+          <EditableList
+            cmsKey="homepage_stats.stats"
+            value={stats}
+            itemLabel="number"
+            label="Numbers"
+            help="Each box counts up to the number when visitors scroll to it."
+            fields={[
+              { key: "icon", type: "icon", label: "Icon (optional)" },
+              { key: "value", type: "number", label: "Number" },
+              { key: "suffix", type: "text", label: "After the number (e.g. + or %)" },
+              { key: "label", type: "text", label: "Label" },
+            ]}
+          >
+            {(stat, index) => (
+              <div className="stat-card" key={index} style={{ animationDelay: `${index * 0.12}s` }}>
+                {stat.icon && (
+                  <div className="stat-icon">
+                    <i className={stat.icon}></i>
+                  </div>
+                )}
+                <div className="stat-content">
+                  <span className="stat-number">
+                    <AnimatedCounter end={Number(stat.value) || 0} duration={2200} suffix={stat.suffix || ""} started={started} />
+                  </span>
+                  <span className="stat-label">{stat.label}</span>
+                </div>
               </div>
-              <div className="stat-content">
-                <span className="stat-number">
-                  <AnimatedCounter
-                    end={stat.value}
-                    duration={2200}
-                    suffix={stat.suffix}
-                    started={started}
-                  />
-                </span>
-                <span className="stat-label">{stat.label}</span>
-              </div>
-            </div>
-          ))}
+            )}
+          </EditableList>
         </div>
 
         <RecentActivity />

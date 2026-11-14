@@ -1,8 +1,31 @@
 import { useRef, useEffect, useState } from "react"; 
 import "./articles.css";
-import BlogModal from "../blogModal/BlogModal"; // make sure path is correct
+import BlogModal from "../blogModal/BlogModal";
+import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
 
-const Articles = ({ articles }) => {
+const ARTICLE_FIELDS = [
+  { key: "title", type: "text", label: "Title" },
+  { key: "image", type: "image", label: "Picture" },
+  { key: "author", type: "text", label: "Author" },
+  { key: "date", type: "text", label: "Date (YYYY-MM-DD)" },
+  { key: "gist1", type: "textarea", rows: 12, label: "Article text", help: "Leave an empty line between paragraphs." },
+  { key: "readTime", type: "text", label: "Reading time (e.g. 4 min read)" },
+  { key: "link", type: "url", label: "Link to the full article (optional)" },
+];
+
+const newArticle = () => ({
+  id: Date.now(),
+  title: "New article",
+  image: "",
+  author: "",
+  date: new Date().toISOString().slice(0, 10),
+  gist1: "",
+  readTime: "3 min read",
+  link: "",
+});
+
+const Articles = ({ articles = [], cmsKey }) => {
   const observer = useRef(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
@@ -34,12 +57,19 @@ const Articles = ({ articles }) => {
   return (
     <div className="articles">
       <div className="title">
-        <span className="primary">Resources</span>
-        <h2 className="bright">Latest Articles</h2>
+        <EditableText cmsKey="information.articles_tag" value="Resources" as="span" className="primary" label="Small tag" />
+        <EditableText cmsKey="information.articles_title" value="Latest Articles" as="h2" className="bright" label="Heading" />
       </div>
 
       <div className="articles_container container">
-        {articles.map((article, index) => {
+        <EditableList
+          cmsKey={cmsKey}
+          value={articles}
+          itemLabel="article"
+          label="Articles"
+          field={{ type: "items", itemLabel: "article", label: "", fields: ARTICLE_FIELDS, newItem: newArticle }}
+        >
+        {(article, index) => {
           // Safely split date
           const [year, month, day] = article.date ? article.date.split("-") : ["", "", ""];
 
@@ -86,7 +116,8 @@ const Articles = ({ articles }) => {
               </button>
             </div>
           );
-        })}
+        }}
+        </EditableList>
       </div>
 
       {/* Show BlogModal if article is selected */}

@@ -1,170 +1,87 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { getContent, getContentByCategory, getAllPublicContent, invalidateCache } from "../services/contentService";
+import { useEffect, useSyncExternalStore, useCallback, useRef } from "react";
+import {
+  subscribe,
+  getVersion,
+  loadAll,
+  isReady,
+  getStatus,
+  getValue,
+  getCategoryMap,
+  getAllItems,
+  hasKey,
+} from "../services/cmsStore";
+
+// Re-renders the calling component whenever any CMS content changes
+// (initial load, or an admin saving an edit).
+const useStoreVersion = () => {
+  const v = useSyncExternalStore(subscribe, getVersion, getVersion);
+  useEffect(() => {
+    loadAll();
+  }, []);
+  return v;
+};
+
+const useRefresh = () =>
+  useCallback(async () => {
+    await loadAll(true);
+  }, []);
+
+// Returns the value for a key directly. The simplest hook for new code:
+//   const title = useCms("about.heading", "About Us");
+export const useCms = (key, fallback) => {
+  useStoreVersion();
+  return getValue(key, fallback);
+};
+
+export const useCmsReady = () => {
+  useStoreVersion();
+  return isReady();
+};
 
 export const useCmsContent = (key, fallback = null) => {
-  const [value, setValue] = useState(fallback);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // `fallback` is almost always passed as a fresh literal (e.g. `useCmsContent("x", {})`)
-  // on every render. Keeping it in the effect's dependency array below would make the
-  // effect re-run every render -> setLoading -> re-render -> forever. A ref lets the
-  // effect always read the *current* fallback without depending on its identity.
-  const fallbackRef = useRef(fallback);
-  fallbackRef.current = fallback;
-
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchContent = async () => {
-      try {
-        setLoading(true);
-        const data = await getContent(key);
-        if (mounted) {
-          setValue(data ?? fallbackRef.current);
-          setError(null);
-        }
-      } catch (err) {
-        if (mounted) {
-          setError(err);
-          setValue(fallbackRef.current);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchContent();
-
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-
-  const refresh = useCallback(async () => {
-    invalidateCache();
-    const data = await getContent(key);
-    setValue(data ?? fallbackRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-
-  return { value, loading, error, refresh };
+  useStoreVersion();
+  const refresh = useRefresh();
+  const ready = isReady();
+  return {
+    value: getValue(key, fallback),
+    loading: !ready && !hasKey(key),
+    error: getStatus() === "error" ? new Error("Could not load content") : null,
+    refresh,
+  };
 };
 
 export const useCmsCategory = (category, fallback = {}) => {
-  const [value, setValue] = useState(fallback);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+  useStoreVersion();
+  const refresh = useRefresh();
   const fallbackRef = useRef(fallback);
   fallbackRef.current = fallback;
 
-  const mergeWithFallback = (data) => {
-    const currentFallback = fallbackRef.current;
-    if (Array.isArray(currentFallback)) {
-      if (Array.isArray(data)) {
-        return data;
-      }
-      if (
-        data &&
-        typeof data === "object" &&
-        !Array.isArray(data) &&
-        Object.keys(data).length === 1 &&
-        Array.isArray(Object.values(data)[0])
-      ) {
-        return Object.values(data)[0];
-      }
-      return currentFallback;
-    }
-    return { ...currentFallback, ...data };
+  const data = getCategoryMap(category);
+  const currentFallback = fallbackRef.current;
+  let value;
+
+  if (Array.isArray(currentFallback)) {
+    const vals = Object.values(data);
+    value = vals.length === 1 && Array.isArray(vals[0]) ? vals[0] : currentFallback;
+  } else {
+    value = { ...currentFallback, ...data };
+  }
+
+  return {
+    value,
+    loading: !isReady(),
+    error: getStatus() === "error" ? new Error("Could not load content") : null,
+    refresh,
   };
-
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchCategory = async () => {
-      try {
-        setLoading(true);
-        console.log(`[CMS-HOOK] useCmsCategory START | category=${category}`);
-        const data = await getContentByCategory(category);
-        console.log(`[CMS-HOOK] useCmsCategory RESULT | category=${category} | dataType=${typeof data} | keys=${Array.isArray(data) ? 'array' : Object.keys(data)}`);
-        if (mounted) {
-          const merged = mergeWithFallback(data);
-          console.log(`[CMS-HOOK] useCmsCategory SET | category=${category} | mergedKeys=${Array.isArray(merged) ? `array[${merged.length}]` : Object.keys(merged)}`);
-          setValue(merged);
-          setError(null);
-        }
-      } catch (err) {
-        console.error(`[CMS-HOOK] useCmsCategory ERROR | category=${category}`, err);
-        if (mounted) {
-          setError(err);
-          setValue(fallbackRef.current);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchCategory();
-
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
-
-  const refresh = useCallback(async () => {
-    invalidateCache();
-    const data = await getContentByCategory(category);
-    setValue(mergeWithFallback(data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
-
-  return { value, loading, error, refresh };
 };
 
 export const useAllCmsContent = (fallback = {}) => {
-  const [value, setValue] = useState(fallback);
-  const [loading, setLoading] = useState(true);
-
-  const fallbackRef = useRef(fallback);
-  fallbackRef.current = fallback;
-
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchAll = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllPublicContent();
-        if (mounted) {
-          setValue({ ...fallbackRef.current, ...data });
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchAll();
-
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const refresh = useCallback(async () => {
-    invalidateCache();
-    const data = await getAllPublicContent();
-    setValue({ ...fallbackRef.current, ...data });
-  }, []);
-
-  return { value, loading, refresh };
+  useStoreVersion();
+  const refresh = useRefresh();
+  const result = { ...fallback };
+  getAllItems().forEach((it) => {
+    const parts = it.key.split(".");
+    result[parts[parts.length - 1]] = it.value;
+  });
+  return { value: result, loading: !isReady(), refresh };
 };

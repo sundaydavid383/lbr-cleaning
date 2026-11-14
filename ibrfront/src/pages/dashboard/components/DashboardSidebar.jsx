@@ -3,10 +3,14 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import "./dashboardSidebar.css";
+import Txt from "../../../component/editable/Txt";
+import EditZone from "../../../component/editable/EditZone";
+import { useSiteSettings } from "../../../hooks/useSiteSettings";
 
 const DashboardSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { user, logout } = useAuth();
+  const site = useSiteSettings();
 
   const mainLinks = [
     { to: "/dashboard", label: "Overview", icon: "fa-solid fa-grid-2", end: true },
@@ -34,11 +38,13 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
   return (
     <aside className={`dashboard-sidebar ${isOpen ? "mobile-open" : ""}`}>
       <div className="dashboard-sidebar-logo">
-        <img src="/house-cleaning.png" alt="" aria-hidden="true" />
-        <span>LBR</span>
+        <EditZone as="span" site badge="Logo">
+          <img src={site.logo} alt="" aria-hidden="true" />
+        </EditZone>
+        <span><Txt k="dashboard.dashboardsidebar.lbr" d={"LBR"} /></span>
       </div>
 
-      <div className="dashboard-sidebar-section">Main Menu</div>
+      <div className="dashboard-sidebar-section"><Txt k="dashboard.dashboardsidebar.main_menu" d={"Main Menu"} /></div>
       {mainLinks.map((link) => (
         <NavLink
           key={link.to}
@@ -50,13 +56,13 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
           onClick={onClose}
         >
           <i className={link.icon} />
-          <span>{link.label}</span>
+          <span><Txt k={`dashboard.menu.${link.to.split("/").pop()}`} d={link.label} label="Menu item" /></span>
         </NavLink>
       ))}
 
       <div className="dashboard-sidebar-divider" />
 
-      <div className="dashboard-sidebar-section">Account</div>
+      <div className="dashboard-sidebar-section"><Txt k="dashboard.dashboardsidebar.account" d={"Account"} /></div>
       {bottomLinks.map((link) => (
         <NavLink
           key={link.to}
@@ -67,18 +73,18 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
           onClick={onClose}
         >
           <i className={link.icon} />
-          <span>{link.label}</span>
+          <span><Txt k={`dashboard.menu.${link.to.split("/").pop()}`} d={link.label} label="Menu item" /></span>
         </NavLink>
       ))}
 
       <div className="dashboard-sidebar-bottom">
         <button className="dashboard-sidebar-link dashboard-sidebar-logout" onClick={handleLogout}>
           <i className="fa-solid fa-arrow-right-from-bracket" />
-          <span>Sign Out</span>
+          <span><Txt k="dashboard.dashboardsidebar.sign_out" d={"Sign Out"} /></span>
         </button>
         <NavLink to="/" className="dashboard-sidebar-link dashboard-sidebar-back" onClick={onClose}>
           <i className="fa-solid fa-arrow-left" />
-          <span>Back to Site</span>
+          <span><Txt k="dashboard.dashboardsidebar.back_to_site" d={"Back to Site"} /></span>
         </NavLink>
       </div>
     </aside>

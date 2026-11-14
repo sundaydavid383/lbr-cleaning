@@ -4,8 +4,16 @@ import "./auth.css";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
+import Txt from "../../component/editable/Txt";
+import AuthInfoExtras from "./AuthInfoExtras";
+import { useCms } from "../../hooks/useCmsContent";
+import EditZone from "../../component/editable/EditZone";
+import EditSection from "../../component/editable/EditSection";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 
 const Login = () => {
+  const site = useSiteSettings();
+  const hints = useCms("login.placeholders", {}) || {};
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,28 +56,15 @@ const Login = () => {
         <div className="auth-card auth-form-topspacing">
           <div className="auth-header">
             <Link to="/" className="auth-logo">
-              <img src="/house-cleaning.png" alt="LBR Cleaning" />
+<EditZone as="span" site badge="Logo">
+                <img src={site.logo} alt={site.name} />
+              </EditZone>
             </Link>
             <div className="auth-badge-row">
-              {isEditMode ? (
-                <EditableText cmsKey="login.badge" type="text" value="Member Login" as="span" className="auth-badge" />
-              ) : (
-                <span className="auth-badge">Member Login</span>
-              )}
+              <EditableText cmsKey="login.badge" type="text" value="Member Login" as="span" className="auth-badge" />
             </div>
-            {isEditMode ? (
-              <EditableText cmsKey="login.heading" type="text" value="Welcome Back" as="h1" />
-            ) : (
-              <h1>Welcome Back</h1>
-            )}
-            {isEditMode ? (
-              <EditableText cmsKey="login.subtitle" type="text" value="Sign in to manage your bookings, track cleaning schedules, and access exclusive member offers." as="p" />
-            ) : (
-              <p>
-                Sign in to manage your bookings, track cleaning schedules, and access exclusive member
-                offers.
-              </p>
-            )}
+            <EditableText cmsKey="login.heading" type="text" value="Welcome Back" as="h1" />
+            <EditableText cmsKey="login.subtitle" type="text" value="Sign in to manage your bookings, track cleaning schedules, and access exclusive member offers." as="p" />
           </div>
 
           {/* {error && (
@@ -79,9 +74,20 @@ const Login = () => {
             </div>
           )} */}
 
+          <EditSection
+            cmsKey="login.placeholders"
+            root={{ email: "you@example.com", password: "Enter your password" }}
+            label="box hints"
+            icon="fa-keyboard"
+            help="The grey hint text shown inside each empty box."
+            fields={[
+              { key: "email", type: "text", label: "Email box" },
+              { key: "password", type: "text", label: "Password box" },
+            ]}
+          />
           <form onSubmit={handleSubmit} className="auth-form">
             <div className={`auth-form-group ${focusedField === "email" || email ? "focused" : ""}`}>
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email"><Txt k="login.email_label" d="Email Address" label="Email box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-envelope"></i>
                 <input
@@ -91,14 +97,14 @@ const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusedField("email")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="you@example.com"
+                  placeholder={hints.email || "you@example.com"}
                   required
                 />
               </div>
             </div>
 
             <div className={`auth-form-group ${focusedField === "password" || password ? "focused" : ""}`}>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password"><Txt k="login.password_label" d="Password" label="Password box title" /></label>
               <div className="auth-input-wrapper">
                 <i className="fa-solid fa-lock"></i>
                 <input
@@ -108,7 +114,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setFocusedField("password")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Enter your password"
+                  placeholder={hints.password || "Enter your password"}
                   required
                 />
               </div>
@@ -131,7 +137,7 @@ const Login = () => {
                 </span>
               ) : (
                 <span>
-                  Sign In <i className="fa-solid fa-arrow-right"></i>
+                  <Txt k="login.button" d="Sign In" label="Sign in button" /> <i className="fa-solid fa-arrow-right"></i>
                 </span>
               )}
             </button>
@@ -139,100 +145,29 @@ const Login = () => {
 
           <div className="auth-footer">
             <p>
-              Don&apos;t have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
+              <Txt k="login.footer_text" d="Don't have an account?" label="Footer text" />{" "}
+              <Link to="/signup" className="auth-link"><Txt k="login.footer_link" d="Sign Up" label="Footer link" /></Link>
             </p>
           </div>
         </div>
 
         <div className="auth-info">
           <div className="auth-info-inner">
-            {isEditMode ? (
-              <EditableText cmsKey="login.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
-            ) : (
-              <span className="auth-info-badge">Trusted by 2,500+ customers</span>
-            )}
-            {isEditMode ? (
-              <EditableText cmsKey="login.info_heading" type="text" value="Your Cleaning Dashboard Awaits" as="h2" />
-            ) : (
-              <h2>Your Cleaning Dashboard Awaits</h2>
-            )}
-            {isEditMode ? (
-              <EditableText cmsKey="login.info_text" type="text" value="Book, reschedule, and track your cleaning services — all from one place. Join thousands of Lagos residents who trust LBR Cleaning." as="p" />
-            ) : (
-              <p>
-                Book, reschedule, and track your cleaning services — all from one place. Join thousands
-                of Lagos residents who trust LBR Cleaning.
-              </p>
-            )}
+            <EditableText cmsKey="login.info_badge" type="text" value="Trusted by 2,500+ customers" as="span" className="auth-info-badge" />
+            <EditableText cmsKey="login.info_heading" type="text" value="Your Cleaning Dashboard Awaits" as="h2" />
+            <EditableText cmsKey="login.info_text" type="text" value="Book, reschedule, and track your cleaning services — all from one place. Join thousands of Lagos residents who trust LBR Cleaning." as="p" />
 
-            <div className="auth-stats">
-              <div className="auth-stat">
-                <span className="auth-stat-number">8+</span>
-                <span className="auth-stat-label">Years Experience</span>
-              </div>
-              <div className="auth-stat">
-                <span className="auth-stat-number">15K+</span>
-                <span className="auth-stat-label">Projects Done</span>
-              </div>
-              <div className="auth-stat">
-                <span className="auth-stat-number">4.9</span>
-                <span className="auth-stat-label">Client Rating</span>
-              </div>
-            </div>
-
-            <div className="auth-features">
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-calendar-check"></i>
-                </div>
-                <div>
-                  <strong>Manage Bookings</strong>
-                  <p>View upcoming, completed, and cancelled appointments</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-bell"></i>
-                </div>
-                <div>
-                  <strong>Smart Notifications</strong>
-                  <p>Get reminders before your scheduled cleaning</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-tag"></i>
-                </div>
-                <div>
-                  <strong>Exclusive Offers</strong>
-                  <p>Members-only discounts and loyalty rewards</p>
-                </div>
-              </div>
-              <div className="auth-feature">
-                <div className="auth-feature-icon">
-                  <i className="fa-solid fa-receipt"></i>
-                </div>
-                <div>
-                  <strong>Payment History</strong>
-                  <p>Download invoices and track transactions</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="auth-testimonial">
-              <div className="auth-testimonial-stars">
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-              </div>
-              <p className="auth-testimonial-text">
-                &ldquo;The dashboard makes it so easy to rebook. I&apos;ve been using LBR Cleaning for
-                over a year now and the consistency is unmatched.&rdquo;
-              </p>
-              <p className="auth-testimonial-author">— Emeka Nwosu, Lekki Phase 1</p>
-            </div>
+            <AuthInfoExtras
+              prefix="login"
+              defaultFeatures={[
+                { icon: "fa-solid fa-calendar-check", title: "Manage Bookings", text: "View upcoming, completed, and cancelled appointments" },
+                { icon: "fa-solid fa-bell", title: "Smart Notifications", text: "Get reminders before your scheduled cleaning" },
+                { icon: "fa-solid fa-tag", title: "Exclusive Offers", text: "Members-only discounts and loyalty rewards" },
+                { icon: "fa-solid fa-receipt", title: "Payment History", text: "Download invoices and track transactions" },
+              ]}
+              defaultQuote="The dashboard makes it so easy to rebook. I've been using LBR Cleaning for over a year now and the consistency is unmatched."
+              defaultAuthor="Emeka Nwosu, Lekki Phase 1"
+            />
           </div>
         </div>
       </div>

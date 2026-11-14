@@ -3,7 +3,7 @@ const CmsContent = require("../../models/mongodb/CmsContent");
 
 class MongodbCmsContentRepository extends ICmsContentRepository {
   async findAll(filters = {}) {
-    const { category, isPublic, limit = 500, skip = 0 } = filters;
+    const { category, isPublic, limit = 5000, skip = 0 } = filters;
     const query = {};
 
     if (category) query.category = category;

@@ -41,7 +41,19 @@ exports.createBooking = async (req, res) => {
         "Post-Construction Cleaning": 45000,
       };
 
-      const amount = servicePricing[service] || 20000;
+      // Prices are managed by admins in the website editor (CMS key
+      // "apply.services"). Fall back to the built-in table if not set.
+      let amount = servicePricing[service] || 20000;
+      try {
+        const cmsServices = await repositories.cmsContentRepository.findByKey("apply.services");
+        const match = Array.isArray(cmsServices?.value)
+          ? cmsServices.value.find((s) => s && String(s.label).trim() === String(service).trim())
+          : null;
+        const cmsPrice = Number(match?.price);
+        if (Number.isFinite(cmsPrice) && cmsPrice > 0) amount = cmsPrice;
+      } catch (err) {
+        console.error("[BOOKING] Could not read service prices from CMS:", err.message);
+      }
 
       await orderRepository.update(order.id, { amount });
 

@@ -6,10 +6,13 @@ import Portfolio from "../../component/portfolio/Portfolio";
 import Deal from "../../component/deals/Deal";
 import About from "../../component/about/About";
 import Articles from "../../component/article/Articles";
-import { useCmsContent } from "../../hooks/useCmsContent";
-import { SITE_CONFIG } from "../../config/site";
+import { useCmsContent, useCms } from "../../hooks/useCmsContent";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
+import EditableList from "../../component/editable/EditableList";
+import EditSection from "../../component/editable/EditSection";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
+import EditZone from "../../component/editable/EditZone";
 
 const HUB_TABS = [
   { id: "how-it-works", label: "How It Works", icon: "fa-solid fa-gears" },
@@ -21,12 +24,29 @@ const HUB_TABS = [
   { id: "blog", label: "Blog", icon: "fa-solid fa-newspaper" },
 ];
 
-const DEAL_INTRO = {
-  image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop",
-  h2: "Please Call Us to Take the Extraordinary Service!",
-  email: SITE_CONFIG.email,
-  phone: SITE_CONFIG.phone,
-};
+const DEFAULT_HERO_STATS = [
+  { number: "8+", label: "Years Experience" },
+  { number: "2,500+", label: "Happy Clients" },
+  { number: "15,000+", label: "Projects Done" },
+];
+
+const SERVICE_FIELDS = [
+  { key: "title", type: "text", label: "Service name" },
+  { key: "image", type: "image", label: "Picture" },
+  { key: "icon", type: "icon", label: "Icon" },
+  { key: "description", type: "textarea", label: "Description" },
+  {
+    key: "features",
+    type: "items",
+    label: "Highlights",
+    itemLabel: "highlight",
+    fields: [
+      { key: "icon", type: "icon", label: "Icon" },
+      { key: "text", type: "text", label: "Text" },
+    ],
+  },
+  { key: "id", hidden: true },
+];
 
 const PLANS = [
   {
@@ -116,6 +136,14 @@ const SECTION_HEADER_EDIT = {
 const InformationHub = () => {
   const [activeTab, setActiveTab] = useState("how-it-works");
   const { isEditMode } = useEditMode();
+  const site = useSiteSettings();
+  const heroStats = useCms("information.hero_stats", DEFAULT_HERO_STATS);
+  const tabLabels = useCms("information.tab_labels", {}) || {};
+  const plans = useCms("information.plans", PLANS);
+  const dealImage = useCms("information.deal_image", "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop");
+  const dealHeading = useCms("information.deal_heading", "Please Call Us to Take the Extraordinary Service!");
+  const dealIntro = { image: dealImage, h2: dealHeading, email: site.email, phone: site.phone };
+  const serviceButton = useCms("information.service_button", "Apply Now");
 
   const { value: faqs = [], loading: faqsLoading } = useCmsContent("information.faqs", []);
   const { value: services = [], loading: servicesLoading } = useCmsContent("information.services", []);
@@ -153,21 +181,11 @@ const InformationHub = () => {
     const cfg = SECTION_HEADER_EDIT[tabId];
     if (!cfg) return null;
 
-    if (isEditMode) {
-      return (
-        <>
-          <EditableText cmsKey={cfg.tag} type="text" value={cfg.defaults.tag} as="span" className="section-tag" />
-          <EditableText cmsKey={cfg.title} type="text" value={cfg.defaults.title} as="h2" />
-          <EditableText cmsKey={cfg.subtitle} type="text" value={cfg.defaults.subtitle} as="p" />
-        </>
-      );
-    }
-
     return (
       <>
-        <span className="section-tag">{cfg.defaults.tag}</span>
-        <h2>{cfg.defaults.title}</h2>
-        <p>{cfg.defaults.subtitle}</p>
+        <EditableText cmsKey={cfg.tag} value={cfg.defaults.tag} as="span" className="section-tag" label="Small tag" />
+        <EditableText cmsKey={cfg.title} value={cfg.defaults.title} as="h2" label="Heading" />
+        <EditableText cmsKey={cfg.subtitle} value={cfg.defaults.subtitle} as="p" label="Intro text" />
       </>
     );
   };
@@ -178,46 +196,48 @@ const InformationHub = () => {
       <section className="hub-hero">
         <div className="hub-hero-bg"></div>
         <div className="hub-hero-content">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="information.hero.badge" type="text" value="Information Hub" as="span" className="hub-badge" />
-              <h1>
-                <EditableText cmsKey="information.hero.title" type="text" value="Everything You Need to" as="span" /> <span className="highlight">
-                  <EditableText cmsKey="information.hero.title_highlight" type="text" value="Know" as="span" />
-                </span>
-              </h1>
-              <EditableText cmsKey="information.hero.subtitle" type="text" value="Explore our comprehensive guides, services, and resources to make informed decisions about your cleaning needs." as="p" />
-            </>
-          ) : (
-            <>
-              <span className="hub-badge">Information Hub</span>
-              <h1>Everything You Need to <span className="highlight">Know</span></h1>
-              <p>Explore our comprehensive guides, services, and resources to make informed decisions about your cleaning needs.</p>
-            </>
-          )}
+          <>
+            <EditableText cmsKey="information.hero.badge" type="text" value="Information Hub" as="span" className="hub-badge" />
+            <h1>
+              <EditableText cmsKey="information.hero.title" type="text" value="Everything You Need to" as="span" /> <span className="highlight">
+                <EditableText cmsKey="information.hero.title_highlight" type="text" value="Know" as="span" />
+              </span>
+            </h1>
+            <EditableText cmsKey="information.hero.subtitle" type="text" value="Explore our comprehensive guides, services, and resources to make informed decisions about your cleaning needs." as="p" />
+          </>
 
-          {!isEditMode && (
-            <div className="hub-hero-stats">
-              <div className="hub-stat">
-                <span className="hub-stat-number">8+</span>
-                <span className="hub-stat-label">Years Experience</span>
-              </div>
-              <div className="hub-stat">
-                <span className="hub-stat-number">2,500+</span>
-                <span className="hub-stat-label">Happy Clients</span>
-              </div>
-              <div className="hub-stat">
-                <span className="hub-stat-number">15,000+</span>
-                <span className="hub-stat-label">Projects Done</span>
-              </div>
-            </div>
-          )}
+          <div className="hub-hero-stats">
+            <EditableList
+              cmsKey="information.hero_stats"
+              value={Array.isArray(heroStats) ? heroStats : DEFAULT_HERO_STATS}
+              itemLabel="number"
+              label="Numbers in the banner"
+              fields={[
+                { key: "number", type: "text", label: "Number (e.g. 2,500+)" },
+                { key: "label", type: "text", label: "Label" },
+              ]}
+            >
+              {(stat, i) => (
+                <div className="hub-stat" key={i}>
+                  <span className="hub-stat-number">{stat.number}</span>
+                  <span className="hub-stat-label">{stat.label}</span>
+                </div>
+              )}
+            </EditableList>
+          </div>
         </div>
       </section>
 
       {/* Quick Navigation Tabs */}
+      <EditSection
+        cmsKey="information.tab_labels"
+        root={Object.fromEntries(HUB_TABS.map((t) => [t.id, t.label]))}
+        label="tab names"
+        icon="fa-folder"
+        fields={HUB_TABS.map((t) => ({ key: t.id, type: "text", label: `Tab: ${t.label}` }))}
+      />
       <nav className="hub-tabs">
-        <div className="hub-tabs-container">
+        <EditZone className="hub-tabs-container" cmsKey="information.tab_labels" root={Object.fromEntries(HUB_TABS.map((t) => [t.id, t.label]))} label="Tab names" fields={HUB_TABS.map((t) => ({ key: t.id, type: "text", label: `Tab: ${t.label}` }))}>
           {HUB_TABS.map((tab) => (
             <button
               key={tab.id}
@@ -225,10 +245,10 @@ const InformationHub = () => {
               onClick={() => handleTabClick(tab.id)}
             >
               <i className={tab.icon}></i>
-              <span>{tab.label}</span>
+              <span>{tabLabels[tab.id] || tab.label}</span>
             </button>
           ))}
-        </div>
+        </EditZone>
       </nav>
 
       {/* Dynamic Content Sections */}
@@ -247,8 +267,21 @@ const InformationHub = () => {
             {renderSectionHeader("services")}
           </div>
           <div className="services-grid">
-            {displayServices.map((service) => (
-              <div className="service-card" key={service.id || service.title}>
+            <EditableList
+              cmsKey="information.services"
+              value={displayServices}
+              itemLabel="service"
+              label="Services"
+              field={{
+                type: "items",
+                itemLabel: "service",
+                label: "",
+                fields: SERVICE_FIELDS,
+                newItem: () => ({ id: Date.now(), title: "New service", image: "", icon: "fa-solid fa-broom", description: "", features: [] }),
+              }}
+            >
+            {(service, sIdx) => (
+              <div className="service-card" key={service.id || sIdx}>
                 <div className="service-card-image">
                   <img src={service.image} alt={service.title} loading="lazy" />
                   <div className="service-card-overlay">
@@ -267,11 +300,12 @@ const InformationHub = () => {
                     ))}
                   </ul>
                   <Link to="/apply" className="service-card-btn">
-                    Apply Now <i className="fa-solid fa-arrow-right"></i>
+                    {serviceButton} <i className="fa-solid fa-arrow-right"></i>
                   </Link>
                 </div>
               </div>
-            ))}
+            )}
+            </EditableList>
           </div>
         </section>
 
@@ -288,7 +322,18 @@ const InformationHub = () => {
           <div className="hub-section-header">
             {renderSectionHeader("pricing")}
           </div>
-          <Deal sectionTitle="Our Plans" deal_Intro={DEAL_INTRO} plans={PLANS} />
+          <Deal
+            sectionTitle="Our Plans"
+            deal_Intro={dealIntro}
+            plans={Array.isArray(plans) ? plans : PLANS}
+            keys={{
+              heading: "information.deal_heading",
+              image: "information.deal_image",
+              sectionTag: "information.deal_tag",
+              sectionTitle: "information.deal_section_title",
+              plans: "information.plans",
+            }}
+          />
         </section>
 
         {/* Portfolio */}
@@ -305,18 +350,29 @@ const InformationHub = () => {
             {renderSectionHeader("faq")}
           </div>
           <div className="faq-grid">
-            {displayFaqs.map((faq, idx) => (
-              <div className="faq-card" key={idx}>
-                <h3>{faq.question}</h3>
-                <p>{faq.answer}</p>
-              </div>
-            ))}
+            <EditableList
+              cmsKey="information.faqs"
+              value={displayFaqs}
+              itemLabel="question"
+              label="Questions & answers"
+              fields={[
+                { key: "question", type: "text", label: "Question" },
+                { key: "answer", type: "textarea", label: "Answer" },
+              ]}
+            >
+              {(faq, idx) => (
+                <div className="faq-card" key={idx}>
+                  <h3>{faq.question}</h3>
+                  <p>{faq.answer}</p>
+                </div>
+              )}
+            </EditableList>
           </div>
         </section>
 
         {/* Blog */}
         <section id="blog" className={`hub-section ${activeTab === "blog" ? "active" : ""}`}>
-          <Articles articles={displayArticles} />
+          <Articles articles={displayArticles} cmsKey="information.articles" />
         </section>
       </div>
     </div>

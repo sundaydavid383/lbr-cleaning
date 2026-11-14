@@ -6,6 +6,8 @@ import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
 import { useAuth } from "../../context/AuthContext";
 import { apiUrl } from "../../utils/apiUrl";
+import Txt from "../../component/editable/Txt";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 
 const Payment = () => {
   const [searchParams] = useSearchParams();
@@ -15,6 +17,7 @@ const Payment = () => {
   const [alertData, setAlertData] = useState({ message: "", type: "success" });
   const [paymentResult, setPaymentResult] = useState(null);
   const [retrying, setRetrying] = useState(false);
+  const site = useSiteSettings();
 
   const reference = searchParams.get("reference") || searchParams.get("trxref");
   const orderId = searchParams.get("orderId");
@@ -112,7 +115,7 @@ const Payment = () => {
       <div className="payment-page">
         <div className="payment-card">
           <Loading message="Verifying your payment..." />
-          <p className="payment-verifying-text">Please do not close this page while we confirm your payment.</p>
+          <p className="payment-verifying-text"><Txt k="payment.verifying_text" d="Please do not close this page while we confirm your payment." label="Message while checking payment" /></p>
         </div>
       </div>
     );
@@ -130,24 +133,24 @@ const Payment = () => {
           </div>
 
           <h1 className="payment-result-title">
-            {isSuccess ? "Payment Successful!" : isFailed ? "Payment Failed" : "Payment Pending"}
+            {isSuccess ? <Txt k="payment.success_title" d="Payment Successful!" label="Title when paid" /> : isFailed ? <Txt k="payment.failed_title" d="Payment Failed" label="Title when payment failed" /> : <Txt k="payment.pending_title" d="Payment Pending" label="Title while pending" />}
           </h1>
 
           <p className="payment-result-message">
             {isSuccess
-              ? "Your booking has been confirmed. We'll send you a confirmation email shortly."
+              ? <Txt k="payment.success_text" d="Your booking has been confirmed. We'll send you a confirmation email shortly." label="Message when paid" />
               : isFailed
-              ? "We couldn't process your payment. Please try again or contact support."
-              : "Your payment is being processed. Please check your email for updates."}
+              ? <Txt k="payment.failed_text" d="We couldn't process your payment. Please try again or contact support." label="Message when payment failed" />
+              : <Txt k="payment.pending_text" d="Your payment is being processed. Please check your email for updates." label="Message while pending" />}
           </p>
 
           <div className="payment-receipt">
             <div className="receipt-row">
-              <span>Service</span>
+              <span><Txt k="payment.service_label" d="Service" label="Service label" /></span>
               <span>{service || "Cleaning Service"}</span>
             </div>
             <div className="receipt-row">
-              <span>Amount Paid</span>
+              <span><Txt k="payment.amount_paid" d="Amount Paid" label="Amount paid label" /></span>
               <span className="receipt-amount">{formatNGN(paymentResult.amount)}</span>
             </div>
             <div className="receipt-row">
@@ -171,12 +174,12 @@ const Payment = () => {
                     Retrying...
                   </span>
                 ) : (
-                  <span><i className="fa-solid fa-rotate-right"></i> Retry Payment</span>
+                  <span><i className="fa-solid fa-rotate-right"></i> <Txt k="payment.retry" d="Retry Payment" label="Retry button" /></span>
                 )}
               </button>
             )}
-            <Link to="/" className="btn-secondary">Back to Home</Link>
-            {isSuccess && <Link to="/dashboard" className="btn-primary">Go to Dashboard</Link>}
+            <Link to="/" className="btn-secondary"><Txt k="payment.back_home" d="Back to Home" label="Back to home button" /></Link>
+            {isSuccess && <Link to="/dashboard" className="btn-primary"><Txt k="payment.go_dashboard" d="Go to Dashboard" label="Dashboard button" /></Link>}
           </div>
         </div>
       </div>
@@ -190,9 +193,9 @@ const Payment = () => {
           <div className="payment-result-icon failed">
             <i className="fa-solid fa-circle-exclamation"></i>
           </div>
-          <h1>Invalid Payment Link</h1>
-          <p>This payment link is invalid or has expired. Please try booking again.</p>
-          <Link to="/apply" className="btn-primary">Book Again</Link>
+          <Txt k="payment.invalid_title" d="Invalid Payment Link" label="Title for an invalid link" as="h1" />
+          <Txt k="payment.invalid_text" d="This payment link is invalid or has expired. Please try booking again." label="Message for an invalid link" as="p" />
+          <Link to="/apply" className="btn-primary"><Txt k="payment.book_again" d="Book Again" label="Book again button" /></Link>
         </div>
       </div>
     );
@@ -212,32 +215,32 @@ const Payment = () => {
         <div className="payment-card-header">
           <div className="payment-logo">
             <i className="fa-solid fa-broom"></i>
-            <span>LBR Cleaning</span>
+            <span>{site.name}</span>
           </div>
           <div className="payment-secure-badge">
             <i className="fa-solid fa-shield-halved"></i>
-            Secure Payment
+            <Txt k="payment.secure_badge" d="Secure Payment" label="Secure badge" />
           </div>
         </div>
 
         <div className="payment-details">
-          <h2>Complete Your Booking</h2>
+          <Txt k="payment.checkout_title" d="Complete Your Booking" label="Checkout heading" as="h2" />
           <div className="payment-info-row">
-            <span>Service</span>
+            <span><Txt k="payment.service_label" d="Service" label="Service label" /></span>
             <span>{service || "Cleaning Service"}</span>
           </div>
           <div className="payment-info-row">
-            <span>Amount</span>
+            <span><Txt k="payment.amount_label" d="Amount" label="Amount label" /></span>
             <span className="payment-amount">{formatNGN(amount)}</span>
           </div>
         </div>
 
         <div className="payment-gateway-info">
-          <p>You will be redirected to our secure payment partner to complete your payment.</p>
+          <Txt k="payment.redirect_text" d="You will be redirected to our secure payment partner to complete your payment." label="Redirect message" as="p" />
           <div className="payment-methods">
-            <span className="payment-method-badge"><i className="fa-solid fa-credit-card"></i> Card</span>
-            <span className="payment-method-badge"><i className="fa-solid fa-building-columns"></i> Bank</span>
-            <span className="payment-method-badge"><i className="fa-solid fa-mobile-screen"></i> Mobile Money</span>
+            <span className="payment-method-badge"><i className="fa-solid fa-credit-card"></i> <Txt k="payment.method_card" d="Card" /></span>
+            <span className="payment-method-badge"><i className="fa-solid fa-building-columns"></i> <Txt k="payment.method_bank" d="Bank" /></span>
+            <span className="payment-method-badge"><i className="fa-solid fa-mobile-screen"></i> <Txt k="payment.method_mobile" d="Mobile Money" /></span>
           </div>
         </div>
 
@@ -253,18 +256,18 @@ const Payment = () => {
             </span>
           ) : (
             <span>
-              Pay {formatNGN(amount)} <i className="fa-solid fa-arrow-right"></i>
+              <Txt k="payment.pay_button" d="Pay" label="Pay button" /> {formatNGN(amount)} <i className="fa-solid fa-arrow-right"></i>
             </span>
           )}
         </button>
 
         <p className="payment-note">
-          By clicking "Pay", you agree to our terms of service. Your payment is secured with 256-bit SSL encryption.
+          <Txt k="payment.note" d={`By clicking "Pay", you agree to our terms of service. Your payment is secured with 256-bit SSL encryption.`} label="Small print" />
         </p>
 
         <div className="payment-footer">
           <Link to="/apply" className="payment-cancel-link">
-            <i className="fa-solid fa-arrow-left"></i> Cancel and go back
+            <i className="fa-solid fa-arrow-left"></i> <Txt k="payment.cancel" d="Cancel and go back" label="Cancel link" />
           </Link>
         </div>
       </div>

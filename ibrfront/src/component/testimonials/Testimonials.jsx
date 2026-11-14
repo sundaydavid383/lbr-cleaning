@@ -2,13 +2,26 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./testimonials.css";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaStar, FaInstagram, FaFacebookF, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { FaStar, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
+import EditSection from "../editable/EditSection";
+import EditZone from "../editable/EditZone";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
 
+const TESTIMONIAL_FIELDS = [
+  { key: "name", type: "text", label: "Customer name" },
+  { key: "image", type: "image", label: "Photo" },
+  { key: "ratings", type: "select", label: "Star rating", options: [5, 4, 3, 2, 1].map((n) => ({ value: n, label: "★".repeat(n) + ` (${n})` })) },
+  { key: "testimony", type: "textarea", label: "What they said" },
+];
+
 const Testimonial = () => {
-  const { value: testimonialsData, loading: testimonialsLoading } = useCmsCategory("testimonials", []);
+  const ready = useCmsReady();
+  const storedList = useCms("testimonials.list", []);
+  const testimonialsData = Array.isArray(storedList) ? storedList : [];
+  const testimonialsLoading = !ready;
+  const background = useCms("testimonials.background", "");
   const [activeIndex, setActiveIndex] = useState(0);
   const trackRef = useRef(null);
   const cardRefs = useRef([]);
@@ -80,7 +93,7 @@ const Testimonial = () => {
 
     track.addEventListener('scroll', handleScroll, { passive: true });
     return () => track.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [testimonialsLoading]);
 
   if (testimonialsLoading) {
     return (
@@ -92,38 +105,53 @@ const Testimonial = () => {
     );
   }
 
-  if (!testimonialsData || testimonialsData.length === 0) {
+  if (testimonialsData.length === 0 && !isEditMode) {
     return null;
   }
 
   return (
-    <div className="testimonailImage">
+    <div className="testimonailImage" style={background ? { backgroundImage: `url(${background})` } : undefined}>
+      <EditSection
+        cmsKey="testimonials.background"
+        root=""
+        label="background picture"
+        icon="fa-image"
+        field={{ type: "image", label: "" }}
+        help="The picture behind the customer reviews. Leave empty to use the original one."
+      />
       <div className="Testimonial">
         <div className="title">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey="testimonials.tag" type="text" value="our services" as="span" />
-              <EditableText cmsKey="testimonials.title" type="text" value="What Our Clients Say" as="h2" />
-            </>
-          ) : (
-            <>
-              <span>our services</span>
-              <h2>What Our Clients Say</h2>
-            </>
-          )}
+          <EditableText cmsKey="testimonials.tag" value="our services" as="span" label="Small tag" />
+          <EditableText cmsKey="testimonials.title" value="What Our Clients Say" as="h2" label="Heading" />
         </div>
 
-        <div className="testiment">
+        <EditSection
+          cmsKey="testimonials.list"
+          root={testimonialsData}
+          label={`customer reviews (${testimonialsData.length})`}
+          icon="fa-star"
+          help="Add, remove, reorder or change your customer reviews."
+          field={{ type: "items", itemLabel: "review", fields: TESTIMONIAL_FIELDS, newItem: { name: "", image: "", ratings: 5, testimony: "" } }}
+        />
+
+        <EditZone
+          className="testiment"
+          cmsKey="testimonials.list"
+          root={testimonialsData}
+          label="Customer reviews"
+          help="Add, remove, reorder or change your customer reviews."
+          field={{ type: "items", itemLabel: "review", fields: TESTIMONIAL_FIELDS, newItem: { name: "", image: "", ratings: 5, testimony: "" } }}
+        >
           <div className="testiment_frame">
             <div className="frame_status">
-              <span className="dot" /> SYS_READY
+              <span className="dot" /> <EditableText cmsKey="testimonials.status_text" value="SYS_READY" label="Small status text" />
               <span className="tracker_mono">[{String(activeIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}]</span>
             </div>
 
             <div className="testimonial-track" ref={trackRef}>
               {testimonialsData?.map((t, index) => (
                 <motion.div
-                  key={t.id || t.name}
+                  key={index}
                   ref={(el) => (cardRefs.current[index] = el)}
                   className={`testimonialCard${index === activeIndex ? ' active' : ''}`}
                   whileHover={{ scale: 1.015 }}
@@ -146,20 +174,11 @@ const Testimonial = () => {
                   </div>
 
                   <p>{t.testimony}</p>
-
-                  <div className="link">
-                    <a className="iconactive" target="_blank" rel="noopener noreferrer" href={t.instagramLink}>
-                      <FaInstagram />
-                    </a>
-                    <a className="iconactive" target="_blank" rel="noopener noreferrer" href={t.facebookLink}>
-                      <FaFacebookF />
-                    </a>
-                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
-        </div>
+        </EditZone>
 
         <div className="carousel_controls">
           <button

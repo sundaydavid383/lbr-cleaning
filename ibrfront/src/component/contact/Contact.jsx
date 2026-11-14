@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./contact.css";
 import { Link } from "react-router-dom";
-import Loading from "../loading/Loading";
+import { useCms } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
+import EditSection from "../editable/EditSection";
+import { highlight, HIGHLIGHT_HELP } from "../../utils/highlight";
 
-const services = [
+const DEFAULT_SHOWCASE = [
   {
     id: 1,
     title: "Home Cleaning",
@@ -33,7 +38,7 @@ const services = [
   {
     id: 3,
     title: "Carpet Cleaning",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
+    image: "/assets/cleaner21.jpg",
     icon: "fa-solid fa-rug",
     description: "Deep carpet cleaning that removes stains and odors",
     features: [
@@ -72,7 +77,7 @@ const services = [
   {
     id: 6,
     title: "Sanitization Service",
-    image: "https://images.unsplash.com/photo-1584463717955-2d3c3c3c3c3c?w=600&h=400&fit=crop",
+    image: "/assets/cleaner22.jpg",
     icon: "fa-solid fa-hand-sparkles",
     description: "Hospital-grade disinfection for your space",
     features: [
@@ -97,7 +102,38 @@ const services = [
   },
 ];
 
+const SHOWCASE_FIELDS = [
+  { key: "title", type: "text", label: "Service name" },
+  { key: "image", type: "image", label: "Picture" },
+  { key: "icon", type: "icon", label: "Icon" },
+  { key: "description", type: "textarea", label: "Description" },
+  {
+    key: "features",
+    type: "items",
+    label: "Highlights",
+    itemLabel: "highlight",
+    fields: [
+      { key: "icon", type: "icon", label: "Icon" },
+      { key: "text", type: "text", label: "Text" },
+    ],
+  },
+  { key: "btnText", type: "text", label: "Button text" },
+  { key: "id", hidden: true },
+];
+
+const DEFAULT_STRIP = [
+  { icon: "fa-solid fa-shield-halved", text: "Fully Insured" },
+  { icon: "fa-solid fa-leaf", text: "Eco-Friendly" },
+  { icon: "fa-solid fa-clock", text: "Flexible Schedule" },
+  { icon: "fa-solid fa-star", text: "Satisfaction Guaranteed" },
+];
+
 const Contact = () => {
+  const stored = useCms("showcase.services", DEFAULT_SHOWCASE);
+  const services = Array.isArray(stored) ? stored : DEFAULT_SHOWCASE;
+  const strip = useCms("showcase.strip", DEFAULT_STRIP);
+  const { isEditMode } = useEditMode();
+  const background = useCms("showcase.background", "");
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollContainerRef = useRef(null);
 
@@ -148,7 +184,12 @@ const Contact = () => {
   }, [activeIndex]);
 
   return (
-    <div className="contact" id="contact">
+    <div className="contact" id="contact" style={background ? { backgroundImage: `url(${background})` } : undefined}>
+      {isEditMode && (
+        <div style={{ position: "relative", zIndex: 30, paddingTop: "5rem" }}>
+          <EditSection cmsKey="showcase.background" root="" label="background picture" icon="fa-image" field={{ type: "image", label: "" }} help="Leave empty to use the original picture." />
+        </div>
+      )}
       {/* Decorative bubbles */}
       {[...Array(11)].map((_, i) => (
         <div className={`bubble b${i + 1}`} key={i}>
@@ -159,11 +200,13 @@ const Contact = () => {
       {/* Hero Header */}
       <div className="contact-hero">
         <div className="contact-hero-content">
-          <span className="contact-badge">Our Services</span>
-          <h1>Professional Cleaning <span className="highlight">Solutions</span></h1>
-          <p>From homes to offices, we deliver spotless results with eco-friendly products and trained professionals.</p>
+          <EditableText cmsKey="showcase.badge" value="Our Services" as="span" className="contact-badge" label="Small tag" />
+          <EditableText cmsKey="showcase.title" value="Professional Cleaning *Solutions*" as="h1" label="Heading" help={HIGHLIGHT_HELP}>
+            {(v) => highlight(v)}
+          </EditableText>
+          <EditableText cmsKey="showcase.subtitle" value="From homes to offices, we deliver spotless results with eco-friendly products and trained professionals." as="p" label="Intro text" />
           <Link to="/apply" className="contact-cta-btn">
-            Apply for Service <i className="fa-solid fa-arrow-right"></i>
+            <EditableText cmsKey="showcase.cta" value="Apply for Service" label="Button text" /> <i className="fa-solid fa-arrow-right"></i>
           </Link>
         </div>
       </div>
@@ -171,8 +214,8 @@ const Contact = () => {
       {/* Services Carousel */}
       <div className="contact_service">
         <div className="title">
-          <span>What We Offer</span>
-          <h2>Explore Our Cleaning Services</h2>
+          <EditableText cmsKey="showcase.section_tag" value="What We Offer" as="span" label="Small tag" />
+          <EditableText cmsKey="showcase.section_title" value="Explore Our Cleaning Services" as="h2" label="Heading" />
         </div>
 
         <div className="service-holder-wrapper">
@@ -181,10 +224,18 @@ const Contact = () => {
           </button>
 
           <div className="services-container" ref={scrollContainerRef}>
-            {services.map((serviceItem, index) => (
+            <EditableList
+              cmsKey="showcase.services"
+              value={services}
+              itemLabel="service"
+              label="Services"
+              addButtonPosition="before"
+              field={{ type: "items", itemLabel: "service", fields: SHOWCASE_FIELDS, label: "", newItem: () => ({ id: Date.now(), title: "New service", image: "", icon: "fa-solid fa-broom", description: "", features: [], btnText: "Apply Now" }) }}
+            >
+            {(serviceItem, index) => (
               <div
                 className={`single_service_display ${index === activeIndex ? "active" : ""}`}
-                key={serviceItem.id}
+                key={serviceItem.id ?? index}
               >
                 <div className="service">
                   <img src={serviceItem.image} alt={serviceItem.title} loading="lazy" />
@@ -207,7 +258,8 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            )}
+            </EditableList>
           </div>
 
           <button onClick={nextService} className="carousel-btn right" aria-label="Next service">
@@ -218,22 +270,23 @@ const Contact = () => {
 
       {/* Why Choose Us Strip */}
       <div className="contact-why-us">
-        <div className="why-us-item">
-          <i className="fa-solid fa-shield-halved"></i>
-          <span>Fully Insured</span>
-        </div>
-        <div className="why-us-item">
-          <i className="fa-solid fa-leaf"></i>
-          <span>Eco-Friendly</span>
-        </div>
-        <div className="why-us-item">
-          <i className="fa-solid fa-clock"></i>
-          <span>Flexible Schedule</span>
-        </div>
-        <div className="why-us-item">
-          <i className="fa-solid fa-star"></i>
-          <span>Satisfaction Guaranteed</span>
-        </div>
+        <EditableList
+          cmsKey="showcase.strip"
+          value={Array.isArray(strip) ? strip : DEFAULT_STRIP}
+          itemLabel="point"
+          label="Bottom strip"
+          fields={[
+            { key: "icon", type: "icon", label: "Icon" },
+            { key: "text", type: "text", label: "Text" },
+          ]}
+        >
+          {(item, i) => (
+            <div className="why-us-item" key={i}>
+              <i className={item.icon}></i>
+              <span>{item.text}</span>
+            </div>
+          )}
+        </EditableList>
       </div>
     </div>
   );

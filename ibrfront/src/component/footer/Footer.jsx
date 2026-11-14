@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { apiUrl } from "../../utils/api";
 import CustomAlert from "../../component/customAlert/CustomAlert";
 import Loading from "../../component/loading/Loading";
-import { SITE_CONFIG } from "../../config/site";
-import { useCmsCategory } from "../../hooks/useCmsContent";
+import { useCmsCategory, useCms } from "../../hooks/useCmsContent";
+import { useSiteSettings, openSiteSettings } from "../../hooks/useSiteSettings";
 import { useEditMode } from "../../context/EditModeContext";
 import { useAuth } from "../../context/AuthContext";
 import EditableText from "../editable/EditableText";
@@ -14,7 +14,11 @@ import EditableList from "../editable/EditableList";
 
 const Footer = () => {
   const { value: footerContent, loading: footerLoading } = useCmsCategory("footer", {});
-  const { isEditMode } = useEditMode();
+  const { isEditMode, openPanel } = useEditMode();
+  const site = useSiteSettings();
+  const subscribeButton = useCms("footer.subscribe_button", "Subscribe");
+  const exploreHeading = useCms("footer.explore_heading", "Explore Links");
+  const copyright = useCms("footer.copyright", "All Rights Reserved LBR Cleaning. Designed & Built by DavidFoster.");
   const { user, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "success" });
@@ -132,9 +136,7 @@ const Footer = () => {
         )}
 
         {isAuthenticated && user?.email ? (
-          <p style={{ color: "#fff", marginTop: "10px", opacity: 0.9 }}>
-            Newsletter updates will be sent to <strong>{user.email}</strong>
-          </p>
+          null
         ) : (
           <form onSubmit={onSubmit}>
             <input
@@ -145,9 +147,9 @@ const Footer = () => {
               placeholder={subscribePlaceholder}
               disabled={isEditMode}
             />
-            <button type="submit" className="btn" disabled={isEditMode}>
+            <button type="submit" className="btn" onClick={isEditMode ? (e) => e.preventDefault() : undefined}>
               <p>
-                Subscribe <i className="fa-solid fa-arrow-right-long"></i>
+                <EditableText cmsKey="footer.subscribe_button" value={subscribeButton} label="Subscribe button text" /> <i className="fa-solid fa-arrow-right-long"></i>
               </p>
             </button>
           </form>
@@ -156,12 +158,14 @@ const Footer = () => {
         <div className="socials">
           <EditableList
             cmsKey="footer.social_links"
-            type="array"
             value={socialLinks}
             itemWrapperTag="span"
+            itemLabel="social link"
+            label="Social media links"
+            help="Pick the network's icon and paste the link to your page."
             fields={[
-              { key: "url", label: "Link URL" },
-              { key: "icon", label: "Icon class (e.g. fa-brands fa-instagram)" },
+              { key: "icon", type: "icon", label: "Icon" },
+              { key: "url", type: "url", label: "Link to your page", placeholder: "https://instagram.com/yourpage" },
             ]}
           >
             {(link, idx) => (
@@ -175,65 +179,75 @@ const Footer = () => {
 
       <div className="main_footer container">
         <div className="main futup">
-          <div className="logo">
-            <img src={houseimage} alt="" />
+          <div
+            className={`logo ${isEditMode ? "editable-field" : ""}`}
+            onClickCapture={isEditMode ? (e) => { e.preventDefault(); e.stopPropagation(); openSiteSettings(openPanel); } : undefined}
+            title={isEditMode ? "Change logo & business info" : undefined}
+          >
+            <img src={site.logo === "/house-cleaning.png" ? houseimage : site.logo} alt="" />
           </div>
-          <p>
-            <EditableText cmsKey="footer.about" type="text" value={footerAbout} />
-          </p>
+          <EditableText cmsKey="footer.about" value={footerAbout} as="p" multiline label="About text" />
         </div>
 
         <ul className="explore futup">
-          <h2>Explore Links</h2>
+          <EditableText cmsKey="footer.explore_heading" value={exploreHeading} as="h2" label="Links heading" />
           <EditableList
             cmsKey="footer.explore_links"
-            type="array"
             value={exploreLinks}
             itemWrapperTag="li"
+            itemLabel="link"
+            label="Footer links"
             fields={[
-              { key: "label", label: "Label" },
-              { key: "to", label: "Link (e.g. /about)" },
-              { key: "icon", label: "Icon class (e.g. fa-solid fa-blog)" },
+              { key: "label", type: "text", label: "Text shown" },
+              { key: "to", type: "url", label: "Goes to (e.g. /about)" },
+              { key: "icon", type: "icon", label: "Icon" },
             ]}
           >
-            {(link, idx) => (
-              <Link key={idx} to={link.to}>
-                <i className={link.icon}></i> {link.label}
-              </Link>
-            )}
+            {(link, idx) =>
+              /^(https?:|mailto:|tel:)/i.test(link.to || "") ? (
+                <a key={idx} href={link.to} target="_blank" rel="noopener noreferrer">
+                  <i className={link.icon}></i> {link.label}
+                </a>
+              ) : (
+                <Link key={idx} to={link.to === "/services" ? "/service" : link.to || "/"}>
+                  <i className={link.icon}></i> {link.label}
+                </Link>
+              )
+            }
           </EditableList>
         </ul>
 
-        <div className="footer_details futup">
-          
-          <a href={`tel:${SITE_CONFIG.phone.replace(/\s/g, "")}`}
-            rel="noopener"
-            aria-label={`Call ${SITE_CONFIG.phone}`}
-          >
-            <i className="fa-solid fa-phone"></i> {SITE_CONFIG.phone}
+        <div
+          className={`footer_details futup ${isEditMode ? "editable-field" : ""}`}
+          onClickCapture={isEditMode ? (e) => { e.preventDefault(); e.stopPropagation(); openSiteSettings(openPanel); } : undefined}
+          title={isEditMode ? "Click to change phone, email, address…" : undefined}
+        >
+          <a href={site.phoneHref} rel="noopener" aria-label={`Call ${site.phone}`}>
+            <i className="fa-solid fa-phone"></i> {site.phone}
           </a>
 
-          <a href={`https://wa.me/${SITE_CONFIG.WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
+          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-whatsapp"></i> WhatsApp
           </a>
-          <a href={`mailto:${SITE_CONFIG.email}`}>
+          <a href={`mailto:${site.email}`}>
             <p>
-              <i className="fa-solid fa-envelope"></i> {SITE_CONFIG.email}
+              <i className="fa-solid fa-envelope"></i> {site.email}
             </p>
           </a>
           <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.address)}`}
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.address)}`}
             target="_blank"
             rel="noreferrer"
           >
             <i className="fa-solid fa-location-dot"></i>
-            {SITE_CONFIG.address}
+            {site.address}
           </a>
         </div>
+
       </div>
 
       <div className="copyright">
-        ©{new Date().getFullYear()} All Rights Reserved <span>LBR Cleaning</span>. Designed & Built by DavidFoster.
+        ©{new Date().getFullYear()} <EditableText cmsKey="footer.copyright" value={copyright} label="Copyright line" />
       </div>
     </div>
   );

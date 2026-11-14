@@ -243,9 +243,10 @@
 }
 
 .nav-user-avatar {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
+  object-fit: cover; /* This is what prevents the squeezing and crops it nicely */
   background: var(--gradient-primary);
   color: white;
   display: flex;
@@ -257,9 +258,10 @@
 }
 
 .nav-user-avatar.large {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 4rem;
+  height: 4rem;
   font-size: 1.1rem;
+  cursor: pointer;
 }
 
 .nav-user-name {

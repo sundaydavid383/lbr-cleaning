@@ -115,4 +115,4 @@ const verifyToken = (token) => {
   return jwt.verify(token, getJwtSecret());
 };
 
-module.exports = { createUser, login, verifyToken };
+module.exports = { createUser, login, verifyToken, updateUser };

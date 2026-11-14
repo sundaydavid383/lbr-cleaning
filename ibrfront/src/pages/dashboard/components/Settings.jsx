@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import "./settings.css";
+import Txt from "../../../component/editable/Txt";
 
 const Settings = () => {
   const { user, updateProfile } = useAuth();
@@ -116,7 +117,7 @@ const Settings = () => {
         <div className="settings-content">
           {activeTab === "profile" && (
             <div className="settings-panel">
-              <h3 className="dashboard-section-title">Profile Information</h3>
+              <h3 className="dashboard-section-title"><Txt k="dashboard.settings.profile_information" d={"Profile Information"} /></h3>
 
               {message.text && (
                 <div className={`settings-message settings-message-${message.type}`}>
@@ -133,7 +134,7 @@ const Settings = () => {
                     ) : (
                       <div className="settings-avatar-placeholder">
                         <i className="fa-solid fa-camera"></i>
-                        <span>Add Photo</span>
+                        <span><Txt k="dashboard.settings.add_photo" d={"Add Photo"} /></span>
                       </div>
                     )}
                     <div className="settings-avatar-overlay">
@@ -141,8 +142,8 @@ const Settings = () => {
                     </div>
                   </div>
                   <div className="settings-avatar-info">
-                    <p className="settings-avatar-label">Profile Picture</p>
-                    <p className="settings-avatar-hint">JPG, PNG or GIF. Max 5MB.</p>
+                    <p className="settings-avatar-label"><Txt k="dashboard.settings.profile_picture" d={"Profile Picture"} /></p>
+                    <p className="settings-avatar-hint"><Txt k="dashboard.settings.jpg_png_or_gif_max_5mb" d={"JPG, PNG or GIF. Max 5MB."} /></p>
                     <button type="button" className="settings-avatar-btn" onClick={triggerAvatarUpload}>
                       {avatarPreview ? "Change Photo" : "Upload Photo"}
                     </button>
@@ -157,27 +158,27 @@ const Settings = () => {
                 </div>
 
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Full Name</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.full_name" d={"Full Name"} /></label>
                   <input type="text" name="name" className="dashboard-form-input" value={formData.name} onChange={handleChange} />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Email Address</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.email_address" d={"Email Address"} /></label>
                   <input type="email" name="email" className="dashboard-form-input" value={formData.email} onChange={handleChange} />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Phone Number</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.phone_number" d={"Phone Number"} /></label>
                   <input type="tel" name="phone" className="dashboard-form-input" value={formData.phone} onChange={handleChange} />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Address</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.address" d={"Address"} /></label>
                   <textarea name="address" className="dashboard-form-input" rows="3" value={formData.address} onChange={handleChange} />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">City</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.city" d={"City"} /></label>
                   <input type="text" name="city" className="dashboard-form-input" value={formData.city} onChange={handleChange} />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Property Type</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.property_type" d={"Property Type"} /></label>
                   <select name="propertyType" className="dashboard-form-input" value={formData.propertyType} onChange={handleChange}>
                     <option value="">Select property type</option>
                     <option value="Apartment">Apartment</option>
@@ -191,7 +192,7 @@ const Settings = () => {
                   </select>
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Referral Source</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.referral_source" d={"Referral Source"} /></label>
                   <select name="referralSource" className="dashboard-form-input" value={formData.referralSource} onChange={handleChange}>
                     <option value="">Select an option</option>
                     <option value="Google Search">Google Search</option>
@@ -212,33 +213,33 @@ const Settings = () => {
 
           {activeTab === "security" && (
             <div className="settings-panel">
-              <h3 className="dashboard-section-title">Security Settings</h3>
+              <h3 className="dashboard-section-title"><Txt k="dashboard.settings.security_settings" d={"Security Settings"} /></h3>
               <div className="settings-form">
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Current Password</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.current_password" d={"Current Password"} /></label>
                   <input type="password" className="dashboard-form-input" placeholder="Enter current password" />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">New Password</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.new_password" d={"New Password"} /></label>
                   <input type="password" className="dashboard-form-input" placeholder="Enter new password" />
                 </div>
                 <div className="dashboard-form-group">
-                  <label className="dashboard-form-label">Confirm New Password</label>
+                  <label className="dashboard-form-label"><Txt k="dashboard.settings.confirm_new_password" d={"Confirm New Password"} /></label>
                   <input type="password" className="dashboard-form-input" placeholder="Confirm new password" />
                 </div>
-                <button className="dashboard-btn dashboard-btn-primary">Update Password</button>
+                <button className="dashboard-btn dashboard-btn-primary"><Txt k="dashboard.settings.update_password" d={"Update Password"} /></button>
               </div>
             </div>
           )}
 
           {activeTab === "preferences" && (
             <div className="settings-panel">
-              <h3 className="dashboard-section-title">Notification Preferences</h3>
+              <h3 className="dashboard-section-title"><Txt k="dashboard.settings.notification_preferences" d={"Notification Preferences"} /></h3>
               <div className="settings-preferences">
                 <div className="settings-preference-item">
                   <div>
-                    <p className="settings-preference-title">Push Notifications</p>
-                    <p className="settings-preference-desc">Receive booking reminders and updates</p>
+                    <p className="settings-preference-title"><Txt k="dashboard.settings.push_notifications" d={"Push Notifications"} /></p>
+                    <p className="settings-preference-desc"><Txt k="dashboard.settings.receive_booking_reminders_and_updates" d={"Receive booking reminders and updates"} /></p>
                   </div>
                   <label className="settings-toggle">
                     <input type="checkbox" defaultChecked />
@@ -247,8 +248,8 @@ const Settings = () => {
                 </div>
                 <div className="settings-preference-item">
                   <div>
-                    <p className="settings-preference-title">Email Notifications</p>
-                    <p className="settings-preference-desc">Receive invoices and updates via email</p>
+                    <p className="settings-preference-title"><Txt k="dashboard.settings.email_notifications" d={"Email Notifications"} /></p>
+                    <p className="settings-preference-desc"><Txt k="dashboard.settings.receive_invoices_and_updates_via_email" d={"Receive invoices and updates via email"} /></p>
                   </div>
                   <label className="settings-toggle">
                     <input type="checkbox" defaultChecked />
@@ -257,8 +258,8 @@ const Settings = () => {
                 </div>
                 <div className="settings-preference-item">
                   <div>
-                    <p className="settings-preference-title">SMS Notifications</p>
-                    <p className="settings-preference-desc">Receive text message reminders</p>
+                    <p className="settings-preference-title"><Txt k="dashboard.settings.sms_notifications" d={"SMS Notifications"} /></p>
+                    <p className="settings-preference-desc"><Txt k="dashboard.settings.receive_text_message_reminders" d={"Receive text message reminders"} /></p>
                   </div>
                   <label className="settings-toggle">
                     <input type="checkbox" />
@@ -271,14 +272,14 @@ const Settings = () => {
 
           {activeTab === "danger" && (
             <div className="settings-panel">
-              <h3 className="dashboard-section-title" style={{ color: "#dc2626" }}>Danger Zone</h3>
+              <h3 className="dashboard-section-title" style={{ color: "#dc2626" }}><Txt k="dashboard.settings.danger_zone" d={"Danger Zone"} /></h3>
               <div className="settings-danger">
                 <div className="settings-danger-item">
                   <div>
-                    <p className="settings-danger-title">Delete Account</p>
-                    <p className="settings-danger-desc">Permanently delete your account and all data</p>
+                    <p className="settings-danger-title"><Txt k="dashboard.settings.delete_account" d={"Delete Account"} /></p>
+                    <p className="settings-danger-desc"><Txt k="dashboard.settings.permanently_delete_your_account_and_all" d={"Permanently delete your account and all data"} /></p>
                   </div>
-                  <button className="dashboard-btn dashboard-btn-danger">Delete Account</button>
+                  <button className="dashboard-btn dashboard-btn-danger"><Txt k="dashboard.settings.delete_account" d={"Delete Account"} /></button>
                 </div>
               </div>
             </div>

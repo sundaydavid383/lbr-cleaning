@@ -1,106 +1,249 @@
-/* Hover affordance for any single editable field */
+/* ===== Click-to-edit affordances (only rendered in edit mode) ===== */
+
 .editable-field {
-  outline: 2px dashed transparent;
+  outline: 2px dashed rgba(22, 163, 74, 0.35);
   outline-offset: 3px;
-  border-radius: var(--radius-sm, 4px);
-  cursor: text;
+  border-radius: 4px;
+  cursor: pointer;
   transition: outline-color 0.15s ease, background 0.15s ease;
   position: relative;
+}
+
+.editable-field:hover,
+.editable-field:focus-visible {
+  outline: 2px solid var(--primary-color, #16a34a);
+  background: rgba(22, 163, 74, 0.07);
+}
+
+.editable-empty {
+  min-width: 120px;
   display: inline-block;
 }
 
-.editable-field:hover {
-  outline-color: rgba(22, 163, 74, 0.4);
-  background: rgba(22, 163, 74, 0.05);
-}
-
-.editable-field:focus {
-  outline: 2px solid var(--primary-color, #16a34a);
-  background: white;
-}
-
-.editable-field.editable-saving {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.editable-field.editable-error {
-  outline-color: #dc2626;
-  background: #fef2f2;
+.editable-placeholder {
+  opacity: 0.55;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .editable-pencil {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   display: inline-flex;
-  margin-left: 0.4rem;
-  color: var(--primary-color, #16a34a);
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-color, #16a34a);
+  color: #fff;
+  font-size: 0.6rem;
+  font-style: normal;
+  line-height: 1;
   opacity: 0;
-  transform: translateY(2px);
+  transform: scale(0.7);
   transition: opacity 0.15s ease, transform 0.15s ease;
   pointer-events: none;
-  font-size: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 5;
 }
 
-.editable-field:hover .editable-pencil {
+.editable-field:hover .editable-pencil,
+.editable-field:focus-visible .editable-pencil {
   opacity: 1;
-  transform: translateY(0);
+  transform: scale(1);
 }
 
-/* Popover wrap for inline text editing */
-.editable-popover-wrap {
+/* Images */
+.editable-image-wrap {
+  position: relative;
   display: inline-block;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.editable-image {
+  outline: 2px dashed rgba(22, 163, 74, 0.45);
+  outline-offset: 3px;
+  transition: outline-color 0.15s ease, filter 0.15s ease;
+}
+
+.editable-image-wrap:hover .editable-image {
+  outline: 3px solid var(--primary-color, #16a34a);
+  filter: brightness(0.85);
+}
+
+.editable-image-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary-color, #16a34a);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.editable-image-empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 160px;
+  min-height: 110px;
+  border: 2px dashed var(--primary-color, #16a34a);
+  border-radius: 8px;
+  color: var(--primary-color-dark, #0f7a37);
+  background: rgba(22, 163, 74, 0.06);
+  font-weight: 600;
+}
+
+/* List items */
+/* Zero specificity so a component's own position (e.g. absolute) always wins */
+:where(.editable-list-item-wrap) {
   position: relative;
 }
 
-.editable-popover-input {
-  display: block;
-  width: 100%;
-  min-width: 220px;
-  padding: 0.6rem 0.8rem;
-  border: 2px solid var(--primary-color, #16a34a);
-  border-radius: var(--radius-md, 6px);
-  font-size: 0.9rem;
-  font-family: inherit;
-  background: white;
-  color: var(--text-color, #0d0d0b);
-  resize: vertical;
-  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.08);
-}
-
-.editable-popover-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.editable-popover-btn {
-  padding: 0.4rem 0.9rem;
-  border-radius: var(--radius-md, 6px);
-  border: 1px solid var(--light-gray, #e5e7eb);
-  background: white;
-  font-size: 0.82rem;
-  font-weight: 600;
+.editable-list-item-wrap {
   cursor: pointer;
-  transition: all 0.15s ease;
+  outline: 2px dashed rgba(22, 163, 74, 0.35);
+  outline-offset: 2px;
+  border-radius: 8px;
+  transition: outline-color 0.15s ease;
 }
 
-.editable-popover-btn.primary {
+.editable-list-item-wrap:hover {
+  outline: 2px solid var(--primary-color, #16a34a);
+}
+
+.editable-list-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   background: var(--primary-color, #16a34a);
-  color: white;
-  border-color: var(--primary-color, #16a34a);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+  z-index: 6;
 }
 
-.editable-popover-btn.primary:hover:not(:disabled) {
-  background: var(--primary-color-dark, #15803d);
+.editable-list-item-wrap:hover .editable-list-controls {
+  opacity: 1;
 }
 
-.editable-popover-btn.cancel:hover:not(:disabled) {
-  background: var(--light-gray, #e5e7eb);
+.editable-list-manage {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  width: 100%;
+  margin: 0.75rem 0;
+  padding: 0.85rem 1rem;
+  border: 2px dashed var(--primary-color, #16a34a);
+  border-radius: 10px;
+  background: rgba(22, 163, 74, 0.06);
+  color: var(--primary-color-dark, #0f7a37);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
 }
 
-.editable-popover-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.editable-list-manage:hover {
+  background: rgba(22, 163, 74, 0.14);
+}
+
+.editable-list-manage-add {
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--primary-color, #16a34a);
+  color: #fff;
+}
+
+.editable-list-empty {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  text-align: center;
+  color: #78716c;
+  font-style: italic;
+}
+
+/* "Edit this section" bar */
+.cms-section-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem auto 1rem;
+  padding: 0.5rem 0.75rem;
+  max-width: 1100px;
+  position: relative;
+  z-index: 20;
+}
+
+.cms-section-bar.inline {
+  display: inline-flex;
+  margin: 0.25rem 0;
+  padding: 0;
+}
+
+.cms-section-bar-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--secondary-color, #214e32);
+  background: #fff;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.cms-section-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--primary-color, #16a34a);
+  background: #fff;
+  color: var(--primary-color-dark, #0f7a37);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-family: inherit;
+}
+
+.cms-section-btn.primary {
+  background: var(--primary-color, #16a34a);
+  color: #fff;
+}
+
+.cms-section-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
 }
 
 /* Hero H1 line boxes in edit mode */
@@ -110,194 +253,14 @@
   gap: 0.5rem;
 }
 
-.hero-line-box {
-  display: inline-block;
-  padding: 0.35rem 0.6rem;
-  border: 2px dashed transparent;
-  border-radius: var(--radius-sm, 4px);
-  background: transparent;
-  transition: all 0.15s ease;
-}
-
-.hero-line-box:hover {
-  border-color: rgba(22, 163, 74, 0.4);
-  background: rgba(22, 163, 74, 0.05);
-}
-
-.hero-line-box:focus {
-  outline: none;
-  border-color: var(--primary-color, #16a34a);
-  background: white;
-}
-
-.hero-line-box + .hero-line-box {
-  margin-top: 0.25rem;
-}
-
-/* Images */
-.editable-image-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-.editable-image {
-  cursor: pointer;
-  transition: outline-color 0.15s ease;
-  outline: 2px dashed transparent;
-  outline-offset: 3px;
-}
-
-.editable-image:hover {
-  outline-color: rgba(22, 163, 74, 0.5);
-}
-
-/* Popover (used by EditableImage and EditableList) */
-.editable-popover {
-  position: absolute;
-  z-index: 40;
-  top: calc(100% + 8px);
-  left: 0;
-  background: white;
-  border: 1px solid var(--light-gray, #e5e7eb);
-  border-radius: var(--radius-lg, 10px);
-  box-shadow: var(--box-shadow-hover, 0 8px 24px rgba(0,0,0,0.15));
-  padding: 1rem;
-  width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.editable-popover label,
-.editable-popover-field label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-color-muted, #6b7280);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.editable-popover input {
-  padding: 0.5rem 0.7rem;
-  border: 2px solid var(--light-gray, #e5e7eb);
-  border-radius: var(--radius-md, 6px);
-  font-size: 0.85rem;
-  outline: none;
-}
-
-.editable-popover input:focus {
-  border-color: var(--primary-color, #16a34a);
-}
-
-.editable-popover-preview {
-  width: 100%;
-  max-height: 120px;
-  object-fit: cover;
-  border-radius: var(--radius-md, 6px);
-  border: 1px solid var(--light-gray, #e5e7eb);
-}
-
-.editable-popover-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.editable-popover-actions button {
-  padding: 0.4rem 0.9rem;
-  border-radius: var(--radius-md, 6px);
-  border: 1px solid var(--light-gray, #e5e7eb);
-  background: white;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.editable-popover-actions button.primary {
-  background: var(--primary-color, #16a34a);
-  color: white;
-  border-color: var(--primary-color, #16a34a);
-}
-
-.editable-uploading {
-  font-size: 0.82rem;
-  color: var(--text-color-muted, #6b7280);
-}
-
-.editable-error {
-  font-size: 0.82rem;
-  color: #dc2626;
-}
-
-/* List items */
-.editable-list-item-wrap {
-  position: relative;
-}
-
-.editable-list-controls {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  display: none;
-  gap: 4px;
-  z-index: 10;
-}
-
-.editable-list-item-wrap:hover .editable-list-controls {
-  display: flex;
-}
-
-.editable-list-edit-btn,
-.editable-list-remove-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: none;
-  font-size: 0.7rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.editable-list-edit-btn {
-  background: var(--primary-color, #16a34a);
-  color: white;
-}
-
-.editable-list-remove-btn {
-  background: #b91c1c;
-  color: white;
-  font-size: 0.85rem;
-}
-
-.editable-add-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  border: 2px dashed var(--light-gray, #e5e7eb);
-  background: transparent;
-  color: var(--primary-color-dark, #15803d);
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.6rem 1rem;
-  border-radius: var(--radius-lg, 10px);
-  cursor: pointer;
-  margin-top: 0.75rem;
-}
-
-.editable-add-btn:hover {
-  border-color: var(--primary-color, #16a34a);
-  background: rgba(22, 163, 74, 0.06);
-}
-
-/* Top edit bar */
+/* ===== Top edit bar (visual editor pages) ===== */
 .edit-mode-bar {
   position: sticky;
   top: 0;
   z-index: 100;
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   justify-content: space-between;
   align-items: center;
   background: var(--secondary-color, #14532d);
@@ -306,25 +269,25 @@
   font-size: 0.9rem;
 }
 
-.edit-mode-bar-left {
+.edit-mode-bar-left,
+.edit-mode-bar-right {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.6rem;
 }
 
 .edit-mode-bar-left select {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: var(--radius-md, 6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
   padding: 0.35rem 0.6rem;
   font-weight: 600;
 }
 
-.edit-mode-bar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.edit-mode-bar-left select option {
+  color: #111;
 }
 
 .edit-save-status {
@@ -339,59 +302,58 @@
   color: #fca5a5;
 }
 
+.edit-mode-exit-btn,
+.edit-mode-refresh-btn {
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0.45rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .edit-mode-exit-btn {
   background: white;
   color: var(--secondary-color, #14532d);
   border: none;
-  padding: 0.45rem 1rem;
-  border-radius: var(--radius-full, 999px);
-  font-weight: 700;
-  font-size: 0.82rem;
-  cursor: pointer;
 }
 
 .edit-mode-refresh-btn {
   background: rgba(255, 255, 255, 0.15);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  padding: 0.45rem 1rem;
-  border-radius: var(--radius-full, 999px);
-  font-weight: 700;
-  font-size: 0.82rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.2s ease;
 }
 
 .edit-mode-refresh-btn:hover {
   background: rgba(255, 255, 255, 0.25);
-  border-color: white;
 }
 
-/* Toast */
+.edit-mode-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Save toast ===== */
 .edit-mode-toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9999;
+  z-index: 100002;
   background: var(--secondary-color, #14532d);
   color: white;
   padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-full, 9999px);
+  border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   animation: toastIn 0.3s ease;
-}
-
-.edit-mode-toast.saving {
-  background: var(--secondary-color, #14532d);
+  max-width: calc(100vw - 32px);
 }
 
 .edit-mode-toast.saved {
@@ -402,19 +364,30 @@
   background: #b91c1c;
 }
 
+.edit-mode-toast button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* Inline note used for things like an input's placeholder text,
-   which can't be edited in place since it isn't visible page content */
+/* Notes for things that aren't visible page content (e.g. input placeholders) */
 .editable-inline-note {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.78rem;
-  color: var(--text-color-muted, #6b7280);
+  color: #6b7280;
   margin-bottom: 0.4rem;
 }
 

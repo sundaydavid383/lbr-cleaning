@@ -3,9 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./serviceDetails.css";
 import TestimonialCarousel from "../testimonial/TestimonialCarousel";
-import { useCmsContent } from "../../hooks/useCmsContent";
+import { useCms, useCmsReady } from "../../hooks/useCmsContent";
 import { useEditMode } from "../../context/EditModeContext";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 import EditableText from "../editable/EditableText";
+import EditableList from "../editable/EditableList";
+import EditSection from "../editable/EditSection";
+import { SERVICE_CARD_FIELDS, serviceSlug } from "../serviceSection/serviceFields";
 import {
   FaClock,
   FaMoneyBillWave,
@@ -22,15 +26,17 @@ import {
   FaAward,
 } from "react-icons/fa";
 import { FaShieldHalved } from "react-icons/fa6";
+import EditZone from "../editable/EditZone";
 
-import service1 from "../../assets/cleaner19.jpeg";
-import service2 from "../../assets/cleaner20.jpg";
-import service3 from "../../assets/cleaner21.jpg";
-import service4 from "../../assets/cleaner25.jpg";
-import service5 from "../../assets/cleaner24.jpg";
-import service6 from "../../assets/cleaner22.jpg";
+// Stable public paths (public/assets) so they stay valid when saved in the CMS.
+const service1 = "/assets/cleaner19.jpeg";
+const service2 = "/assets/cleaner20.jpg";
+const service3 = "/assets/cleaner21.jpg";
+const service4 = "/assets/cleaner25.jpg";
+const service5 = "/assets/cleaner24.jpg";
+const service6 = "/assets/cleaner22.jpg";
 
-const services = [
+const SERVICE_DEFAULTS = [
   {
     id: "home-cleaning",
     title: "Home Cleaning",
@@ -650,52 +656,49 @@ const services = [
   },
 ];
 
-const serviceGalleries = {
-  "home-cleaning": [
-    "../../assets/cleaner19.jpeg",
-    "../../assets/cleaner20.jpg",
-    "../../assets/cleaner21.jpg",
-    "../../assets/cleaner1.jpg",
-  ],
-  "office-cleaning": [
-    "../../assets/cleaner20.jpg",
-    "../../assets/cleaner25.jpg",
-    "../../assets/cleaner1.jpg",
-    "../../assets/cleaner7.jpeg",
-  ],
-  "carpet-cleaning": [
-    "../../assets/cleaner21.jpg",
-    "../../assets/cleaner22.jpg",
-    "../../assets/cleaner5.jpg",
-    "../../assets/cleaner6.jpg",
-  ],
-  "window-cleaning": [
-    "../../assets/cleaner25.jpg",
-    "../../assets/cleaner24.jpg",
-    "../../assets/cleaner4.png",
-    "../../assets/cleaner1.jpg",
-  ],
-  "move-cleaning": [
-    "../../assets/cleaner24.jpg",
-    "../../assets/cleaner19.jpeg",
-    "../../assets/cleaner2.png",
-    "../../assets/cleaner3.png",
-  ],
-  "post-construction-cleaning": [
-    "../../assets/cleaner22.jpg",
-    "../../assets/cleaner23.jpg",
-    "../../assets/cleaner1.jpg",
-    "../../assets/cleaner9.jpg",
-  ],
-  "sanitization-service": [
-    "../../assets/cleaner22.jpg",
-    "../../assets/cleaner6.jpg",
-    "../../assets/cleaner15.jpg",
-    "../../assets/cleaner16.jpg",
-  ],
-};
 
-const useRevealOnScroll = () => {
+const DEFAULT_GALLERY = [service1, service2, service3, service4];
+
+// Fields for one service's own page (stored in service_details.<id>).
+export const SERVICE_DETAIL_FIELDS = [
+  { key: "heroBadge", type: "text", label: "Badge on the banner (e.g. Most Popular)" },
+  { key: "tagline", type: "text", label: "Short tagline" },
+  { key: "description", type: "textarea", label: "Description" },
+  { key: "duration", type: "text", label: "How long it takes" },
+  { key: "pricing", type: "text", label: "Price (e.g. Starting from ₦15,000)" },
+  { key: "rating", type: "number", label: "Star rating (e.g. 4.9)" },
+  { key: "reviewCount", type: "number", label: "Number of reviews (0 hides the rating)" },
+  { key: "targetAudience", type: "list", label: "Who it's for", itemLabel: "group" },
+  { key: "details", type: "list", label: "What's included", itemLabel: "point", itemField: { type: "textarea" } },
+  { key: "benefits", type: "list", label: "Why choose us (benefits)", itemLabel: "benefit", itemField: { type: "textarea" } },
+  { key: "preparation", type: "list", label: "How to prepare", itemLabel: "step", itemField: { type: "textarea" } },
+  { key: "gallery", type: "list", label: "Gallery pictures", itemLabel: "picture", itemField: { type: "image" } },
+  {
+    key: "faqs",
+    type: "items",
+    label: "Questions & answers",
+    itemLabel: "question",
+    fields: [
+      { key: "question", type: "text", label: "Question" },
+      { key: "answer", type: "textarea", label: "Answer" },
+    ],
+  },
+  {
+    key: "testimonials",
+    type: "items",
+    label: "Customer reviews",
+    itemLabel: "review",
+    fields: [
+      { key: "quote", type: "textarea", label: "What they said" },
+      { key: "author", type: "text", label: "Name (e.g. - Ifeoma, Lagos)" },
+      { key: "image", type: "image", label: "Photo" },
+    ],
+  },
+];
+
+const fill = (text, service) => (typeof text === "string" ? text.replace(/\{service\}/g, service?.title || "") : text);
+
+const useRevealOnScroll = (ready) => {
   const elementsRef = useRef([]);
 
   useEffect(() => {
@@ -710,41 +713,128 @@ const useRevealOnScroll = () => {
       { threshold: 0.1 }
     );
 
-    elementsRef.current.forEach((el) => el && observer.observe(el));
+    const els = elementsRef.current;
+    els.forEach((el) => el && observer.observe(el));
 
-    return () => {
-      elementsRef.current.forEach((el) => el && observer.unobserve(el));
-    };
-  }, []);
+    return () => observer.disconnect();
+  }, [ready]);
 
   return elementsRef;
 };
 
-const ServiceDetails = ({}) => {
+// Builds the full service from: the card on the Services page
+// (service_page.services), its own page content (service_details.<id>),
+// and the built-in defaults for the original services.
+export const useServiceData = (serviceId) => {
+  const cards = useCms("service_page.services", []);
+  const cardList = Array.isArray(cards) ? cards : [];
+  const cardIndex = cardList.findIndex((c) => c && serviceSlug(c) === serviceId);
+  const card = cardIndex >= 0 ? cardList[cardIndex] : null;
+  const base = SERVICE_DEFAULTS.find((s) => s.id === serviceId) || null;
+  const detailsKey = `service_details.${serviceId}`;
+  const cms = useCms(detailsKey, null);
+
+  if (!card && !base && !cms) return { service: null, cards: cardList };
+
+  const root = {
+    tagline: "",
+    heroBadge: "",
+    description: "",
+    duration: "",
+    pricing: "",
+    rating: 5,
+    reviewCount: 0,
+    targetAudience: [],
+    details: card?.details || [],
+    benefits: [],
+    preparation: [],
+    faqs: [],
+    testimonials: [],
+    gallery: base ? DEFAULT_GALLERY : [],
+    ...(base || {}),
+    ...(cms && typeof cms === "object" ? cms : {}),
+  };
+  delete root.id;
+  delete root.image;
+  delete root.outlistimage;
+  delete root.title;
+
+  const service = {
+    ...root,
+    id: serviceId,
+    title: card?.title || cms?.title || base?.title || serviceId,
+    image: card?.image || base?.image,
+    icon: card?.icon,
+  };
+
+  return { service, root, detailsKey, card, cardIndex, cards: cardList };
+};
+
+const ServiceDetails = () => {
   const { serviceId } = useParams();
   const [openFAQ, setOpenFAQ] = useState(null);
-  const service = services.find((s) => s.id === serviceId);
-  const { value: cmsServiceDetails } = useCmsContent(
-    service ? `service_details.${service.id}` : null,
-    null
-  );
-  const description = cmsServiceDetails?.description ?? service?.description;
-  const faqs = cmsServiceDetails?.faqs ?? service?.faqs;
-  const testimonials = cmsServiceDetails?.testimonials ?? service?.testimonials;
-  const sectionsRef = useRevealOnScroll();
+  const ready = useCmsReady();
+  const { service, root, detailsKey, cardIndex, cards } = useServiceData(serviceId);
+  const sectionsRef = useRevealOnScroll(ready && !!service);
   const { isEditMode } = useEditMode();
+  const site = useSiteSettings();
+  const heads = useCms("service_details.headings", {});
+  const viewDetailsText = useCms("service_page.view_details_text", "View Details");
+  const reviewsWord = heads?.reviews_word || "reviews";
+
+  if (!ready && !service) {
+    return <div style={{ minHeight: "60vh" }} />;
+  }
 
   if (!service) {
     return (
       <div className="not-found">
         <h2>Service not found</h2>
-        <Link to="/">Go Back</Link>
+        <Link to="/service">See all services</Link>
       </div>
     );
   }
 
-  const relatedServices = services
-    .filter((s) => s.id !== service.id)
+  // Text inside this service's own content.
+  const T = (path, Tag, props = {}) => (
+    <EditableText cmsKey={detailsKey} root={root} path={path} value={root[path]} as={Tag} {...props} />
+  );
+
+  // Section headings shared by every service page. "{service}" becomes the service name.
+  const H = (section, defaults) => {
+    const keyBase = `service_details.${section}`;
+    return (
+      <div className="section-header">
+        <EditableText cmsKey={`${keyBase}.tag`} value={defaults.tag} as="span" className="section-tag" label="Small tag (all service pages)" />
+        <EditableText cmsKey={`${keyBase}.title`} value={defaults.title} as="h2" label="Heading (all service pages)" help="Shared by every service page. Type {service} to insert the service's name.">
+          {(v) => fill(v, service)}
+        </EditableText>
+        <EditableText cmsKey={`${keyBase}.subtitle`} value={defaults.subtitle} as="p" label="Intro (all service pages)" help="Shared by every service page. Type {service} to insert the service's name.">
+          {(v) => fill(v, service)}
+        </EditableText>
+      </div>
+    );
+  };
+
+  const listEdit = (key, label, itemLabel, itemField = { type: "textarea" }) => (
+    <EditSection
+      cmsKey={detailsKey}
+      root={root}
+      path={key}
+      label={label}
+      field={{ type: "list", itemLabel, itemField, label: "" }}
+    />
+  );
+
+  const whatsappLink = `${site.whatsappHref}?text=${encodeURIComponent(`Hi, I'm interested in ${service.title}`)}`;
+  const gallery = Array.isArray(service.gallery) ? service.gallery.filter(Boolean) : [];
+  const faqs = Array.isArray(service.faqs) ? service.faqs : [];
+  const testimonials = Array.isArray(service.testimonials) ? service.testimonials : [];
+  const audience = Array.isArray(service.targetAudience) ? service.targetAudience : [];
+  const showRating = Number(service.reviewCount) > 0;
+
+  const relatedServices = cards
+    .filter((s) => s && serviceSlug(s) && serviceSlug(s) !== service.id)
     .slice(0, 3);
 
   return (
@@ -760,51 +850,72 @@ const ServiceDetails = ({}) => {
         }}
       >
         <div className="banner-content">
-          {isEditMode ? (
-            <>
-              <EditableText cmsKey={`service_details.${service.id}.badge`} type="text" value={service.heroBadge} as="span" className="banner-badge" />
-              <EditableText cmsKey={`service_details.${service.id}.title`} type="text" value={service.title} as="h1" />
-              <EditableText cmsKey={`service_details.${service.id}.tagline`} type="text" value={service.tagline} as="p" className="tagline" />
-              <EditableText cmsKey={`service_details.${service.id}.description`} type="text" value={description} as="p" className="banner-description" />
-            </>
-          ) : (
-            <>
-              <div className="banner-badge">{service.heroBadge}</div>
-              <h1>{service.title}</h1>
-              <p className="tagline">{service.tagline}</p>
-              <p className="banner-description">{description}</p>
-            </>
+          {isEditMode && (
+            <EditSection
+              inline
+              label="This service"
+              icon="fa-broom"
+              items={[
+                { cmsKey: detailsKey, root, label: "All page details", fields: SERVICE_DETAIL_FIELDS },
+                cardIndex >= 0 && {
+                  cmsKey: "service_page.services",
+                  root: cards,
+                  path: String(cardIndex),
+                  label: "Name, picture & card",
+                  fields: SERVICE_CARD_FIELDS,
+                },
+                {
+                  cmsKey: "service_details.headings",
+                  root: {},
+                  label: "Words on all service pages",
+                  help: "Button and label text shared by every service page.",
+                  fields: [
+                    { key: "book_now", type: "text", label: "Banner call button (default: Book Now)" },
+                    { key: "whatsapp", type: "text", label: "Banner WhatsApp button (default: Chat on WhatsApp)" },
+                    { key: "reviews_word", type: "text", label: "Word after the review count (default: reviews)" },
+                    { key: "scroll_hint", type: "text", label: "Scroll hint (default: Scroll to explore)" },
+                    { key: "starting_from", type: "text", label: "Price label (default: Starting from)" },
+                    { key: "sidebar_title", type: "text", label: "Sidebar heading (default: Book This Service)" },
+                  ],
+                },
+              ].filter(Boolean)}
+            />
           )}
+          {(service.heroBadge || isEditMode) && T("heroBadge", "div", { className: "banner-badge", label: "Banner badge" })}
+          {cardIndex >= 0 ? (
+            <EditableText cmsKey="service_page.services" root={cards} path={`${cardIndex}.title`} value={service.title} as="h1" label="Service name" help="Also changes the name on the Services page." />
+          ) : (
+            <h1>{service.title}</h1>
+          )}
+          {T("tagline", "p", { className: "tagline", label: "Tagline" })}
+          {T("description", "p", { className: "banner-description", label: "Description", multiline: true })}
 
-          <div className="quick-info">
+          <EditZone className="quick-info" cmsKey={detailsKey} root={root} label="Quick facts" fields={SERVICE_DETAIL_FIELDS.filter((f) => ["duration", "pricing", "rating", "reviewCount"].includes(f.key))}>
             <span>
-              <FaClock /> {service.duration}
+              <FaClock /> {T("duration", "span", { label: "How long it takes" })}
             </span>
             <span>
-              <FaMoneyBillWave /> {service.pricing}
+              <FaMoneyBillWave /> {T("pricing", "span", { label: "Price" })}
             </span>
-            <span>
-              <FaStar /> {service.rating} ({service.reviewCount} reviews)
-            </span>
-          </div>
+            {showRating && (
+              <span>
+                <FaStar /> {service.rating} ({service.reviewCount} {reviewsWord})
+              </span>
+            )}
+          </EditZone>
 
           <div className="banner-actions">
-            <a href="tel:+2349012345678" className="btn-primary">
-              <FaPhone /> Book Now
+            <a href={site.phoneHref} className="btn-primary">
+              <FaPhone /> <EditableText cmsKey="service_details.headings" root={heads} path="book_now" value={heads?.book_now || "Book Now"} label="Banner call button" />
             </a>
-            <a
-              href={`https://wa.me/2349012345678?text=Hi,%20I'm%20interested%20in%20${encodeURIComponent(service.title)}`}
-              className="btn-secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp /> Chat on WhatsApp
+            <a href={whatsappLink} className="btn-secondary" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp /> <EditableText cmsKey="service_details.headings" root={heads} path="whatsapp" value={heads?.whatsapp || "Chat on WhatsApp"} label="Banner WhatsApp button" />
             </a>
           </div>
         </div>
 
         <div className="banner-scroll-hint">
-          <span>Scroll to explore</span>
+          <EditableText cmsKey="service_details.headings" root={heads} path="scroll_hint" value={heads?.scroll_hint || "Scroll to explore"} label="Scroll hint" />
           <i className="fa-solid fa-chevron-down"></i>
         </div>
       </section>
@@ -812,18 +923,19 @@ const ServiceDetails = ({}) => {
       {/* ========== TRUST STRIP ========== */}
       <section className="trust-strip">
         <div className="trust-strip-container">
-          <div className="trust-item">
-            <FaCheckCircle /> Fully Insured
-          </div>
-          <div className="trust-item">
-            <FaLeaf /> Eco-Friendly Products
-          </div>
-          <div className="trust-item">
-            <FaShieldHalved /> Satisfaction Guarantee
-          </div>
-          <div className="trust-item">
-            <FaAward /> 8+ Years Experience
-          </div>
+          <EditableList
+            cmsKey="service_details.trust_strip"
+            value={["Fully Insured", "Eco-Friendly Products", "Satisfaction Guarantee", "8+ Years Experience"]}
+            itemLabel="point"
+            label="Trust points (all service pages)"
+            fields={[]}
+          >
+            {(item, i) => (
+              <div className="trust-item" key={i}>
+                {[<FaCheckCircle key="a" />, <FaLeaf key="b" />, <FaShieldHalved key="c" />, <FaAward key="d" />][i % 4]} {item}
+              </div>
+            )}
+          </EditableList>
         </div>
       </section>
 
@@ -832,23 +944,10 @@ const ServiceDetails = ({}) => {
         <main className="detail-main">
           {/* WHAT'S INCLUDED */}
           <section className="detail-content reveal" ref={(el) => (sectionsRef.current[0] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.included.tag" type="text" value="Service Details" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.included.title" type="text" value="What's Included" as="h2" />
-                  <EditableText cmsKey="service_details.included.subtitle" type="text" value={`Every ${service.title} service comes with this complete checklist`} as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">Service Details</span>
-                  <h2>What's Included</h2>
-                  <p>Every {service.title} service comes with this complete checklist</p>
-                </>
-              )}
-            </div>
-            <div className="inclusion-grid">
-              {service.details.map((point, index) => (
+            {H("included", { tag: "Service Details", title: "What's Included", subtitle: "Every {service} service comes with this complete checklist" })}
+            {listEdit("details", "what's included", "point")}
+            <EditZone className="inclusion-grid" cmsKey={detailsKey} root={root} path="details" label="What's included" field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "details"), label: "" }}>
+              {(service.details || []).map((point, index) => (
                 <div className="inclusion-card" key={index}>
                   <div className="inclusion-icon">
                     <FaCheckCircle />
@@ -856,57 +955,33 @@ const ServiceDetails = ({}) => {
                   <span>{point}</span>
                 </div>
               ))}
-            </div>
+            </EditZone>
           </section>
 
           {/* GALLERY */}
-          <section className="gallery-section reveal" ref={(el) => (sectionsRef.current[1] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.gallery.tag" type="text" value="Gallery" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.gallery.title" type="text" value="Our Work in Action" as="h2" />
-                  <EditableText cmsKey="service_details.gallery.subtitle" type="text" value="See the quality and attention to detail we bring to every job" as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">Gallery</span>
-                  <h2>Our Work in Action</h2>
-                  <p>See the quality and attention to detail we bring to every job</p>
-                </>
-              )}
-            </div>
-            <div className="gallery-grid">
-              {serviceGalleries[service.id]?.map((img, idx) => (
-                <div className="gallery-item" key={idx}>
-                  <img src={img} alt={`${service.title} gallery ${idx + 1}`} loading="lazy" />
-                  <div className="gallery-overlay">
-                    <i className="fa-solid fa-magnifying-glass-plus"></i>
+          {(gallery.length > 0 || isEditMode) && (
+            <section className="gallery-section reveal" ref={(el) => (sectionsRef.current[1] = el)}>
+              {H("gallery", { tag: "Gallery", title: "Our Work in Action", subtitle: "See the quality and attention to detail we bring to every job" })}
+              {listEdit("gallery", "gallery pictures", "picture", { type: "image" })}
+              <EditZone className="gallery-grid" cmsKey={detailsKey} root={root} path="gallery" label="Gallery pictures" field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "gallery"), label: "" }}>
+                {gallery.map((img, idx) => (
+                  <div className="gallery-item" key={idx}>
+                    <img src={img} alt={`${service.title} gallery ${idx + 1}`} loading="lazy" />
+                    <div className="gallery-overlay">
+                      <i className="fa-solid fa-magnifying-glass-plus"></i>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </EditZone>
+            </section>
+          )}
 
           {/* WHY CHOOSE US */}
           <section className="why-section reveal" ref={(el) => (sectionsRef.current[2] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.why_us.tag" type="text" value="Why Us" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.why_us.title" type="text" value={`Why Choose Our ${service.title}?`} as="h2" />
-                  <EditableText cmsKey="service_details.why_us.subtitle" type="text" value="The difference is in the details" as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">Why Us</span>
-                  <h2>Why Choose Our {service.title}?</h2>
-                  <p>The difference is in the details</p>
-                </>
-              )}
-            </div>
-            <div className="benefits-grid">
-              {service.benefits?.map((item, idx) => (
+            {H("why_us", { tag: "Why Us", title: "Why Choose Our {service}?", subtitle: "The difference is in the details" })}
+            {listEdit("benefits", "benefits", "benefit")}
+            <EditZone className="benefits-grid" cmsKey={detailsKey} root={root} path="benefits" label="Benefits" field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "benefits"), label: "" }}>
+              {(service.benefits || []).map((item, idx) => (
                 <div className="benefit-card" key={idx}>
                   <div className="benefit-icon">
                     <FaHeart />
@@ -914,164 +989,139 @@ const ServiceDetails = ({}) => {
                   <p>{item}</p>
                 </div>
               ))}
-            </div>
+            </EditZone>
           </section>
 
           {/* HOW TO PREPARE */}
           <section className="prep-section reveal" ref={(el) => (sectionsRef.current[3] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.preparation.tag" type="text" value="Preparation" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.preparation.title" type="text" value="How to Prepare" as="h2" />
-                  <EditableText cmsKey="service_details.preparation.subtitle" type="text" value="A few simple steps to get the best results" as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">Preparation</span>
-                  <h2>How to Prepare</h2>
-                  <p>A few simple steps to get the best results</p>
-                </>
-              )}
-            </div>
-            <div className="prep-steps">
-              {service.preparation?.map((item, idx) => (
+            {H("preparation", { tag: "Preparation", title: "How to Prepare", subtitle: "A few simple steps to get the best results" })}
+            {listEdit("preparation", "preparation steps", "step")}
+            <EditZone className="prep-steps" cmsKey={detailsKey} root={root} path="preparation" label="How to prepare" field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "preparation"), label: "" }}>
+              {(service.preparation || []).map((item, idx) => (
                 <div className="prep-step" key={idx}>
                   <div className="prep-number">{idx + 1}</div>
                   <p>{item}</p>
                 </div>
               ))}
-            </div>
+            </EditZone>
           </section>
 
           {/* TESTIMONIALS */}
-          <section className="testimonial-section reveal" ref={(el) => (sectionsRef.current[4] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.testimonials.tag" type="text" value="Testimonials" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.testimonials.title" type="text" value="What Our Clients Say" as="h2" />
-                  <EditableText cmsKey="service_details.testimonials.subtitle" type="text" value="Real feedback from real customers" as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">Testimonials</span>
-                  <h2>What Our Clients Say</h2>
-                  <p>Real feedback from real customers</p>
-                </>
+          {(testimonials.length > 0 || isEditMode) && (
+            <section className="testimonial-section reveal" ref={(el) => (sectionsRef.current[4] = el)}>
+              {H("testimonials", { tag: "Testimonials", title: "What Our Clients Say", subtitle: "Real feedback from real customers" })}
+              <EditSection
+                cmsKey={detailsKey}
+                root={root}
+                path="testimonials"
+                label={`reviews (${testimonials.length})`}
+                field={SERVICE_DETAIL_FIELDS.find((f) => f.key === "testimonials")}
+              />
+              {testimonials.length > 0 && (
+                <EditZone cmsKey={detailsKey} root={root} path="testimonials" label="Customer reviews" field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "testimonials"), label: "" }}>
+                  <TestimonialCarousel testimonials={testimonials} />
+                </EditZone>
               )}
-            </div>
-            <TestimonialCarousel testimonials={testimonials} />
-          </section>
+            </section>
+          )}
 
           {/* FAQ */}
           <section className="faq-section reveal" ref={(el) => (sectionsRef.current[5] = el)}>
-            <div className="section-header">
-              {isEditMode ? (
-                <>
-                  <EditableText cmsKey="service_details.faq.tag" type="text" value="FAQ" as="span" className="section-tag" />
-                  <EditableText cmsKey="service_details.faq.title" type="text" value="Frequently Asked Questions" as="h2" />
-                  <EditableText cmsKey="service_details.faq.subtitle" type="text" value="Everything you need to know before booking" as="p" />
-                </>
-              ) : (
-                <>
-                  <span className="section-tag">FAQ</span>
-                  <h2>Frequently Asked Questions</h2>
-                  <p>Everything you need to know before booking</p>
-                </>
-              )}
-            </div>
+            {H("faq", { tag: "FAQ", title: "Frequently Asked Questions", subtitle: "Everything you need to know before booking" })}
             <div className="faq-list">
-              {faqs?.map((faq, idx) => (
-                <div className="faq-item" key={idx}>
-                  <div
-                    className="faq-question"
-                    onClick={() => setOpenFAQ(openFAQ === idx ? null : idx)}
-                  >
-                    <span>{faq.question}</span>
-                    <i
-                      className={`fa-solid ${
-                        openFAQ === idx ? "fa-chevron-up" : "fa-chevron-down"
-                      }`}
-                    ></i>
-                  </div>
-                  {openFAQ === idx && (
-                    <div className="faq-answer">
-                      <p>{faq.answer}</p>
+              <EditableList
+                cmsKey={detailsKey}
+                root={root}
+                path="faqs"
+                value={faqs}
+                itemLabel="question"
+                label="Questions & answers"
+                field={{ ...SERVICE_DETAIL_FIELDS.find((f) => f.key === "faqs"), label: "" }}
+              >
+                {(faq, idx) => (
+                  <div className="faq-item" key={idx}>
+                    <div className="faq-question" onClick={() => setOpenFAQ(openFAQ === idx ? null : idx)}>
+                      <span>{faq.question}</span>
+                      <i className={`fa-solid ${openFAQ === idx ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {openFAQ === idx && (
+                      <div className="faq-answer">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </EditableList>
             </div>
           </section>
 
           {/* RELATED SERVICES */}
-          <section className="related-section reveal" ref={(el) => (sectionsRef.current[6] = el)}>
-            <div className="section-header">
-              <span className="section-tag">Explore More</span>
-              <h2>Related Services</h2>
-              <p>You might also be interested in</p>
-            </div>
-            <div className="related-grid">
-              {relatedServices.map((rel) => (
-                <Link to={`/services/${rel.id}`} className="related-card" key={rel.id}>
-                  <div className="related-image">
-                    <img src={rel.outlistimage} alt={rel.title} />
-                  </div>
-                  <div className="related-content">
-                    <h3>{rel.title}</h3>
-                    <p>{rel.tagline}</p>
-                    <span className="related-link">
-                      View Details <FaArrowRight />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
+          {relatedServices.length > 0 && (
+            <section className="related-section reveal" ref={(el) => (sectionsRef.current[6] = el)}>
+              {H("related", { tag: "Explore More", title: "Related Services", subtitle: "You might also be interested in" })}
+              <EditZone className="related-grid" cmsKey="service_page.services" root={cards} label="Services" field={{ type: "items", itemLabel: "service", label: "", fields: SERVICE_CARD_FIELDS }}>
+                {relatedServices.map((rel) => (
+                  <Link to={`/services/${serviceSlug(rel)}`} className="related-card" key={serviceSlug(rel)}>
+                    <div className="related-image">
+                      <img src={rel.image} alt={rel.title} />
+                    </div>
+                    <div className="related-content">
+                      <h3>{rel.title}</h3>
+                      <p>{rel.tagline || rel.details?.[0] || ""}</p>
+                      <span className="related-link">
+                        {viewDetailsText} <FaArrowRight />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </EditZone>
+            </section>
+          )}
         </main>
 
         {/* ========== STICKY BOOKING SIDEBAR ========== */}
         <aside className="booking-sidebar">
           <div className="sidebar-card">
             <div className="sidebar-header">
-              <h3>Book This Service</h3>
-              <div className="sidebar-rating">
-                <FaStar /> {service.rating} ({service.reviewCount} reviews)
-              </div>
+              <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_title" value={heads?.sidebar_title || "Book This Service"} as="h3" label="Sidebar heading" />
+              {showRating && (
+                <div className="sidebar-rating">
+                  <FaStar /> {service.rating} ({service.reviewCount} {reviewsWord})
+                </div>
+              )}
             </div>
 
             <div className="sidebar-price">
-              <span className="price-label">Starting from</span>
-              <span className="price-value">{service.pricing}</span>
+              <EditableText cmsKey="service_details.headings" root={heads} path="starting_from" value={heads?.starting_from || "Starting from"} className="price-label" label="Price label" />
+              {T("pricing", "span", { className: "price-value", label: "Price" })}
             </div>
 
-            <div className="sidebar-features">
+            <EditZone className="sidebar-features" cmsKey={detailsKey} root={root} label="Sidebar details" fields={SERVICE_DETAIL_FIELDS.filter((f) => ["duration", "targetAudience"].includes(f.key))}>
               <div className="sidebar-feature">
                 <FaClock /> {service.duration}
               </div>
+              {audience.length > 0 && (
+                <div className="sidebar-feature">
+                  <FaUsers /> {audience.slice(0, 3).join(", ")}
+                </div>
+              )}
               <div className="sidebar-feature">
-                <FaUsers /> {service.targetAudience.slice(0, 3).join(", ")}
+                <FaShieldHalved /> <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_insured" value={heads?.sidebar_insured || "Fully insured & bonded"} label="Sidebar line" />
               </div>
-              <div className="sidebar-feature">
-                <FaShieldHalved /> Fully insured & bonded
-              </div>
-            </div>
+            </EditZone>
 
-            <a href="tel:+2349012345678" className="sidebar-btn primary">
-              <FaPhone /> Call to Book
+            <a href={site.phoneHref} className="sidebar-btn primary">
+              <FaPhone /> <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_call" value={heads?.sidebar_call || "Call to Book"} label="Call button" />
             </a>
-            <a
-              href={`https://wa.me/2349012345678?text=Hi,%20I'm%20interested%20in%20${encodeURIComponent(service.title)}`}
-              className="sidebar-btn secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp /> WhatsApp Us
+            <Link to="/apply" className="sidebar-btn primary" style={{ marginTop: "0.5rem" }}>
+              <FaCalendarCheck /> <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_book_online" value={heads?.sidebar_book_online || "Book Online"} label="Book online button" />
+            </Link>
+            <a href={whatsappLink} className="sidebar-btn secondary" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp /> <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_whatsapp" value={heads?.sidebar_whatsapp || "WhatsApp Us"} label="WhatsApp button" />
             </a>
 
             <div className="sidebar-guarantee">
-              <FaCalendarCheck /> Free consultation & quote
+              <FaCalendarCheck /> <EditableText cmsKey="service_details.headings" root={heads} path="sidebar_note" value={heads?.sidebar_note || "Free consultation & quote"} label="Sidebar note" />
             </div>
           </div>
         </aside>

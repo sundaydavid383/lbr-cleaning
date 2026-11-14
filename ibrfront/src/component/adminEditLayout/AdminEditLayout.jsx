@@ -1,40 +1,37 @@
-import React, { useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useEditMode } from "../../context/EditModeContext";
-import EditModeBar from "../editModeBar/EditModeBar";
-import EditModeToast from "../editModeBar/EditModeToast";
+
+// Old visual-editor URLs (/admin/edit/…) now open the real page with
+// editing switched on, so admins edit exactly what visitors see.
+const MAP = {
+  "/admin/edit": "/",
+  "/admin/edit/home": "/",
+  "/admin/edit/about": "/about",
+  "/admin/edit/services": "/service",
+  "/admin/edit/blog": "/blog",
+  "/admin/edit/contact": "/contact",
+};
+
+export const editTarget = (pathname) => {
+  if (MAP[pathname]) return MAP[pathname];
+  const m = pathname.match(/^\/admin\/edit\/services\/(.+)$/);
+  if (m) return `/services/${m[1]}`;
+  return pathname.replace(/^\/admin\/edit/, "") || "/";
+};
 
 const AdminEditLayout = () => {
   const { isAuthenticated, user } = useAuth();
-  const { isEditMode, setIsEditMode, saveStatus, refreshAll } = useEditMode();
-  const reloadTimerRef = useRef(null);
+  const { setIsEditMode } = useEditMode();
+  const location = useLocation();
+  const isAdmin = isAuthenticated && user?.role === "admin";
 
   useEffect(() => {
-    if (isAuthenticated && user?.role === "admin") {
-      setIsEditMode(true);
-    }
-    return () => setIsEditMode(false);
-  }, [isAuthenticated, user, setIsEditMode]);
+    if (isAdmin) setIsEditMode(true);
+  }, [isAdmin, setIsEditMode]);
 
-  useEffect(() => {
-    if (saveStatus === "saved") {
-      if (reloadTimerRef.current) {
-        clearTimeout(reloadTimerRef.current);
-      }
-      reloadTimerRef.current = setTimeout(() => {
-        refreshAll();
-        window.location.reload();
-      }, 1200);
-    }
-    return () => {
-      if (reloadTimerRef.current) {
-        clearTimeout(reloadTimerRef.current);
-      }
-    };
-  }, [saveStatus, refreshAll]);
-
-  if (!isAuthenticated || user?.role !== "admin") {
+  if (!isAdmin) {
     return (
       <div className="cms-locked">
         <i className="fa-solid fa-lock"></i>
@@ -44,13 +41,7 @@ const AdminEditLayout = () => {
     );
   }
 
-  return (
-    <>
-      <EditModeBar />
-      <EditModeToast />
-      <Outlet />
-    </>
-  );
+  return <Navigate to={editTarget(location.pathname)} replace />;
 };
 
 export default AdminEditLayout;

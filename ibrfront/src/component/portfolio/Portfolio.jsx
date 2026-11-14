@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './portfolio.css';
-import img1 from "../../assets/cleaner11.jpg";
-import img2 from "../../assets/cleaner12.jpg";
-import img3 from "../../assets/cleaner14.jpg";
-import img4 from "../../assets/cleaner13.jpg";
-import img5 from "../../assets/cleaner15.jpg";
-import img6 from "../../assets/cleaner16.jpg";
-import img7 from "../../assets/cleaner17.jpg";
-import img8 from "../../assets/cleaner18.jpg";
+const img1 = "/assets/cleaner11.jpg";
+const img2 = "/assets/cleaner12.jpg";
+const img3 = "/assets/cleaner14.jpg";
+const img4 = "/assets/cleaner13.jpg";
+const img5 = "/assets/cleaner15.jpg";
+const img6 = "/assets/cleaner16.jpg";
+const img7 = "/assets/cleaner17.jpg";
+const img8 = "/assets/cleaner18.jpg";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../../component/editable/EditableText";
+import EditSection from "../../component/editable/EditSection";
+import { useCms } from "../../hooks/useCmsContent";
 
-const cardsData = [
+const DEFAULT_CARDS = [
   { name: "John Doe", img: img1, location: "New York, USA", desc: "Residential Cleaning Specialist" },
   { name: "Jane Smith", img: img2, location: "London, UK", desc: "Office Cleaning Expert" },
   { name: "Michael Johnson", img: img3, location: "Toronto, Canada", desc: "Deep Cleaning Specialist" },
@@ -23,9 +25,11 @@ const cardsData = [
   { name: "Mr Love", img: img8, location: "Newcastle, UK", desc: "Window and Glass Cleaning" },
 ];
 
-const total = cardsData.length;
-
 const Portfolio = () => {
+  const stored = useCms("portfolio.cards", DEFAULT_CARDS);
+  const cardsData = Array.isArray(stored) && stored.length ? stored : DEFAULT_CARDS;
+  const total = cardsData.length;
+  const trackerText = useCms("portfolio.tracker", "Viewing service {n} of {total}");
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const wrapperRef = useRef(null);
@@ -51,7 +55,7 @@ const Portfolio = () => {
       }
       return prev;
     });
-  }, []);
+  }, [total]);
 
   const handleDragEnd = useCallback((event, info) => {
     const swipeThreshold = 60;
@@ -99,21 +103,43 @@ const Portfolio = () => {
   return (
     <div className="portfolio">
       <div className="portfolio_heading">
-        {isEditMode ? (
-          <div className="title">
-            <EditableText cmsKey="portfolio.tag" type="text" value="our work" as="span" className="priamry" />
-            <EditableText cmsKey="portfolio.title" type="text" value="Portfolio" as="h2" className="bright" />
-            <EditableText cmsKey="portfolio.subtitle" type="text" value={`Viewing service ${activeIndex + 1} of ${total}`} as="p" className="tracker" />
-          </div>
-        ) : (
-          <div className="title">
-            <span className="priamry">our work</span>
-            <h2 className="bright">Portfolio</h2>
-            <p className="tracker">
-              Viewing service {activeIndex + 1} of {total}
-            </p>
-          </div>
-        )}
+        <div className="title">
+          <EditableText cmsKey="portfolio.tag" value="our work" as="span" className="priamry" label="Small tag" />
+          <EditableText cmsKey="portfolio.title" value="Portfolio" as="h2" className="bright" label="Heading" />
+          <p className="tracker">
+            {String(trackerText || "").replace("{n}", activeIndex + 1).replace("{total}", total)}
+          </p>
+        </div>
+        <EditSection
+          label="Portfolio"
+          icon="fa-images"
+          items={[
+            {
+              cmsKey: "portfolio.cards",
+              root: DEFAULT_CARDS,
+              label: `Cards (${total})`,
+              field: {
+                type: "items",
+                itemLabel: "card",
+                label: "",
+                fields: [
+                  { key: "name", type: "text", label: "Name" },
+                  { key: "img", type: "image", label: "Picture" },
+                  { key: "location", type: "text", label: "Location" },
+                  { key: "desc", type: "text", label: "Description" },
+                ],
+                newItem: { name: "", img: "", location: "", desc: "" },
+              },
+            },
+            {
+              cmsKey: "portfolio.tracker",
+              root: "Viewing service {n} of {total}",
+              label: "Counter text",
+              help: "{n} becomes the current card number and {total} the number of cards.",
+              field: { type: "text", label: "Counter text" },
+            },
+          ]}
+        />
       </div>
 
       <div className="portfolio_holder">
@@ -139,11 +165,11 @@ const Portfolio = () => {
               style={{ cursor: 'grab', touchAction: 'pan-y' }}
               whileDrag={{ cursor: 'grabbing' }}
             >
-              <div className="person">{cardsData[activeIndex].name}</div>
-              <img src={cardsData[activeIndex].img} alt={cardsData[activeIndex].name} draggable={false} />
+              <div className="person">{cardsData[Math.min(activeIndex, total - 1)]?.name}</div>
+              <img src={cardsData[Math.min(activeIndex, total - 1)]?.img} alt={cardsData[Math.min(activeIndex, total - 1)]?.name} draggable={false} />
               <div className="place">
-                <span><i className='fas fa-location-dot'></i>{cardsData[activeIndex].location}</span>
-                <p>{cardsData[activeIndex].name} - {cardsData[activeIndex].desc}</p>
+                <span><i className='fas fa-location-dot'></i>{cardsData[Math.min(activeIndex, total - 1)]?.location}</span>
+                <p>{cardsData[Math.min(activeIndex, total - 1)]?.name} - {cardsData[Math.min(activeIndex, total - 1)]?.desc}</p>
                 <i className="fa-solid fa-circle-arrow-right"></i>
               </div>
             </motion.div>

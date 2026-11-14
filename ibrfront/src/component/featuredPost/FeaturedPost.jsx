@@ -5,25 +5,30 @@ import { Link } from "react-router-dom";
 import { useEditMode } from "../../context/EditModeContext";
 import EditableText from "../editable/EditableText";
 
-const FeaturedPost = ({ articles }) => {
+const FeaturedPost = ({ articles, onEdit }) => {
+  const { isEditMode } = useEditMode();
   if (!articles || articles.length === 0) return null;
   const featured = articles[0];
-  const { isEditMode } = useEditMode();
 
   return (
-    <section className="featured-post">
+    <section
+      className={`featured-post ${onEdit ? "editable-list-item-wrap" : ""}`}
+      onClick={onEdit}
+      title={onEdit ? "Click to edit this article" : undefined}
+    >
+      {onEdit && (
+        <span className="editable-list-controls" aria-hidden="true">
+          <i className="fa-solid fa-pen"></i> Edit article
+        </span>
+      )}
       <div className="featured-container">
         <div className="featured-image">
-          <img src={featured.image_url} alt={featured.title} loading="lazy" />
+          {featured.image_url && <img src={featured.image_url} alt={featured.title} loading="lazy" />}
           <div className="featured-badge">Featured</div>
         </div>
         <div className="featured-content">
           <div className="featured-meta">
-            {isEditMode ? (
-              <EditableText cmsKey="featured_post.tag" type="text" value="Latest Article" as="span" className="featured-tag" />
-            ) : (
-              <span className="featured-tag">Latest Article</span>
-            )}
+            <EditableText cmsKey="featured_post.tag" value="Latest Article" as="span" className="featured-tag" label="Featured tag" />
             <span className="featured-date">
               {featured.pubDate && new Date(featured.pubDate).toLocaleDateString("en-US", {
                 month: "long",

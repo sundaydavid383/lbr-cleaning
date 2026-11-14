@@ -4,6 +4,33 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useUserGuide } from "../../context/UserGuideContext";
 import "./nav.css";
+import { ImageViewer } from "../imageviewer/ImageViewer";
+import { useCms } from "../../hooks/useCmsContent";
+import { useEditMode } from "../../context/EditModeContext";
+import { useSiteSettings, openSiteSettings } from "../../hooks/useSiteSettings";
+import EditableText from "../editable/EditableText";
+
+const DEFAULT_NAV_LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/service", label: "Services" },
+  { to: "/about", label: "About" },
+  { to: "/information", label: "Learn More" },
+  { to: "/blog", label: "Blog" },
+];
+
+const NAV_LINK_FIELDS = [
+  { key: "label", type: "text", label: "Text shown" },
+  { key: "to", type: "url", label: "Goes to", help: "A page on this site like /about, or a full web address." },
+];
+
+const isExternal = (to) => /^(https?:|mailto:|tel:)/i.test(to || "");
+
+const NavItem = ({ link, className, children }) =>
+  isExternal(link.to) ? (
+    <a href={link.to} className={className} target="_blank" rel="noopener noreferrer">{children}</a>
+  ) : (
+    <Link to={link.to || "/"} className={className}>{children}</Link>
+  );
 
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -15,6 +42,7 @@ const Nav = () => {
   const { restart } = useUserGuide();
   const userMenuRef = useRef(null);
   const mobileRef = useRef(null);
+  const [openImageViewer, setOpenImageViewer] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -47,13 +75,28 @@ const Nav = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/service", label: "Services" },
-    { to: "/about", label: "About" },
-    { to: "/information", label: "Learn More" },
-    { to: "/blog", label: "Blog" },
-  ];
+  const storedLinks = useCms("site.nav_links", DEFAULT_NAV_LINKS);
+  const navLinks = Array.isArray(storedLinks) ? storedLinks.filter((l) => l && l.label) : DEFAULT_NAV_LINKS;
+  const site = useSiteSettings();
+  const { isEditMode, openPanel } = useEditMode();
+  const ctaText = useCms("site.nav_cta_text", "Apply Now");
+  const signInText = useCms("site.nav_signin_text", "Sign In");
+  const getStartedText = useCms("site.nav_signup_text", "Get Started");
+  const tourText = useCms("site.nav_tour_text", "Take Tour");
+
+  const editLinks = () =>
+    openPanel({
+      cmsKey: "site.nav_links",
+      root: DEFAULT_NAV_LINKS,
+      value: navLinks,
+      title: "Menu links",
+      help: "These are the links in the top menu (and the mobile menu). Add, remove, rename or reorder them.",
+      field: { type: "items", itemLabel: "link", fields: NAV_LINK_FIELDS, newItem: { label: "New link", to: "/" } },
+      openedAt: Date.now(),
+    });
+
+  const label = (key, fallback, help) =>
+    isEditMode ? <EditableText cmsKey={key} value={fallback} label={help || "Button text"} /> : fallback;
 
   const handleLogout = () => {
     logout();
@@ -64,21 +107,29 @@ const Nav = () => {
   return (
     <header className={`nav ${scrolled ? "scrolled" : ""}`}>
       <div className="nav-inner">
-        <Link to="/" className="nav-logo" aria-label="LBR Cleaning Home">
-          <img src="/house-cleaning.png" alt="" aria-hidden="true" />
+        <Link
+          to="/"
+          className={`nav-logo ${isEditMode ? "editable-field" : ""}`}
+          aria-label={`${site.name} Home`}
+          onClickCapture={isEditMode ? (e) => { e.preventDefault(); e.stopPropagation(); openSiteSettings(openPanel); } : undefined}
+          title={isEditMode ? "Change logo & business info" : undefined}
+        >
+          <img src={site.logo} alt="" aria-hidden="true" />
         </Link>
 
-        <nav className="nav-links" aria-label="Primary">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`nav-link ${isActive(link.to) ? "active" : ""}`}
-            >
+        <nav
+          className={`nav-links ${isEditMode ? "editable-field" : ""}`}
+          aria-label="Primary"
+          onClickCapture={isEditMode ? (e) => { e.preventDefault(); e.stopPropagation(); editLinks(); } : undefined}
+          title={isEditMode ? "Click to edit menu links" : undefined}
+        >
+          {navLinks.map((link, i) => (
+            <NavItem key={`${link.to}-${i}`} link={link} className={`nav-link ${isActive(link.to) ? "active" : ""}`}>
               {link.label}
               {isActive(link.to) && <span className="nav-link-indicator" />}
-            </Link>
+            </NavItem>
           ))}
+          {isEditMode && <span className="editable-pencil" aria-hidden="true"><i className="fa-solid fa-pen"></i></span>}
         </nav>
 
         <div className="nav-actions">
@@ -90,18 +141,29 @@ const Nav = () => {
                 aria-expanded={userMenuOpen}
                 aria-haspopup="true"
               >
+                {user?.avatar ? (
+                  <img src={user.avatar} alt={`${user.name}'s avatar`} className="nav-user-avatar" />
+                ) : (
                 <div className="nav-user-avatar">
                   {user?.name?.[0]?.toUpperCase() || "U"}
                 </div>
+                )}
+
                 <span className="nav-user-name">{user?.name?.split(" ")[0] || "User"}</span>
                 <i className={`fa-solid fa-chevron-down nav-user-chevron ${userMenuOpen ? "open" : ""}`} />
               </button>
 
               <div className={`nav-user-dropdown ${userMenuOpen ? "open" : ""}`}>
                 <div className="nav-user-dropdown-header">
+                  { user?.avatar ? (
+                    <img onClick={() => setOpenImageViewer(prev=> !prev)}
+                    src={user.avatar} alt={`${user.name}'s avatar`} className="nav-user-avatar large" />
+                  ) : (
                   <div className="nav-user-avatar large">
                     {user?.name?.[0]?.toUpperCase() || "U"}
                   </div>
+                  )}
+
                   <div>
                     <p className="nav-user-fullname">{user?.name}</p>
                     <p className="nav-user-email">{user?.email}</p>
@@ -133,8 +195,8 @@ const Nav = () => {
             </div>
           ) : (
             <div className="nav-auth-buttons">
-              <Link to="/login" className="nav-btn nav-btn-ghost">Sign In</Link>
-              <Link to="/signup" className="nav-btn nav-btn-primary">Get Started</Link>
+              <Link to="/login" className="nav-btn nav-btn-ghost">{label("site.nav_signin_text", signInText, "Sign in button")}</Link>
+              <Link to="/signup" className="nav-btn nav-btn-primary">{label("site.nav_signup_text", getStartedText, "Sign up button")}</Link>
             </div>
           )}
 
@@ -145,11 +207,11 @@ const Nav = () => {
             aria-label="Take a tour"
           >
             <i className="fa-solid fa-route"></i>
-            <span>Take Tour</span>
+            <span>{label("site.nav_tour_text", tourText, "Tour button")}</span>
           </button>
 
           <Link to="/apply" className="nav-cta">
-            <span>Apply Now</span>
+            <span>{label("site.nav_cta_text", ctaText, "Main button (top right)")}</span>
             <i className="fa-solid fa-arrow-right" />
           </Link>
 
@@ -169,21 +231,17 @@ const Nav = () => {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${mobileOpen ? "open" : ""}`} ref={mobileRef}>
         <nav className="mobile-nav-links">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`mobile-nav-link ${isActive(link.to) ? "active" : ""}`}
-            >
+          {navLinks.map((link, i) => (
+            <NavItem key={`${link.to}-${i}`} link={link} className={`mobile-nav-link ${isActive(link.to) ? "active" : ""}`}>
               {link.label}
-            </Link>
+            </NavItem>
           ))}
           <div className="mobile-nav-divider" />
           <Link to="/apply" className="mobile-nav-link mobile-nav-cta" onClick={() => setMobileOpen(false)}>
-            <i className="fa-solid fa-arrow-right" /> Apply Now
+            <i className="fa-solid fa-arrow-right" /> {ctaText}
           </Link>
           <button className="mobile-nav-link mobile-nav-auth" onClick={() => { restart(); setMobileOpen(false); }}>
-            <i className="fa-solid fa-route" /> Take a Tour
+            <i className="fa-solid fa-route" /> {tourText}
           </button>
           {isAuthenticated ? (
             <>
@@ -209,10 +267,10 @@ const Nav = () => {
             <>
               <div className="mobile-nav-divider" />
               <Link to="/login" className="mobile-nav-link mobile-nav-auth" onClick={() => setMobileOpen(false)}>
-                Sign In
+                {signInText}
               </Link>
               <Link to="/signup" className="mobile-nav-link mobile-nav-auth primary" onClick={() => setMobileOpen(false)}>
-                Get Started
+                {getStartedText}
               </Link>
             </>
           )}
@@ -224,6 +282,11 @@ const Nav = () => {
         className={`mobile-overlay ${mobileOpen ? "open" : ""}`}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
+      />
+      <ImageViewer
+        imageUrl={user?.avatar}
+        isOpen={openImageViewer}
+        onClose={() => setOpenImageViewer(false)}
       />
     </header>
   );

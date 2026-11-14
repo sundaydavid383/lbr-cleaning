@@ -631,3 +631,32 @@
         max-width: 240px;
     }
 }
+/* Visual editor tools, shown just above the banner while editing */
+.hero-edit-tools {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  padding: 0.6rem 12px;
+  margin-top: 80px;
+  background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+}
+
+.hero .text h1.hero-lines-wrap > span {
+  display: block;
+  width: fit-content;
+}
+
+.hero .text h1.hero-lines-wrap > span:first-child {
+  color: inherit;
+}
+
+.hero .text h1 .editable-pencil {
+  display: inline-flex;
+  color: #fff;
+}
+
+.cms-section-bar + .hero-edit-tools {
+  margin-top: 0;
+}

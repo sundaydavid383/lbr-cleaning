@@ -83,26 +83,37 @@ exports.upsertContent = async (req, res) => {
       return res.status(400).json({ success: false, message: "Key is required" });
     }
 
-    if (!type) {
+    if (!/^[a-z0-9_.-]+$/i.test(key) || key.length > 200) {
+      return res.status(400).json({ success: false, message: "Invalid key" });
+    }
+
+    // Fields that are not sent keep their existing values, so the visual
+    // editor can save just { value } without wiping the label/category.
+    const existing = await cmsContentRepository.findByKey(key);
+    const finalType = type || existing?.type;
+
+    if (!finalType) {
       return res.status(400).json({ success: false, message: "Type is required" });
     }
 
     const allowedTypes = ["text", "rich_text", "array", "object", "image", "boolean", "number", "json"];
-    if (!allowedTypes.includes(type)) {
+    if (!allowedTypes.includes(finalType)) {
       return res.status(400).json({
         success: false,
         message: `Invalid type. Allowed: ${allowedTypes.join(", ")}`,
       });
     }
 
+    const pick = (incoming, current) => (incoming !== undefined ? incoming || null : current ?? null);
+
     const item = await cmsContentRepository.upsert({
       key,
-      type,
+      type: finalType,
       value: value ?? null,
-      label: label || null,
-      description: description || null,
-      category: category || null,
-      isPublic: isPublic !== undefined ? isPublic : true,
+      label: pick(label, existing?.label),
+      description: pick(description, existing?.description),
+      category: pick(category, existing?.category),
+      isPublic: isPublic !== undefined ? isPublic : existing?.isPublic ?? true,
       updatedBy: updatedBy || req.user?.email || null,
     });
 

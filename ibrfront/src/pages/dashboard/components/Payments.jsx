@@ -5,6 +5,7 @@ import "./payments.css";
 import CustomAlert from "../../../component/customAlert/CustomAlert";
 import { useAuth } from "../../../context/AuthContext";
 import { apiUrl } from "../../../utils/apiUrl";
+import Txt from "../../../component/editable/Txt";
 
 const formatNGN = (amount) =>
   new Intl.NumberFormat("en-NG", {
@@ -105,7 +106,7 @@ const Payments = () => {
       <div className="payments">
         <div className="dashboard-card" style={{ textAlign: "center", padding: "3rem" }}>
           <div className="spinner" style={{ margin: "0 auto 1rem" }}></div>
-          <p style={{ color: "var(--text-color-muted)" }}>Loading your payment history...</p>
+          <p style={{ color: "var(--text-color-muted)" }}><Txt k="dashboard.payments.loading_your_payment_history" d={"Loading your payment history..."} /></p>
         </div>
       </div>
     );
@@ -116,8 +117,8 @@ const Payments = () => {
       <div className="payments">
         <div className="dashboard-card" style={{ textAlign: "center", padding: "3rem" }}>
           <i className="fa-solid fa-lock" style={{ fontSize: "2rem", color: "var(--text-color-muted)", marginBottom: "1rem" }}></i>
-          <p style={{ color: "var(--text-color-muted)", marginBottom: "1.5rem" }}>Please log in to view your payment history.</p>
-          <Link to="/login" className="btn-primary">Log In</Link>
+          <p style={{ color: "var(--text-color-muted)", marginBottom: "1.5rem" }}><Txt k="dashboard.payments.please_log_in_to_view_your_payment_histo" d={"Please log in to view your payment history."} /></p>
+          <Link to="/login" className="btn-primary"><Txt k="dashboard.payments.log_in" d={"Log In"} /></Link>
         </div>
       </div>
     );
@@ -133,19 +134,19 @@ const Payments = () => {
 
       <div className="payments-summary">
         <div className="dashboard-card payments-summary-card">
-          <div className="dashboard-card-title">Total Spent</div>
+          <div className="dashboard-card-title"><Txt k="dashboard.payments.total_spent" d={"Total Spent"} /></div>
           <div className="payments-total">{formatNGN(totalSpent)}</div>
           <p className="payments-summary-text">Across {completedPayments.length} completed transaction{completedPayments.length !== 1 ? "s" : ""}</p>
         </div>
         <div className="dashboard-card payments-summary-card">
-          <div className="dashboard-card-title">Pending Payments</div>
+          <div className="dashboard-card-title"><Txt k="dashboard.payments.pending_payments" d={"Pending Payments"} /></div>
           <div className="payments-total pending">{formatNGN(pendingAmount)}</div>
           <p className="payments-summary-text">{pendingPayments.length} payment{pendingPayments.length !== 1 ? "s" : ""} awaiting</p>
         </div>
         <div className="dashboard-card payments-summary-card">
-          <div className="dashboard-card-title">Total Transactions</div>
+          <div className="dashboard-card-title"><Txt k="dashboard.payments.total_transactions" d={"Total Transactions"} /></div>
           <div className="payments-total">{payments.length}</div>
-          <p className="payments-summary-text">Since joining LBR Cleaning</p>
+          <p className="payments-summary-text"><Txt k="dashboard.payments.since_joining_lbr_cleaning" d={"Since joining LBR Cleaning"} /></p>
         </div>
       </div>
 
@@ -156,22 +157,22 @@ const Payments = () => {
         {payments.length === 0 ? (
           <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-color-muted)" }}>
             <i className="fa-solid fa-receipt" style={{ fontSize: "2.5rem", opacity: 0.3, marginBottom: "1rem", display: "block" }}></i>
-            <p>No payments yet.</p>
-            <p style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>Your payment history will appear here after your first booking.</p>
-            <Link to="/apply" className="btn-primary" style={{ marginTop: "1.5rem", display: "inline-flex" }}>Book a Service</Link>
+            <p><Txt k="dashboard.payments.no_payments_yet" d={"No payments yet."} /></p>
+            <p style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}><Txt k="dashboard.payments.your_payment_history_will_appear_here_af" d={"Your payment history will appear here after your first booking."} /></p>
+            <Link to="/apply" className="btn-primary" style={{ marginTop: "1.5rem", display: "inline-flex" }}><Txt k="dashboard.payments.book_a_service" d={"Book a Service"} /></Link>
           </div>
         ) : (
           <div className="payments-table-wrapper">
             <table className="dashboard-table">
               <thead>
                 <tr>
-                  <th>Transaction ID</th>
-                  <th>Date</th>
-                  <th>Service</th>
-                  <th>Amount</th>
-                  <th>Method</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th><Txt k="dashboard.payments.transaction_id" d={"Transaction ID"} /></th>
+                  <th><Txt k="dashboard.payments.date" d={"Date"} /></th>
+                  <th><Txt k="dashboard.payments.service" d={"Service"} /></th>
+                  <th><Txt k="dashboard.payments.amount" d={"Amount"} /></th>
+                  <th><Txt k="dashboard.payments.method" d={"Method"} /></th>
+                  <th><Txt k="dashboard.payments.status" d={"Status"} /></th>
+                  <th><Txt k="dashboard.payments.action" d={"Action"} /></th>
                 </tr>
               </thead>
               <tbody>
