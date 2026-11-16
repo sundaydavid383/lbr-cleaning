@@ -23,12 +23,12 @@ export const apiUrl = (path) => {
 
     // If running on Vercel, point to the Render backend
     if (host.includes("vercel.app")) {
-      return `https://ibrback.onrender.com${cleanPath}`;
+      return `https://lbr-cleaning.onrender.com${cleanPath}`;
     }
 
     // If running on Render
     if (host.includes("onrender.com")) {
-      return `https://ibrback.onrender.com${cleanPath}`;
+      return `https://lbr-cleaning.onrender.com${cleanPath}`;
     }
 
     // Local dev
@@ -37,9 +37,9 @@ export const apiUrl = (path) => {
     }
 
     // Default to Render backend
-    return `https://ibrback.onrender.com${cleanPath}`;
+    return `https://lbr-cleaning.onrender.com${cleanPath}`;
   }
 
   // 3. SSR/build-time default
-  return `https://ibrback.onrender.com${cleanPath}`;
+  return `https://lbr-cleaning.onrender.com${cleanPath}`;
 };

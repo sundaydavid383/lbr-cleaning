@@ -51,6 +51,7 @@ export const getVersion = () => version;
 export const getStatus = () => status;
 export const isReady = () => status === "ready" || items.size > 0;
 
+let retries = 0;
 export const loadAll = (force = false) => {
   if (loadPromise && !force) return loadPromise;
   status = items.size > 0 ? "ready" : "loading";
@@ -61,6 +62,7 @@ export const loadAll = (force = false) => {
       items.clear();
       json.data.forEach((it) => items.set(it.key, it));
       status = "ready";
+      retries = 0;
       persist();
       emit();
     })
@@ -69,6 +71,11 @@ export const loadAll = (force = false) => {
       status = items.size > 0 ? "ready" : "error";
       loadPromise = null; // allow a retry later
       emit();
+      // The server may still be waking up (Render free plan) — try again.
+      if (retries < 8) {
+        retries += 1;
+        setTimeout(() => loadAll(), 5000);
+      }
     });
   return loadPromise;
 };

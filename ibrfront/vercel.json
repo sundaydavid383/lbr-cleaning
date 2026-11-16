@@ -19,6 +19,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://ibrback.onrender.com"
+    "VITE_API_URL": "https://lbr-cleaning.onrender.com"
   }
 }

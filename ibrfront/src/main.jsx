@@ -2,6 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import { wakeServer } from './utils/api'
+
+// Start waking the backend straight away (Render free plan sleeps when idle).
+wakeServer()
 
 // Enable lazy loading for images
 if ('loading' in HTMLImageElement.prototype) {
