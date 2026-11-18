@@ -1,7 +1,18 @@
 // filepath: ibrback/src/controllers/paymentController.js
 const { repositories } = require("../repositories");
 const { paymentRepository, orderRepository } = repositories;
-const { initializePayment: gatewayInitialize, verifyPayment: gatewayVerify, verifyWebhookSignature, parseWebhookEvent } = require("../services/paymentService");
+const { initializePayment: gatewayInitialize, verifyPayment: gatewayVerify, verifyWebhookSignature, parseWebhookEvent, frontendUrl } = require("../services/paymentService");
+const { canAccessOrder } = require("../middleware/auth");
+
+// A payment only counts as PAID if the customer paid at least what we asked for.
+const checkPaidAmount = (status, paidAmount, expectedAmount, reference) => {
+  if (status !== "PAID") return status;
+  if (Number(paidAmount) + 0.01 < Number(expectedAmount)) {
+    console.warn(`[payment] ${reference}: paid ${paidAmount} but expected ${expectedAmount} - marking FAILED`);
+    return "FAILED";
+  }
+  return status;
+};
 
 /**
  * Initialize a payment via the configured gateway (Paystack/Flutterwave).
@@ -9,15 +20,22 @@ const { initializePayment: gatewayInitialize, verifyPayment: gatewayVerify, veri
  */
 exports.initializePayment = async (req, res) => {
   try {
-    const { orderId, email, amount, currency = "NGN", customerName, phone, service } = req.body;
+    const { orderId, currency = "NGN" } = req.body;
 
-    if (!orderId || !email || !amount) {
-      return res.status(400).json({ success: false, message: "orderId, email, and amount are required" });
+    if (!orderId) {
+      return res.status(400).json({ success: false, message: "orderId is required" });
     }
 
     const order = await orderRepository.findById(orderId);
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    // The price always comes from the booking itself (set by the server from
+    // the CMS price list), never from the browser, which could be edited.
+    const amount = Number(order.amount);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ success: false, message: "This booking has no price set. Please contact us." });
     }
 
     if (order.paymentOption !== "PAY_BEFORE") {
@@ -29,13 +47,13 @@ exports.initializePayment = async (req, res) => {
     }
 
     const gatewayResult = await gatewayInitialize({
-      email,
-      amount: Number(amount),
+      email: order.email,
+      amount,
       currency,
-      customerName: customerName || order.customerName,
-      phone: phone || order.phone,
+      customerName: order.customerName,
+      phone: order.phone,
       orderId: order.id,
-      service: service || order.service,
+      service: order.service,
     });
 
     await paymentRepository.create({
@@ -82,6 +100,14 @@ exports.verifyPayment = async (req, res) => {
       return res.status(400).json({ success: false, message: "Payment reference is required" });
     }
 
+    // A customer's browser landing here straight from the payment page (older
+    // callback setting): send them to the website, which confirms the payment.
+    if (req.accepts(["json", "html"]) === "html") {
+      const known = await paymentRepository.findByTransactionId(gatewayReference);
+      const target = `${frontendUrl()}/payment?reference=${encodeURIComponent(gatewayReference)}&orderId=${encodeURIComponent(known?.orderId || orderId || "")}`;
+      return res.redirect(302, target);
+    }
+
     const verification = await gatewayVerify(gatewayReference);
 
     const payment = await paymentRepository.findByTransactionId(gatewayReference);
@@ -89,15 +115,16 @@ exports.verifyPayment = async (req, res) => {
       return res.status(404).json({ success: false, message: "Payment record not found" });
     }
 
-    await paymentRepository.updateStatus(payment.id, verification.status, verification.transactionId);
+    const status = checkPaidAmount(verification.status, verification.amount, payment.amount, gatewayReference);
+    await paymentRepository.updateStatus(payment.id, status, verification.transactionId);
 
     const order = await orderRepository.findById(payment.orderId);
     if (order) {
-      await orderRepository.updatePaymentStatus(order.id, verification.status);
+      await orderRepository.updatePaymentStatus(order.id, status);
 
-      if (verification.status === "PAID") {
+      if (status === "PAID") {
         await orderRepository.updateStatus(order.id, "CONFIRMED");
-      } else if (verification.status === "FAILED") {
+      } else if (status === "FAILED") {
         await orderRepository.updateStatus(order.id, "CANCELLED");
       }
     }
@@ -106,7 +133,7 @@ exports.verifyPayment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: verification.status === "PAID" ? "Payment successful!" : "Payment verification completed",
+      message: status === "PAID" ? "Payment successful!" : "Payment verification completed",
       payment: updatedPayment,
     });
   } catch (error) {
@@ -125,12 +152,14 @@ exports.handleWebhook = async (req, res) => {
     const rawBody = req.body;
     const provider = process.env.PAYMENT_PROVIDER || "paystack";
 
-    if (signature && !verifyWebhookSignature(provider, rawBody, signature)) {
-      console.warn("Invalid webhook signature");
+    // Every webhook must be signed by the payment provider, otherwise anyone
+    // could post a fake "paid" message.
+    if (!signature || !Buffer.isBuffer(rawBody) || !verifyWebhookSignature(provider, rawBody, signature)) {
+      console.warn("Rejected webhook: missing or invalid signature");
       return res.status(401).json({ success: false, message: "Invalid signature" });
     }
 
-    const body = typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
+    const body = JSON.parse(rawBody.toString("utf8"));
     const event = parseWebhookEvent(provider, body);
 
     if (!event.reference) {
@@ -143,20 +172,21 @@ exports.handleWebhook = async (req, res) => {
       return res.status(404).json({ success: false, message: "Payment not found" });
     }
 
-    await paymentRepository.updateStatus(payment.id, event.status, event.reference);
+    const status = checkPaidAmount(event.status, event.amount, payment.amount, event.reference);
+    await paymentRepository.updateStatus(payment.id, status, event.reference);
 
     const order = await orderRepository.findById(payment.orderId);
     if (order) {
-      await orderRepository.updatePaymentStatus(order.id, event.status);
+      await orderRepository.updatePaymentStatus(order.id, status);
 
-      if (event.status === "PAID") {
+      if (status === "PAID") {
         await orderRepository.updateStatus(order.id, "CONFIRMED");
-      } else if (event.status === "FAILED") {
+      } else if (status === "FAILED") {
         await orderRepository.updateStatus(order.id, "CANCELLED");
       }
     }
 
-    console.log(`Webhook processed: ${event.event} for reference ${event.reference} -> ${event.status}`);
+    console.log(`Webhook processed: ${event.event} for reference ${event.reference} -> ${status}`);
     res.status(200).json({ success: true, received: true });
   } catch (error) {
     console.error("Webhook processing error:", error);
@@ -173,6 +203,10 @@ exports.getPaymentStatus = async (req, res) => {
 
     const payment = await paymentRepository.findById(paymentId);
     if (!payment) {
+      return res.status(404).json({ success: false, message: "Payment not found" });
+    }
+    const order = await orderRepository.findById(payment.orderId);
+    if (!canAccessOrder(req, order)) {
       return res.status(404).json({ success: false, message: "Payment not found" });
     }
 
@@ -199,6 +233,11 @@ exports.getPaymentStatus = async (req, res) => {
 exports.getOrderPayments = async (req, res) => {
   try {
     const { orderId } = req.params;
+
+    const order = await orderRepository.findById(orderId);
+    if (!canAccessOrder(req, order)) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
 
     const payments = await paymentRepository.findByOrderId(orderId);
 

@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './component/ScrollToTop';
+import PageMeta from './component/PageMeta';
 import { AuthProvider } from './context/AuthContext';
 import Nav from './component/nav/Nav';
 import Footer from './component/footer/Footer';
@@ -61,6 +62,7 @@ const App = () => {
             <UserGuideProvider>
               <ToastProvider>
                 <ScrollToTop />
+                <PageMeta />
                 <Nav />
                 <Suspense fallback={<RouteSkeleton />}>
                   <Routes>

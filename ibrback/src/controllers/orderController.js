@@ -1,13 +1,15 @@
 // filepath: ibrback/src/controllers/orderController.js
 const { repositories } = require("../repositories");
 const { orderRepository } = repositories;
+const { canAccessOrder } = require("../middleware/auth");
 
 /**
  * Get orders for a specific email (used by dashboard to load user's bookings).
  */
 exports.getOrdersByEmail = async (req, res) => {
   try {
-    const { email } = req.query;
+    // Customers only ever see their own bookings; admins may look up any email.
+    const email = req.user.role === "admin" && req.query.email ? req.query.email : req.user.email;
 
     if (!email) {
       return res.status(400).json({ success: false, message: "Email is required" });
@@ -47,7 +49,7 @@ exports.getOrderById = async (req, res) => {
     const { id } = req.params;
 
     const order = await orderRepository.findById(id);
-    if (!order) {
+    if (!order || !canAccessOrder(req, order)) {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
 

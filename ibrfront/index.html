@@ -19,18 +19,16 @@
     <!-- ========================================
          Canonical URL
          ======================================== -->
-    <link rel="canonical" href="https://lbrcleaning.com/" />
+    <link rel="canonical" href="https://lbrcleaning.vercel.app/" />
     
     <!-- ========================================
          Open Graph / Facebook
          ======================================== -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://lbrcleaning.com/" />
+    <meta property="og:url" content="https://lbrcleaning.vercel.app/" />
     <meta property="og:title" content="LBR Cleaning Services | Professional Cleaning in Lagos" />
     <meta property="og:description" content="Premier cleaning company in Lagos, Nigeria. Expert house cleaning, office cleaning, and professional cleaning services. Book your trusted cleaning service today!" />
-    <meta property="og:image" content="https://lbrcleaning.com/og-image.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://lbrcleaning.vercel.app/assets/cleaningbackground.jpg" />
     <meta property="og:locale" content="en_NG" />
     <meta property="og:site_name" content="LBR Cleaning Services" />
     
@@ -38,10 +36,10 @@
          Twitter
          ======================================== -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://lbrcleaning.com/" />
+    <meta name="twitter:url" content="https://lbrcleaning.vercel.app/" />
     <meta name="twitter:title" content="LBR Cleaning Services | Professional Cleaning in Lagos" />
     <meta name="twitter:description" content="Premier cleaning company in Lagos, Nigeria. Expert house cleaning, office cleaning, and professional cleaning services." />
-    <meta name="twitter:image" content="https://lbrcleaning.com/og-image.jpg" />
+    <meta name="twitter:image" content="https://lbrcleaning.vercel.app/assets/cleaningbackground.jpg" />
     
     <!-- ========================================
          Favicon & Icons
@@ -58,7 +56,15 @@
     <!-- ========================================
          Font Awesome
          ======================================== -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" crossorigin="anonymous" />
+    <!-- Icons and fonts load without blocking the page: the site starts
+         straight away and they appear a moment later. -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+    </noscript>
     
     <!-- ========================================
          JSON-LD Structured Data
@@ -69,12 +75,11 @@
       "@type": "LocalBusiness",
       "name": "LBR Cleaning Services",
       "description": "Premier cleaning company in Lagos, Nigeria offering professional house cleaning, office cleaning, post-construction cleaning, and more.",
-      "url": "https://lbrcleaning.com",
+      "url": "https://lbrcleaning.vercel.app",
       "telephone": "+2348068686953",
-      "email": "info@lbrcleaningservices",
+      "email": "info@lbrcleaningservices.com",
       "priceRange": "$$",
       "openingHours": "Mo-Fr 08:00-18:00, Sa 09:00-16:00",
-      "closingHours": "Su 00:00-00:00",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Block A6, Suite 39, Sura Shopping Complex, Simpson Street",
@@ -106,19 +111,7 @@
         "https://www.facebook.com/lbrcleaning",
         "https://www.instagram.com/lbrcleaning",
         "https://www.youtube.com/@lbrcleaning"
-      ],
-      "review": {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "4.8",
-          "bestRating": "5"
-        },
-        "author": {
-          "@type": "Person",
-          "name": "Satisfied Customer"
-        }
-      }
+      ]
     }
     </script>
     
@@ -130,8 +123,8 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "LBR Cleaning Services",
-      "url": "https://lbrcleaning.com",
-      "logo": "https://lbrcleaning.com/logo.png",
+      "url": "https://lbrcleaning.vercel.app",
+      "logo": "https://lbrcleaning.vercel.app/house-cleaning.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+2348068686953",

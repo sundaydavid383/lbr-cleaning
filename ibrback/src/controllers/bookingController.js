@@ -1,6 +1,6 @@
 // filepath: ibrback/src/controllers/bookingController.js
 const { repositories } = require("../repositories");
-const { orderRepository } = repositories;
+const { orderRepository, paymentRepository } = repositories;
 const { initializePayment } = require("../services/paymentService");
 
 /**
@@ -66,6 +66,18 @@ exports.createBooking = async (req, res) => {
           phone,
           orderId: order.id,
           service,
+        });
+
+        // Save the payment so it can be confirmed when the customer comes back.
+        await paymentRepository.create({
+          orderId: order.id,
+          amount: Number(amount),
+          currency: paymentResult.currency,
+          paymentMethod: "CARD",
+          paymentGateway: paymentResult.provider.toUpperCase(),
+          gatewayTransactionId: paymentResult.reference,
+          status: "PENDING",
+          metadata: paymentResult.metadata || {},
         });
 
         payment = await orderRepository.update(order.id, {

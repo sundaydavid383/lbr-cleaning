@@ -1,6 +1,12 @@
 // filepath: ibrback/src/controllers/receiptController.js
 const { repositories } = require("../repositories");
 const { paymentRepository, orderRepository } = repositories;
+const { canAccessOrder } = require("../middleware/auth");
+
+// Escape text before putting it in the receipt HTML (customer names etc. are
+// typed by visitors and must never be able to inject code).
+const esc = (v) =>
+  String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 /**
  * Generate an HTML receipt for a payment.
@@ -15,6 +21,9 @@ exports.getReceipt = async (req, res) => {
     }
 
     const order = await orderRepository.findById(payment.orderId);
+    if (!canAccessOrder(req, order)) {
+      return res.status(404).json({ success: false, message: "Payment not found" });
+    }
 
     const formatCurrency = (amount, currency = "NGN") => {
       if (currency === "NGN") {
@@ -160,7 +169,7 @@ exports.getReceipt = async (req, res) => {
         <h3>Payment Details</h3>
         <div class="receipt-row">
           <span>Transaction ID</span>
-          <span>${payment.gatewayTransactionId || payment.id}</span>
+          <span>${esc(payment.gatewayTransactionId || payment.id)}</span>
         </div>
         <div class="receipt-row">
           <span>Date</span>
@@ -168,15 +177,15 @@ exports.getReceipt = async (req, res) => {
         </div>
         <div class="receipt-row">
           <span>Payment Method</span>
-          <span>${payment.paymentMethod || "Card"}</span>
+          <span>${esc(payment.paymentMethod || "Card")}</span>
         </div>
         <div class="receipt-row">
           <span>Gateway</span>
-          <span>${payment.paymentGateway || "N/A"}</span>
+          <span>${esc(payment.paymentGateway || "N/A")}</span>
         </div>
         <div class="receipt-row">
           <span>Status</span>
-          <span class="receipt-status">${payment.status}</span>
+          <span class="receipt-status">${esc(payment.status)}</span>
         </div>
       </div>
 
@@ -185,19 +194,19 @@ exports.getReceipt = async (req, res) => {
         <h3>Service Information</h3>
         <div class="receipt-row">
           <span>Service</span>
-          <span>${order.service}</span>
+          <span>${esc(order.service)}</span>
         </div>
         <div class="receipt-row">
           <span>Customer</span>
-          <span>${order.customerName}</span>
+          <span>${esc(order.customerName)}</span>
         </div>
         <div class="receipt-row">
           <span>Email</span>
-          <span>${order.email}</span>
+          <span>${esc(order.email)}</span>
         </div>
         <div class="receipt-row">
           <span>Phone</span>
-          <span>${order.phone}</span>
+          <span>${esc(order.phone)}</span>
         </div>
       </div>
       ` : ""}

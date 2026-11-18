@@ -30,4 +30,15 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { authenticate, requireAdmin };
+/**
+ * True when the logged-in user may see this order: admins see everything,
+ * customers only orders booked with their own email.
+ */
+const canAccessOrder = (req, order) => {
+  if (!order || !req.user) return false;
+  if (req.user.role === "admin") return true;
+  const mine = String(req.user.email || "").trim().toLowerCase();
+  return !!mine && String(order.email || "").trim().toLowerCase() === mine;
+};
+
+module.exports = { authenticate, requireAdmin, canAccessOrder };

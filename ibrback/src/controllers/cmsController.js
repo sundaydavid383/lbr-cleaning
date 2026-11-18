@@ -1,11 +1,24 @@
 // filepath: ibrback/src/controllers/cmsController.js
 const { repositories } = require("../repositories");
 const { cmsContentRepository } = repositories;
+const { verifyToken } = require("../services/authService");
+
+// Content an admin marked "Hidden" is only ever returned to admins.
+const isAdminRequest = (req) => {
+  const [scheme, token] = (req.headers.authorization || "").split(" ");
+  if (scheme !== "Bearer" || !token) return false;
+  try {
+    return verifyToken(token)?.role === "admin";
+  } catch {
+    return false;
+  }
+};
+const visible = (req, items) => (isAdminRequest(req) ? items : items.filter((i) => i.isPublic !== false));
 
 exports.listContent = async (req, res) => {
   try {
     const { category } = req.query;
-    const isPublic = req.query.isPublic === "false" ? false : true;
+    const isPublic = req.query.isPublic === "false" && isAdminRequest(req) ? false : true;
 
     console.log(`[CMS] GET /api/cms/content | category=${category || "all"} | isPublic=${isPublic}`);
 
@@ -33,7 +46,7 @@ exports.listByCategory = async (req, res) => {
     const { category } = req.params;
     console.log(`[CMS] GET /api/cms/content/category/${category}`);
 
-    const items = await cmsContentRepository.findByCategory(category);
+    const items = visible(req, await cmsContentRepository.findByCategory(category));
 
     console.log(`[CMS] listByCategory: category=${category} | found ${items.length} items`);
 
@@ -56,7 +69,7 @@ exports.getContent = async (req, res) => {
 
     console.log(`[CMS] getContent key=${key} | found=${!!item}`);
 
-    if (!item) {
+    if (!item || (item.isPublic === false && !isAdminRequest(req))) {
       return res.status(404).json({ success: false, message: "Content not found" });
     }
 

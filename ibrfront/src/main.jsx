@@ -4,8 +4,12 @@ import App from './App.jsx'
 import './index.css'
 import { wakeServer } from './utils/api'
 
-// Start waking the backend straight away (Render free plan sleeps when idle).
+import { loadAll } from './services/cmsStore'
+
+// Start waking the backend and downloading the site's text and pictures
+// straight away, in parallel with the page code (Render's free plan sleeps).
 wakeServer()
+loadAll()
 
 // Enable lazy loading for images
 if ('loading' in HTMLImageElement.prototype) {

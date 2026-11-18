@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const { init: initDatabase, disconnect: disconnectDatabase, provider } = require("./src/repositories");
 
@@ -15,6 +17,14 @@ const cmsRoutes = require("./src/routes/cms");
 const uploadsRoutes = require("./src/routes/uploads");
 
 const app = express();
+
+// Render sits in front of the app as a proxy; needed so rate limits see the
+// visitor's real IP address instead of Render's.
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+// Standard security headers. This server only returns JSON (and printable
+// receipts), so cross-origin resource loading must stay allowed.
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "*").split(",").map(origin => origin.trim()).filter(Boolean);
 console.log("Allowed origins:", allowedOrigins);
@@ -41,12 +51,30 @@ app.use(
     credentials: true,
   })
 );
+// Raw body for payment webhooks — the signature is checked against the exact
+// bytes, so this MUST run before express.json() parses the body.
+app.use("/api/payment/webhook", express.raw({ type: "*/*", limit: "1mb" }));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Raw body parser for webhooks — needed for signature verification.
-// Only enable for the specific webhook path so normal JSON routes keep working.
-app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
+// Rate limits: stop password guessing and form spam.
+const limiter = (windowMinutes, max, message) =>
+  rateLimit({
+    windowMs: windowMinutes * 60 * 1000,
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, message },
+  });
+const loginLimiter = limiter(15, 20, "Too many sign-in attempts. Please wait 15 minutes and try again.");
+const formLimiter = limiter(15, 30, "Too many requests. Please wait a few minutes and try again.");
+const strictLimiter = limiter(60, 5, "Too many attempts. Please try again later.");
+
+app.use(["/api/admin/login", "/api/admin-login", "/api/auth/login"], loginLimiter);
+app.use(["/api/auth/signup", "/api/contact", "/api/book", "/appointments/book", "/api/subscribe", "/api/uploads/avatar", "/api/payment/initialize"], formLimiter);
+app.use("/api/admin/recover", strictLimiter);
+app.use("/api", limiter(1, 300, "Too many requests. Please slow down."));
 
 // Health check endpoint for Render
 app.get("/", (req, res) => {

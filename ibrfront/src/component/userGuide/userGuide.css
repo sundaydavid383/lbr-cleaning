@@ -18,12 +18,20 @@
   animation: ugFadeIn 0.35s ease;
 }
 
+/* When a part of the page is highlighted, the darkening comes from the
+   spotlight below, so the highlighted part itself stays bright. */
+.ug-backdrop--clear {
+  background: transparent;
+}
+
 .ug-highlight {
   position: absolute;
   border-radius: 12px;
-  box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35);
+  box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35),
+    0 0 0 200vmax rgba(13, 13, 11, 0.55);
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: top 0.3s cubic-bezier(0.22, 1, 0.36, 1), left 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.3s cubic-bezier(0.22, 1, 0.36, 1), height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 10000;
   opacity: 0;
 }
@@ -170,10 +178,12 @@
 
 @keyframes ugPulse {
   0%, 100% {
-    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35);
+    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 24px rgba(22, 163, 74, 0.35),
+      0 0 0 200vmax rgba(13, 13, 11, 0.55);
   }
   50% {
-    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 40px rgba(22, 163, 74, 0.55);
+    box-shadow: 0 0 0 4px var(--primary-color, #16a34a), 0 0 40px rgba(22, 163, 74, 0.55),
+      0 0 0 200vmax rgba(13, 13, 11, 0.55);
   }
 }
 
@@ -193,5 +203,15 @@
     width: calc(100% - 24px);
     left: 12px !important;
     right: 12px;
+    padding: 14px 16px;
+  }
+
+  .ug-tooltip-title {
+    font-size: 16px;
+  }
+
+  .ug-tooltip-desc {
+    font-size: 13px;
+    margin-bottom: 12px;
   }
 }

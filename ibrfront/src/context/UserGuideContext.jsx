@@ -15,7 +15,7 @@ const GUIDE_STEPS = {
   "/service": [
     { target: ".service-hero, .hero", title: "Our Services", description: "Discover our full range of professional cleaning services designed for every space and budget.", icon: "fa-solid fa-broom" },
     { target: ".service-section, .service-card", title: "Service Categories", description: "From home cleaning to post-construction cleanup — tap any card to see details, FAQs, and pricing.", icon: "fa-solid fa-grid-2" },
-    { target: ".deal-section, .pricing-card", title: "Transparent Pricing", description: "No hidden fees. Choose the plan that fits your needs and book instantly.", icon: "fa-solid fa-tags" },
+    { target: ".main_deal, .deal", title: "Transparent Pricing", description: "No hidden fees. Choose the plan that fits your needs and book instantly.", icon: "fa-solid fa-tags" },
   ],
   "/about": [
     { target: ".about-hero, .hero", title: "About LBR Cleaning", description: "Learn about our mission, values, and the team behind Nigeria's most trusted cleaning company.", icon: "fa-solid fa-building" },

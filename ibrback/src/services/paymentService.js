@@ -12,6 +12,20 @@ const FLUTTERWAVE_PUBLIC_KEY = process.env.FLUTTERWAVE_PUBLIC_KEY;
 const FLUTTERWAVE_BASE_URL = process.env.FLUTTERWAVE_BASE_URL || "https://api.flutterwave.com/v3";
 
 const SUPPORTED_PROVIDERS = ["paystack", "flutterwave"];
+
+// The website's address — where customers are sent back to after paying.
+const frontendUrl = () => {
+  const fromCors = (process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map((o) => o.trim())
+    .find((o) => /^https?:\/\//.test(o) && !o.includes("localhost"));
+  return (process.env.FRONTEND_URL || fromCors || "https://lbrcleaning.vercel.app").replace(/\/$/, "");
+};
+
+// After paying, the gateway sends the customer to the website's payment
+// page, which then confirms the payment with this server.
+const callbackUrl = (orderId) =>
+  process.env.PAYMENT_CALLBACK_URL || `${frontendUrl()}/payment?orderId=${encodeURIComponent(orderId)}`;
 if (!SUPPORTED_PROVIDERS.includes(PAYMENT_PROVIDER)) {
   throw new Error(`Unsupported PAYMENT_PROVIDER: "${PAYMENT_PROVIDER}". Use "paystack" or "flutterwave".`);
 }
@@ -51,7 +65,7 @@ const initializePayment = async ({ email, amount, currency = "NGN", customerName
         customerName,
         phone,
       },
-      callback_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.BACKEND_URL || process.env.RENDER_URL || "http://localhost:5100"}/api/payment/verify`,
+      callback_url: callbackUrl(orderId),
     };
 
     const res = await fetch(`${PAYSTACK_BASE_URL}/transaction/initialize`, {
@@ -83,7 +97,7 @@ const initializePayment = async ({ email, amount, currency = "NGN", customerName
       tx_ref: reference,
       amount: Number(amount).toFixed(2),
       currency,
-      redirect_url: process.env.PAYMENT_CALLBACK_URL || `${process.env.BACKEND_URL || process.env.RENDER_URL || "http://localhost:5100"}/api/payment/verify`,
+      redirect_url: callbackUrl(orderId),
       customer: {
         email,
         name: customerName,
@@ -269,6 +283,7 @@ const parseWebhookEvent = (provider, body) => {
 };
 
 module.exports = {
+  frontendUrl,
   PAYMENT_PROVIDER,
   initializePayment,
   verifyPayment,

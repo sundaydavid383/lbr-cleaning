@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /payment
+Disallow: /portal/
+
+Sitemap: https://lbrcleaning.vercel.app/sitemap.xml

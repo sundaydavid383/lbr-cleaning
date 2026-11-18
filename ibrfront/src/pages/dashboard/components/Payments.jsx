@@ -15,7 +15,8 @@ const formatNGN = (amount) =>
   }).format(Number(amount || 0));
 
 const Payments = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated } = useAuth();
+  const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
   const [orders, setOrders] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ const Payments = () => {
       }
 
       try {
-        const ordersRes = await fetch(apiUrl(`/api/orders?email=${encodeURIComponent(user.email)}`));
+        const ordersRes = await fetch(apiUrl("/api/orders"), authHeaders);
         const ordersData = await ordersRes.json();
 
         if (ordersRes.ok && ordersData.success) {
@@ -39,7 +40,7 @@ const Payments = () => {
           const paymentPromises = userOrders
             .filter((o) => o.id)
             .map((o) =>
-              fetch(apiUrl(`/api/payment/order/${o.id}`)).then((r) => r.json())
+              fetch(apiUrl(`/api/payment/order/${o.id}`), authHeaders).then((r) => r.json())
             );
 
           const paymentResults = await Promise.all(paymentPromises);
@@ -67,7 +68,7 @@ const Payments = () => {
 
   const handleDownloadReceipt = async (paymentId) => {
     try {
-      const res = await fetch(apiUrl(`/api/payment/${paymentId}/receipt`));
+      const res = await fetch(apiUrl(`/api/payment/${paymentId}/receipt`), authHeaders);
       if (!res.ok) throw new Error("Failed to fetch receipt");
       const html = await res.text();
       const newWindow = window.open("", "_blank");

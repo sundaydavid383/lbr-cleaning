@@ -61,7 +61,10 @@ export const AuthProvider = ({ children }) => {
     if (expiryTimerRef.current) {
       clearTimeout(expiryTimerRef.current);
     }
-    // Schedule an automatic logout when the token expires
+    // Schedule an automatic logout when the token expires. Browsers can't
+    // time more than ~24.8 days ahead (a longer delay fires at once), so cap it.
+    const MAX_TIMER_MS = 2147483647;
+    if (msLeft + 1500 > MAX_TIMER_MS) return;
     expiryTimerRef.current = setTimeout(() => {
       logout();
     }, msLeft + 1500);

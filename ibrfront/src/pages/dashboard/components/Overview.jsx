@@ -8,7 +8,8 @@ import { apiUrl } from "../../../utils/apiUrl";
 import Txt from "../../../component/editable/Txt";
 
 const Overview = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated } = useAuth();
+  const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
   const [stats, setStats] = useState({
     totalBookings: 0,
     servicesCompleted: 0,
@@ -28,7 +29,7 @@ const Overview = () => {
       }
 
       try {
-        const ordersRes = await fetch(apiUrl(`/api/orders?email=${encodeURIComponent(user.email)}`));
+        const ordersRes = await fetch(apiUrl("/api/orders"), authHeaders);
         const ordersData = await ordersRes.json();
 
         if (ordersRes.ok && ordersData.success) {
